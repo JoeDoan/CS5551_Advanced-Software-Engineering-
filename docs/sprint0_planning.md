@@ -1,12 +1,12 @@
-# OptiSched: Sprint 0 Step-by-Step Onboarding and Execution Guide
+# UMKC Course Timetable Scheduler: Sprint 0 Step-by-Step Onboarding and Execution Guide
 
-This document establishes the official technical foundation, workflow rules, and individual step-by-step responsibilities for **OptiSched (Smart Event Scheduling System)** during **Sprint 0: Up-front Planning**. All guidelines comply with the curriculum standards of CS 5551 Advanced Software Engineering.
+This document establishes the official technical foundation, workflow rules, and individual step-by-step responsibilities for the **UMKC Course Timetable Scheduler** during **Sprint 0: Up-front Planning**. All guidelines comply with the curriculum standards of CS 5551 Advanced Software Engineering.
 
 ---
 
 ## 1. Project Objectives & Academic Governance
 
-OptiSched automates the academic course and room scheduling workflow between Course Coordinators and Academic Instructors. The system replaces ad-hoc scheduling by formulating schedule creation as a constraint satisfaction and optimization problem (Hard and Soft constraints).
+The UMKC Course Timetable Scheduler automates the academic course and room scheduling workflow between Course Coordinators and Academic Instructors. The system replaces ad-hoc scheduling by formulating schedule creation as a constraint satisfaction and optimization problem (Hard and Soft constraints).
 
 | Academic Mandate | Compliance Strategy & Enforcement |
 | :--- | :--- |
@@ -130,7 +130,7 @@ Before any individual coding begins, the full team must collaborate to define th
    * Navigate to `/frontend`.
    * Scaffold project: `npm create vite@latest . -- --template react-ts`.
    * Install dependencies: `npm install react-router-dom lucide-react clsx tailwindcss postcss autoprefixer`.
-   * Initialize Tailwind CSS configuration (`tailwind.config.js`) with OptiSched brand colors, and apply styling directives to `src/index.css`.
+   * Initialize Tailwind CSS configuration (`tailwind.config.js`) with UMKC brand colors (Blue/Gold/Slate), and apply styling directives to `src/index.css`.
 
 2. **Step 2: Design System & Theme Tokens**
    * Define color palette, typography scale, spacing tokens, and component variants in Tailwind config.
@@ -181,7 +181,7 @@ Before any individual coding begins, the full team must collaborate to define th
 ### 6.1. Directory Structure Specification
 
 ```text
-optisched/
+scheduler_project/
 ├── .github/
 │   └── workflows/          # GitHub Actions CI for pytest and vitest
 ├── backend/

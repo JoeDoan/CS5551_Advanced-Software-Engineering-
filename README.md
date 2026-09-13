@@ -204,7 +204,7 @@ In real universities, faculty do not request identical schedules term after term
 ## Repository Structure (Monorepo Layout)
 
 ```text
-optisched/
+scheduler_project/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml                             # GitHub Actions CI for Backend & Frontend
@@ -351,6 +351,13 @@ Validates constraint satisfaction, capacity limits, qualification purity, and so
 python3 backend/tests/solver/test_umkc_verification.py
 ```
 
+### 4. Frontend Vitest Suite (Navigation & Shell Verification)
+Validates UI components, route mounting, and application navigation shell:
+```bash
+cd frontend
+npm test
+```
+
 ---
 
 ## Solver Performance Benchmarks
@@ -367,6 +374,17 @@ Measured on Apple Silicon (M-series / macOS):
 | **Over-Capacity Violations** | 0 | 0 (Hard Constraint) | Verified |
 | **Faculty Over-Load Violations** | 0 (Max 2 classes) | 0 (Hard Constraint) | Verified |
 | **Lab Misassignment Violations** | 0 | 0 (Hard Constraint) | Verified |
+
+---
+
+## Team & Work Allocation
+
+| Member | Role | Domain Ownership | Sprint 0 Focus |
+|:---|:---|:---|:---|
+| **Joe** | Coordinator / Algorithm | OR-Tools CP-SAT Solver & Constraints | Solver module migration, constraint models, coordination & report |
+| **Tony** | Backend Engineer | FastAPI, SQLModel ORM, REST Endpoints | API server boilerplate, database models, OpenAPI spec draft |
+| **Tina** | Frontend Engineer | React Shell, Routing, Forms & Design | Navigation shell, Tailwind theme, routing & Vitest setup |
+| **Sal** | Frontend Engineer | Calendar Matrix, FullCalendar, API Layer | FullCalendar skeleton, mock data, Axios client & types |
 
 ---
 

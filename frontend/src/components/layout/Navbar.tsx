@@ -10,7 +10,7 @@ export const Navbar: React.FC = () => {
         </div>
         <div>
           <span className="text-xl font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
-            OptiSched
+            UMKC Scheduler
           </span>
           <span className="ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
             Sprint 0
