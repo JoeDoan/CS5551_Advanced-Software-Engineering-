@@ -1,0 +1,1354 @@
+{
+  "Dr. Yugyung Lee": {
+    "user_id": 1,
+    "base_priority": 115000,
+    "current_priority": 115000,
+    "preferences": {
+      "days": [],
+      "slots": [],
+      "classrooms": [],
+      "layout": null
+    },
+    "course_preferences": {
+      "CS 101 Intro to CS": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "CS 431 Software Eng": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          1
+        ],
+        "classrooms": [
+          "FH 310"
+        ],
+        "layout": "lecture"
+      },
+      "CS 461R AI": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "FH 256"
+        ],
+        "layout": "lecture"
+      },
+      "CS 5551 Adv Software Eng": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "BHH 204"
+        ],
+        "layout": "lecture"
+      },
+      "CS 5560 ML": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "RH 211"
+        ],
+        "layout": "lecture"
+      }
+    }
+  },
+  "Dr. Baek-Young Choi": {
+    "user_id": 2,
+    "base_priority": 105000,
+    "current_priority": 105000,
+    "preferences": {
+      "days": [],
+      "slots": [],
+      "classrooms": [],
+      "layout": null
+    },
+    "course_preferences": {
+      "CS 191 Discrete Structures": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          1
+        ],
+        "classrooms": [
+          "FH 256"
+        ],
+        "layout": "lecture"
+      },
+      "CS 404 Operating Systems": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "FH 310"
+        ],
+        "layout": "lecture"
+      },
+      "CS 441 Programming Languages": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "BHH 204"
+        ],
+        "layout": "lecture"
+      },
+      "CS 451R Networks": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "FH 256"
+        ],
+        "layout": "lecture"
+      },
+      "CS 5553 Parallel Prog": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          1
+        ],
+        "classrooms": [
+          "FH 310"
+        ],
+        "layout": "lecture"
+      }
+    }
+  },
+  "Dr. Praveen Rao": {
+    "user_id": 3,
+    "base_priority": 110000,
+    "current_priority": 110000,
+    "preferences": {
+      "days": [],
+      "slots": [],
+      "classrooms": [],
+      "layout": null
+    },
+    "course_preferences": {
+      "CS 201R Prog II": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "CS 281R Data Structures": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "FH 256"
+        ],
+        "layout": "lecture"
+      },
+      "CS 303 Algorithms": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          1
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "CS 394R Databases": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "FH 310"
+        ],
+        "layout": "lecture"
+      },
+      "CS 5560 ML": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "FH 256"
+        ],
+        "layout": "lecture"
+      }
+    }
+  },
+  "Dr. Reza Derakhshani": {
+    "user_id": 4,
+    "base_priority": 100000,
+    "current_priority": 103999,
+    "preferences": {
+      "days": [],
+      "slots": [],
+      "classrooms": [],
+      "layout": null
+    },
+    "course_preferences": {
+      "CS 101 Intro to CS": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "CS 281R Data Structures": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          1
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "CS 457 Info Security": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "FH 464"
+        ],
+        "layout": "lecture"
+      },
+      "CS 461R AI": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "FH 256"
+        ],
+        "layout": "lecture"
+      }
+    }
+  },
+  "Dr. Sejun Song": {
+    "user_id": 5,
+    "base_priority": 105000,
+    "current_priority": 105000,
+    "preferences": {
+      "days": [],
+      "slots": [],
+      "classrooms": [],
+      "layout": null
+    },
+    "course_preferences": {
+      "CS 404 Operating Systems": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          1
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "CS 451R Networks": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "FH 256"
+        ],
+        "layout": "lecture"
+      },
+      "CS 456 Comp Arch": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "RH 211"
+        ],
+        "layout": "lecture"
+      },
+      "CS 5553 Parallel Prog": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "FH 464"
+        ],
+        "layout": "lecture"
+      }
+    }
+  },
+  "Dr. Zhu Li": {
+    "user_id": 6,
+    "base_priority": 100000,
+    "current_priority": 100000,
+    "preferences": {
+      "days": [],
+      "slots": [],
+      "classrooms": [],
+      "layout": null
+    },
+    "course_preferences": {
+      "CS 201R Prog II": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "FH 256"
+        ],
+        "layout": "lecture"
+      },
+      "CS 303 Algorithms": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "CS 456 Comp Arch": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          1
+        ],
+        "classrooms": [
+          "FH 310"
+        ],
+        "layout": "lecture"
+      },
+      "CS 5553 Parallel Prog": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "FH 514"
+        ],
+        "layout": "lecture"
+      }
+    }
+  },
+  "Dr. Cihan Tunc": {
+    "user_id": 7,
+    "base_priority": 100000,
+    "current_priority": 100000,
+    "preferences": {
+      "days": [],
+      "slots": [],
+      "classrooms": [],
+      "layout": null
+    },
+    "course_preferences": {
+      "CS 191 Discrete Structures": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "CS 281R Data Structures": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          1
+        ],
+        "classrooms": [
+          "FH 256"
+        ],
+        "layout": "lecture"
+      },
+      "CS 404 Operating Systems": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "BHH 204"
+        ],
+        "layout": "lecture"
+      },
+      "CS 457 Info Security": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "FH 464"
+        ],
+        "layout": "lecture"
+      }
+    }
+  },
+  "Dr. Mohammad Kuhail": {
+    "user_id": 8,
+    "base_priority": 100000,
+    "current_priority": 103998,
+    "preferences": {
+      "days": [],
+      "slots": [],
+      "classrooms": [],
+      "layout": null
+    },
+    "course_preferences": {
+      "CS 394R Databases": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          1
+        ],
+        "classrooms": [
+          "FH 256"
+        ],
+        "layout": "lecture"
+      },
+      "CS 431 Software Eng": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "RH 211"
+        ],
+        "layout": "lecture"
+      },
+      "CS 441 Programming Languages": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "CS 5551 Adv Software Eng": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "FH 256"
+        ],
+        "layout": "lecture"
+      }
+    }
+  },
+  "Dr. Majid Bani-Yaghoub": {
+    "user_id": 9,
+    "base_priority": 112000,
+    "current_priority": 112000,
+    "preferences": {
+      "days": [],
+      "slots": [],
+      "classrooms": [],
+      "layout": null
+    },
+    "course_preferences": {
+      "MATH 110 College Algebra": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "MATH 210 Calc I": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "MATH 345 Diff Eq": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          1
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "STAT 235 Elem Stats": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "HH 301"
+        ],
+        "layout": "lecture"
+      }
+    }
+  },
+  "Dr. Noah Rhee": {
+    "user_id": 10,
+    "base_priority": 100000,
+    "current_priority": 100000,
+    "preferences": {
+      "days": [],
+      "slots": [],
+      "classrooms": [],
+      "layout": null
+    },
+    "course_preferences": {
+      "MATH 210 Calc I": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "MATH 220 Calc II": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          1
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "MATH 300 Linear Algebra": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "HH 301"
+        ],
+        "layout": "lecture"
+      },
+      "MATH 410 Abstract Algebra": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "FH 517"
+        ],
+        "layout": "seminar"
+      }
+    }
+  },
+  "Dr. Liana Sega": {
+    "user_id": 11,
+    "base_priority": 106000,
+    "current_priority": 106000,
+    "preferences": {
+      "days": [],
+      "slots": [],
+      "classrooms": [],
+      "layout": null
+    },
+    "course_preferences": {
+      "MATH 220 Calc II": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          1
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "MATH 300 Linear Algebra": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "HH 301"
+        ],
+        "layout": "lecture"
+      },
+      "MATH 410 Abstract Algebra": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "FH 517"
+        ],
+        "layout": "seminar"
+      },
+      "STAT 436 Applied Stats": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "HH 201"
+        ],
+        "layout": "lecture"
+      }
+    }
+  },
+  "Dr. Xianping Ge": {
+    "user_id": 12,
+    "base_priority": 100000,
+    "current_priority": 101999,
+    "preferences": {
+      "days": [],
+      "slots": [],
+      "classrooms": [],
+      "layout": null
+    },
+    "course_preferences": {
+      "MATH 110 College Algebra": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "MATH 345 Diff Eq": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "RH 211"
+        ],
+        "layout": "lecture"
+      },
+      "STAT 235 Elem Stats": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          1
+        ],
+        "classrooms": [
+          "HH 301"
+        ],
+        "layout": "lecture"
+      },
+      "STAT 436 Applied Stats": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      }
+    }
+  },
+  "Dr. Anthony Caruso": {
+    "user_id": 13,
+    "base_priority": 118000,
+    "current_priority": 118000,
+    "preferences": {
+      "days": [],
+      "slots": [],
+      "classrooms": [],
+      "layout": null
+    },
+    "course_preferences": {
+      "PHYS 210 Intro Mechanics": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "PHYS 240 Physics I": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          1
+        ],
+        "classrooms": [
+          "FH 256"
+        ],
+        "layout": "lecture"
+      },
+      "PHYS 250 Physics II": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "PHYS 480 Quantum Mechanics": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "FH 517"
+        ],
+        "layout": "seminar"
+      }
+    }
+  },
+  "Dr. Deb Chatterjee": {
+    "user_id": 14,
+    "base_priority": 100000,
+    "current_priority": 100000,
+    "preferences": {
+      "days": [],
+      "slots": [],
+      "classrooms": [],
+      "layout": null
+    },
+    "course_preferences": {
+      "ECE 216 Circuits I": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          1
+        ],
+        "classrooms": [
+          "FH 310"
+        ],
+        "layout": "lecture"
+      },
+      "ECE 282 Digital Logic": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "PHYS 210 Intro Mechanics": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "PHYS 240 Physics I": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "PHYS 250 Physics II": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      }
+    }
+  },
+  "Dr. Ahmed Hassan": {
+    "user_id": 15,
+    "base_priority": 105000,
+    "current_priority": 105000,
+    "preferences": {
+      "days": [],
+      "slots": [],
+      "classrooms": [],
+      "layout": null
+    },
+    "course_preferences": {
+      "ECE 216 Circuits I": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "ECE 282 Digital Logic": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "FH 256"
+        ],
+        "layout": "lecture"
+      },
+      "ECE 380 Microcontrollers": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "FH 514"
+        ],
+        "layout": "lab"
+      },
+      "ECE 448 Embedded Systems": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "SCB 205"
+        ],
+        "layout": "lab"
+      }
+    }
+  },
+  "Dr. Masud Chowdhury": {
+    "user_id": 16,
+    "base_priority": 100000,
+    "current_priority": 100000,
+    "preferences": {
+      "days": [],
+      "slots": [],
+      "classrooms": [],
+      "layout": null
+    },
+    "course_preferences": {
+      "ECE 216 Circuits I": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "FH 256"
+        ],
+        "layout": "lecture"
+      },
+      "ECE 380 Microcontrollers": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "FH 514"
+        ],
+        "layout": "lab"
+      },
+      "ECE 448 Embedded Systems": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "SCB 205"
+        ],
+        "layout": "lab"
+      },
+      "PHYS 480 Quantum Mechanics": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "FH 517"
+        ],
+        "layout": "seminar"
+      }
+    }
+  },
+  "Dr. Kathleen Kilway": {
+    "user_id": 17,
+    "base_priority": 120000,
+    "current_priority": 120000,
+    "preferences": {
+      "days": [],
+      "slots": [],
+      "classrooms": [],
+      "layout": null
+    },
+    "course_preferences": {
+      "CHEM 211 Gen Chem I": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          1
+        ],
+        "classrooms": [
+          "SCB 101"
+        ],
+        "layout": "lecture"
+      },
+      "CHEM 212 Gen Chem II": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "CHEM 330 Organic Chem": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "SCB 101"
+        ],
+        "layout": "lecture"
+      },
+      "CHEM 432 Biochemistry": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "SCB 205"
+        ],
+        "layout": "lab"
+      }
+    }
+  },
+  "Dr. Jeffrey Thomas": {
+    "user_id": 18,
+    "base_priority": 100000,
+    "current_priority": 100000,
+    "preferences": {
+      "days": [],
+      "slots": [],
+      "classrooms": [],
+      "layout": null
+    },
+    "course_preferences": {
+      "BIOL 108 Intro Biology": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "SCB 101"
+        ],
+        "layout": "lecture"
+      },
+      "BIOL 109 Biology Lab": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "SCB 205"
+        ],
+        "layout": "lab"
+      },
+      "BIOL 302 Genetics": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "RH 211"
+        ],
+        "layout": "lecture"
+      },
+      "BIOL 410 Molecular Bio": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "RH 211"
+        ],
+        "layout": "lecture"
+      }
+    }
+  },
+  "Dr. Shin Moteki": {
+    "user_id": 19,
+    "base_priority": 104000,
+    "current_priority": 107998,
+    "preferences": {
+      "days": [],
+      "slots": [],
+      "classrooms": [],
+      "layout": null
+    },
+    "course_preferences": {
+      "BIOL 410 Molecular Bio": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "SCB 101"
+        ],
+        "layout": "lecture"
+      },
+      "CHEM 211 Gen Chem I": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          1
+        ],
+        "classrooms": [
+          "RH 204"
+        ],
+        "layout": "lecture"
+      },
+      "CHEM 212 Gen Chem II": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "SCB 101"
+        ],
+        "layout": "lecture"
+      },
+      "CHEM 330 Organic Chem": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          3
+        ],
+        "classrooms": [
+          "SCB 101"
+        ],
+        "layout": "lecture"
+      }
+    }
+  },
+  "Dr. Ryan Mohan": {
+    "user_id": 20,
+    "base_priority": 100000,
+    "current_priority": 101999,
+    "preferences": {
+      "days": [],
+      "slots": [],
+      "classrooms": [],
+      "layout": null
+    },
+    "course_preferences": {
+      "BIOL 108 Intro Biology": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          1
+        ],
+        "classrooms": [
+          "SCB 101"
+        ],
+        "layout": "lecture"
+      },
+      "BIOL 109 Biology Lab": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "SCB 205"
+        ],
+        "layout": "lab"
+      },
+      "BIOL 302 Genetics": {
+        "days": [
+          "Tuesday",
+          "Thursday"
+        ],
+        "slots": [
+          2
+        ],
+        "classrooms": [
+          "RH 211"
+        ],
+        "layout": "lecture"
+      },
+      "CHEM 432 Biochemistry": {
+        "days": [
+          "Wednesday",
+          "Monday"
+        ],
+        "slots": [
+          4
+        ],
+        "classrooms": [
+          "SCB 205"
+        ],
+        "layout": "lab"
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "semester_id": 1,
+    "id": 1,
+    "name": "Fall 2024",
+    "start_date": "2024-08-26",
+    "end_date": "2024-12-20",
+    "is_active": false
+  },
+  {
+    "semester_id": 2,
+    "id": 2,
+    "name": "Spring 2025",
+    "start_date": "2025-01-21",
+    "end_date": "2025-05-16",
+    "is_active": false
+  },
+  {
+    "semester_id": 3,
+    "id": 3,
+    "name": "Fall 2025",
+    "start_date": "2025-08-25",
+    "end_date": "2025-12-19",
+    "is_active": false
+  },
+  {
+    "semester_id": 4,
+    "id": 4,
+    "name": "Spring 2026",
+    "start_date": "2026-01-20",
+    "end_date": "2026-05-15",
+    "is_active": false
+  },
+  {
+    "semester_id": 5,
+    "id": 5,
+    "name": "Fall 2026",
+    "start_date": "2026-08-24",
+    "end_date": "2026-12-18",
+    "is_active": true
+  },
+  {
+    "semester_id": 6,
+    "id": 6,
+    "name": "Spring 2027",
+    "start_date": "2027-01-19",
+    "end_date": "2027-05-14",
+    "is_active": false
+  }
+]

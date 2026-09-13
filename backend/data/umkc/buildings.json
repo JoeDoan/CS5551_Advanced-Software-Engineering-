@@ -1,0 +1,32 @@
+[
+  {
+    "building_id": 1,
+    "campus_id": 1,
+    "name": "Flarsheim Hall",
+    "code": "FH"
+  },
+  {
+    "building_id": 2,
+    "campus_id": 1,
+    "name": "Royall Hall",
+    "code": "RH"
+  },
+  {
+    "building_id": 3,
+    "campus_id": 1,
+    "name": "Haag Hall",
+    "code": "HH"
+  },
+  {
+    "building_id": 4,
+    "campus_id": 1,
+    "name": "Spencer Chemistry Building",
+    "code": "SCB"
+  },
+  {
+    "building_id": 5,
+    "campus_id": 1,
+    "name": "Bloch Heritage Hall",
+    "code": "BHH"
+  }
+]

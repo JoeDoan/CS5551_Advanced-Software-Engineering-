@@ -1,0 +1,9074 @@
+[
+  {
+    "id": 1,
+    "instructor_id": 1,
+    "course_id": 1,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 2,
+    "instructor_id": 1,
+    "course_id": 8,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 3,
+    "instructor_id": 1,
+    "course_id": 13,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 4,
+    "instructor_id": 1,
+    "course_id": 14,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 8,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 5,
+    "instructor_id": 1,
+    "course_id": 16,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 6,
+    "instructor_id": 2,
+    "course_id": 2,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 7,
+    "instructor_id": 2,
+    "course_id": 7,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 8,
+    "instructor_id": 2,
+    "course_id": 9,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 8,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 9,
+    "instructor_id": 2,
+    "course_id": 10,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 10,
+    "instructor_id": 2,
+    "course_id": 15,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 10,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 11,
+    "instructor_id": 3,
+    "course_id": 3,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 12,
+    "instructor_id": 3,
+    "course_id": 4,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 13,
+    "instructor_id": 3,
+    "course_id": 5,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 14,
+    "instructor_id": 3,
+    "course_id": 6,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 15,
+    "instructor_id": 3,
+    "course_id": 16,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 16,
+    "instructor_id": 4,
+    "course_id": 1,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 17,
+    "instructor_id": 4,
+    "course_id": 4,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 18,
+    "instructor_id": 4,
+    "course_id": 12,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 10,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 19,
+    "instructor_id": 4,
+    "course_id": 13,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 20,
+    "instructor_id": 5,
+    "course_id": 7,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 21,
+    "instructor_id": 5,
+    "course_id": 10,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 22,
+    "instructor_id": 5,
+    "course_id": 11,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 23,
+    "instructor_id": 5,
+    "course_id": 15,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 24,
+    "instructor_id": 6,
+    "course_id": 3,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 25,
+    "instructor_id": 6,
+    "course_id": 5,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 26,
+    "instructor_id": 6,
+    "course_id": 11,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 27,
+    "instructor_id": 6,
+    "course_id": 15,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 28,
+    "instructor_id": 7,
+    "course_id": 2,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 29,
+    "instructor_id": 7,
+    "course_id": 4,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 30,
+    "instructor_id": 7,
+    "course_id": 7,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 8,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 31,
+    "instructor_id": 7,
+    "course_id": 12,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 32,
+    "instructor_id": 8,
+    "course_id": 6,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 33,
+    "instructor_id": 8,
+    "course_id": 8,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 34,
+    "instructor_id": 8,
+    "course_id": 9,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 35,
+    "instructor_id": 8,
+    "course_id": 14,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 36,
+    "instructor_id": 9,
+    "course_id": 17,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 37,
+    "instructor_id": 9,
+    "course_id": 18,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 38,
+    "instructor_id": 9,
+    "course_id": 21,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 7,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 39,
+    "instructor_id": 9,
+    "course_id": 23,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 40,
+    "instructor_id": 10,
+    "course_id": 18,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 41,
+    "instructor_id": 10,
+    "course_id": 19,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 42,
+    "instructor_id": 10,
+    "course_id": 20,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 43,
+    "instructor_id": 10,
+    "course_id": 22,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 44,
+    "instructor_id": 11,
+    "course_id": 19,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 45,
+    "instructor_id": 11,
+    "course_id": 20,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 46,
+    "instructor_id": 11,
+    "course_id": 22,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 47,
+    "instructor_id": 11,
+    "course_id": 24,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 48,
+    "instructor_id": 12,
+    "course_id": 17,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 49,
+    "instructor_id": 12,
+    "course_id": 21,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 50,
+    "instructor_id": 12,
+    "course_id": 23,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 51,
+    "instructor_id": 12,
+    "course_id": 24,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 52,
+    "instructor_id": 13,
+    "course_id": 29,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 53,
+    "instructor_id": 13,
+    "course_id": 30,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 54,
+    "instructor_id": 13,
+    "course_id": 31,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 55,
+    "instructor_id": 13,
+    "course_id": 32,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 56,
+    "instructor_id": 14,
+    "course_id": 25,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 57,
+    "instructor_id": 14,
+    "course_id": 26,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 58,
+    "instructor_id": 14,
+    "course_id": 29,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 59,
+    "instructor_id": 14,
+    "course_id": 30,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 60,
+    "instructor_id": 14,
+    "course_id": 31,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 61,
+    "instructor_id": 15,
+    "course_id": 25,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 62,
+    "instructor_id": 15,
+    "course_id": 26,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 63,
+    "instructor_id": 15,
+    "course_id": 27,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 10,
+    "preferred_layout": "lab",
+    "semester_id": 1,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 64,
+    "instructor_id": 15,
+    "course_id": 28,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lab",
+    "semester_id": 1,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 65,
+    "instructor_id": 16,
+    "course_id": 25,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 66,
+    "instructor_id": 16,
+    "course_id": 27,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 10,
+    "preferred_layout": "lab",
+    "semester_id": 1,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 67,
+    "instructor_id": 16,
+    "course_id": 28,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lab",
+    "semester_id": 1,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 68,
+    "instructor_id": 16,
+    "course_id": 32,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 69,
+    "instructor_id": 17,
+    "course_id": 37,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 70,
+    "instructor_id": 17,
+    "course_id": 38,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 71,
+    "instructor_id": 17,
+    "course_id": 39,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 72,
+    "instructor_id": 17,
+    "course_id": 40,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 1,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 73,
+    "instructor_id": 18,
+    "course_id": 33,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 74,
+    "instructor_id": 18,
+    "course_id": 34,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 1,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 75,
+    "instructor_id": 18,
+    "course_id": 35,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 76,
+    "instructor_id": 18,
+    "course_id": 36,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 77,
+    "instructor_id": 19,
+    "course_id": 36,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 78,
+    "instructor_id": 19,
+    "course_id": 37,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 79,
+    "instructor_id": 19,
+    "course_id": 38,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 80,
+    "instructor_id": 19,
+    "course_id": 39,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 81,
+    "instructor_id": 20,
+    "course_id": 33,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 82,
+    "instructor_id": 20,
+    "course_id": 34,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 1,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 83,
+    "instructor_id": 20,
+    "course_id": 35,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 1,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 84,
+    "instructor_id": 20,
+    "course_id": 40,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lab",
+    "semester_id": 1,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 85,
+    "instructor_id": 1,
+    "course_id": 1,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 86,
+    "instructor_id": 1,
+    "course_id": 8,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 87,
+    "instructor_id": 1,
+    "course_id": 13,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 88,
+    "instructor_id": 1,
+    "course_id": 14,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 89,
+    "instructor_id": 1,
+    "course_id": 16,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 90,
+    "instructor_id": 2,
+    "course_id": 2,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 91,
+    "instructor_id": 2,
+    "course_id": 7,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 92,
+    "instructor_id": 2,
+    "course_id": 9,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 93,
+    "instructor_id": 2,
+    "course_id": 10,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 94,
+    "instructor_id": 2,
+    "course_id": 15,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 95,
+    "instructor_id": 3,
+    "course_id": 3,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 96,
+    "instructor_id": 3,
+    "course_id": 4,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 97,
+    "instructor_id": 3,
+    "course_id": 5,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 98,
+    "instructor_id": 3,
+    "course_id": 6,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 99,
+    "instructor_id": 3,
+    "course_id": 16,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 100,
+    "instructor_id": 4,
+    "course_id": 1,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 101,
+    "instructor_id": 4,
+    "course_id": 4,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 102,
+    "instructor_id": 4,
+    "course_id": 12,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 103,
+    "instructor_id": 4,
+    "course_id": 13,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 104,
+    "instructor_id": 5,
+    "course_id": 7,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 105,
+    "instructor_id": 5,
+    "course_id": 10,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 106,
+    "instructor_id": 5,
+    "course_id": 11,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 107,
+    "instructor_id": 5,
+    "course_id": 15,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 108,
+    "instructor_id": 6,
+    "course_id": 3,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 109,
+    "instructor_id": 6,
+    "course_id": 5,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 110,
+    "instructor_id": 6,
+    "course_id": 11,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 8,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 111,
+    "instructor_id": 6,
+    "course_id": 15,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 112,
+    "instructor_id": 7,
+    "course_id": 2,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 113,
+    "instructor_id": 7,
+    "course_id": 4,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 114,
+    "instructor_id": 7,
+    "course_id": 7,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 115,
+    "instructor_id": 7,
+    "course_id": 12,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 8,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 116,
+    "instructor_id": 8,
+    "course_id": 6,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 117,
+    "instructor_id": 8,
+    "course_id": 8,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 118,
+    "instructor_id": 8,
+    "course_id": 9,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 119,
+    "instructor_id": 8,
+    "course_id": 14,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 120,
+    "instructor_id": 9,
+    "course_id": 17,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 121,
+    "instructor_id": 9,
+    "course_id": 18,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 122,
+    "instructor_id": 9,
+    "course_id": 21,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 123,
+    "instructor_id": 9,
+    "course_id": 23,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 124,
+    "instructor_id": 10,
+    "course_id": 18,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 125,
+    "instructor_id": 10,
+    "course_id": 19,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 126,
+    "instructor_id": 10,
+    "course_id": 20,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 127,
+    "instructor_id": 10,
+    "course_id": 22,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 128,
+    "instructor_id": 11,
+    "course_id": 19,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 129,
+    "instructor_id": 11,
+    "course_id": 20,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 130,
+    "instructor_id": 11,
+    "course_id": 22,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 131,
+    "instructor_id": 11,
+    "course_id": 24,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 7,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 132,
+    "instructor_id": 12,
+    "course_id": 17,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 133,
+    "instructor_id": 12,
+    "course_id": 21,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 134,
+    "instructor_id": 12,
+    "course_id": 23,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 135,
+    "instructor_id": 12,
+    "course_id": 24,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 136,
+    "instructor_id": 13,
+    "course_id": 29,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 137,
+    "instructor_id": 13,
+    "course_id": 30,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 138,
+    "instructor_id": 13,
+    "course_id": 31,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 139,
+    "instructor_id": 13,
+    "course_id": 32,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 140,
+    "instructor_id": 14,
+    "course_id": 25,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 141,
+    "instructor_id": 14,
+    "course_id": 26,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 142,
+    "instructor_id": 14,
+    "course_id": 29,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 143,
+    "instructor_id": 14,
+    "course_id": 30,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 144,
+    "instructor_id": 14,
+    "course_id": 31,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 145,
+    "instructor_id": 15,
+    "course_id": 25,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 146,
+    "instructor_id": 15,
+    "course_id": 26,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 147,
+    "instructor_id": 15,
+    "course_id": 27,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lab",
+    "semester_id": 2,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 148,
+    "instructor_id": 15,
+    "course_id": 28,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 10,
+    "preferred_layout": "lab",
+    "semester_id": 2,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 149,
+    "instructor_id": 16,
+    "course_id": 25,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 150,
+    "instructor_id": 16,
+    "course_id": 27,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lab",
+    "semester_id": 2,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 151,
+    "instructor_id": 16,
+    "course_id": 28,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 10,
+    "preferred_layout": "lab",
+    "semester_id": 2,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 152,
+    "instructor_id": 16,
+    "course_id": 32,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 153,
+    "instructor_id": 17,
+    "course_id": 37,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 154,
+    "instructor_id": 17,
+    "course_id": 38,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 155,
+    "instructor_id": 17,
+    "course_id": 39,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 156,
+    "instructor_id": 17,
+    "course_id": 40,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lab",
+    "semester_id": 2,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 157,
+    "instructor_id": 18,
+    "course_id": 33,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 158,
+    "instructor_id": 18,
+    "course_id": 34,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 2,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 159,
+    "instructor_id": 18,
+    "course_id": 35,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 160,
+    "instructor_id": 18,
+    "course_id": 36,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 161,
+    "instructor_id": 19,
+    "course_id": 36,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 162,
+    "instructor_id": 19,
+    "course_id": 37,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 163,
+    "instructor_id": 19,
+    "course_id": 38,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 164,
+    "instructor_id": 19,
+    "course_id": 39,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 165,
+    "instructor_id": 20,
+    "course_id": 33,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 166,
+    "instructor_id": 20,
+    "course_id": 34,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 2,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 167,
+    "instructor_id": 20,
+    "course_id": 35,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 2,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 168,
+    "instructor_id": 20,
+    "course_id": 40,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lab",
+    "semester_id": 2,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 169,
+    "instructor_id": 1,
+    "course_id": 1,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 170,
+    "instructor_id": 1,
+    "course_id": 8,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 171,
+    "instructor_id": 1,
+    "course_id": 13,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 172,
+    "instructor_id": 1,
+    "course_id": 14,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 173,
+    "instructor_id": 1,
+    "course_id": 16,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 174,
+    "instructor_id": 2,
+    "course_id": 2,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 175,
+    "instructor_id": 2,
+    "course_id": 7,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 176,
+    "instructor_id": 2,
+    "course_id": 9,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 177,
+    "instructor_id": 2,
+    "course_id": 10,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 178,
+    "instructor_id": 2,
+    "course_id": 15,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 179,
+    "instructor_id": 3,
+    "course_id": 3,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 180,
+    "instructor_id": 3,
+    "course_id": 4,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 181,
+    "instructor_id": 3,
+    "course_id": 5,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 182,
+    "instructor_id": 3,
+    "course_id": 6,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 183,
+    "instructor_id": 3,
+    "course_id": 16,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 184,
+    "instructor_id": 4,
+    "course_id": 1,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 185,
+    "instructor_id": 4,
+    "course_id": 4,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 186,
+    "instructor_id": 4,
+    "course_id": 12,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 187,
+    "instructor_id": 4,
+    "course_id": 13,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 188,
+    "instructor_id": 5,
+    "course_id": 7,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 189,
+    "instructor_id": 5,
+    "course_id": 10,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 190,
+    "instructor_id": 5,
+    "course_id": 11,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 191,
+    "instructor_id": 5,
+    "course_id": 15,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 192,
+    "instructor_id": 6,
+    "course_id": 3,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 193,
+    "instructor_id": 6,
+    "course_id": 5,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 194,
+    "instructor_id": 6,
+    "course_id": 11,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 195,
+    "instructor_id": 6,
+    "course_id": 15,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 196,
+    "instructor_id": 7,
+    "course_id": 2,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 197,
+    "instructor_id": 7,
+    "course_id": 4,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 198,
+    "instructor_id": 7,
+    "course_id": 7,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 199,
+    "instructor_id": 7,
+    "course_id": 12,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 200,
+    "instructor_id": 8,
+    "course_id": 6,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 201,
+    "instructor_id": 8,
+    "course_id": 8,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 202,
+    "instructor_id": 8,
+    "course_id": 9,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 203,
+    "instructor_id": 8,
+    "course_id": 14,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 204,
+    "instructor_id": 9,
+    "course_id": 17,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 205,
+    "instructor_id": 9,
+    "course_id": 18,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 206,
+    "instructor_id": 9,
+    "course_id": 21,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 207,
+    "instructor_id": 9,
+    "course_id": 23,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 208,
+    "instructor_id": 10,
+    "course_id": 18,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 209,
+    "instructor_id": 10,
+    "course_id": 19,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 210,
+    "instructor_id": 10,
+    "course_id": 20,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 211,
+    "instructor_id": 10,
+    "course_id": 22,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 212,
+    "instructor_id": 11,
+    "course_id": 19,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 213,
+    "instructor_id": 11,
+    "course_id": 20,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 214,
+    "instructor_id": 11,
+    "course_id": 22,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 215,
+    "instructor_id": 11,
+    "course_id": 24,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 216,
+    "instructor_id": 12,
+    "course_id": 17,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 217,
+    "instructor_id": 12,
+    "course_id": 21,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 218,
+    "instructor_id": 12,
+    "course_id": 23,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 219,
+    "instructor_id": 12,
+    "course_id": 24,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 220,
+    "instructor_id": 13,
+    "course_id": 29,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 221,
+    "instructor_id": 13,
+    "course_id": 30,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 222,
+    "instructor_id": 13,
+    "course_id": 31,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 223,
+    "instructor_id": 13,
+    "course_id": 32,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 224,
+    "instructor_id": 14,
+    "course_id": 25,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 225,
+    "instructor_id": 14,
+    "course_id": 26,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 226,
+    "instructor_id": 14,
+    "course_id": 29,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 227,
+    "instructor_id": 14,
+    "course_id": 30,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 228,
+    "instructor_id": 14,
+    "course_id": 31,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 229,
+    "instructor_id": 15,
+    "course_id": 25,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 230,
+    "instructor_id": 15,
+    "course_id": 26,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 231,
+    "instructor_id": 15,
+    "course_id": 27,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 5,
+    "preferred_slots": [
+      5
+    ],
+    "preferred_room_id": 10,
+    "preferred_layout": "lab",
+    "semester_id": 3,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 232,
+    "instructor_id": 15,
+    "course_id": 28,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 3,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 233,
+    "instructor_id": 16,
+    "course_id": 25,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 234,
+    "instructor_id": 16,
+    "course_id": 27,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 5,
+    "preferred_slots": [
+      5
+    ],
+    "preferred_room_id": 10,
+    "preferred_layout": "lab",
+    "semester_id": 3,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 235,
+    "instructor_id": 16,
+    "course_id": 28,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 3,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 236,
+    "instructor_id": 16,
+    "course_id": 32,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 237,
+    "instructor_id": 17,
+    "course_id": 37,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 238,
+    "instructor_id": 17,
+    "course_id": 38,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 239,
+    "instructor_id": 17,
+    "course_id": 39,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 240,
+    "instructor_id": 17,
+    "course_id": 40,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lab",
+    "semester_id": 3,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 241,
+    "instructor_id": 18,
+    "course_id": 33,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 242,
+    "instructor_id": 18,
+    "course_id": 34,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lab",
+    "semester_id": 3,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 243,
+    "instructor_id": 18,
+    "course_id": 35,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 244,
+    "instructor_id": 18,
+    "course_id": 36,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 245,
+    "instructor_id": 19,
+    "course_id": 36,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 246,
+    "instructor_id": 19,
+    "course_id": 37,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 247,
+    "instructor_id": 19,
+    "course_id": 38,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 248,
+    "instructor_id": 19,
+    "course_id": 39,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 249,
+    "instructor_id": 20,
+    "course_id": 33,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 250,
+    "instructor_id": 20,
+    "course_id": 34,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 3,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 251,
+    "instructor_id": 20,
+    "course_id": 35,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 3,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 252,
+    "instructor_id": 20,
+    "course_id": 40,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lab",
+    "semester_id": 3,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 253,
+    "instructor_id": 1,
+    "course_id": 1,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 254,
+    "instructor_id": 1,
+    "course_id": 8,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 255,
+    "instructor_id": 1,
+    "course_id": 13,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 256,
+    "instructor_id": 1,
+    "course_id": 14,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 257,
+    "instructor_id": 1,
+    "course_id": 16,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 258,
+    "instructor_id": 2,
+    "course_id": 2,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 259,
+    "instructor_id": 2,
+    "course_id": 7,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 260,
+    "instructor_id": 2,
+    "course_id": 9,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 261,
+    "instructor_id": 2,
+    "course_id": 10,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 262,
+    "instructor_id": 2,
+    "course_id": 15,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 263,
+    "instructor_id": 3,
+    "course_id": 3,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 264,
+    "instructor_id": 3,
+    "course_id": 4,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 265,
+    "instructor_id": 3,
+    "course_id": 5,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 266,
+    "instructor_id": 3,
+    "course_id": 6,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 267,
+    "instructor_id": 3,
+    "course_id": 16,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 268,
+    "instructor_id": 4,
+    "course_id": 1,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 269,
+    "instructor_id": 4,
+    "course_id": 4,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 270,
+    "instructor_id": 4,
+    "course_id": 12,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 271,
+    "instructor_id": 4,
+    "course_id": 13,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 272,
+    "instructor_id": 5,
+    "course_id": 7,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 273,
+    "instructor_id": 5,
+    "course_id": 10,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 274,
+    "instructor_id": 5,
+    "course_id": 11,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 275,
+    "instructor_id": 5,
+    "course_id": 15,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 276,
+    "instructor_id": 6,
+    "course_id": 3,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 277,
+    "instructor_id": 6,
+    "course_id": 5,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 278,
+    "instructor_id": 6,
+    "course_id": 11,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 279,
+    "instructor_id": 6,
+    "course_id": 15,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 8,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 280,
+    "instructor_id": 7,
+    "course_id": 2,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 281,
+    "instructor_id": 7,
+    "course_id": 4,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 282,
+    "instructor_id": 7,
+    "course_id": 7,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 283,
+    "instructor_id": 7,
+    "course_id": 12,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 10,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 284,
+    "instructor_id": 8,
+    "course_id": 6,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 285,
+    "instructor_id": 8,
+    "course_id": 8,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 286,
+    "instructor_id": 8,
+    "course_id": 9,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 287,
+    "instructor_id": 8,
+    "course_id": 14,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 8,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 288,
+    "instructor_id": 9,
+    "course_id": 17,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 289,
+    "instructor_id": 9,
+    "course_id": 18,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 290,
+    "instructor_id": 9,
+    "course_id": 21,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 291,
+    "instructor_id": 9,
+    "course_id": 23,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 292,
+    "instructor_id": 10,
+    "course_id": 18,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 293,
+    "instructor_id": 10,
+    "course_id": 19,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 294,
+    "instructor_id": 10,
+    "course_id": 20,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 295,
+    "instructor_id": 10,
+    "course_id": 22,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 296,
+    "instructor_id": 11,
+    "course_id": 19,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 297,
+    "instructor_id": 11,
+    "course_id": 20,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 298,
+    "instructor_id": 11,
+    "course_id": 22,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 299,
+    "instructor_id": 11,
+    "course_id": 24,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 300,
+    "instructor_id": 12,
+    "course_id": 17,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 301,
+    "instructor_id": 12,
+    "course_id": 21,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 302,
+    "instructor_id": 12,
+    "course_id": 23,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 303,
+    "instructor_id": 12,
+    "course_id": 24,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 304,
+    "instructor_id": 13,
+    "course_id": 29,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 305,
+    "instructor_id": 13,
+    "course_id": 30,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 306,
+    "instructor_id": 13,
+    "course_id": 31,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 307,
+    "instructor_id": 13,
+    "course_id": 32,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 308,
+    "instructor_id": 14,
+    "course_id": 25,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 309,
+    "instructor_id": 14,
+    "course_id": 26,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 310,
+    "instructor_id": 14,
+    "course_id": 29,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 311,
+    "instructor_id": 14,
+    "course_id": 30,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 312,
+    "instructor_id": 14,
+    "course_id": 31,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 313,
+    "instructor_id": 15,
+    "course_id": 25,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 314,
+    "instructor_id": 15,
+    "course_id": 26,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 315,
+    "instructor_id": 15,
+    "course_id": 27,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 4,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 316,
+    "instructor_id": 15,
+    "course_id": 28,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lab",
+    "semester_id": 4,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 317,
+    "instructor_id": 16,
+    "course_id": 25,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 318,
+    "instructor_id": 16,
+    "course_id": 27,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 4,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 319,
+    "instructor_id": 16,
+    "course_id": 28,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lab",
+    "semester_id": 4,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 320,
+    "instructor_id": 16,
+    "course_id": 32,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 321,
+    "instructor_id": 17,
+    "course_id": 37,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 322,
+    "instructor_id": 17,
+    "course_id": 38,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 323,
+    "instructor_id": 17,
+    "course_id": 39,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 324,
+    "instructor_id": 17,
+    "course_id": 40,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 4,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 325,
+    "instructor_id": 18,
+    "course_id": 33,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 326,
+    "instructor_id": 18,
+    "course_id": 34,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 4,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 327,
+    "instructor_id": 18,
+    "course_id": 35,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 328,
+    "instructor_id": 18,
+    "course_id": 36,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 329,
+    "instructor_id": 19,
+    "course_id": 36,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 330,
+    "instructor_id": 19,
+    "course_id": 37,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 331,
+    "instructor_id": 19,
+    "course_id": 38,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 332,
+    "instructor_id": 19,
+    "course_id": 39,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 333,
+    "instructor_id": 20,
+    "course_id": 33,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 334,
+    "instructor_id": 20,
+    "course_id": 34,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 4,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 335,
+    "instructor_id": 20,
+    "course_id": 35,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 4,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 336,
+    "instructor_id": 20,
+    "course_id": 40,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 4,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 337,
+    "instructor_id": 1,
+    "course_id": 1,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 338,
+    "instructor_id": 1,
+    "course_id": 8,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 339,
+    "instructor_id": 1,
+    "course_id": 13,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 340,
+    "instructor_id": 1,
+    "course_id": 14,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 341,
+    "instructor_id": 1,
+    "course_id": 16,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 342,
+    "instructor_id": 2,
+    "course_id": 2,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 343,
+    "instructor_id": 2,
+    "course_id": 7,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 344,
+    "instructor_id": 2,
+    "course_id": 9,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 345,
+    "instructor_id": 2,
+    "course_id": 10,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 8,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 346,
+    "instructor_id": 2,
+    "course_id": 15,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 347,
+    "instructor_id": 3,
+    "course_id": 3,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 348,
+    "instructor_id": 3,
+    "course_id": 4,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 349,
+    "instructor_id": 3,
+    "course_id": 5,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 350,
+    "instructor_id": 3,
+    "course_id": 6,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 351,
+    "instructor_id": 3,
+    "course_id": 16,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 352,
+    "instructor_id": 4,
+    "course_id": 1,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 353,
+    "instructor_id": 4,
+    "course_id": 4,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 354,
+    "instructor_id": 4,
+    "course_id": 12,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 355,
+    "instructor_id": 4,
+    "course_id": 13,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 356,
+    "instructor_id": 5,
+    "course_id": 7,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 8,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 357,
+    "instructor_id": 5,
+    "course_id": 10,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 358,
+    "instructor_id": 5,
+    "course_id": 11,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 359,
+    "instructor_id": 5,
+    "course_id": 15,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 360,
+    "instructor_id": 6,
+    "course_id": 3,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 361,
+    "instructor_id": 6,
+    "course_id": 5,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 362,
+    "instructor_id": 6,
+    "course_id": 11,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 363,
+    "instructor_id": 6,
+    "course_id": 15,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 364,
+    "instructor_id": 7,
+    "course_id": 2,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 365,
+    "instructor_id": 7,
+    "course_id": 4,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 366,
+    "instructor_id": 7,
+    "course_id": 7,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 367,
+    "instructor_id": 7,
+    "course_id": 12,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 368,
+    "instructor_id": 8,
+    "course_id": 6,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 369,
+    "instructor_id": 8,
+    "course_id": 8,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 370,
+    "instructor_id": 8,
+    "course_id": 9,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 8,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 371,
+    "instructor_id": 8,
+    "course_id": 14,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 372,
+    "instructor_id": 9,
+    "course_id": 17,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 373,
+    "instructor_id": 9,
+    "course_id": 18,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 374,
+    "instructor_id": 9,
+    "course_id": 21,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 7,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 375,
+    "instructor_id": 9,
+    "course_id": 23,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 376,
+    "instructor_id": 10,
+    "course_id": 18,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 377,
+    "instructor_id": 10,
+    "course_id": 19,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 378,
+    "instructor_id": 10,
+    "course_id": 20,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 379,
+    "instructor_id": 10,
+    "course_id": 22,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 380,
+    "instructor_id": 11,
+    "course_id": 19,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 381,
+    "instructor_id": 11,
+    "course_id": 20,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 382,
+    "instructor_id": 11,
+    "course_id": 22,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 383,
+    "instructor_id": 11,
+    "course_id": 24,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 384,
+    "instructor_id": 12,
+    "course_id": 17,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 385,
+    "instructor_id": 12,
+    "course_id": 21,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 386,
+    "instructor_id": 12,
+    "course_id": 23,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 387,
+    "instructor_id": 12,
+    "course_id": 24,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 388,
+    "instructor_id": 13,
+    "course_id": 29,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 389,
+    "instructor_id": 13,
+    "course_id": 30,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 390,
+    "instructor_id": 13,
+    "course_id": 31,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 391,
+    "instructor_id": 13,
+    "course_id": 32,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 392,
+    "instructor_id": 14,
+    "course_id": 25,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 393,
+    "instructor_id": 14,
+    "course_id": 26,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 394,
+    "instructor_id": 14,
+    "course_id": 29,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 395,
+    "instructor_id": 14,
+    "course_id": 30,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 396,
+    "instructor_id": 14,
+    "course_id": 31,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 397,
+    "instructor_id": 15,
+    "course_id": 25,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 398,
+    "instructor_id": 15,
+    "course_id": 26,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 399,
+    "instructor_id": 15,
+    "course_id": 27,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lab",
+    "semester_id": 5,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 400,
+    "instructor_id": 15,
+    "course_id": 28,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 10,
+    "preferred_layout": "lab",
+    "semester_id": 5,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 401,
+    "instructor_id": 16,
+    "course_id": 25,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 402,
+    "instructor_id": 16,
+    "course_id": 27,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lab",
+    "semester_id": 5,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 403,
+    "instructor_id": 16,
+    "course_id": 28,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 10,
+    "preferred_layout": "lab",
+    "semester_id": 5,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 404,
+    "instructor_id": 16,
+    "course_id": 32,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 405,
+    "instructor_id": 17,
+    "course_id": 37,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 406,
+    "instructor_id": 17,
+    "course_id": 38,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 407,
+    "instructor_id": 17,
+    "course_id": 39,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 408,
+    "instructor_id": 17,
+    "course_id": 40,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 5,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 409,
+    "instructor_id": 18,
+    "course_id": 33,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 410,
+    "instructor_id": 18,
+    "course_id": 34,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 5,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 411,
+    "instructor_id": 18,
+    "course_id": 35,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 412,
+    "instructor_id": 18,
+    "course_id": 36,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 413,
+    "instructor_id": 19,
+    "course_id": 36,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 414,
+    "instructor_id": 19,
+    "course_id": 37,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 415,
+    "instructor_id": 19,
+    "course_id": 38,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 416,
+    "instructor_id": 19,
+    "course_id": 39,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 417,
+    "instructor_id": 20,
+    "course_id": 33,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 418,
+    "instructor_id": 20,
+    "course_id": 34,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 5,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 419,
+    "instructor_id": 20,
+    "course_id": 35,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 5,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 420,
+    "instructor_id": 20,
+    "course_id": 40,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lab",
+    "semester_id": 5,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 421,
+    "instructor_id": 1,
+    "course_id": 1,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 422,
+    "instructor_id": 1,
+    "course_id": 8,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 423,
+    "instructor_id": 1,
+    "course_id": 13,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 424,
+    "instructor_id": 1,
+    "course_id": 14,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 8,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 425,
+    "instructor_id": 1,
+    "course_id": 16,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 426,
+    "instructor_id": 2,
+    "course_id": 2,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 427,
+    "instructor_id": 2,
+    "course_id": 7,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 428,
+    "instructor_id": 2,
+    "course_id": 9,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 8,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 429,
+    "instructor_id": 2,
+    "course_id": 10,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 430,
+    "instructor_id": 2,
+    "course_id": 15,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 431,
+    "instructor_id": 3,
+    "course_id": 3,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 432,
+    "instructor_id": 3,
+    "course_id": 4,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 433,
+    "instructor_id": 3,
+    "course_id": 5,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 434,
+    "instructor_id": 3,
+    "course_id": 6,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 435,
+    "instructor_id": 3,
+    "course_id": 16,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 436,
+    "instructor_id": 4,
+    "course_id": 1,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 437,
+    "instructor_id": 4,
+    "course_id": 4,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 438,
+    "instructor_id": 4,
+    "course_id": 12,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 439,
+    "instructor_id": 4,
+    "course_id": 13,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 440,
+    "instructor_id": 5,
+    "course_id": 7,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 441,
+    "instructor_id": 5,
+    "course_id": 10,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 442,
+    "instructor_id": 5,
+    "course_id": 11,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 443,
+    "instructor_id": 5,
+    "course_id": 15,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 444,
+    "instructor_id": 6,
+    "course_id": 3,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 445,
+    "instructor_id": 6,
+    "course_id": 5,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 446,
+    "instructor_id": 6,
+    "course_id": 11,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 447,
+    "instructor_id": 6,
+    "course_id": 15,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 10,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 448,
+    "instructor_id": 7,
+    "course_id": 2,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 449,
+    "instructor_id": 7,
+    "course_id": 4,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 450,
+    "instructor_id": 7,
+    "course_id": 7,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 8,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 451,
+    "instructor_id": 7,
+    "course_id": 12,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 452,
+    "instructor_id": 8,
+    "course_id": 6,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 453,
+    "instructor_id": 8,
+    "course_id": 8,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 454,
+    "instructor_id": 8,
+    "course_id": 9,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 455,
+    "instructor_id": 8,
+    "course_id": 14,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 456,
+    "instructor_id": 9,
+    "course_id": 17,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 457,
+    "instructor_id": 9,
+    "course_id": 18,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 458,
+    "instructor_id": 9,
+    "course_id": 21,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 459,
+    "instructor_id": 9,
+    "course_id": 23,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 460,
+    "instructor_id": 10,
+    "course_id": 18,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 461,
+    "instructor_id": 10,
+    "course_id": 19,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 462,
+    "instructor_id": 10,
+    "course_id": 20,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 463,
+    "instructor_id": 10,
+    "course_id": 22,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 464,
+    "instructor_id": 11,
+    "course_id": 19,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 465,
+    "instructor_id": 11,
+    "course_id": 20,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 466,
+    "instructor_id": 11,
+    "course_id": 22,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 467,
+    "instructor_id": 11,
+    "course_id": 24,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 7,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 468,
+    "instructor_id": 12,
+    "course_id": 17,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 469,
+    "instructor_id": 12,
+    "course_id": 21,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 470,
+    "instructor_id": 12,
+    "course_id": 23,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 4,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 471,
+    "instructor_id": 12,
+    "course_id": 24,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 472,
+    "instructor_id": 13,
+    "course_id": 29,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 473,
+    "instructor_id": 13,
+    "course_id": 30,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 474,
+    "instructor_id": 13,
+    "course_id": 31,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 475,
+    "instructor_id": 13,
+    "course_id": 32,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 476,
+    "instructor_id": 14,
+    "course_id": 25,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 477,
+    "instructor_id": 14,
+    "course_id": 26,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 478,
+    "instructor_id": 14,
+    "course_id": 29,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 479,
+    "instructor_id": 14,
+    "course_id": 30,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 480,
+    "instructor_id": 14,
+    "course_id": 31,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 481,
+    "instructor_id": 15,
+    "course_id": 25,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 482,
+    "instructor_id": 15,
+    "course_id": 26,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 483,
+    "instructor_id": 15,
+    "course_id": 27,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 10,
+    "preferred_layout": "lab",
+    "semester_id": 6,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 484,
+    "instructor_id": 15,
+    "course_id": 28,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 6,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 485,
+    "instructor_id": 16,
+    "course_id": 25,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 3,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 486,
+    "instructor_id": 16,
+    "course_id": 27,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 10,
+    "preferred_layout": "lab",
+    "semester_id": 6,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 487,
+    "instructor_id": 16,
+    "course_id": 28,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 6,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 488,
+    "instructor_id": 16,
+    "course_id": 32,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 12,
+    "preferred_layout": "seminar",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 489,
+    "instructor_id": 17,
+    "course_id": 37,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 490,
+    "instructor_id": 17,
+    "course_id": 38,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 491,
+    "instructor_id": 17,
+    "course_id": 39,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 492,
+    "instructor_id": 17,
+    "course_id": 40,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 6,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 493,
+    "instructor_id": 18,
+    "course_id": 33,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 494,
+    "instructor_id": 18,
+    "course_id": 34,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 6,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 495,
+    "instructor_id": 18,
+    "course_id": 35,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 496,
+    "instructor_id": 18,
+    "course_id": 36,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 497,
+    "instructor_id": 19,
+    "course_id": 36,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 498,
+    "instructor_id": 19,
+    "course_id": 37,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 2,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 499,
+    "instructor_id": 19,
+    "course_id": 38,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 500,
+    "instructor_id": 19,
+    "course_id": 39,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 501,
+    "instructor_id": 20,
+    "course_id": 33,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 1,
+    "preferred_slots": [
+      1
+    ],
+    "preferred_room_id": 1,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 502,
+    "instructor_id": 20,
+    "course_id": 34,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 6,
+    "exams_count": 1,
+    "has_final": false
+  },
+  {
+    "id": 503,
+    "instructor_id": 20,
+    "course_id": 35,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 5,
+    "preferred_layout": "lecture",
+    "semester_id": 6,
+    "exams_count": 2,
+    "has_final": true
+  },
+  {
+    "id": 504,
+    "instructor_id": 20,
+    "course_id": 40,
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
+    "preferred_room_id": 11,
+    "preferred_layout": "lab",
+    "semester_id": 6,
+    "exams_count": 1,
+    "has_final": false
+  }
+]

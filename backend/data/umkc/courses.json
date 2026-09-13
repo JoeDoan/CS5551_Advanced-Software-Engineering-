@@ -1,0 +1,242 @@
+[
+  {
+    "course_id": 1,
+    "course_name": "CS 101 Intro to CS",
+    "expected_enrollment": 110,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 2,
+    "course_name": "CS 191 Discrete Structures",
+    "expected_enrollment": 75,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 3,
+    "course_name": "CS 201R Prog II",
+    "expected_enrollment": 70,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 4,
+    "course_name": "CS 281R Data Structures",
+    "expected_enrollment": 65,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 5,
+    "course_name": "CS 303 Algorithms",
+    "expected_enrollment": 55,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 6,
+    "course_name": "CS 394R Databases",
+    "expected_enrollment": 45,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 7,
+    "course_name": "CS 404 Operating Systems",
+    "expected_enrollment": 40,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 8,
+    "course_name": "CS 431 Software Eng",
+    "expected_enrollment": 45,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 9,
+    "course_name": "CS 441 Programming Languages",
+    "expected_enrollment": 35,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 10,
+    "course_name": "CS 451R Networks",
+    "expected_enrollment": 40,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 11,
+    "course_name": "CS 456 Comp Arch",
+    "expected_enrollment": 35,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 12,
+    "course_name": "CS 457 Info Security",
+    "expected_enrollment": 30,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 13,
+    "course_name": "CS 461R AI",
+    "expected_enrollment": 50,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 14,
+    "course_name": "CS 5551 Adv Software Eng",
+    "expected_enrollment": 35,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 15,
+    "course_name": "CS 5553 Parallel Prog",
+    "expected_enrollment": 25,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 16,
+    "course_name": "CS 5560 ML",
+    "expected_enrollment": 45,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 17,
+    "course_name": "MATH 110 College Algebra",
+    "expected_enrollment": 130,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 18,
+    "course_name": "MATH 210 Calc I",
+    "expected_enrollment": 100,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 19,
+    "course_name": "MATH 220 Calc II",
+    "expected_enrollment": 75,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 20,
+    "course_name": "MATH 300 Linear Algebra",
+    "expected_enrollment": 50,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 21,
+    "course_name": "MATH 345 Diff Eq",
+    "expected_enrollment": 40,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 22,
+    "course_name": "MATH 410 Abstract Algebra",
+    "expected_enrollment": 25,
+    "required_layout": "seminar"
+  },
+  {
+    "course_id": 23,
+    "course_name": "STAT 235 Elem Stats",
+    "expected_enrollment": 60,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 24,
+    "course_name": "STAT 436 Applied Stats",
+    "expected_enrollment": 35,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 25,
+    "course_name": "ECE 216 Circuits I",
+    "expected_enrollment": 40,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 26,
+    "course_name": "ECE 282 Digital Logic",
+    "expected_enrollment": 35,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 27,
+    "course_name": "ECE 380 Microcontrollers",
+    "expected_enrollment": 28,
+    "required_layout": "lab"
+  },
+  {
+    "course_id": 28,
+    "course_name": "ECE 448 Embedded Systems",
+    "expected_enrollment": 25,
+    "required_layout": "lab"
+  },
+  {
+    "course_id": 29,
+    "course_name": "PHYS 210 Intro Mechanics",
+    "expected_enrollment": 90,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 30,
+    "course_name": "PHYS 240 Physics I",
+    "expected_enrollment": 80,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 31,
+    "course_name": "PHYS 250 Physics II",
+    "expected_enrollment": 60,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 32,
+    "course_name": "PHYS 480 Quantum Mechanics",
+    "expected_enrollment": 20,
+    "required_layout": "seminar"
+  },
+  {
+    "course_id": 33,
+    "course_name": "BIOL 108 Intro Biology",
+    "expected_enrollment": 140,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 34,
+    "course_name": "BIOL 109 Biology Lab",
+    "expected_enrollment": 26,
+    "required_layout": "lab"
+  },
+  {
+    "course_id": 35,
+    "course_name": "BIOL 302 Genetics",
+    "expected_enrollment": 55,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 36,
+    "course_name": "BIOL 410 Molecular Bio",
+    "expected_enrollment": 35,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 37,
+    "course_name": "CHEM 211 Gen Chem I",
+    "expected_enrollment": 110,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 38,
+    "course_name": "CHEM 212 Gen Chem II",
+    "expected_enrollment": 85,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 39,
+    "course_name": "CHEM 330 Organic Chem",
+    "expected_enrollment": 50,
+    "required_layout": "lecture"
+  },
+  {
+    "course_id": 40,
+    "course_name": "CHEM 432 Biochemistry",
+    "expected_enrollment": 28,
+    "required_layout": "lab"
+  }
+]

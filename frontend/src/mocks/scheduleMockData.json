@@ -1,0 +1,67 @@
+[
+  {
+    "id": 1,
+    "semester_id": 1,
+    "course_id": 1,
+    "course_code": "CS 101",
+    "course_name": "Problem Solving & Programming I",
+    "instructor_name": "Dr. Yugyung Lee",
+    "room_number": "RH 204",
+    "day_pattern": "MWF",
+    "start_time": "09:00",
+    "end_time": "09:50",
+    "status": "confirmed"
+  },
+  {
+    "id": 2,
+    "semester_id": 1,
+    "course_id": 3,
+    "course_code": "CS 201R",
+    "course_name": "Discrete Structures",
+    "instructor_name": "Dr. Praveen Rao",
+    "room_number": "MN 102",
+    "day_pattern": "TR",
+    "start_time": "10:00",
+    "end_time": "11:15",
+    "status": "confirmed"
+  },
+  {
+    "id": 3,
+    "semester_id": 1,
+    "course_id": 14,
+    "course_code": "ECE 448",
+    "course_name": "Embedded Systems",
+    "instructor_name": "Dr. Ghulam Rasool",
+    "room_number": "FH 464",
+    "day_pattern": "MWF",
+    "start_time": "13:00",
+    "end_time": "13:50",
+    "status": "confirmed"
+  },
+  {
+    "id": 4,
+    "semester_id": 1,
+    "course_id": 21,
+    "course_code": "MATH 110",
+    "course_name": "College Algebra",
+    "instructor_name": "Dr. Liana Sega",
+    "room_number": "SCB 101",
+    "day_pattern": "MWF",
+    "start_time": "11:00",
+    "end_time": "11:50",
+    "status": "confirmed"
+  },
+  {
+    "id": 5,
+    "semester_id": 1,
+    "course_id": 33,
+    "course_code": "BIOL 108",
+    "course_name": "General Biology I",
+    "instructor_name": "Dr. Theodore White",
+    "room_number": "SCB 101",
+    "day_pattern": "TR",
+    "start_time": "13:00",
+    "end_time": "14:15",
+    "status": "confirmed"
+  }
+]

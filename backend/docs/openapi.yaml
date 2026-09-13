@@ -1,0 +1,281 @@
+openapi: 3.0.3
+info:
+  title: OptiSched API Contract
+  description: OpenAPI 3.0 specification for OptiSched Smart Academic Course & Room Scheduling System.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Local development server
+paths:
+  /health:
+    get:
+      summary: Health Check
+      description: Returns service health status and timestamp.
+      tags:
+        - System
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /courses:
+    get:
+      summary: List Courses
+      description: Retrieve catalog courses with optional department filter.
+      tags:
+        - Courses
+      parameters:
+        - name: department
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of courses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CourseResponse'
+
+  /rooms:
+    get:
+      summary: List Rooms
+      description: Retrieve available classrooms and labs.
+      tags:
+        - Rooms
+      parameters:
+        - name: min_capacity
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of rooms
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoomResponse'
+
+  /preferences:
+    post:
+      summary: Submit Instructor Preference
+      description: Record instructor preferences for days, times, and classrooms.
+      tags:
+        - Preferences
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreferenceCreate'
+      responses:
+        '201':
+          description: Preference created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreferenceResponse'
+
+  /schedules:
+    get:
+      summary: Get Master Schedule
+      description: Retrieve timetabled schedule events for a specific semester.
+      tags:
+        - Schedules
+      parameters:
+        - name: semester_id
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: Timetable events for the calendar view
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScheduleEventResponse'
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - version
+        - timestamp
+      properties:
+        status:
+          type: string
+          example: healthy
+        version:
+          type: string
+          example: 1.0.0
+        timestamp:
+          type: string
+          example: '2026-09-13T12:00:00Z'
+
+    CourseResponse:
+      type: object
+      required:
+        - id
+        - course_code
+        - course_name
+        - department
+        - credits
+        - expected_enrollment
+        - requires_lab
+      properties:
+        id:
+          type: integer
+        course_code:
+          type: string
+          example: CS 101
+        course_name:
+          type: string
+          example: Problem Solving & Programming I
+        department:
+          type: string
+          example: CS
+        credits:
+          type: integer
+          example: 3
+        expected_enrollment:
+          type: integer
+          example: 45
+        requires_lab:
+          type: boolean
+          example: false
+
+    RoomResponse:
+      type: object
+      required:
+        - id
+        - room_number
+        - capacity
+        - room_type
+        - building_id
+      properties:
+        id:
+          type: integer
+        room_number:
+          type: string
+          example: FH 464
+        capacity:
+          type: integer
+          example: 60
+        room_type:
+          type: string
+          example: lab
+        building_id:
+          type: integer
+
+    PreferenceCreate:
+      type: object
+      required:
+        - user_id
+        - semester_id
+      properties:
+        user_id:
+          type: integer
+        semester_id:
+          type: integer
+        course_id:
+          type: integer
+        preferred_days:
+          type: array
+          items:
+            type: string
+          example: ["M", "W", "F"]
+        preferred_slots:
+          type: array
+          items:
+            type: string
+          example: ["09:00-09:50", "10:00-10:50"]
+        preferred_rooms:
+          type: array
+          items:
+            type: string
+          example: ["FH 464"]
+
+    PreferenceResponse:
+      type: object
+      required:
+        - id
+        - user_id
+        - semester_id
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        semester_id:
+          type: integer
+        course_id:
+          type: integer
+        preferred_days:
+          type: string
+        preferred_slots:
+          type: string
+        preferred_rooms:
+          type: string
+        preference_rank:
+          type: integer
+
+    ScheduleEventResponse:
+      type: object
+      required:
+        - id
+        - semester_id
+        - course_id
+        - course_code
+        - course_name
+        - instructor_name
+        - room_number
+        - day_pattern
+        - start_time
+        - end_time
+        - status
+      properties:
+        id:
+          type: integer
+        semester_id:
+          type: integer
+        course_id:
+          type: integer
+        course_code:
+          type: string
+          example: CS 101
+        course_name:
+          type: string
+          example: Problem Solving & Programming I
+        instructor_name:
+          type: string
+          example: Dr. Yugyung Lee
+        room_number:
+          type: string
+          example: RH 204
+        day_pattern:
+          type: string
+          example: MWF
+        start_time:
+          type: string
+          example: '09:00'
+        end_time:
+          type: string
+          example: '09:50'
+        status:
+          type: string
+          example: confirmed

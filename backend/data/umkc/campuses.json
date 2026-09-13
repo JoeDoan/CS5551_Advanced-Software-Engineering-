@@ -1,0 +1,12 @@
+[
+  {
+    "campus_id": 1,
+    "name": "Volker Campus",
+    "address": "5100 Rockhill Rd, Kansas City, MO 64110"
+  },
+  {
+    "campus_id": 2,
+    "name": "Health Sciences Campus",
+    "address": "2464 Charlotte St, Kansas City, MO 64108"
+  }
+]

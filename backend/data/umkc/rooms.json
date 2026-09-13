@@ -1,0 +1,98 @@
+[
+  {
+    "room_id": 1,
+    "room_number": "SCB 101",
+    "building_id": 4,
+    "campus_id": 1,
+    "capacity": 150,
+    "layout_type": "auditorium"
+  },
+  {
+    "room_id": 2,
+    "room_number": "RH 204",
+    "building_id": 2,
+    "campus_id": 1,
+    "capacity": 120,
+    "layout_type": "lecture"
+  },
+  {
+    "room_id": 3,
+    "room_number": "FH 256",
+    "building_id": 1,
+    "campus_id": 1,
+    "capacity": 80,
+    "layout_type": "lecture"
+  },
+  {
+    "room_id": 4,
+    "room_number": "HH 301",
+    "building_id": 3,
+    "campus_id": 1,
+    "capacity": 60,
+    "layout_type": "lecture"
+  },
+  {
+    "room_id": 5,
+    "room_number": "RH 211",
+    "building_id": 2,
+    "campus_id": 1,
+    "capacity": 50,
+    "layout_type": "lecture"
+  },
+  {
+    "room_id": 6,
+    "room_number": "FH 310",
+    "building_id": 1,
+    "campus_id": 1,
+    "capacity": 45,
+    "layout_type": "lecture"
+  },
+  {
+    "room_id": 7,
+    "room_number": "HH 201",
+    "building_id": 3,
+    "campus_id": 1,
+    "capacity": 45,
+    "layout_type": "lecture"
+  },
+  {
+    "room_id": 8,
+    "room_number": "BHH 204",
+    "building_id": 5,
+    "campus_id": 1,
+    "capacity": 40,
+    "layout_type": "lecture"
+  },
+  {
+    "room_id": 9,
+    "room_number": "FH 464",
+    "building_id": 1,
+    "campus_id": 1,
+    "capacity": 30,
+    "layout_type": "lab"
+  },
+  {
+    "room_id": 10,
+    "room_number": "FH 514",
+    "building_id": 1,
+    "campus_id": 1,
+    "capacity": 30,
+    "layout_type": "lab"
+  },
+  {
+    "room_id": 11,
+    "room_number": "SCB 205",
+    "building_id": 4,
+    "campus_id": 1,
+    "capacity": 28,
+    "layout_type": "lab"
+  },
+  {
+    "room_id": 12,
+    "room_number": "FH 517",
+    "building_id": 1,
+    "campus_id": 1,
+    "capacity": 25,
+    "layout_type": "seminar"
+  }
+]

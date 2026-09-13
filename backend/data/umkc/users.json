@@ -1,0 +1,182 @@
+[
+  {
+    "user_id": 1,
+    "name": "Dr. Yugyung Lee",
+    "email": "leeyu@umkc.edu",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 115000,
+    "priority_points": 115000
+  },
+  {
+    "user_id": 2,
+    "name": "Dr. Baek-Young Choi",
+    "email": "choiby@umkc.edu",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 105000,
+    "priority_points": 105000
+  },
+  {
+    "user_id": 3,
+    "name": "Dr. Praveen Rao",
+    "email": "raopr@umkc.edu",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 110000,
+    "priority_points": 110000
+  },
+  {
+    "user_id": 4,
+    "name": "Dr. Reza Derakhshani",
+    "email": "derakhshanir@umkc.edu",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 100000,
+    "priority_points": 103999
+  },
+  {
+    "user_id": 5,
+    "name": "Dr. Sejun Song",
+    "email": "songse@umkc.edu",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 105000,
+    "priority_points": 105000
+  },
+  {
+    "user_id": 6,
+    "name": "Dr. Zhu Li",
+    "email": "lizhu@umkc.edu",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 100000,
+    "priority_points": 100000
+  },
+  {
+    "user_id": 7,
+    "name": "Dr. Cihan Tunc",
+    "email": "tuncc@umkc.edu",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 100000,
+    "priority_points": 100000
+  },
+  {
+    "user_id": 8,
+    "name": "Dr. Mohammad Kuhail",
+    "email": "kuhailm@umkc.edu",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 100000,
+    "priority_points": 103998
+  },
+  {
+    "user_id": 9,
+    "name": "Dr. Majid Bani-Yaghoub",
+    "email": "baniyaghoubm@umkc.edu",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 112000,
+    "priority_points": 112000
+  },
+  {
+    "user_id": 10,
+    "name": "Dr. Noah Rhee",
+    "email": "rheen@umkc.edu",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 100000,
+    "priority_points": 100000
+  },
+  {
+    "user_id": 11,
+    "name": "Dr. Liana Sega",
+    "email": "segal@umkc.edu",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 106000,
+    "priority_points": 106000
+  },
+  {
+    "user_id": 12,
+    "name": "Dr. Xianping Ge",
+    "email": "gex@umkc.edu",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 100000,
+    "priority_points": 101999
+  },
+  {
+    "user_id": 13,
+    "name": "Dr. Anthony Caruso",
+    "email": "carusoan@umkc.edu",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 118000,
+    "priority_points": 118000
+  },
+  {
+    "user_id": 14,
+    "name": "Dr. Deb Chatterjee",
+    "email": "chatterjeed@umkc.edu",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 100000,
+    "priority_points": 100000
+  },
+  {
+    "user_id": 15,
+    "name": "Dr. Ahmed Hassan",
+    "email": "hassana@umkc.edu",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 105000,
+    "priority_points": 105000
+  },
+  {
+    "user_id": 16,
+    "name": "Dr. Masud Chowdhury",
+    "email": "chowdhurym@umkc.edu",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 100000,
+    "priority_points": 100000
+  },
+  {
+    "user_id": 17,
+    "name": "Dr. Kathleen Kilway",
+    "email": "kilwayk@umkc.edu",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 120000,
+    "priority_points": 120000
+  },
+  {
+    "user_id": 18,
+    "name": "Dr. Jeffrey Thomas",
+    "email": "thomasj@umkc.edu",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 100000,
+    "priority_points": 100000
+  },
+  {
+    "user_id": 19,
+    "name": "Dr. Shin Moteki",
+    "email": "motekis@umkc.edu",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 104000,
+    "priority_points": 107998
+  },
+  {
+    "user_id": 20,
+    "name": "Dr. Ryan Mohan",
+    "email": "mohanr@umkc.edu",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 100000,
+    "priority_points": 101999
+  }
+]

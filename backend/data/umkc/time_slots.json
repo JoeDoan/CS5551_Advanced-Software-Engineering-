@@ -1,0 +1,32 @@
+[
+  {
+    "slot_id": 1,
+    "start_time": "08:00",
+    "end_time": "09:15"
+  },
+  {
+    "slot_id": 2,
+    "start_time": "09:30",
+    "end_time": "10:45"
+  },
+  {
+    "slot_id": 3,
+    "start_time": "11:00",
+    "end_time": "12:15"
+  },
+  {
+    "slot_id": 4,
+    "start_time": "12:30",
+    "end_time": "13:45"
+  },
+  {
+    "slot_id": 5,
+    "start_time": "14:00",
+    "end_time": "15:15"
+  },
+  {
+    "slot_id": 6,
+    "start_time": "15:30",
+    "end_time": "16:45"
+  }
+]
