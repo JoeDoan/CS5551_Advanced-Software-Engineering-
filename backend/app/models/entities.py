@@ -53,8 +53,8 @@ class TimeSlot(SQLModel, table=True):
     __tablename__ = "time_slots"
     id: Optional[int] = Field(default=None, primary_key=True)
     day_pattern: str  # e.g., "MWF", "TR"
-    start_time: str   # "09:00"
-    end_time: str     # "09:50"
+    start_time: str  # "09:00"
+    end_time: str  # "09:50"
     slot_label: Optional[str] = None
 
 
@@ -62,7 +62,7 @@ class Semester(SQLModel, table=True):
     __tablename__ = "semesters"
     id: Optional[int] = Field(default=None, primary_key=True)
     semester_id: int
-    name: str         # "Fall 2024"
+    name: str  # "Fall 2024"
     start_date: str
     end_date: str
     is_active: bool = False
