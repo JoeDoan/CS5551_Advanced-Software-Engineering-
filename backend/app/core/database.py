@@ -3,7 +3,9 @@ from sqlmodel import Session, create_engine, SQLModel
 from app.core.config import settings
 
 # SQLite needs check_same_thread=False
-connect_args = {"check_same_thread": False} if settings.DATABASE_URL.startswith("sqlite") else {}
+connect_args = (
+    {"check_same_thread": False} if settings.DATABASE_URL.startswith("sqlite") else {}
+)
 
 engine = create_engine(settings.DATABASE_URL, echo=False, connect_args=connect_args)
 

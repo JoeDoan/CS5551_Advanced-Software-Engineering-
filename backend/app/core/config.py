@@ -11,7 +11,9 @@ class Settings:
 
     @property
     def cors_origins(self) -> List[str]:
-        origins = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173")
+        origins = os.getenv(
+            "CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173"
+        )
         return [o.strip() for o in origins.split(",") if o.strip()]
 
 
