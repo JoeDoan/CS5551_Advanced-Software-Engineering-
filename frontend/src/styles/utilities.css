@@ -1,0 +1,30 @@
+/* OptiSched Shared UI Utilities */
+@layer components {
+  .card-umkc {
+    @apply bg-white border border-slate-200/80 rounded-2xl shadow-card transition-shadow duration-200 hover:shadow-card-hover;
+  }
+
+  .glass-panel {
+    @apply bg-white/80 backdrop-blur-md border border-slate-200/60 rounded-2xl;
+  }
+
+  .badge-dept-cs {
+    @apply bg-blue-50 text-blue-700 border border-blue-200;
+  }
+
+  .badge-dept-math {
+    @apply bg-purple-50 text-purple-700 border border-purple-200;
+  }
+
+  .badge-dept-ece {
+    @apply bg-emerald-50 text-emerald-700 border border-emerald-200;
+  }
+
+  .badge-dept-chem {
+    @apply bg-amber-50 text-amber-700 border border-amber-200;
+  }
+
+  .badge-dept-bio {
+    @apply bg-teal-50 text-teal-700 border border-teal-200;
+  }
+}

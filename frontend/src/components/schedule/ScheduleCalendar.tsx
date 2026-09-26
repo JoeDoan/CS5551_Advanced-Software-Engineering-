@@ -11,6 +11,13 @@ interface ScheduleCalendarProps {
   semesterId?: number
 }
 
+const DEPT_LEGEND = [
+  { label: 'Computer Science', color: 'bg-blue-600', text: 'text-blue-700' },
+  { label: 'Mathematics', color: 'bg-purple-600', text: 'text-purple-700' },
+  { label: 'ECE / Physics', color: 'bg-emerald-600', text: 'text-emerald-700' },
+  { label: 'Chemistry / Biology', color: 'bg-amber-600', text: 'text-amber-700' },
+]
+
 export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({ semesterId = 1 }) => {
   const [events, setEvents] = useState<CalendarEventItem[]>([])
   const [loading, setLoading] = useState<boolean>(true)
@@ -32,20 +39,32 @@ export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({ semesterId =
   }, [semesterId])
 
   return (
-    <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-      <div className="flex items-center justify-between mb-4">
+    <div className="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-card">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-5 pb-4 border-b border-slate-100">
         <div>
           <h2 className="text-lg font-bold text-slate-800">Weekly Schedule Matrix</h2>
           <p className="text-xs text-slate-500">
             Timetable visualization across classrooms and meeting patterns (Monday – Friday)
           </p>
         </div>
-        {loading && (
-          <div className="flex items-center space-x-2 text-xs text-blue-600 font-medium">
-            <Loader2 className="w-4 h-4 animate-spin" />
-            <span>Loading timetable...</span>
+
+        <div className="flex items-center space-x-4">
+          <div className="flex flex-wrap items-center gap-3">
+            {DEPT_LEGEND.map((dept) => (
+              <div key={dept.label} className="flex items-center space-x-1.5 text-xs text-slate-600 font-medium">
+                <span className={`w-2.5 h-2.5 rounded-full ${dept.color} shadow-sm`} />
+                <span>{dept.label}</span>
+              </div>
+            ))}
           </div>
-        )}
+
+          {loading && (
+            <div className="flex items-center space-x-2 text-xs text-umkc-blue-700 font-medium">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span>Loading...</span>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="h-[680px]">
@@ -63,7 +82,6 @@ export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({ semesterId =
           slotMaxTime="21:00:00"
           slotDuration="00:30:00"
           events={events}
-          eventColor="#2563eb"
           eventTextColor="#ffffff"
           height="100%"
           expandRows={true}
@@ -72,3 +90,5 @@ export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({ semesterId =
     </div>
   )
 }
+
+export default ScheduleCalendar
