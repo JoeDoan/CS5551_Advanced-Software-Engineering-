@@ -236,7 +236,7 @@
   "Dr. Reza Derakhshani": {
     "user_id": 4,
     "base_priority": 100000,
-    "current_priority": 103999,
+    "current_priority": 101999,
     "preferences": {
       "days": [],
       "slots": [],
@@ -366,7 +366,7 @@
   "Dr. Zhu Li": {
     "user_id": 6,
     "base_priority": 100000,
-    "current_priority": 100000,
+    "current_priority": 101999,
     "preferences": {
       "days": [],
       "slots": [],

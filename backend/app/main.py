@@ -16,7 +16,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    description="OptiSched: Smart Event & Academic Course Scheduling API",
+    description="UMKC Scheduler: Smart Academic Course Scheduling API",
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
     docs_url=f"{settings.API_V1_STR}/docs",
     redoc_url=f"{settings.API_V1_STR}/redoc",
@@ -39,7 +39,7 @@ app.include_router(api_v1_router, prefix=settings.API_V1_STR)
 @app.get("/")
 def root():
     return {
-        "message": "Welcome to OptiSched API",
+        "message": "Welcome to UMKC Scheduler API",
         "docs": f"{settings.API_V1_STR}/docs",
         "health": f"{settings.API_V1_STR}/health",
     }

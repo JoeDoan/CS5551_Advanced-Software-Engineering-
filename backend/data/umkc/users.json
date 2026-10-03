@@ -33,7 +33,7 @@
     "role": "instructor",
     "campus_id": 1,
     "base_priority": 100000,
-    "priority_points": 103999
+    "priority_points": 101999
   },
   {
     "user_id": 5,
@@ -51,7 +51,7 @@
     "role": "instructor",
     "campus_id": 1,
     "base_priority": 100000,
-    "priority_points": 100000
+    "priority_points": 101999
   },
   {
     "user_id": 7,

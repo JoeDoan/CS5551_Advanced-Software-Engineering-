@@ -7,7 +7,7 @@
     "instructor_name": "Dr. Reza Derakhshani",
     "room_id": 2,
     "room_number": "RH 204",
-    "slot_id": 6,
+    "slot_id": 5,
     "days": "Tuesday/Thursday",
     "semester_id": 1,
     "status": "confirmed"
@@ -33,7 +33,7 @@
     "instructor_name": "Dr. Zhu Li",
     "room_id": 2,
     "room_number": "RH 204",
-    "slot_id": 2,
+    "slot_id": 6,
     "days": "Monday/Wednesday",
     "semester_id": 1,
     "status": "confirmed"
@@ -384,7 +384,7 @@
     "instructor_name": "Dr. Deb Chatterjee",
     "room_id": 2,
     "room_number": "RH 204",
-    "slot_id": 5,
+    "slot_id": 2,
     "days": "Monday/Wednesday",
     "semester_id": 1,
     "status": "confirmed"
@@ -501,7 +501,7 @@
     "instructor_name": "Dr. Shin Moteki",
     "room_id": 2,
     "room_number": "RH 204",
-    "slot_id": 5,
+    "slot_id": 6,
     "days": "Tuesday/Thursday",
     "semester_id": 1,
     "status": "confirmed"
