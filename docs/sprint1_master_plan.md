@@ -258,21 +258,22 @@ The Sprint 1 report requires a comprehensive source code inventory listing every
 | `backend/app/api/v1/routes_preferences.py` | Production | TBD | Tony Nguyen | 100% |
 | `backend/app/schemas/api_schemas.py` | Production | TBD | Tony Nguyen | 100% |
 | `frontend/src/pages/PreferencesPage.tsx` | Production | TBD | Tina Nguyen | 100% |
-| `frontend/src/components/admin/CourseManager.tsx` | Production | TBD | Tina Nguyen | 100% |
-| `frontend/src/components/admin/RoomManager.tsx` | Production | TBD | Tina Nguyen | 100% |
 | `frontend/src/components/common/Toast.tsx` | Production | TBD | Tina Nguyen | 100% |
+| `frontend/src/components/schedule/ScheduleFilters.tsx` | Production | TBD | Tina Nguyen | 100% |
+| `frontend/src/utils/exportSchedule.ts` | Production | TBD | Tina Nguyen | 100% |
 | `frontend/src/components/schedule/ScheduleCalendar.tsx` | Production | TBD | Salvatore Nigro | 100% |
-| `frontend/src/components/schedule/ScheduleFilters.tsx` | Production | TBD | Salvatore Nigro | 100% |
-| `frontend/src/components/schedule/SolverControlPanel.tsx` | Production | TBD | Salvatore Nigro | 100% |
-| `frontend/src/utils/exportSchedule.ts` | Production | TBD | Salvatore Nigro | 100% |
-| `backend/tests/test_seeder.py` | Test | TBD | Joe Doan | 100% |
-| `backend/tests/test_solver_api.py` | Test | TBD | Joe Doan | 100% |
+| `frontend/src/components/ui/Button.tsx` | Production | TBD | Salvatore Nigro | 100% |
+| `frontend/src/components/ui/Modal.tsx` | Production | TBD | Salvatore Nigro | 100% |
+| `frontend/src/services/apiClient.ts` | Production | TBD | Salvatore Nigro | 100% |
+| `frontend/src/services/preferenceService.ts` | Production | TBD | Salvatore Nigro | 100% |
+| `frontend/src/services/scheduleService.ts` | Production | TBD | Salvatore Nigro | 100% |
 | `backend/tests/test_courses_api.py` | Test | TBD | Tony Nguyen | 100% |
 | `backend/tests/test_rooms_api.py` | Test | TBD | Tony Nguyen | 100% |
 | `backend/tests/test_preferences_api.py` | Test | TBD | Tony Nguyen | 100% |
+| `backend/tests/test_time_slots_api.py` | Test | TBD | Tony Nguyen | 100% |
 | `frontend/src/pages/__tests__/PreferencesPage.test.tsx` | Test | TBD | Tina Nguyen | 100% |
-| `frontend/src/components/admin/__tests__/CourseManager.test.tsx` | Test | TBD | Tina Nguyen | 100% |
+| `frontend/src/components/schedule/__tests__/ScheduleFilters.test.tsx` | Test | TBD | Tina Nguyen | 100% |
 | `frontend/src/components/schedule/__tests__/ScheduleCalendar.test.tsx` | Test | TBD | Salvatore Nigro | 100% |
-| `frontend/src/utils/__tests__/exportSchedule.test.ts` | Test | TBD | Salvatore Nigro | 100% |
+| `frontend/src/services/__tests__/preferenceService.test.ts` | Test | TBD | Salvatore Nigro | 100% |
 
 > **Note:** LOC values marked `TBD` will be filled in using `wc -l` and `git log --author` during Week 8 report finalization.
