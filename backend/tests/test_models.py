@@ -62,7 +62,17 @@ def test_session_fixture_persists_and_queries_course(session):
 
 
 def test_session_fixture_persists_and_queries_room(session):
-    room = Room(building_id=1, room_number="FH 464", capacity=60, room_type="lab")
+    from app.models.entities import Campus, Building
+
+    campus = Campus(name="Volker", code="VK")
+    session.add(campus)
+    session.commit()
+
+    building = Building(campus_id=campus.id, name="Flarsheim Hall", code="FH")
+    session.add(building)
+    session.commit()
+
+    room = Room(building_id=building.id, room_number="FH 464", capacity=60, room_type="lab")
     session.add(room)
     session.commit()
     session.refresh(room)

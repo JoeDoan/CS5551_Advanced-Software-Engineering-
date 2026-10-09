@@ -1,19 +1,28 @@
 from datetime import datetime, timezone
-from typing import List, Optional
+from typing import List
 from fastapi import APIRouter, Depends, Query
 from sqlmodel import Session, select
+
 from app.core.database import get_session
 from app.schemas.api_schemas import (
     HealthResponse,
-    CourseResponse,
-    RoomResponse,
-    PreferenceCreate,
-    PreferenceResponse,
     ScheduleEventResponse,
 )
-from app.models.entities import Course, Room, InstructorPreference
+from app.models.entities import Schedule, Course, User, Room, TimeSlot
+from app.api.v1 import (
+    routes_courses,
+    routes_rooms,
+    routes_preferences,
+    routes_time_slots,
+)
 
 router = APIRouter()
+
+# Mount dedicated CRUD and Catalog routers
+router.include_router(routes_courses.router, prefix="/courses", tags=["Courses"])
+router.include_router(routes_rooms.router, prefix="/rooms", tags=["Rooms"])
+router.include_router(routes_preferences.router, prefix="/preferences", tags=["Preferences"])
+router.include_router(routes_time_slots.router, prefix="/time-slots", tags=["Time Slots"])
 
 
 @router.get("/health", response_model=HealthResponse, tags=["System"])
@@ -26,64 +35,6 @@ def health_check():
     )
 
 
-@router.get("/courses", response_model=List[CourseResponse], tags=["Courses"])
-def list_courses(
-    department: Optional[str] = None,
-    session: Session = Depends(get_session),
-):
-    """Retrieve catalog courses, optionally filtered by department."""
-    statement = select(Course)
-    if department:
-        statement = statement.where(Course.department == department)
-    courses = session.exec(statement).all()
-    return courses
-
-
-@router.get("/rooms", response_model=List[RoomResponse], tags=["Rooms"])
-def list_rooms(
-    min_capacity: Optional[int] = None,
-    session: Session = Depends(get_session),
-):
-    """Retrieve classrooms and laboratories."""
-    statement = select(Room)
-    if min_capacity is not None:
-        statement = statement.where(Room.capacity >= min_capacity)
-    rooms = session.exec(statement).all()
-    return rooms
-
-
-@router.post(
-    "/preferences",
-    response_model=PreferenceResponse,
-    status_code=201,
-    tags=["Preferences"],
-)
-def submit_preference(
-    payload: PreferenceCreate,
-    session: Session = Depends(get_session),
-):
-    """Submit or update instructor teaching preferences."""
-    pref = InstructorPreference(
-        user_id=payload.user_id,
-        semester_id=payload.semester_id,
-        course_id=payload.course_id,
-        preferred_days=(
-            ",".join(payload.preferred_days) if payload.preferred_days else None
-        ),
-        preferred_slots=(
-            ",".join(payload.preferred_slots) if payload.preferred_slots else None
-        ),
-        preferred_rooms=(
-            ",".join(payload.preferred_rooms) if payload.preferred_rooms else None
-        ),
-        preference_rank=1,
-    )
-    session.add(pref)
-    session.commit()
-    session.refresh(pref)
-    return pref
-
-
 @router.get(
     "/schedules", response_model=List[ScheduleEventResponse], tags=["Schedules"]
 )
@@ -94,5 +45,34 @@ def get_schedule(
     session: Session = Depends(get_session),
 ):
     """Retrieve the generated schedule for a given semester."""
-    # Stubs: Return empty list if no schedules found in DB yet
-    return []
+    # Query database schedules joined with entities
+    results = session.exec(
+        select(Schedule, Course, User, Room, TimeSlot)
+        .join(Course, Course.id == Schedule.course_id)
+        .join(User, User.id == Schedule.user_id)
+        .join(Room, Room.id == Schedule.room_id)
+        .join(TimeSlot, TimeSlot.id == Schedule.time_slot_id)
+        .where(Schedule.semester_id == semester_id)
+    ).all()
+
+    if not results:
+        return []
+
+    events = []
+    for sched, course, user, room, slot in results:
+        events.append(
+            ScheduleEventResponse(
+                id=sched.id,
+                semester_id=sched.semester_id,
+                course_id=sched.course_id,
+                course_code=course.course_code,
+                course_name=course.course_name,
+                instructor_name=user.full_name,
+                room_number=room.room_number,
+                day_pattern=slot.day_pattern,
+                start_time=slot.start_time,
+                end_time=slot.end_time,
+                status=sched.status,
+            )
+        )
+    return events

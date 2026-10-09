@@ -1,4 +1,5 @@
-from typing import Optional
+from typing import Optional, List
+from sqlalchemy import Column, JSON, UniqueConstraint
 from sqlmodel import SQLModel, Field
 
 
@@ -20,6 +21,8 @@ class Building(SQLModel, table=True):
 
 class Room(SQLModel, table=True):
     __tablename__ = "rooms"
+    __table_args__ = (UniqueConstraint("building_id", "room_number"),)
+
     id: Optional[int] = Field(default=None, primary_key=True)
     building_id: int = Field(foreign_key="buildings.id")
     room_number: str
@@ -41,7 +44,7 @@ class User(SQLModel, table=True):
 class Course(SQLModel, table=True):
     __tablename__ = "courses"
     id: Optional[int] = Field(default=None, primary_key=True)
-    course_code: str
+    course_code: str = Field(unique=True, index=True)
     course_name: str
     department: str
     credits: int = 3
@@ -56,6 +59,8 @@ class TimeSlot(SQLModel, table=True):
     start_time: str  # "09:00"
     end_time: str  # "09:50"
     slot_label: Optional[str] = None
+    pattern_type: str = "TR_75"  # MWF_50, TR_75, EVENING_GRAD, LAB_BLOCK
+    level: Optional[str] = None  # "undergraduate", "graduate", or None = any
 
 
 class Semester(SQLModel, table=True):
@@ -74,9 +79,9 @@ class InstructorPreference(SQLModel, table=True):
     user_id: int = Field(foreign_key="users.id")
     semester_id: int = Field(foreign_key="semesters.id")
     course_id: Optional[int] = Field(default=None, foreign_key="courses.id")
-    preferred_days: Optional[str] = None
-    preferred_slots: Optional[str] = None
-    preferred_rooms: Optional[str] = None
+    preferred_days: Optional[List[str]] = Field(default=None, sa_column=Column(JSON))
+    preferred_slots: Optional[List[str]] = Field(default=None, sa_column=Column(JSON))
+    preferred_rooms: Optional[List[str]] = Field(default=None, sa_column=Column(JSON))
     preference_rank: int = 1
 
 
