@@ -1,6 +1,7 @@
 import React from 'react'
 import { CalendarDays, Users, School, Sparkles, ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { Card, CardHeader, CardTitle, CardContent, Badge, Button } from '../components/ui'
 
 export const DashboardPage: React.FC = () => {
   const stats = [
@@ -23,7 +24,7 @@ export const DashboardPage: React.FC = () => {
         {stats.map((s, idx) => {
           const Icon = s.icon
           return (
-            <div key={idx} className="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
+            <Card key={idx} hoverable className="p-5 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{s.label}</span>
                 <div className={`p-2 rounded-xl ${s.bg} ${s.color}`}>
@@ -32,61 +33,67 @@ export const DashboardPage: React.FC = () => {
               </div>
               <div className="text-2xl font-extrabold text-slate-800">{s.value}</div>
               <div className="text-xs text-slate-500">{s.sub}</div>
-            </div>
+            </Card>
           )
         })}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold text-slate-800">Sprint 0 Status & Architecture</h2>
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+        <Card hoverable className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle>Sprint 0 Status & Architecture</CardTitle>
+            <Badge variant="success" dot>
               Scaffolding Complete
-            </span>
-          </div>
-          <p className="text-sm text-slate-600 leading-relaxed">
-            The Google OR-Tools CP-SAT core solver is modularized and verified against 25/25 automated test cases spanning 6 consecutive academic terms. The FastAPI backend and React frontend are scaffolded with formal OpenAPI contracts.
-          </p>
-          <div className="pt-2 flex items-center space-x-3">
-            <Link
-              to="/schedule"
-              className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-700 transition-colors shadow-sm"
-            >
-              <span>View Master Schedule</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link
-              to="/preferences"
-              className="inline-flex items-center space-x-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-200 transition-colors"
-            >
-              <span>Preference Setup</span>
-            </Link>
-          </div>
-        </div>
+            </Badge>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-slate-600 leading-relaxed">
+              The Google OR-Tools CP-SAT core solver is modularized and verified against 25/25 automated test cases spanning 6 consecutive academic terms. The FastAPI backend and React frontend are scaffolded with formal OpenAPI contracts.
+            </p>
+            <div className="pt-2 flex items-center space-x-3">
+              <Link to="/schedule">
+                <Button variant="primary" size="sm" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                  View Master Schedule
+                </Button>
+              </Link>
+              <Link to="/preferences">
+                <Button variant="secondary" size="sm">
+                  Preference Setup
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
 
-        <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-4">
-          <h2 className="text-base font-bold text-slate-800">Team Ownership</h2>
-          <ul className="space-y-3 text-xs">
-            <li className="flex justify-between pb-2 border-b border-slate-100">
-              <span className="font-semibold text-slate-700">Joe (Coordinator)</span>
-              <span className="text-slate-500">OR-Tools Engine</span>
-            </li>
-            <li className="flex justify-between pb-2 border-b border-slate-100">
-              <span className="font-semibold text-slate-700">Tony (Backend)</span>
-              <span className="text-slate-500">FastAPI & SQLModel</span>
-            </li>
-            <li className="flex justify-between pb-2 border-b border-slate-100">
-              <span className="font-semibold text-slate-700">Tina (Frontend)</span>
-              <span className="text-slate-500">Shell & Forms</span>
-            </li>
-            <li className="flex justify-between">
-              <span className="font-semibold text-slate-700">Sal (Frontend)</span>
-              <span className="text-slate-500">Matrix & API Client</span>
-            </li>
-          </ul>
-        </div>
+        <Card hoverable>
+          <CardHeader>
+            <CardTitle>Team Ownership</CardTitle>
+            <Badge variant="gold">Sprint 0</Badge>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-3 text-xs">
+              <li className="flex justify-between pb-2 border-b border-slate-100">
+                <span className="font-semibold text-slate-700">Joe (Coordinator)</span>
+                <span className="text-slate-500">OR-Tools Engine</span>
+              </li>
+              <li className="flex justify-between pb-2 border-b border-slate-100">
+                <span className="font-semibold text-slate-700">Tony (Backend)</span>
+                <span className="text-slate-500">FastAPI & SQLModel</span>
+              </li>
+              <li className="flex justify-between pb-2 border-b border-slate-100">
+                <span className="font-semibold text-slate-700">Tina (Frontend)</span>
+                <span className="text-slate-500">Shell & Forms</span>
+              </li>
+              <li className="flex justify-between">
+                <span className="font-semibold text-slate-700">Sal (Frontend)</span>
+                <span className="text-slate-500">Matrix & API Client</span>
+              </li>
+            </ul>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )
 }
+
+export default DashboardPage

@@ -1,0 +1,84 @@
+/* OptiSched & UMKC Theme Variables */
+:root {
+  --color-umkc-primary: #004b87;
+  --color-umkc-secondary: #005696;
+  --color-umkc-gold: #ffc72c;
+  --color-umkc-gold-dark: #d99b00;
+  
+  --color-surface-bg: #f8fafc;
+  --color-surface-card: #ffffff;
+  --color-surface-border: #e2e8f0;
+  --color-text-main: #0f172a;
+  --color-text-muted: #64748b;
+
+  --fc-border-color: #f1f5f9;
+  --fc-now-indicator-color: #ef4444;
+  --fc-today-bg-color: #f8fafc;
+  --fc-page-bg-color: #ffffff;
+}
+
+.dark {
+  --color-surface-bg: #0b0f19;
+  --color-surface-card: #111827;
+  --color-surface-border: #1f2937;
+  --color-text-main: #f9fafb;
+  --color-text-muted: #9ca3af;
+
+  --fc-border-color: #1f2937;
+  --fc-today-bg-color: #111827;
+  --fc-page-bg-color: #0b0f19;
+}
+
+/* FullCalendar Customization Overrides */
+.fc {
+  font-family: inherit;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.fc-theme-standard td, 
+.fc-theme-standard th {
+  border-color: var(--fc-border-color);
+}
+
+.fc .fc-timegrid-slot {
+  height: 2.25rem;
+}
+
+.fc .fc-timegrid-slot-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.fc .fc-col-header-cell {
+  background-color: #f8fafc;
+  padding: 0.5rem 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dark .fc .fc-col-header-cell {
+  background-color: #111827;
+  color: #cbd5e1;
+}
+
+.fc-timegrid-event {
+  border-radius: 0.5rem;
+  padding: 2px 4px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.fc-timegrid-event:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  z-index: 50 !important;
+}
