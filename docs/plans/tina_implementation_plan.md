@@ -31,16 +31,16 @@ In **Sprint 1**, following Sal's delivery of the foundational UI component libra
 ## 2. Step-by-Step Task Checklist
 
 ```
-[ ] Step 1: Create Git Branch 'feature/tina-preference-schedule-ui' from latest 'main'
-[ ] Step 2: Implement Reusable Toast Component ('frontend/src/components/common/Toast.tsx')
-[ ] Step 3: Implement Interactive Time-Slot Picker & API Submission in 'frontend/src/pages/PreferencesPage.tsx'
-[ ] Step 4: Implement Schedule Export Utility ('frontend/src/utils/exportSchedule.ts')
-[ ] Step 5: Implement Multi-Dimension Filter Component ('frontend/src/components/schedule/ScheduleFilters.tsx')
-[ ] Step 6: Integrate ScheduleFilters and Export Button into 'frontend/src/pages/SchedulePage.tsx'
-[ ] Step 7: Author Vitest Automated Test Suites ('PreferencesPage.test.tsx' & 'ScheduleFilters.test.tsx')
-[ ] Step 8: Verify 100% Test Pass Rate via 'npm test'
-[ ] Step 9: Push branch to GitHub and open Pull Request into 'main'
-[ ] Step 10: Rehearse Segment 3 (1:45 – 2:45) for the 5-Minute Demonstration Video
+[x] Step 1: Create Git Branch 'feature/tina-preference-schedule-ui' from latest 'main'
+[x] Step 2: Implement Reusable Toast Component ('frontend/src/components/common/Toast.tsx')
+[x] Step 3: Implement Interactive Time-Slot Picker & API Submission in 'frontend/src/pages/PreferencesPage.tsx'
+[x] Step 4: Implement Schedule Export Utility ('frontend/src/utils/exportSchedule.ts')
+[x] Step 5: Implement Multi-Dimension Filter Component ('frontend/src/components/schedule/ScheduleFilters.tsx')
+[x] Step 6: Integrate ScheduleFilters and Export Button into 'frontend/src/pages/SchedulePage.tsx'
+[x] Step 7: Author Vitest Automated Test Suites ('PreferencesPage.test.tsx' & 'ScheduleFilters.test.tsx')
+[x] Step 8: Verify 100% Test Pass Rate via 'npm test'
+[x] Step 9: Push branch to GitHub and open Pull Request into 'main'
+[x] Step 10: Rehearse Segment 3 (1:45 – 2:45) for the 5-Minute Demonstration Video
 ```
 
 ---

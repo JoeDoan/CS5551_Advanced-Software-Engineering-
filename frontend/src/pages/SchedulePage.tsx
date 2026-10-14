@@ -1,6 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { ScheduleCalendar } from '../components/schedule/ScheduleCalendar'
-import { Filter } from 'lucide-react'
+import { ScheduleFilters, ScheduleFilterState } from '../components/schedule/ScheduleFilters'
+import { exportScheduleToCSV } from '../utils/exportSchedule'
+import { ScheduleEvent } from '../types/api'
+import { resolveDepartment } from '../utils/scheduleParser'
+import { Filter, Download } from 'lucide-react'
+import { Button } from '../components/ui'
 
 const semesters = [
   { id: 1, name: 'Fall 2024' },
@@ -13,6 +18,40 @@ const semesters = [
 
 export const SchedulePage: React.FC = () => {
   const [selectedSemester, setSelectedSemester] = useState<number>(1)
+  const [rawEvents, setRawEvents] = useState<ScheduleEvent[]>([])
+  const [filters, setFilters] = useState<ScheduleFilterState>({
+    department: 'ALL',
+    search: '',
+  })
+
+  const currentSemesterName = useMemo(() => {
+    return semesters.find((s) => s.id === selectedSemester)?.name || `Semester_${selectedSemester}`
+  }, [selectedSemester])
+
+  const filteredEvents = useMemo(() => {
+    let list = [...rawEvents]
+    if (filters.department && filters.department !== 'ALL') {
+      const targetDept = filters.department.toUpperCase()
+      list = list.filter(
+        (e) => resolveDepartment(e.course_code, e.department) === targetDept
+      )
+    }
+    if (filters.search && filters.search.trim() !== '') {
+      const q = filters.search.toLowerCase()
+      list = list.filter(
+        (e) =>
+          (e.course_code || '').toLowerCase().includes(q) ||
+          (e.course_name || '').toLowerCase().includes(q) ||
+          (e.instructor_name || '').toLowerCase().includes(q) ||
+          (e.room_number || '').toLowerCase().includes(q)
+      )
+    }
+    return list
+  }, [rawEvents, filters])
+
+  const handleExportCSV = () => {
+    exportScheduleToCSV(filteredEvents.length > 0 ? filteredEvents : rawEvents, currentSemesterName)
+  }
 
   return (
     <div className="space-y-6">
@@ -24,11 +63,13 @@ export const SchedulePage: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center space-x-3">
+        <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center space-x-2 bg-white px-3 py-2 rounded-xl border border-slate-200 shadow-sm text-xs">
             <Filter className="w-4 h-4 text-slate-400" />
             <span className="font-semibold text-slate-600">Semester:</span>
             <select
+              aria-label="Select semester"
+              data-testid="semester-select"
               value={selectedSemester}
               onChange={(e) => setSelectedSemester(Number(e.target.value))}
               className="bg-transparent font-semibold text-blue-700 outline-none cursor-pointer"
@@ -40,10 +81,28 @@ export const SchedulePage: React.FC = () => {
               ))}
             </select>
           </div>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleExportCSV}
+            leftIcon={<Download className="w-4 h-4" />}
+            data-testid="export-csv-button"
+          >
+            Export CSV
+          </Button>
         </div>
       </div>
 
-      <ScheduleCalendar semesterId={selectedSemester} />
+      <ScheduleFilters onFilterChange={setFilters} />
+
+      <ScheduleCalendar
+        semesterId={selectedSemester}
+        filter={filters}
+        onEventsLoaded={setRawEvents}
+      />
     </div>
   )
 }
+
+export default SchedulePage

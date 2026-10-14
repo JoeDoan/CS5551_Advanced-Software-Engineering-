@@ -3,12 +3,14 @@ import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { scheduleService } from '../../services/scheduleService'
-import { transformToCalendarEvents } from '../../utils/scheduleParser'
-import { CalendarEventItem } from '../../types/api'
+import { transformToCalendarEvents, resolveDepartment } from '../../utils/scheduleParser'
+import { CalendarEventItem, ScheduleEvent } from '../../types/api'
 import { Loader2 } from 'lucide-react'
 
-interface ScheduleCalendarProps {
+export interface ScheduleCalendarProps {
   semesterId?: number
+  filter?: { department?: string; search?: string }
+  onEventsLoaded?: (rawEvents: ScheduleEvent[]) => void
 }
 
 const DEPT_LEGEND = [
@@ -18,7 +20,12 @@ const DEPT_LEGEND = [
   { label: 'Chemistry / Biology', color: 'bg-amber-600', text: 'text-amber-700' },
 ]
 
-export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({ semesterId = 1 }) => {
+export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({
+  semesterId = 1,
+  filter,
+  onEventsLoaded,
+}) => {
+  const [rawEvents, setRawEvents] = useState<ScheduleEvent[]>([])
   const [events, setEvents] = useState<CalendarEventItem[]>([])
   const [loading, setLoading] = useState<boolean>(true)
 
@@ -27,16 +34,39 @@ export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({ semesterId =
       setLoading(true)
       try {
         const data = await scheduleService.getSchedules(semesterId)
-        const formatted = transformToCalendarEvents(data)
-        setEvents(formatted)
+        setRawEvents(data)
+        onEventsLoaded?.(data)
       } catch (err) {
         console.error('Failed to load schedule events:', err)
+        setRawEvents([])
+        onEventsLoaded?.([])
       } finally {
         setLoading(false)
       }
     }
     loadData()
-  }, [semesterId])
+  }, [semesterId, onEventsLoaded])
+
+  useEffect(() => {
+    let filtered = [...rawEvents]
+    if (filter?.department && filter.department !== 'ALL') {
+      const targetDept = filter.department.toUpperCase()
+      filtered = filtered.filter(
+        (e) => resolveDepartment(e.course_code, e.department) === targetDept
+      )
+    }
+    if (filter?.search && filter.search.trim() !== '') {
+      const q = filter.search.toLowerCase()
+      filtered = filtered.filter(
+        (e) =>
+          e.course_code.toLowerCase().includes(q) ||
+          e.course_name.toLowerCase().includes(q) ||
+          e.instructor_name.toLowerCase().includes(q) ||
+          e.room_number.toLowerCase().includes(q)
+      )
+    }
+    setEvents(transformToCalendarEvents(filtered))
+  }, [rawEvents, filter])
 
   return (
     <div className="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-card">
