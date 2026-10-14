@@ -2,10 +2,16 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { PreferencesPage } from '../PreferencesPage'
 import { preferenceService } from '../../services/preferenceService'
+import { timeSlotService } from '../../services/timeSlotService'
 
 describe('PreferencesPage Component', () => {
   beforeEach(() => {
     vi.restoreAllMocks()
+    vi.spyOn(timeSlotService, 'getTimeSlots').mockResolvedValue([
+      { id: 1, day_pattern: 'MW', start_time: '08:00', end_time: '09:15' },
+      { id: 2, day_pattern: 'MW', start_time: '09:30', end_time: '10:45' },
+      { id: 3, day_pattern: 'MW', start_time: '11:00', end_time: '12:15' },
+    ])
   })
 
   it('renders preference form with instructor selector and default state', () => {
@@ -16,6 +22,14 @@ describe('PreferencesPage Component', () => {
     expect(screen.getByText('Preferred Days')).toBeInTheDocument()
     expect(screen.getByText('Preferred Time Slots')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /save preferences/i })).toBeInTheDocument()
+  })
+
+  it('renders time slots from the backend catalog', async () => {
+    render(<PreferencesPage />)
+
+    expect(await screen.findByTestId('slot-08:00-09:15')).toHaveTextContent('08:00 - 09:15')
+    expect(screen.getByTestId('slot-09:30-10:45')).toBeInTheDocument()
+    expect(screen.getByTestId('slot-11:00-12:15')).toBeInTheDocument()
   })
 
   it('toggles day selection buttons', () => {
@@ -33,11 +47,10 @@ describe('PreferencesPage Component', () => {
     fireEvent.click(mondayBtn)
   })
 
-  it('toggles time slot selection buttons', () => {
+  it('toggles time slot selection buttons', async () => {
     render(<PreferencesPage />)
 
-    const slotBtn = screen.getByTestId('slot-09:30 - 10:45')
-    expect(slotBtn).toBeInTheDocument()
+    const slotBtn = await screen.findByTestId('slot-09:30-10:45')
 
     // Initially not active
     expect(slotBtn.className).toContain('bg-slate-50')
@@ -66,28 +79,29 @@ describe('PreferencesPage Component', () => {
     })
   })
 
-  it('submits preference to API and displays success toast', async () => {
+  it('submits catalog slot keys to API and displays success toast', async () => {
     const submitSpy = vi.spyOn(preferenceService, 'submitPreference').mockResolvedValueOnce({
       id: 101,
       user_id: 1,
       semester_id: 1,
       preferred_days: ['M', 'W'],
-      preferred_slots: ['09:30 - 10:45'],
+      preferred_slots: ['09:30-10:45'],
       preferred_rooms: [],
     })
 
     render(<PreferencesPage />)
 
     // Select a time slot (Monday and Wednesday are already selected by default)
-    const slotBtn = screen.getByTestId('slot-09:30 - 10:45')
-    fireEvent.click(slotBtn)
+    fireEvent.click(await screen.findByTestId('slot-09:30-10:45'))
 
     // Click Save Preferences
     const saveBtn = screen.getByRole('button', { name: /save preferences/i })
     fireEvent.click(saveBtn)
 
     await waitFor(() => {
-      expect(submitSpy).toHaveBeenCalledTimes(1)
+      expect(submitSpy).toHaveBeenCalledWith(
+        expect.objectContaining({ preferred_days: ['M', 'W'], preferred_slots: ['09:30-10:45'] })
+      )
       expect(screen.getByText('Instructor preferences saved successfully!')).toBeInTheDocument()
     })
   })
@@ -100,8 +114,7 @@ describe('PreferencesPage Component', () => {
     render(<PreferencesPage />)
 
     // Select a time slot
-    const slotBtn = screen.getByTestId('slot-11:00 - 12:15')
-    fireEvent.click(slotBtn)
+    fireEvent.click(await screen.findByTestId('slot-11:00-12:15'))
 
     // Click Save
     const saveBtn = screen.getByRole('button', { name: /save preferences/i })
@@ -114,10 +127,10 @@ describe('PreferencesPage Component', () => {
     })
   })
 
-  it('resets selected days and slots on Reset button click', () => {
+  it('resets selected days and slots on Reset button click', async () => {
     render(<PreferencesPage />)
 
-    const slotBtn = screen.getByTestId('slot-08:00 - 09:15')
+    const slotBtn = await screen.findByTestId('slot-08:00-09:15')
     fireEvent.click(slotBtn)
     expect(slotBtn.className).toContain('bg-blue-50')
 

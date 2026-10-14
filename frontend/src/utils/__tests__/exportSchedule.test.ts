@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, type MockInstance } from 'vitest'
 import { exportScheduleToCSV, exportScheduleToJSON } from '../exportSchedule'
 import { ScheduleEvent } from '../../types/api'
 
@@ -38,8 +38,8 @@ describe('exportSchedule Utility', () => {
     },
   ]
 
-  let appendChildSpy: ReturnType<typeof vi.spyOn>
-  let removeChildSpy: ReturnType<typeof vi.spyOn>
+  let appendChildSpy: MockInstance<typeof document.body.appendChild>
+  let removeChildSpy: MockInstance<typeof document.body.removeChild>
 
   beforeEach(() => {
     appendChildSpy = vi.spyOn(document.body, 'appendChild').mockImplementation((node) => node)

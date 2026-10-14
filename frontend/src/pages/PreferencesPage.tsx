@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Clock, Check } from 'lucide-react'
 import { Alert, Card, CardHeader, CardTitle, CardContent, Button, Select } from '../components/ui'
 import { Toast } from '../components/common/Toast'
 import { preferenceService } from '../services/preferenceService'
+import { timeSlotService, toSlotKey } from '../services/timeSlotService'
+import { TimeSlot } from '../types/api'
 
 export const PreferencesPage: React.FC = () => {
   const [selectedInstructor, setSelectedInstructor] = useState('1')
@@ -26,14 +28,11 @@ export const PreferencesPage: React.FC = () => {
     'Friday (F)',
   ]
 
-  const timeSlots = [
-    '08:00 - 09:15',
-    '09:30 - 10:45',
-    '11:00 - 12:15',
-    '13:00 - 14:15',
-    '14:30 - 15:45',
-    '16:00 - 17:15',
-  ]
+  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([])
+
+  useEffect(() => {
+    timeSlotService.getTimeSlots().then(setTimeSlots)
+  }, [])
 
   const toggleDay = (day: string) => {
     setSelectedDays((prev) =>
@@ -149,7 +148,8 @@ export const PreferencesPage: React.FC = () => {
               Preferred Time Slots <span className="text-red-500">*</span>
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
-              {timeSlots.map((slot) => {
+              {timeSlots.map((timeSlot) => {
+                const slot = toSlotKey(timeSlot)
                 const isSelected = selectedSlots.includes(slot)
                 return (
                   <button
@@ -168,7 +168,7 @@ export const PreferencesPage: React.FC = () => {
                         isSelected ? 'text-blue-600' : 'text-slate-400'
                       }`}
                     />
-                    <span className="truncate">{slot}</span>
+                    <span className="truncate">{`${timeSlot.start_time} - ${timeSlot.end_time}`}</span>
                   </button>
                 )
               })}

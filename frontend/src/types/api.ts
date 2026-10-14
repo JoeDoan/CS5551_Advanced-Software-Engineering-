@@ -92,6 +92,16 @@ export interface PreferenceFilterParams {
   course_id?: number;
 }
 
+export interface TimeSlot {
+  id: number;
+  day_pattern: string;
+  start_time: string;
+  end_time: string;
+  slot_label?: string | null;
+  pattern_type?: string;
+  level?: string | null;
+}
+
 export interface Building {
   id: number;
   campus_id: number;
