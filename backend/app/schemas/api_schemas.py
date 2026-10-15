@@ -123,6 +123,7 @@ class PreferenceResponse(BaseModel):
     course_id: Optional[int] = None
     preferred_days: Union[List[str], str, None] = None
     preferred_slots: Union[List[str], str, None] = None
+    preferred_slot_ids: List[int] = Field(default_factory=list)
     preferred_rooms: Union[List[str], str, None] = None
     preference_rank: int = 1
 
@@ -139,3 +140,53 @@ class ScheduleEventResponse(BaseModel):
     start_time: str
     end_time: str
     status: str = "confirmed"
+
+
+class SeedResponse(BaseModel):
+    status: str = "seeded"
+    campuses: int
+    buildings: int
+    rooms: int
+    users: int
+    courses: int
+    time_slots: int
+    semesters: int
+    preferences: int
+    schedules: int
+
+
+class SolverRunRequest(BaseModel):
+    semester_id: int = Field(default=1, description="Target semester ID (1..6)")
+    max_courses_per_instructor: int = Field(default=2, ge=1, le=5)
+    min_courses_per_instructor: int = Field(default=1, ge=0, le=5)
+    enforce_zero_violations: bool = Field(
+        default=False,
+        description="If true, forces an infeasible (over-constrained) run to exercise AC 2.3",
+    )
+
+
+class SolverRunResponse(BaseModel):
+    status: str
+    semester_id: int
+    scheduled_count: int
+    wall_time_seconds: float
+    satisfaction_rate: float
+
+
+class UserResponse(BaseModel):
+    id: int
+    username: str
+    email: str
+    full_name: str
+    role: str
+    department: str
+    priority_score: int
+
+
+class SemesterResponse(BaseModel):
+    id: int
+    semester_id: int
+    name: str
+    start_date: str
+    end_date: str
+    is_active: bool

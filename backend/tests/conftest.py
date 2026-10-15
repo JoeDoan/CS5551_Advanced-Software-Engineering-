@@ -1,3 +1,7 @@
+import os
+
+os.environ.setdefault("AUTO_SEED", "false")
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlmodel import SQLModel, Session, create_engine

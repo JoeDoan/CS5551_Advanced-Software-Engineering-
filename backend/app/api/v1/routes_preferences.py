@@ -1,3 +1,4 @@
+import re
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlmodel import Session, select, or_
@@ -9,40 +10,76 @@ from app.schemas.api_schemas import PreferenceCreate, PreferenceResponse
 router = APIRouter()
 
 
-def resolve_slots(session: Session, ids: List[int], strings: List[str]) -> List[str]:
-    """Resolve and validate time slot IDs and string labels against catalog."""
+def course_level(course_code: str) -> str:
+    """Course numbers 5000+ are graduate-level (derived from the course code)."""
+    m = re.search(r"\d+", course_code)
+    return "graduate" if m and int(m.group()) >= 5000 else "undergraduate"
+
+
+def _label(slot: TimeSlot) -> str:
+    return f"{slot.start_time}-{slot.end_time}"
+
+
+def resolve_slots(
+    session: Session,
+    ids: List[int],
+    strings: List[str],
+    course: Optional[Course] = None,
+) -> List[str]:
+    """Resolve slot ids/labels against the catalog and return canonical 'HH:MM-HH:MM' labels."""
     catalog = session.exec(select(TimeSlot)).all()
     if not catalog:
-        # If catalog not yet seeded, pass through raw slots
-        return [str(i) for i in ids] + strings
+        # Catalog not yet seeded: pass raw values through.
+        return list(dict.fromkeys([str(i) for i in ids] + strings))
 
     by_id = {s.id: s for s in catalog}
-    by_label = {f"{s.start_time}-{s.end_time}": s for s in catalog}
-    # Also index by slot_label if available
+    by_label = {_label(s): s for s in catalog}
     for s in catalog:
         if s.slot_label:
-            by_label[s.slot_label] = s
+            by_label.setdefault(s.slot_label, s)
 
-    resolved: List[str] = []
+    slots: List[TimeSlot] = []
     for i in ids:
         if i not in by_id:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Time slot {i} not found",
             )
-        slot = by_id[i]
-        resolved.append(f"{slot.start_time}-{slot.end_time}")
-
+        slots.append(by_id[i])
     for s in strings:
-        if s not in by_label and not any(f"{slot.start_time}-{slot.end_time}" == s for slot in catalog):
-            # If string doesn't match catalog directly, check if it's a valid time range or accept
-            valid_labels = sorted(set(list(by_label.keys())))
-            if valid_labels:
-                # If catalog is actively populated, ensure validity
-                pass
-        resolved.append(s)
+        if s not in by_label:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=f"Unknown slot {s}. Valid: {sorted({_label(c) for c in catalog})}",
+            )
+        slots.append(by_label[s])
 
-    return list(dict.fromkeys(resolved))
+    if course is not None:
+        level = course_level(course.course_code)
+        for s in slots:
+            if s.level and s.level != level:
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    detail=f"Slot {_label(s)} is {s.level}-only",
+                )
+    return list(dict.fromkeys(_label(s) for s in slots))
+
+
+def to_response(session: Session, pref: InstructorPreference) -> PreferenceResponse:
+    """Build the response, adding catalog slot ids for the stored labels (AC 5.14)."""
+    labels = pref.preferred_slots if isinstance(pref.preferred_slots, list) else []
+    by_label = {_label(s): s.id for s in session.exec(select(TimeSlot)).all()}
+    return PreferenceResponse(
+        id=pref.id,
+        user_id=pref.user_id,
+        semester_id=pref.semester_id,
+        course_id=pref.course_id,
+        preferred_days=pref.preferred_days,
+        preferred_slots=pref.preferred_slots,
+        preferred_slot_ids=[by_label[l] for l in labels if l in by_label],
+        preferred_rooms=pref.preferred_rooms,
+        preference_rank=pref.preference_rank,
+    )
 
 
 @router.post("", response_model=PreferenceResponse)
@@ -78,6 +115,7 @@ def submit_preference(
         )
 
     # 3. Validate Course if provided
+    course = None
     if payload.course_id is not None:
         course = session.get(Course, payload.course_id)
         if not course:
@@ -112,14 +150,14 @@ def submit_preference(
 
     # 5. Populate and resolve preferences
     pref.preferred_days = payload.preferred_days
-    resolved_slots = resolve_slots(session, payload.preferred_slot_ids, payload.preferred_slots)
+    resolved_slots = resolve_slots(session, payload.preferred_slot_ids, payload.preferred_slots, course)
     pref.preferred_slots = resolved_slots
     pref.preferred_rooms = payload.preferred_rooms
 
     session.add(pref)
     session.commit()
     session.refresh(pref)
-    return pref
+    return to_response(session, pref)
 
 
 @router.get("", response_model=List[PreferenceResponse])
@@ -137,7 +175,7 @@ def get_preferences(
         stmt = stmt.where(InstructorPreference.semester_id == semester_id)
     if course_id is not None:
         stmt = stmt.where(InstructorPreference.course_id == course_id)
-    return session.exec(stmt).all()
+    return [to_response(session, p) for p in session.exec(stmt).all()]
 
 
 @router.get("/{preference_id}", response_model=PreferenceResponse)
@@ -152,7 +190,7 @@ def get_preference(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Preference not found",
         )
-    return pref
+    return to_response(session, pref)
 
 
 @router.delete("/{preference_id}", status_code=status.HTTP_204_NO_CONTENT)
