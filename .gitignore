@@ -79,3 +79,7 @@ Thumbs.db
 # Database local files
 *.db
 *.sqlite3
+data/Binary_Decision_Tree.webp
+data/CS5551TeamProject_Introduction.pdf
+data/Database_Design.webp
+report/Project Proposal_ Smart Event Scheduling System (React.js & Python).pdf
