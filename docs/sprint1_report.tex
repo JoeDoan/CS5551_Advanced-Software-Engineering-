@@ -1,0 +1,272 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=0.7in, top=0.8in, bottom=0.8in]{geometry}
+\usepackage[table]{xcolor}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{charter}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{microtype}
+\usepackage[most]{tcolorbox}
+
+% ─────────────────────────────────────────────────────────────
+% Color Palette (UMKC Brand & Professional Executive Slate)
+% ─────────────────────────────────────────────────────────────
+\definecolor{umkcblue}{RGB}{0, 75, 135}       % #004B87 UMKC Primary Blue
+\definecolor{umkcgold}{RGB}{218, 165, 32}     % #DAA520 UMKC Gold
+\definecolor{headerdark}{RGB}{15, 34, 64}     % #0F2240 Deep Navy
+\definecolor{darkslate}{RGB}{30, 41, 59}      % #1E293B Body Text Slate
+\definecolor{lightbg}{RGB}{248, 250, 252}     % #F8FAFC Subtle Gray Tint
+\definecolor{tableheader}{RGB}{234, 242, 250} % Light Blue Header Fill
+\definecolor{bordergray}{RGB}{203, 213, 225}  % Slate 300 Clean Divider
+\definecolor{statusgreen}{RGB}{22, 101, 52}   % Forest Green for Completed
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=umkcblue,
+    filecolor=umkcblue,
+    urlcolor=umkcblue,
+    citecolor=umkcblue
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{bordergray}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\footrulewidth}{0.5pt}
+\renewcommand{\footrule}{\hbox to\headwidth{\color{bordergray}\leaders\hrule height \footrulewidth\hfill}}
+
+\fancyhead[L]{\small\sffamily\textcolor{umkcblue}{\textbf{CS 5551 -- Advanced Software Engineering}}}
+\fancyhead[R]{\small\sffamily\textcolor{darkslate}{Team Project: Sprint \#1 Report}}
+\fancyfoot[L]{\footnotesize\sffamily\textcolor{darkslate}{Project: \textbf{UMKC Course Timetable Scheduler}}}
+\fancyfoot[R]{\footnotesize\sffamily\textcolor{darkslate}{Page \textbf{\thepage} of \textbf{\pageref{LastPage}}}}
+
+\titleformat{\section}
+  {\Large\bfseries\sffamily\color{headerdark}}
+  {\textcolor{umkcblue}{\thesection.}}{0.5em}{}
+  [\vspace{-0.3em}{\color{umkcblue}\rule{\textwidth}{1pt}}]
+
+\titlespacing*{\section}{0pt}{12pt}{6pt}
+
+\tcbset{
+    sleekbox/.style={
+        colback=lightbg,
+        colframe=umkcblue,
+        arc=3pt,
+        boxrule=0.8pt,
+        leftrule=4pt,
+        left=10pt,
+        right=10pt,
+        top=8pt,
+        bottom=8pt
+    }
+}
+
+\begin{document}
+
+% ─────────────────────────────────────────────────────────────
+% PAGE 1: TITLE BANNER, OBJECTIVES & STUDENT CONTRIBUTIONS
+% ─────────────────────────────────────────────────────────────
+\begin{center}
+    {\LARGE\bfseries\sffamily\color{headerdark} CS 5551 -- Advanced Software Engineering}\\[0.25em]
+    {\huge\bfseries\sffamily\color{umkcblue} Team Project: Sprint \#1 Report}\\[0.4em]
+    \normalsize\sffamily
+    \textbf{Course Instructor:} Dr. Sudipta Chattopadhyay \quad$|$\quad 
+    \textbf{Institution:} University of Missouri--Kansas City\\[0.2em]
+    \textbf{Submission Date:} October 16, 2026 \quad$|$\quad
+    \textbf{Repository:} \href{https://github.com/JoeDoan/CS5551_Advanced-Software-Engineering-}{github.com/JoeDoan/CS5551\_Advanced-Software-Engineering-}
+\end{center}
+
+\vspace{0.3em}
+
+\begin{tcolorbox}[sleekbox]
+    \sffamily\small
+    \textbf{\color{umkcblue}Sprint \#1 Objectives:} Transition the Sprint \#0 prototype into an integrated full-stack web application with persistent SQLite storage, RESTful CRUD and solver execution endpoints, interactive React interfaces, and comprehensive automated test coverage across all four team members (minimum 400+ LOC per member).
+    
+    \vspace{0.3em}
+    \textbf{\color{umkcblue}Sprint \#1 Weight (25\% Total Project Credit):}
+    \begin{enumerate}[topsep=2pt, itemsep=0pt, parsep=1pt, leftmargin=1.8em]
+        \item Specification of Requirements: User Stories \& Given-When-Then Acceptance Criteria \textbf{\color{umkcblue}(12 points)}
+        \item Source Code Implementation, Individual 400+ LOC Compliance \& Automated Tests \textbf{\color{umkcblue}(5 points)}
+        \item Team Collaboration \& Meeting Minutes \textbf{\color{umkcblue}(2 points)}
+        \item 5-Minute Live Video Demonstration \textbf{\color{umkcblue}(6 points)}
+    \end{enumerate}
+\end{tcolorbox}
+
+\vspace{0.3em}
+\noindent\textbf{Team Name:} {\large\textbf{\color{umkcblue}UMKC Course Timetable Scheduler}}
+
+\vspace{0.3em}
+\renewcommand{\arraystretch}{1.25}
+\noindent
+\begin{tabularx}{\textwidth}{|p{2.9cm}|X|c|c|c|}
+\hline
+\rowcolor{tableheader}
+\textbf{\sffamily Student Name} & \textbf{\sffamily Specific Sprint \#1 Contributions} & \textbf{\sffamily Verified LOC} & \textbf{\sffamily Team Score} & \textbf{\sffamily Indiv. Score} \\ \hline
+\textbf{Joe Doan}\newline\footnotesize(Coordinator / Solver) & Core OR-Tools CP-SAT constraint engine, REST CRUD routers for Courses and Rooms, SQLite foreign-key enforcement, frontend time-slot catalog service integration, solver UI wiring, CI pipeline, and Sprint \#1 coordination. & \textbf{3,795 LOC}\newline\footnotesize(2,507 Prod / 1,288 Test) & & \\ \hline
+\textbf{Salvatore Nigro}\newline\footnotesize(Frontend UI / API) & Foundational React UI component library (\texttt{Button}, \texttt{Card}, \texttt{Modal}, \texttt{Input}, \texttt{Select}, \texttt{Badge}, \texttt{Alert}), Axios service layer (\texttt{apiClient}, \texttt{courseService}, \texttt{roomService}, \texttt{preferenceService}, \texttt{scheduleService}), FullCalendar integration, and Vitest unit suites. & \textbf{1,923 LOC}\newline\footnotesize(1,379 Prod / 544 Test) & & \\ \hline
+\textbf{Tony Nguyen}\newline\footnotesize(Backend Seeder / Solver API) & Idempotent UMKC database seeder (\texttt{seeder.py}), CP-SAT solver execution bridge (\texttt{solver\_service.py}), solver/admin/directory endpoints (\texttt{routes\_solver.py}), preference slot-catalog validation rules (\texttt{routes\_preferences.py}), and Pytest suites (\texttt{test\_seeder.py}, \texttt{test\_solver\_api.py}, \texttt{test\_preferences\_slot\_rules.py}). & \textbf{805 LOC}\newline\footnotesize(568 Prod / 237 Test) & & \\ \hline
+\textbf{Tina Nguyen}\newline\footnotesize(Frontend Forms / Filters / Export) & Interactive Instructor Preferences portal (\texttt{PreferencesPage.tsx}), reusable auto-dismiss \texttt{Toast.tsx} alert system, multi-dimension \texttt{ScheduleFilters.tsx} toolbar, one-click CSV/JSON export utility (\texttt{exportSchedule.ts}), and Vitest test suites. & \textbf{757 LOC}\newline\footnotesize(425 Prod / 332 Test) & & \\ \hline
+\end{tabularx}
+
+% ─────────────────────────────────────────────────────────────
+% SECTION 1: SPECIFICATION OF REQUIREMENTS
+% ─────────────────────────────────────────────────────────────
+\section{Specification of Requirements (User Stories \& Acceptance Criteria)}
+
+\subsection*{1.1 User Stories Matrix}
+\renewcommand{\arraystretch}{1.2}
+\noindent
+\begin{tabularx}{\textwidth}{|c|p{2.6cm}|X|c|c|p{2.3cm}|}
+\hline
+\rowcolor{tableheader}
+\textbf{\sffamily ID} & \textbf{\sffamily Persona} & \textbf{\sffamily User Story (\textit{As a ... I want to ... So that ...})} & \textbf{\sffamily Priority} & \textbf{\sffamily Pts} & \textbf{\sffamily Owner} \\ \hline
+\textbf{US-1} & Course Coordinator & Seed the initial UMKC catalog, faculty, rooms, semesters, and time slots into SQLite so the application boots with real academic data. & High & 3 & Tony Nguyen \\ \hline
+\textbf{US-2} & Course Coordinator & Trigger the Google OR-Tools CP-SAT solver on demand via REST API for a target semester and persist the conflict-free schedule into SQLite. & Critical & 5 & Tony Nguyen \\ \hline
+\textbf{US-3} & Course Coordinator & Create, read, update, and delete courses in the catalog via REST API with duplicate-code conflict protection and cascade checks. & High & 5 & Joe Doan / Tony Nguyen \\ \hline
+\textbf{US-4} & Course Coordinator & Manage classroom and laboratory spaces via REST API with capacity boundary validation and building association. & High & 5 & Joe Doan / Tony Nguyen \\ \hline
+\textbf{US-5} & Faculty / Instructor & Submit and query teaching preferences (preferred days, time slots, and rooms) via REST API with catalog slot validation. & High & 3 & Tony Nguyen / Joe Doan \\ \hline
+\textbf{US-6} & Faculty / Instructor & Use an interactive web form to toggle teaching days and catalog time slots with client-side validation and toast notifications. & High & 5 & Tina Nguyen \\ \hline
+\textbf{US-7} & Course Coordinator & Inspect dataset status and trigger CP-SAT solver execution directly from the Administration dashboard UI. & Medium & 3 & Salvatore Nigro / Joe Doan \\ \hline
+\textbf{US-8} & Course Coordinator & View the weekly schedule matrix on FullCalendar and filter courses in real time by Department (CS, ECE, MATH) and search keyword. & Critical & 5 & Tina Nguyen / Salvatore Nigro \\ \hline
+\textbf{US-9} & Course Coordinator & Export the active or filtered semester timetable to structured CSV and JSON files with one click. & Medium & 3 & Tina Nguyen / Salvatore Nigro \\ \hline
+\end{tabularx}
+
+\subsection*{1.2 Given-When-Then Acceptance Criteria}
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt, topsep=3pt]
+    \small
+    \item \textbf{AC 1.1 (Database Seeding Counts):} \textit{Given} an empty SQLite database, \textit{When} \texttt{seed\_database()} or \texttt{POST /api/v1/admin/seed} executes, \textit{Then} 2 campuses, 5 buildings, 12 rooms, 20 users, 40 courses, 14 time slots, 6 semesters, 504 preferences, and 240 schedule records are inserted with zero foreign-key violations.
+    \item \textbf{AC 1.2 (Seeder Idempotency):} \textit{Given} a seeded database, \textit{When} \texttt{seed\_database()} is called a second time without \texttt{force\_reset}, \textit{Then} no duplicate rows are created and all entity counts remain identical.
+    \item \textbf{AC 2.1 (Valid CP-SAT Solve \& Persistence):} \textit{Given} seeded UMKC data for Semester 1, \textit{When} \texttt{POST /api/v1/solver/run} is called with \texttt{\{"semester\_id": 1\}}, \textit{Then} the server solves the model to \texttt{OPTIMAL}/\texttt{FEASIBLE}, persists 40 confirmed events to \texttt{schedules}, and returns HTTP 200 with runtime and satisfaction metrics.
+    \item \textbf{AC 2.2 \& AC 2.3 (Solver Error Handling):} \textit{Given} a non-existent semester ID (\texttt{999}), \textit{When} \texttt{POST /api/v1/solver/run} is called, \textit{Then} HTTP 404 is returned; \textit{Given} infeasible teaching-load bounds (\texttt{min > max}), \textit{Then} HTTP 422 is returned with diagnostic details.
+    \item \textbf{AC 3.1 -- 3.4 (Course Catalog CRUD):} \textit{Given} valid course payloads on \texttt{/api/v1/courses}, \textit{When} creating, filtering by \texttt{?department=CS}, updating via \texttt{PUT}, or deleting via \texttt{DELETE}, \textit{Then} the API returns HTTP 201, 200, or 204 respectively, and rejects duplicate \texttt{course\_code} entries with HTTP 409.
+    \item \textbf{AC 4.1 -- 4.3 (Classroom CRUD \& Boundaries):} \textit{Given} room requests on \texttt{/api/v1/rooms}, \textit{When} capacity is negative or zero, \textit{Then} HTTP 422 is returned; \textit{When} filtering by \texttt{?min\_capacity=50\&room\_type=lecture}, \textit{Then} only matching rooms are returned.
+    \item \textbf{AC 5.1 -- 5.2 (Preference Upsert \& Slot Validation):} \textit{Given} instructor preference submissions on \texttt{POST /api/v1/preferences}, \textit{When} valid days and catalog slots are provided, \textit{Then} HTTP 201 (or 200 on idempotent upsert) is returned; invalid slot IDs return HTTP 404 and level mismatches (graduate slot for undergraduate course) return HTTP 422.
+    \item \textbf{AC 6.1 -- 6.3 (Interactive Preferences UI \& Toast):} \textit{Given} the \texttt{/preferences} page, \textit{When} an instructor toggles days and catalog time slots and clicks \texttt{Save Preferences}, \textit{Then} \texttt{POST /api/v1/preferences} is invoked and a green success toast appears; submitting without a day or slot is blocked with an error toast.
+    \item \textbf{AC 8.1 -- 8.2 \& AC 9.1 -- 9.2 (Schedule Matrix, Multi-Filter, Solver Trigger \& CSV Export):} \textit{Given} the \texttt{/schedule} and \texttt{/admin} pages, \textit{When} the user filters by department/keyword, triggers the solver, or clicks \texttt{Export CSV}, \textit{Then} FullCalendar updates without reloading and downloads \texttt{UMKC\_Schedule\_Fall\_2024.csv}.
+\end{itemize}
+
+% ─────────────────────────────────────────────────────────────
+% SECTION 2: AUTOMATED VERIFICATION SUMMARY
+% ─────────────────────────────────────────────────────────────
+\section{Automated Testing \& Verification Summary}
+
+All code changes are verified locally and on GitHub Actions CI (\texttt{.github/workflows/ci.yml}):
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt, topsep=3pt]
+    \small
+    \item \textbf{Backend Pytest Suite (\texttt{pytest backend/tests/ -v}):} \textbf{43 / 43 tests passing} across 8 test modules (\texttt{test\_courses\_api.py}, \texttt{test\_rooms\_api.py}, \texttt{test\_preferences\_api.py}, \texttt{test\_preferences\_slot\_rules.py}, \texttt{test\_time\_slots\_api.py}, \texttt{test\_seeder.py}, \texttt{test\_solver\_api.py}, \texttt{test\_models.py}, \texttt{test\_health.py}).
+    \item \textbf{Backend CP-SAT Solver Verification (\texttt{backend/tests/solver/}):} \textbf{25 / 25 tests passing} verifying zero room/instructor double-booking, room capacity compliance, and multi-semester priority accumulation.
+    \item \textbf{Frontend Vitest Suite (\texttt{npx vitest run} \& \texttt{npm run build}):} \textbf{68 / 68 tests passing} across 20 test files covering UI components, API services, \texttt{PreferencesPage}, \texttt{ScheduleFilters}, \texttt{ScheduleCalendar}, \texttt{Toast}, and \texttt{exportSchedule}. Production TypeScript + Vite build succeeds with zero errors.
+\end{itemize}
+
+% ─────────────────────────────────────────────────────────────
+% SECTION 3: SOURCE CODE SUMMARY TABLE (GIT BLAME VERIFIED)
+% ─────────────────────────────────────────────────────────────
+\section{Source Code Inventory \& Individual LOC Audit}
+The table below lists every production and test source file in the repository, its line count, and developer authorship percentages verified via \texttt{git blame} on \texttt{main}.
+
+\footnotesize
+\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{|p{7.1cm}|c|r|p{6.2cm}|}
+\hline
+\rowcolor{tableheader}
+\textbf{\sffamily Source File Path} & \textbf{\sffamily Type} & \textbf{\sffamily LOC} & \textbf{\sffamily Developer(s) \& \% Contribution (\texttt{git blame})} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{tableheader}
+\textbf{\sffamily Source File Path} & \textbf{\sffamily Type} & \textbf{\sffamily LOC} & \textbf{\sffamily Developer(s) \& \% Contribution (\texttt{git blame})} \\ \hline
+\endhead
+\texttt{backend/app/api/v1/routes.py} & Production & 80 & Joe Doan (89\%), Tony Nguyen (11\%) \\ \hline
+\texttt{backend/app/api/v1/routes\_courses.py} & Production & 154 & Joe Doan (100\%) \\ \hline
+\texttt{backend/app/api/v1/routes\_preferences.py} & Production & 210 & Joe Doan (70\%), Tony Nguyen (30\%) \\ \hline
+\texttt{backend/app/api/v1/routes\_rooms.py} & Production & 188 & Joe Doan (100\%) \\ \hline
+\texttt{backend/app/api/v1/routes\_solver.py} & Production & 62 & Tony Nguyen (100\%) \\ \hline
+\texttt{backend/app/api/v1/routes\_time\_slots.py} & Production & 24 & Joe Doan (100\%) \\ \hline
+\texttt{backend/app/core/config.py} & Production & 21 & Joe Doan (81\%), Tony Nguyen (19\%) \\ \hline
+\texttt{backend/app/core/database.py} & Production & 30 & Joe Doan (90\%), Tony Nguyen (10\%) \\ \hline
+\texttt{backend/app/core/seeder.py} & Production & 234 & Tony Nguyen (100\%) \\ \hline
+\texttt{backend/app/main.py} & Production & 54 & Joe Doan (83\%), Tony Nguyen (17\%) \\ \hline
+\texttt{backend/app/models/entities.py} & Production & 106 & Joe Doan (97\%), Tony Nguyen (3\%) \\ \hline
+\texttt{backend/app/schemas/api\_schemas.py} & Production & 192 & Joe Doan (73\%), Tony Nguyen (27\%) \\ \hline
+\texttt{backend/app/services/solver\_service.py} & Production & 131 & Tony Nguyen (100\%) \\ \hline
+\texttt{backend/app/solver/constraints.py} & Production & 72 & Joe Doan (100\%) \\ \hline
+\texttt{backend/app/solver/data\_loader.py} & Production & 270 & Joe Doan (100\%) \\ \hline
+\texttt{backend/app/solver/engine.py} & Production & 678 & Joe Doan (100\%) \\ \hline
+\texttt{backend/tests/conftest.py} & Test & 46 & Joe Doan (74\%), Tony Nguyen (26\%) \\ \hline
+\texttt{backend/tests/solver/test\_multi\_semester\_verification.py} & Test & 320 & Joe Doan (100\%) \\ \hline
+\texttt{backend/tests/solver/test\_umkc\_verification.py} & Test & 276 & Joe Doan (100\%) \\ \hline
+\texttt{backend/tests/test\_courses\_api.py} & Test & 173 & Joe Doan (100\%) \\ \hline
+\texttt{backend/tests/test\_health.py} & Test & 22 & Joe Doan (100\%) \\ \hline
+\texttt{backend/tests/test\_models.py} & Test & 82 & Joe Doan (61\%), Tony Nguyen (39\%) \\ \hline
+\texttt{backend/tests/test\_preferences\_api.py} & Test & 122 & Joe Doan (100\%) \\ \hline
+\texttt{backend/tests/test\_preferences\_slot\_rules.py} & Test & 49 & Tony Nguyen (100\%) \\ \hline
+\texttt{backend/tests/test\_rooms\_api.py} & Test & 165 & Joe Doan (100\%) \\ \hline
+\texttt{backend/tests/test\_seeder.py} & Test & 72 & Tony Nguyen (100\%) \\ \hline
+\texttt{backend/tests/test\_solver\_api.py} & Test & 72 & Tony Nguyen (100\%) \\ \hline
+\texttt{backend/tests/test\_time\_slots\_api.py} & Test & 27 & Joe Doan (100\%) \\ \hline
+\texttt{frontend/src/App.tsx} & Production & 24 & Joe Doan (100\%) \\ \hline
+\texttt{frontend/src/App.test.tsx} & Test & 15 & Joe Doan (100\%) \\ \hline
+\texttt{frontend/src/components/common/Toast.tsx} & Production & 58 & Tina Nguyen (100\%) \\ \hline
+\texttt{frontend/src/components/common/\_\_tests\_\_/Toast.test.tsx} & Test & 51 & Tina Nguyen (100\%) \\ \hline
+\texttt{frontend/src/components/layout/AppLayout.tsx} & Production & 18 & Joe Doan (100\%) \\ \hline
+\texttt{frontend/src/components/layout/Navbar.tsx} & Production & 43 & Joe Doan (100\%) \\ \hline
+\texttt{frontend/src/components/layout/Sidebar.tsx} & Production & 51 & Joe Doan (100\%) \\ \hline
+\texttt{frontend/src/components/layout/\_\_tests\_\_/Navbar.test.tsx} & Test & 17 & Joe Doan (100\%) \\ \hline
+\texttt{frontend/src/components/schedule/ScheduleCalendar.tsx} & Production & 124 & Joe Doan (48\%), Tina Nguyen (30\%), Salvatore Nigro (23\%) \\ \hline
+\texttt{frontend/src/components/schedule/ScheduleFilters.tsx} & Production & 104 & Tina Nguyen (100\%) \\ \hline
+\texttt{frontend/src/components/schedule/\_\_tests\_\_/ScheduleCalendar.test.tsx} & Test & 40 & Salvatore Nigro (100\%) \\ \hline
+\texttt{frontend/src/components/schedule/\_\_tests\_\_/ScheduleFilters.test.tsx} & Test & 72 & Tina Nguyen (100\%) \\ \hline
+\texttt{frontend/src/components/ui/Alert.tsx} & Production & 82 & Salvatore Nigro (100\%) \\ \hline
+\texttt{frontend/src/components/ui/Badge.tsx} & Production & 66 & Salvatore Nigro (100\%) \\ \hline
+\texttt{frontend/src/components/ui/Button.tsx} & Production & 70 & Salvatore Nigro (100\%) \\ \hline
+\texttt{frontend/src/components/ui/Card.tsx} & Production & 97 & Salvatore Nigro (100\%) \\ \hline
+\texttt{frontend/src/components/ui/Input.tsx} & Production & 62 & Salvatore Nigro (100\%) \\ \hline
+\texttt{frontend/src/components/ui/Modal.tsx} & Production & 82 & Salvatore Nigro (100\%) \\ \hline
+\texttt{frontend/src/components/ui/Select.tsx} & Production & 60 & Salvatore Nigro (100\%) \\ \hline
+\texttt{frontend/src/components/ui/\_\_tests\_\_/*.test.tsx} (7 files) & Test & 288 & Salvatore Nigro (100\%) \\ \hline
+\texttt{frontend/src/pages/AdminPage.tsx} & Production & 125 & Salvatore Nigro (58\%), Joe Doan (42\%) \\ \hline
+\texttt{frontend/src/pages/DashboardPage.tsx} & Production & 99 & Salvatore Nigro (56\%), Joe Doan (44\%) \\ \hline
+\texttt{frontend/src/pages/PreferencesPage.tsx} & Production & 212 & Tina Nguyen (52\%), Salvatore Nigro (31\%), Joe Doan (17\%) \\ \hline
+\texttt{frontend/src/pages/SchedulePage.tsx} & Production & 108 & Tina Nguyen (58\%), Joe Doan (42\%) \\ \hline
+\texttt{frontend/src/pages/\_\_tests\_\_/PreferencesPage.test.tsx} & Test & 142 & Tina Nguyen (82\%), Joe Doan (18\%) \\ \hline
+\texttt{frontend/src/services/apiClient.ts} & Production & 105 & Salvatore Nigro (87\%), Joe Doan (13\%) \\ \hline
+\texttt{frontend/src/services/courseService.ts} & Production & 62 & Salvatore Nigro (100\%) \\ \hline
+\texttt{frontend/src/services/preferenceService.ts} & Production & 85 & Salvatore Nigro (100\%) \\ \hline
+\texttt{frontend/src/services/roomService.ts} & Production & 66 & Salvatore Nigro (100\%) \\ \hline
+\texttt{frontend/src/services/scheduleService.ts} & Production & 95 & Salvatore Nigro (85\%), Joe Doan (15\%) \\ \hline
+\texttt{frontend/src/services/timeSlotService.ts} & Production & 40 & Joe Doan (100\%) \\ \hline
+\texttt{frontend/src/services/\_\_tests\_\_/*.test.ts} (6 files) & Test & 255 & Salvatore Nigro (85\%), Joe Doan (15\%) \\ \hline
+\texttt{frontend/src/styles/theme.css} \& \texttt{utilities.css} & Production & 114 & Salvatore Nigro (100\%) \\ \hline
+\texttt{frontend/src/types/api.ts} & Production & 157 & Salvatore Nigro (57\%), Joe Doan (43\%) \\ \hline
+\texttt{frontend/src/utils/exportSchedule.ts} & Production & 53 & Tina Nguyen (100\%) \\ \hline
+\texttt{frontend/src/utils/\_\_tests\_\_/exportSchedule.test.ts} & Test & 95 & Tina Nguyen (97\%), Joe Doan (3\%) \\ \hline
+\texttt{frontend/src/utils/scheduleParser.ts} & Production & 72 & Salvatore Nigro (51\%), Joe Doan (49\%) \\ \hline
+\end{longtable}
+\normalsize
+
+% ─────────────────────────────────────────────────────────────
+% SECTION 4: SPRINT 1 MEETING MINUTES
+% ─────────────────────────────────────────────────────────────
+\section{Sprint \#1 Meeting Minutes Summary}
+\renewcommand{\arraystretch}{1.2}
+\noindent
+\begin{tabularx}{\textwidth}{|p{1.9cm}|p{2.2cm}|p{2.8cm}|X|X|}
+\hline
+\rowcolor{tableheader}
+\textbf{\sffamily Date} & \textbf{\sffamily Time / Place} & \textbf{\sffamily Participants} & \textbf{\sffamily Agenda \& Decisions} & \textbf{\sffamily Action Items Completed} \\ \hline
+09/23/2026 & 2:30 PM CST\newline Zoom / Discord & Joe, Tony, Tina, Sal & Sprint \#1 backlog grooming, User Stories US-1..US-9 breakdown, and API schema freeze. & Defined Given-When-Then acceptance criteria and assigned individual 400+ LOC targets. \\ \hline
+10/06/2026 & 2:30 PM CST\newline Zoom / Discord & Joe, Tony, Tina, Sal & Mid-sprint integration review: merged Sal's UI library and service layer (\texttt{client\_api}) with backend CRUD routes. & Verified Course/Room/Preference endpoints and frontend service contracts. \\ \hline
+10/14/2026 & 2:30 PM CST\newline Zoom / Discord & Joe, Tony, Tina, Sal & Final Sprint \#1 code review, seeder \& CP-SAT solver API integration, test suite audit, and video rehearsal. & Merged Tina's UI branch and Tony's seeder/solver branch; verified 43 Pytest + 68 Vitest tests passing. \\ \hline
+\end{tabularx}
+
+\end{document}
