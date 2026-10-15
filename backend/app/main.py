@@ -1,15 +1,24 @@
+import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.database import init_db
+from app.core.seeder import seed_database
 from app.api.v1.routes import router as api_v1_router
+
+logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Initialize DB schema on startup
     init_db()
+    if settings.AUTO_SEED:
+        try:
+            seed_database()
+        except Exception as exc:  # e.g. stale local DB from an older schema
+            logger.warning("Auto-seed skipped: %s (delete backend/optisched.db to rebuild)", exc)
     yield
 
 

@@ -14,6 +14,7 @@ from app.api.v1 import (
     routes_rooms,
     routes_preferences,
     routes_time_slots,
+    routes_solver,
 )
 
 router = APIRouter()
@@ -23,6 +24,7 @@ router.include_router(routes_courses.router, prefix="/courses", tags=["Courses"]
 router.include_router(routes_rooms.router, prefix="/rooms", tags=["Rooms"])
 router.include_router(routes_preferences.router, prefix="/preferences", tags=["Preferences"])
 router.include_router(routes_time_slots.router, prefix="/time-slots", tags=["Time Slots"])
+router.include_router(routes_solver.router, prefix="")
 
 
 @router.get("/health", response_model=HealthResponse, tags=["System"])

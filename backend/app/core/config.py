@@ -8,6 +8,7 @@ class Settings:
     API_V1_STR: str = "/api/v1"
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./optisched.db")
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
+    AUTO_SEED: bool = os.getenv("AUTO_SEED", "true").lower() in ("1", "true", "yes")
 
     @property
     def cors_origins(self) -> List[str]:
