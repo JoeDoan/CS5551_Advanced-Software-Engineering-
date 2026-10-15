@@ -1,110 +1,121 @@
-# Sprint 1 — 5-Minute Video Demonstration Script (Simple ESL English)
+# Sprint 1 — 5-Minute Video Demonstration Script (Single Presenter: Joe Doan)
 
-**Total Time Cap:** Strictly under **5:00 minutes** (Target: **4:40 – 4:50**)  
-**Language Level:** Clear, natural, everyday academic English (short sentences, easy to pronounce).  
-**Before Recording Checklist:**
-1. Terminal 1 (`backend/`): run `uvicorn app.main:app --reload --port 8000`
-2. Terminal 2 (`frontend/`): run `npm run dev`
-3. Browser Tab 1: Open `http://localhost:5173` (React App on Dashboard)
-4. Browser Tab 2: Open `http://localhost:8000/api/v1/docs` (FastAPI Swagger UI)
-5. Browser Tab 3: Open your GitHub repository page (`https://github.com/JoeDoan/CS5551_Advanced-Software-Engineering-`)
+**Presenter:** Joe Doan (presenting on behalf of the entire team: Joe Doan, Tony Nguyen, Tina Nguyen, and Salvatore Nigro)  
+**Total Time Cap:** Strictly under **5:00 minutes** (Target: **4:30 – 4:45**)  
+**Language Level:** Clear, simple ESL graduate-student English (short sentences, easy to read aloud smoothly).
 
 ---
 
-## Segment 1: Introduction & System Architecture (0:00 – 0:45)
-**Presenter:** Joe Doan (45 seconds)  
-**On Screen:** Show the GitHub repository briefly, then switch to the React Dashboard at `http://localhost:5173`.
+## Pre-Recording Setup (Open These Before Hitting Record)
+
+1. **Terminal 1 (`backend/`):**
+   ```bash
+   cd backend
+   uvicorn app.main:app --reload --port 8000
+   ```
+2. **Terminal 2 (`frontend/`):**
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+3. **Terminal 3 (Ready for Part 5 test run):**
+   - Split into two tabs or keep two terminal windows ready: one in `backend/` and one in `frontend/`.
+4. **Browser Tabs:**
+   - **Tab 1:** `http://localhost:5173` (React App — start on the **Dashboard** page)
+   - **Tab 2:** `http://localhost:8000/api/v1/docs` (FastAPI **Swagger UI**)
+   - **Tab 3:** `https://github.com/JoeDoan/CS5551_Advanced-Software-Engineering-` (GitHub Repository)
+
+---
+
+## Part 1: Introduction & Project Overview (0:00 – 0:45)
+**On Screen:** Start on **Tab 3 (GitHub repo)** for 15 seconds, then switch to **Tab 1 (React Dashboard `http://localhost:5173`)**.
 
 > **Spoken Script (Joe):**  
-> "Hello Professor. We are the **UMKC Course Timetable Scheduler** team.  
-> Our team members are Joe Doan, Tony Nguyen, Tina Nguyen, and Salvatore Nigro.  
+> "Hello Professor. My name is Joe Doan.  
+> Today I am presenting the Sprint 1 demonstration for our group.  
+> Our team members are **Joe Doan**, **Tony Nguyen**, **Tina Nguyen**, and **Salvatore Nigro**.  
 >   
-> The goal of our project is to automate university course scheduling using **Google OR-Tools CP-SAT**.  
-> In Sprint 0, we built the prototype solver and project skeleton.  
-> In **Sprint 1**, we turned our prototype into a full-stack web application.  
+> Out of the two project options for this course, our team chose the **Course Timetable Scheduler** project.  
+> In Sprint 0, we set up our repository and migrated our **Google OR-Tools CP-SAT** solver prototype.  
+> In **Sprint 1**, we turned that prototype into a working full-stack web application.  
 >   
-> Our backend uses **FastAPI** and **SQLite** with automatic database seeding for 40 UMKC courses, 20 instructors, 12 rooms, and 6 semesters.  
-> Our frontend uses **React**, **TypeScript**, and **FullCalendar**.  
-> Every team member contributed over 750 lines of production and test code.  
-> Now, Tony will demonstrate our backend APIs and solver service."
+> Our backend uses **FastAPI** and **SQLite**, and our frontend uses **React**, **TypeScript**, and **FullCalendar**.  
+> All four team members contributed more than 750 lines of production and test code on GitHub."
 
 ---
 
-## Segment 2: Backend CRUD APIs, Seeder & Validation (0:45 – 1:45)
-**Presenter:** Tony Nguyen (60 seconds)  
-**On Screen:** Switch to Browser Tab 2 (`http://localhost:8000/api/v1/docs` — Swagger UI).
+## Part 2: Backend CRUD APIs, Database Seeder & Validation (0:45 – 1:50)
+**On Screen:** Switch to **Tab 2 (`http://localhost:8000/api/v1/docs` — FastAPI Swagger UI)**.
 
-> **Spoken Script (Tony):**  
-> "Thank you, Joe. I am Tony Nguyen, and I worked on the backend APIs, database seeder, and solver integration.  
+> **Spoken Script (Joe):**  
+> "First, let's look at our backend REST APIs in Swagger UI, which were implemented by **Tony** and **me**.  
 >   
-> First, when our server starts, our idempotent seeder automatically loads all UMKC campuses, buildings, rooms, courses, instructors, and time slots into SQLite.  
-> *(Click `GET /api/v1/courses` -> Try it out -> Execute)*  
-> Here in Swagger UI, calling `GET /api/v1/courses` returns our 40 seeded UMKC courses. We can also filter courses by department, such as `CS`.  
+> When the backend server starts, our database seeder automatically loads the UMKC dataset into SQLite.  
+> This includes 2 campuses, 5 buildings, 12 rooms, 20 instructors, 40 courses, 14 time slots, and 6 semesters.  
+>   
+> *(Click `GET /api/v1/courses` -> Click `Try it out` -> Enter `CS` in `department` -> Click `Execute`)*  
+> Here, when I call `GET /api/v1/courses` and filter by the `CS` department, the API returns our Computer Science courses from SQLite.  
 >   
 > Next, let's test our input validation and error handling.  
-> *(Click `POST /api/v1/courses` -> Try it out -> Send duplicate course code `"CS 101"`)*  
-> If we try to create a course with an existing course code like `CS 101`, the API blocks it and returns **HTTP 409 Conflict**.  
-> *(Scroll to `POST /api/v1/rooms` -> Try it out -> Enter `"capacity": -10` -> Execute)*  
-> Similarly, if we submit a room with a negative capacity, Pydantic validation rejects it with **HTTP 422 Unprocessable Entity**.  
+> *(Open `POST /api/v1/courses` -> Click `Try it out` -> Set `"course_code": "CS 101"` -> Click `Execute`)*  
+> If I try to create a course with a duplicate code like `CS 101`, the server blocks it and returns **HTTP 409 Conflict**.  
 >   
-> We also built `POST /api/v1/solver/run` to run the CP-SAT solver directly from the API and save the schedule into SQLite.  
-> Now, Tina will show the instructor preferences portal."
+> *(Scroll down to `POST /api/v1/rooms` -> Click `Try it out` -> Set `"capacity": -10` -> Click `Execute`)*  
+> And if I try to create a classroom with a negative capacity, Pydantic validation rejects the request with **HTTP 422 Unprocessable Entity**.  
+>   
+> We also have `POST /api/v1/admin/seed` and `POST /api/v1/solver/run` to seed the database and run the CP-SAT solver via REST API."
 
 ---
 
-## Segment 3: Interactive Instructor Preferences & Toast System (1:45 – 2:45)
-**Presenter:** Tina Nguyen (60 seconds)  
-**On Screen:** Switch to Browser Tab 1 (`http://localhost:5173/preferences` — React App).
-
-> **Spoken Script (Tina):**  
-> "Hi everyone, I am Tina Nguyen. In Sprint 1, I implemented the interactive **Instructor Preferences Portal**, the **Toast notification system**, the **Schedule Filters**, and the **CSV Export** feature.  
->   
-> Here on the Preferences page, instructors can select their name from the dropdown.  
-> The time slots below are loaded dynamically from our backend `/api/v1/time-slots` catalog.  
->   
-> *(Click `Reset` button, then click `Save Preferences`)*  
-> First, if I reset the form and click **Save Preferences** without selecting any day or time slot, our client-side validation blocks the submission and shows a red **error toast**.  
->   
-> *(Click `Tuesday (T)` and `Thursday (R)`, then click `09:30 - 10:45` and `11:00 - 12:15`, then click `Save Preferences`)*  
-> Now, when I select Tuesday and Thursday, pick two time slots, and click **Save Preferences**, the form sends a `POST` request to `/api/v1/preferences` and shows a green **success toast** confirming that the preferences are saved in the database.  
-> Next, Sal will demonstrate the interactive schedule calendar and solver execution."
-
----
-
-## Segment 4: FullCalendar Matrix, Multi-Filters, CSV Export & Live Solver (2:45 – 4:00)
-**Presenter:** Salvatore Nigro (75 seconds)  
-**On Screen:** Click **Schedule** in the left sidebar (`http://localhost:5173/schedule`), then **Admin** (`http://localhost:5173/admin`).
-
-> **Spoken Script (Sal):**  
-> "Hello, I am Salvatore Nigro. I built the reusable UI component library, the frontend API service layer, and the FullCalendar schedule integration.  
->   
-> Here on the **Master Schedule Matrix** page, FullCalendar displays the weekly timetable loaded live from our SQLite backend across all 6 semesters.  
-> Each department is color-coded: blue for Computer Science, purple for Math, and green for ECE.  
->   
-> *(Select `CS (Computer Science)` in the Department filter, then type `Lee` or `204` in the search box, then click `Reset Filters`)*  
-> Using the filter toolbar at the top, coordinators can filter the calendar in real time by department or search by course code, instructor name, or room number without reloading the page.  
->   
-> *(Click `Export CSV` button at the top right)*  
-> When we click **Export CSV**, the browser immediately downloads a structured CSV file of the current semester schedule for department review.  
->   
-> *(Click `Admin` in the left sidebar -> Click `Execute Solver (Semester 1)` button)*  
-> Finally, on the **Admin** page, clicking **Execute Solver** calls `POST /api/v1/solver/run`, solves all 40 courses to **OPTIMAL** in less than one second with zero conflicts, and displays the live satisfaction rate.  
-> Now, Joe will wrap up with our automated test results."
-
----
-
-## Segment 5: Automated Test Suites & Wrap-Up (4:00 – 5:00)
-**Presenter:** Joe Doan (50 seconds)  
-**On Screen:** Show Terminal 1 (`pytest tests/ -v`) and Terminal 2 (`npm test`).
+## Part 3: Instructor Preferences Portal & Toast Notifications (1:50 – 2:45)
+**On Screen:** Switch to **Tab 1 (React App)** and click **Preferences** in the left sidebar (`http://localhost:5173/preferences`).
 
 > **Spoken Script (Joe):**  
-> "To finish our demo, let's look at our automated test suites.  
+> "Now let's switch to the React frontend.  
+> **Sal** built our reusable UI component library and API service layer, and **Tina** built the interactive **Preferences page**, **Toast notifications**, **Schedule Filters**, and **CSV Export**.  
 >   
-> *(Show Terminal 1 running `PYTHONPATH=. pytest tests/ -v`)*  
-> On the backend, we have **43 Pytest unit and integration tests** plus **25 CP-SAT solver verification tests**. As you can see, all 43 Pytest tests pass 100%, covering CRUD operations, database seeding idempotency, preference rules, and solver persistence.  
+> Here on the **Instructor Preferences** page, an instructor can select their name from the dropdown.  
+> The time slots below are loaded from our backend `/api/v1/time-slots` endpoint.  
 >   
-> *(Show Terminal 2 running `npm test` in `frontend/`)*  
-> On the frontend, we have **20 Vitest test files with 68 automated tests**, and all 68 tests pass with a clean production build.  
+> *(Click `Reset`, then click `Save Preferences`)*  
+> First, if I reset the form and click **Save Preferences** without choosing any day or time slot, our form validation blocks the request and shows a red **error toast** at the bottom right.  
 >   
-> In summary, our team completed all Sprint 1 goals with over 110 passing automated tests and full Git contribution compliance.  
-> Thank you for watching!"
+> *(Click `Tuesday (T)` and `Thursday (R)`, click `09:30 - 10:45` and `11:00 - 12:15`, then click `Save Preferences`)*  
+> Now, when I select Tuesday and Thursday, pick two time slots, and click **Save Preferences**, the frontend sends a `POST` request to `/api/v1/preferences` and shows a green **success toast** confirming the data is saved in SQLite."
+
+---
+
+## Part 4: Schedule Calendar, Multi-Filters, CSV Export & Live Solver Run (2:45 – 3:55)
+**On Screen:** Click **Schedule** in the left sidebar (`http://localhost:5173/schedule`), then click **Admin** (`http://localhost:5173/admin`).
+
+> **Spoken Script (Joe):**  
+> "Next, let's open the **Schedule** page.  
+> Here, FullCalendar displays the weekly timetable loaded directly from our SQLite database across all 6 semesters.  
+> Courses are color-coded by department: blue for Computer Science, purple for Math, and green for ECE.  
+>   
+> *(In the filter bar, select `CS (Computer Science)` from the Department dropdown, then type `204` or `Lee` in the search box, then click `Reset Filters`)*  
+> Using the filter toolbar, we can filter the calendar in real time by department, or search by course code, instructor name, or room number without reloading the page.  
+>   
+> *(Click the `Export CSV` button at the top right)*  
+> We can also click **Export CSV** at the top right to download the current semester schedule as a CSV file in one click.  
+>   
+> *(Click `Admin` in the left sidebar -> Click `Execute Solver (Semester 1)` button)*  
+> Finally, on the **Admin** page, when I click **Execute Solver**, the frontend calls `POST /api/v1/solver/run`.  
+> The backend runs Google OR-Tools CP-SAT, schedules all 40 courses to **OPTIMAL** in under one second with zero hard-constraint conflicts, saves the new schedule into SQLite, and shows the faculty satisfaction rate."
+
+---
+
+## Part 5: Automated Test Suites & Wrap-Up (3:55 – 4:45)
+**On Screen:** Switch to **Terminal** to show backend Pytest (`pytest tests/ -v`) and frontend Vitest (`npm test`).
+
+> **Spoken Script (Joe):**  
+> "To conclude our demo, let's run our automated test suites in the terminal.  
+>   
+> *(In the `backend/` terminal, run `PYTHONPATH=. pytest tests/ -v`)*  
+> On the backend, we have **43 Pytest unit and integration tests**, plus **25 solver verification tests**.  
+> As shown here, all 43 Pytest tests pass 100%. They test our Course and Room CRUD APIs, database seeder idempotency, preference slot rules, and solver persistence.  
+>   
+> *(In the `frontend/` terminal, run `npm test`)*  
+> On the frontend, we have **20 Vitest test files with 68 unit tests**, and all 68 tests pass with zero build errors.  
+>   
+> That completes our Sprint 1 demonstration. Thank you for watching, Professor!"
