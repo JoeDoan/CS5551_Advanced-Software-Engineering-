@@ -1,6 +1,7 @@
 # Sprint 1 — 5-Minute Video Demonstration Script (Single Presenter: Joe Doan)
 
 **Presenter:** Joe Doan (presenting on behalf of the entire team: Joe Doan, Tony Nguyen, Tina Nguyen, and Salvatore Nigro)  
+**Recorded Video (Panopto):** https://umsystem.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=835d036a-c31b-42cc-8b4a-b4e50145fcb9  
 **Total Time Cap:** Strictly under **5:00 minutes** (Target: **4:30 – 4:45**)  
 **Language Level:** Clear, simple ESL graduate-student English (short sentences, easy to read aloud smoothly).
 
