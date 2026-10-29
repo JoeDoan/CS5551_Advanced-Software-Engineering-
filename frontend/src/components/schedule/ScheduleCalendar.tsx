@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import { EventClickArg } from '@fullcalendar/core'
 import { scheduleService } from '../../services/scheduleService'
 import { transformToCalendarEvents, resolveDepartment } from '../../utils/scheduleParser'
 import { CalendarEventItem, ScheduleEvent } from '../../types/api'
+import { EventDetailModal } from './EventDetailModal'
 import { Loader2 } from 'lucide-react'
 
 export interface ScheduleCalendarProps {
@@ -28,6 +30,7 @@ export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({
   const [rawEvents, setRawEvents] = useState<ScheduleEvent[]>([])
   const [events, setEvents] = useState<CalendarEventItem[]>([])
   const [loading, setLoading] = useState<boolean>(true)
+  const [selectedEvent, setSelectedEvent] = useState<ScheduleEvent | null>(null)
 
   useEffect(() => {
     async function loadData() {
@@ -67,6 +70,14 @@ export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({
     }
     setEvents(transformToCalendarEvents(filtered))
   }, [rawEvents, filter])
+
+  const handleEventClick = (clickInfo: EventClickArg) => {
+    const rawId = Number(clickInfo.event.id.split('-')[0])
+    const found = rawEvents.find((item) => item.id === rawId)
+    if (found) {
+      setSelectedEvent(found)
+    }
+  }
 
   return (
     <div className="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-card">
@@ -112,11 +123,18 @@ export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({
           slotMaxTime="21:00:00"
           slotDuration="00:30:00"
           events={events}
+          eventClick={handleEventClick}
           eventTextColor="#ffffff"
           height="100%"
           expandRows={true}
         />
       </div>
+
+      <EventDetailModal
+        isOpen={selectedEvent !== null}
+        event={selectedEvent}
+        onClose={() => setSelectedEvent(null)}
+      />
     </div>
   )
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import { CalendarDays, Users, School, Sparkles, ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, CardHeader, CardTitle, CardContent, Badge, Button } from '../components/ui'
+import { EditRequestQueue } from '../components/admin/EditRequestQueue'
 
 export const DashboardPage: React.FC = () => {
   const stats = [
@@ -92,6 +93,8 @@ export const DashboardPage: React.FC = () => {
           </CardContent>
         </Card>
       </div>
+
+      <EditRequestQueue />
     </div>
   )
 }

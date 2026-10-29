@@ -140,8 +140,40 @@ export interface EditRequest {
   schedule_id: number;
   requester_id: number;
   requested_changes: string;
+  proposed_room_id?: number | null;
+  proposed_time_slot_id?: number | null;
+  reviewer_notes?: string | null;
   status: 'pending' | 'approved' | 'rejected';
   created_at?: string;
+}
+
+export interface EditRequestCreatePayload {
+  schedule_id: number;
+  requester_id: number;
+  requested_changes: string;
+  proposed_room_id?: number;
+  proposed_time_slot_id?: number;
+}
+
+export interface EditRequestReviewPayload {
+  status: 'approved' | 'rejected';
+  reviewer_notes?: string;
+}
+
+export interface InstructorPriorityStat {
+  user_id: number;
+  instructor_name: string;
+  old_priority: number;
+  new_priority: number;
+  delta: number;
+  satisfaction_rate?: number | null;
+}
+
+export interface SimulationResult {
+  semesters_simulated: number;
+  total_scheduled_events: number;
+  average_satisfaction_rate: number;
+  total_wall_time_seconds: number;
 }
 
 export interface HealthResponse {
