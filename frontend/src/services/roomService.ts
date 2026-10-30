@@ -48,6 +48,45 @@ export const roomService = {
     }
   },
 
+  async createRoom(payload: Omit<Room, 'id'>): Promise<Room> {
+    try {
+      const response = await apiClient.post<Room>('/rooms', payload)
+      return response.data
+    } catch {
+      const nextId = MOCK_ROOMS.length > 0 ? Math.max(...MOCK_ROOMS.map((r) => r.id)) + 1 : 1
+      const created: Room = { id: nextId, ...payload }
+      MOCK_ROOMS.push(created)
+      return created
+    }
+  },
+
+  async updateRoom(id: number, payload: Partial<Omit<Room, 'id'>>): Promise<Room> {
+    try {
+      const response = await apiClient.put<Room>(`/rooms/${id}`, payload)
+      return response.data
+    } catch {
+      const idx = MOCK_ROOMS.findIndex((r) => r.id === id)
+      if (idx === -1) {
+        throw new Error(`Room ${id} not found`)
+      }
+      MOCK_ROOMS[idx] = { ...MOCK_ROOMS[idx], ...payload }
+      return MOCK_ROOMS[idx]
+    }
+  },
+
+  async deleteRoom(id: number): Promise<boolean> {
+    try {
+      await apiClient.delete(`/rooms/${id}`)
+      return true
+    } catch {
+      const idx = MOCK_ROOMS.findIndex((r) => r.id === id)
+      if (idx !== -1) {
+        MOCK_ROOMS.splice(idx, 1)
+      }
+      return true
+    }
+  },
+
   _filterMock(filters?: RoomFilterParams): Room[] {
     let result = [...MOCK_ROOMS]
     if (filters?.min_capacity !== undefined) {

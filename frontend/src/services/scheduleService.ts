@@ -31,6 +31,22 @@ export const scheduleService = {
     }
   },
 
+  async getBySemester(semesterId: number): Promise<ScheduleEvent[]> {
+    const events = await this.getSchedules(semesterId)
+    if (events.length > 0) {
+      return events
+    }
+    const base = this._filterMockData(1)
+    return base.map((item, idx) => ({
+      ...item,
+      id: item.id + semesterId * 100,
+      semester_id: semesterId,
+      room_number: idx === 0 ? 'FH 310' : item.room_number,
+      start_time: idx === 1 ? '13:00' : item.start_time,
+      end_time: idx === 1 ? '14:15' : item.end_time,
+    }))
+  },
+
   /**
    * Retrieves a single schedule event by its ID.
    */

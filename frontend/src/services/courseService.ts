@@ -46,6 +46,45 @@ export const courseService = {
     }
   },
 
+  async createCourse(payload: Omit<Course, 'id'>): Promise<Course> {
+    try {
+      const response = await apiClient.post<Course>('/courses', payload)
+      return response.data
+    } catch {
+      const nextId = MOCK_COURSES.length > 0 ? Math.max(...MOCK_COURSES.map((c) => c.id)) + 1 : 1
+      const created: Course = { id: nextId, ...payload }
+      MOCK_COURSES.push(created)
+      return created
+    }
+  },
+
+  async updateCourse(id: number, payload: Partial<Omit<Course, 'id'>>): Promise<Course> {
+    try {
+      const response = await apiClient.put<Course>(`/courses/${id}`, payload)
+      return response.data
+    } catch {
+      const idx = MOCK_COURSES.findIndex((c) => c.id === id)
+      if (idx === -1) {
+        throw new Error(`Course ${id} not found`)
+      }
+      MOCK_COURSES[idx] = { ...MOCK_COURSES[idx], ...payload }
+      return MOCK_COURSES[idx]
+    }
+  },
+
+  async deleteCourse(id: number): Promise<boolean> {
+    try {
+      await apiClient.delete(`/courses/${id}`)
+      return true
+    } catch {
+      const idx = MOCK_COURSES.findIndex((c) => c.id === id)
+      if (idx !== -1) {
+        MOCK_COURSES.splice(idx, 1)
+      }
+      return true
+    }
+  },
+
   _filterMock(filters?: CourseFilterParams): Course[] {
     let result = [...MOCK_COURSES]
     if (filters?.department) {

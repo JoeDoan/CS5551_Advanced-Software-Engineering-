@@ -1,6 +1,9 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { ScheduleCalendar } from '../components/schedule/ScheduleCalendar'
 import { ScheduleFilters, ScheduleFilterState } from '../components/schedule/ScheduleFilters'
+import { ConflictInspectorPanel } from '../components/schedule/ConflictInspectorPanel'
+import { SemesterComparisonModal } from '../components/schedule/SemesterComparisonModal'
+import { scheduleService } from '../services/scheduleService'
 import { exportScheduleToCSV } from '../utils/exportSchedule'
 import { ScheduleEvent } from '../types/api'
 import { resolveDepartment } from '../utils/scheduleParser'
@@ -19,6 +22,8 @@ const semesters = [
 export const SchedulePage: React.FC = () => {
   const [selectedSemester, setSelectedSemester] = useState<number>(1)
   const [rawEvents, setRawEvents] = useState<ScheduleEvent[]>([])
+  const [isComparisonOpen, setIsComparisonOpen] = useState<boolean>(false)
+  const [comparisonEvents, setComparisonEvents] = useState<ScheduleEvent[]>([])
   const [filters, setFilters] = useState<ScheduleFilterState>({
     department: 'ALL',
     search: '',
@@ -27,6 +32,27 @@ export const SchedulePage: React.FC = () => {
   const currentSemesterName = useMemo(() => {
     return semesters.find((s) => s.id === selectedSemester)?.name || `Semester_${selectedSemester}`
   }, [selectedSemester])
+
+  const comparisonSemesterId = selectedSemester < 6 ? selectedSemester + 1 : 1
+  const comparisonSemesterName = useMemo(() => {
+    return (
+      semesters.find((s) => s.id === comparisonSemesterId)?.name ||
+      `Semester_${comparisonSemesterId}`
+    )
+  }, [comparisonSemesterId])
+
+  useEffect(() => {
+    if (!isComparisonOpen) return
+    let active = true
+    scheduleService.getBySemester(comparisonSemesterId).then((events) => {
+      if (active) {
+        setComparisonEvents(events)
+      }
+    })
+    return () => {
+      active = false
+    }
+  }, [isComparisonOpen, comparisonSemesterId])
 
   const filteredEvents = useMemo(() => {
     let list = [...rawEvents]
@@ -96,10 +122,24 @@ export const SchedulePage: React.FC = () => {
 
       <ScheduleFilters onFilterChange={setFilters} />
 
+      <ConflictInspectorPanel
+        events={filteredEvents.length > 0 ? filteredEvents : rawEvents}
+        onOpenComparison={() => setIsComparisonOpen(true)}
+      />
+
       <ScheduleCalendar
         semesterId={selectedSemester}
         filter={filters}
         onEventsLoaded={setRawEvents}
+      />
+
+      <SemesterComparisonModal
+        isOpen={isComparisonOpen}
+        onClose={() => setIsComparisonOpen(false)}
+        baseSemesterLabel={`Semester ${selectedSemester} (${currentSemesterName})`}
+        targetSemesterLabel={`Semester ${comparisonSemesterId} (${comparisonSemesterName})`}
+        baseEvents={rawEvents}
+        targetEvents={comparisonEvents}
       />
     </div>
   )
