@@ -10,9 +10,13 @@ from app.schemas.api_schemas import (
 )
 from app.models.entities import Schedule, Course, User, Room, TimeSlot
 from app.api.v1 import (
+    routes_analytics,
     routes_courses,
+    routes_edit_requests,
+    routes_export,
     routes_rooms,
     routes_preferences,
+    routes_schedules,
     routes_time_slots,
     routes_solver,
 )
@@ -22,9 +26,21 @@ router = APIRouter()
 # Mount dedicated CRUD and Catalog routers
 router.include_router(routes_courses.router, prefix="/courses", tags=["Courses"])
 router.include_router(routes_rooms.router, prefix="/rooms", tags=["Rooms"])
-router.include_router(routes_preferences.router, prefix="/preferences", tags=["Preferences"])
-router.include_router(routes_time_slots.router, prefix="/time-slots", tags=["Time Slots"])
+router.include_router(
+    routes_preferences.router, prefix="/preferences", tags=["Preferences"]
+)
+router.include_router(
+    routes_time_slots.router, prefix="/time-slots", tags=["Time Slots"]
+)
 router.include_router(routes_solver.router, prefix="")
+router.include_router(routes_export.router, prefix="")
+router.include_router(routes_schedules.router, prefix="")
+router.include_router(
+    routes_edit_requests.router, prefix="/edit-requests", tags=["Edit Requests"]
+)
+router.include_router(
+    routes_analytics.router, prefix="/analytics", tags=["Analytics"]
+)
 
 
 @router.get("/health", response_model=HealthResponse, tags=["System"])

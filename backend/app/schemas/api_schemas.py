@@ -1,6 +1,6 @@
 from enum import Enum
 import re
-from typing import Optional, List, Union
+from typing import Dict, List, Optional, Union
 from pydantic import BaseModel, Field, field_validator
 
 
@@ -161,7 +161,9 @@ class SolverRunRequest(BaseModel):
     min_courses_per_instructor: int = Field(default=1, ge=0, le=5)
     enforce_zero_violations: bool = Field(
         default=False,
-        description="If true, forces an infeasible (over-constrained) run to exercise AC 2.3",
+        description=(
+            "If true, forces an infeasible (over-constrained) run to exercise AC 2.3"
+        ),
     )
 
 
@@ -190,3 +192,77 @@ class SemesterResponse(BaseModel):
     start_date: str
     end_date: str
     is_active: bool
+
+
+class InstructorPriorityDelta(BaseModel):
+    user_id: int
+    instructor_name: str
+    old_priority: int
+    new_priority: int
+    delta: int
+    satisfaction_rate: Optional[float] = None
+
+
+class SemesterSimulationResult(BaseModel):
+    semester_id: int
+    semester_name: str
+    status: str
+    scheduled_count: int
+    wall_time_seconds: float
+    satisfaction_rate: float
+    priority_updates: List[InstructorPriorityDelta] = Field(default_factory=list)
+
+
+class MultiSemesterSimulationRequest(BaseModel):
+    semester_ids: List[int] = Field(
+        default=[1, 2, 3, 4, 5, 6],
+        min_length=1,
+        description="Ordered list of semester IDs to simulate sequentially",
+    )
+    max_courses_per_instructor: int = Field(default=2, ge=1, le=5)
+    min_courses_per_instructor: int = Field(default=1, ge=0, le=5)
+    reset_priorities_before_run: bool = Field(
+        default=True,
+        description="Reset instructor priorities to base 100,000 before simulation",
+    )
+
+
+class MultiSemesterSimulationResponse(BaseModel):
+    semesters_simulated: int
+    total_scheduled_events: int
+    average_satisfaction_rate: float
+    total_wall_time_seconds: float
+    results: List[SemesterSimulationResult]
+    final_priorities: Dict[str, int]
+
+
+class ScheduleOverrideRequest(BaseModel):
+    room_id: Optional[int] = None
+    time_slot_id: Optional[int] = None
+    user_id: Optional[int] = None
+    status: Optional[str] = None
+
+
+class EditRequestCreate(BaseModel):
+    schedule_id: int
+    requester_id: int
+    requested_changes: str = Field(..., min_length=3, max_length=1000)
+    proposed_room_id: Optional[int] = None
+    proposed_time_slot_id: Optional[int] = None
+
+
+class EditRequestReview(BaseModel):
+    status: str = Field(..., pattern="^(approved|rejected)$")
+    reviewer_notes: Optional[str] = None
+
+
+class EditRequestResponse(BaseModel):
+    id: int
+    schedule_id: int
+    requester_id: int
+    requested_changes: str
+    proposed_room_id: Optional[int] = None
+    proposed_time_slot_id: Optional[int] = None
+    reviewer_notes: Optional[str] = None
+    status: str
+    created_at: Optional[str] = None
