@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Database, SlidersHorizontal, Play, CheckCircle, FastForward } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Database, SlidersHorizontal, Play, CheckCircle, FastForward, Users } from 'lucide-react'
 import { Alert, Card, CardHeader, CardTitle, CardContent, Button, Badge } from '../components/ui'
 import { apiClient } from '../services/apiClient'
 import { SimulationResult } from '../types/api'
@@ -82,6 +83,15 @@ export const AdminPage: React.FC = () => {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
+          <Link to="/users">
+            <Button
+              variant="outline"
+              leftIcon={<Users className="w-4 h-4" />}
+              data-testid="manage-user-accounts-btn"
+            >
+              Manage User Accounts
+            </Button>
+          </Link>
           <Button
             variant="secondary"
             isLoading={runningSimulation}

@@ -7,6 +7,7 @@ import {
   ShieldCheck,
   BookOpen,
   Layers,
+  Users,
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { AuthRole } from '../../types/api'
@@ -22,6 +23,7 @@ const navItems: NavItem[] = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/schedule', label: 'Master Schedule', icon: CalendarDays },
   { to: '/courses', label: 'Courses & Sections', icon: Layers, roles: ['coordinator'] },
+  { to: '/users', label: 'User Accounts', icon: Users, roles: ['coordinator'] },
   { to: '/preferences', label: 'Instructor Prefs', icon: Sliders },
   { to: '/admin', label: 'Administration', icon: ShieldCheck, roles: ['coordinator'] },
 ]

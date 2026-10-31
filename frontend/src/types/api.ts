@@ -243,6 +243,39 @@ export interface LogoutResponse {
   revoked_session_id: string;
 }
 
+export interface AccountAdminItem {
+  id: number;
+  email: string;
+  username: string;
+  full_name: string;
+  role: AuthRole;
+  department: string;
+  linked_user_id: number | null;
+  is_active: boolean;
+}
+
+export interface AccountFilterParams {
+  role?: AuthRole;
+  search?: string;
+}
+
+export interface AccountCreatePayload {
+  full_name: string;
+  email: string;
+  username?: string;
+  password: string;
+  role: AuthRole;
+  department: string;
+}
+
+export interface AccountUpdatePayload {
+  full_name?: string;
+  department?: string;
+  role?: AuthRole;
+  password?: string;
+  is_active?: boolean;
+}
+
 export interface InstructorSummary {
   id: number;
   full_name: string;
@@ -250,4 +283,5 @@ export interface InstructorSummary {
   department: string;
   priority_score: number;
 }
+
 

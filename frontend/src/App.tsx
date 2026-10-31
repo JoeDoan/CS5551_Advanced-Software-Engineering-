@@ -8,6 +8,7 @@ import { DashboardPage } from './pages/DashboardPage'
 import { SchedulePage } from './pages/SchedulePage'
 import { PreferencesPage } from './pages/PreferencesPage'
 import { CatalogManagementPage } from './pages/CatalogManagementPage'
+import { AccountManagementPage } from './pages/AccountManagementPage'
 import { AdminPage } from './pages/AdminPage'
 
 export const AppRoutes: React.FC = () => {
@@ -30,6 +31,14 @@ export const AppRoutes: React.FC = () => {
           element={
             <ProtectedRoute allowedRoles={['coordinator']}>
               <CatalogManagementPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="users"
+          element={
+            <ProtectedRoute allowedRoles={['coordinator']}>
+              <AccountManagementPage />
             </ProtectedRoute>
           }
         />
