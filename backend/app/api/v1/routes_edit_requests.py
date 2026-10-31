@@ -55,8 +55,29 @@ class EditRequestMetadata:
         return cls(message=raw)
 
 
-def _to_response(er: EditRequest) -> EditRequestResponse:
+def _format_slot(slot: Optional[TimeSlot]) -> Optional[str]:
+    if slot is None:
+        return None
+    return f"{slot.day_pattern} {slot.start_time}-{slot.end_time}"
+
+
+def _to_response(session: Session, er: EditRequest) -> EditRequestResponse:
     meta = EditRequestMetadata.from_raw(er.requested_changes)
+    sched = session.get(Schedule, er.schedule_id)
+    course = session.get(Course, sched.course_id) if sched else None
+    requester = session.get(User, er.requester_id)
+    cur_room = session.get(Room, sched.room_id) if sched else None
+    cur_slot = session.get(TimeSlot, sched.time_slot_id) if sched else None
+    prop_room = (
+        session.get(Room, meta.proposed_room_id)
+        if meta.proposed_room_id is not None
+        else None
+    )
+    prop_slot = (
+        session.get(TimeSlot, meta.proposed_time_slot_id)
+        if meta.proposed_time_slot_id is not None
+        else None
+    )
     return EditRequestResponse(
         id=er.id,
         schedule_id=er.schedule_id,
@@ -67,6 +88,13 @@ def _to_response(er: EditRequest) -> EditRequestResponse:
         reviewer_notes=meta.reviewer_notes,
         status=er.status,
         created_at=er.created_at,
+        course_code=course.course_code if course else None,
+        course_name=course.course_name if course else None,
+        requester_name=requester.full_name if requester else None,
+        current_room_number=cur_room.room_number if cur_room else None,
+        current_time_slot=_format_slot(cur_slot),
+        proposed_room_number=prop_room.room_number if prop_room else None,
+        proposed_time_slot=_format_slot(prop_slot),
     )
 
 
@@ -181,11 +209,32 @@ def create_edit_request(
             detail=f"Schedule {payload.schedule_id} not found",
         )
 
-    requester = session.get(User, payload.requester_id)
+    if (
+        _principal is not None
+        and _principal.role == "instructor"
+        and _principal.linked_user_id is not None
+    ):
+        if (
+            payload.requester_id is not None
+            and payload.requester_id != _principal.linked_user_id
+        ):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=(
+                    "Instructors can only submit edit requests under their own profile."
+                ),
+            )
+        effective_requester_id = _principal.linked_user_id
+    else:
+        effective_requester_id = (
+            payload.requester_id if payload.requester_id is not None else sched.user_id
+        )
+
+    requester = session.get(User, effective_requester_id)
     if not requester:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"User {payload.requester_id} not found",
+            detail=f"User {effective_requester_id} not found",
         )
 
     if payload.proposed_room_id is not None:
@@ -211,7 +260,7 @@ def create_edit_request(
     )
     er = EditRequest(
         schedule_id=payload.schedule_id,
-        requester_id=payload.requester_id,
+        requester_id=effective_requester_id,
         requested_changes=meta.to_json(),
         status="pending",
         created_at=datetime.now(timezone.utc).isoformat(),
@@ -219,7 +268,7 @@ def create_edit_request(
     session.add(er)
     session.commit()
     session.refresh(er)
-    return _to_response(er)
+    return _to_response(session, er)
 
 
 @router.get("", response_model=List[EditRequestResponse])
@@ -245,7 +294,7 @@ def list_edit_requests(
         stmt = stmt.where(EditRequest.requester_id == requester_id)
     if schedule_id is not None:
         stmt = stmt.where(EditRequest.schedule_id == schedule_id)
-    return [_to_response(r) for r in session.exec(stmt).all()]
+    return [_to_response(session, r) for r in session.exec(stmt).all()]
 
 
 @router.get("/{request_id}", response_model=EditRequestResponse)
@@ -260,7 +309,7 @@ def get_edit_request(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Edit request {request_id} not found",
         )
-    return _to_response(er)
+    return _to_response(session, er)
 
 
 @router.patch("/{request_id}/review", response_model=EditRequestResponse)
@@ -299,7 +348,7 @@ def review_edit_request(
     session.add(er)
     session.commit()
     session.refresh(er)
-    return _to_response(er)
+    return _to_response(session, er)
 
 
 @router.delete("/{request_id}", status_code=status.HTTP_204_NO_CONTENT)

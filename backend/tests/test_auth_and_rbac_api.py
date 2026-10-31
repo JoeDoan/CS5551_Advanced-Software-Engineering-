@@ -664,3 +664,168 @@ def test_self_lockout_self_delete_cascade_delete_and_instructor_rbac(
         ).status_code
         == 404
     )
+
+
+def test_coordinator_blocked_from_preference_writes_and_instructor_persists_course_and_rooms(
+    client, session, monkeypatch
+):
+    """Coordinator gets 403 on preference writes; instructor persists course/room prefs."""
+    monkeypatch.setenv("REQUIRE_AUTH", "true")
+    seed_database(session=session)
+
+    coord = _login(client, "coordinator@umkc.edu", "coordinator123")
+    coord_headers = _bearer(coord["access_token"])
+
+    faculty = _login(client, "leeyu@umkc.edu", "faculty123")
+    faculty_headers = _bearer(faculty["access_token"])
+    own_uid = faculty["user"]["linked_user_id"]
+
+    assert (
+        client.post(
+            "/api/v1/preferences",
+            headers=coord_headers,
+            json={"user_id": own_uid, "semester_id": 1, "preferred_days": ["TR"]},
+        ).status_code
+        == 403
+    )
+
+    rooms = client.get("/api/v1/rooms").json()
+    chosen_room = rooms[0]["room_number"]
+    courses = client.get("/api/v1/courses").json()
+    target_course = next(c for c in courses if c["id"] == 25)
+
+    general_saved = client.post(
+        "/api/v1/preferences",
+        headers=faculty_headers,
+        json={
+            "user_id": own_uid,
+            "semester_id": 1,
+            "preferred_days": ["MWF"],
+            "preferred_slots": ["09:00-09:50"],
+            "preferred_rooms": [chosen_room],
+        },
+    )
+    assert general_saved.status_code in (200, 201)
+
+    course_saved = client.post(
+        "/api/v1/preferences",
+        headers=faculty_headers,
+        json={
+            "user_id": own_uid,
+            "semester_id": 1,
+            "course_id": target_course["id"],
+            "preferred_days": ["TR"],
+            "preferred_slots": ["09:30-10:45"],
+            "preferred_rooms": [chosen_room],
+        },
+    )
+    assert course_saved.status_code in (200, 201)
+    course_pref_id = course_saved.json()["id"]
+
+    assert (
+        client.delete(
+            f"/api/v1/preferences/{course_pref_id}",
+            headers=coord_headers,
+        ).status_code
+        == 403
+    )
+
+    fetched = client.get(
+        f"/api/v1/preferences?user_id={own_uid}&semester_id=1",
+        headers=faculty_headers,
+    )
+    assert fetched.status_code == 200
+    rows = fetched.json()
+    assert rows[0]["course_id"] is None
+    assert rows[0]["course_code"] is None
+    assert rows[0]["course_name"] is None
+    assert rows[0]["preferred_days"] == ["MWF"]
+    assert rows[0]["preferred_slots"] == ["09:00-09:50"]
+    assert rows[0]["preferred_rooms"] == [chosen_room]
+
+    matched_course_pref = next(
+        row for row in rows if row["course_id"] == target_course["id"]
+    )
+    assert matched_course_pref["course_code"] == target_course["course_code"]
+    assert matched_course_pref["course_name"] == target_course["course_name"]
+    assert matched_course_pref["preferred_days"] == ["TR"]
+    assert matched_course_pref["preferred_slots"] == ["09:30-10:45"]
+    assert matched_course_pref["preferred_rooms"] == [chosen_room]
+
+    general_only_rows = client.get(
+        f"/api/v1/preferences?user_id={own_uid}&semester_id=1&general_only=true",
+        headers=faculty_headers,
+    ).json()
+    assert len(general_only_rows) == 1
+    assert general_only_rows[0]["course_id"] is None
+
+    solved = client.post(
+        "/api/v1/solver/run",
+        headers=coord_headers,
+        json={"semester_id": 1},
+    )
+    assert solved.status_code == 200
+    assert solved.json()["scheduled_count"] == 40
+
+    deleted = client.delete(
+        f"/api/v1/preferences/{course_pref_id}",
+        headers=faculty_headers,
+    )
+    assert deleted.status_code == 204
+
+
+def test_instructor_edit_request_autobinds_blocks_spoofing_and_returns_enriched_fields(
+    client, session, monkeypatch
+):
+    """Instructor edit request auto-binds requester_id, blocks spoofing, and enriches labels."""
+    monkeypatch.setenv("REQUIRE_AUTH", "true")
+    seed_database(session=session)
+
+    faculty = _login(client, "leeyu@umkc.edu", "faculty123")
+    faculty_headers = _bearer(faculty["access_token"])
+    own_uid = faculty["user"]["linked_user_id"]
+
+    schedules = client.get("/api/v1/schedules?semester_id=1").json()
+    target_sched = schedules[0]
+    rooms = client.get("/api/v1/rooms").json()
+    prop_room = rooms[-1]
+    slots = client.get("/api/v1/time-slots").json()
+    prop_slot = slots[-1]
+
+    spoofed = client.post(
+        "/api/v1/edit-requests",
+        headers=faculty_headers,
+        json={
+            "schedule_id": target_sched["id"],
+            "requester_id": 2,
+            "requested_changes": "Attempting spoofed requester profile",
+        },
+    )
+    assert spoofed.status_code == 403
+
+    created = client.post(
+        "/api/v1/edit-requests",
+        headers=faculty_headers,
+        json={
+            "schedule_id": target_sched["id"],
+            "requested_changes": "Requesting larger afternoon classroom",
+            "proposed_room_id": prop_room["id"],
+            "proposed_time_slot_id": prop_slot["id"],
+        },
+    )
+    assert created.status_code == 201
+    body = created.json()
+    assert body["requester_id"] == own_uid
+    assert body["requester_name"] == "Dr. Yugyung Lee"
+    assert body["course_code"] == target_sched["course_code"]
+    assert body["course_name"] == target_sched["course_name"]
+    assert body["current_room_number"] == target_sched["room_number"]
+    assert (
+        body["current_time_slot"]
+        == f"{target_sched['day_pattern']} {target_sched['start_time']}-{target_sched['end_time']}"
+    )
+    assert body["proposed_room_number"] == prop_room["room_number"]
+    assert (
+        body["proposed_time_slot"]
+        == f"{prop_slot['day_pattern']} {prop_slot['start_time']}-{prop_slot['end_time']}"
+    )

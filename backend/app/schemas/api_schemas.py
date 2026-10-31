@@ -121,6 +121,8 @@ class PreferenceResponse(BaseModel):
     user_id: int
     semester_id: int
     course_id: Optional[int] = None
+    course_code: Optional[str] = None
+    course_name: Optional[str] = None
     preferred_days: Union[List[str], str, None] = None
     preferred_slots: Union[List[str], str, None] = None
     preferred_slot_ids: List[int] = Field(default_factory=list)
@@ -258,7 +260,7 @@ class ScheduleOverrideRequest(BaseModel):
 
 class EditRequestCreate(BaseModel):
     schedule_id: int
-    requester_id: int
+    requester_id: Optional[int] = None
     requested_changes: str = Field(..., min_length=3, max_length=1000)
     proposed_room_id: Optional[int] = None
     proposed_time_slot_id: Optional[int] = None
@@ -279,6 +281,13 @@ class EditRequestResponse(BaseModel):
     reviewer_notes: Optional[str] = None
     status: str
     created_at: Optional[str] = None
+    course_code: Optional[str] = None
+    course_name: Optional[str] = None
+    requester_name: Optional[str] = None
+    current_room_number: Optional[str] = None
+    current_time_slot: Optional[str] = None
+    proposed_room_number: Optional[str] = None
+    proposed_time_slot: Optional[str] = None
 
 
 class LoginRequest(BaseModel):

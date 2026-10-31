@@ -1,7 +1,8 @@
 import re
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
-from sqlmodel import Session, select, or_
+from sqlalchemy import case
+from sqlmodel import Session, select
 
 from app.core.database import get_session
 from app.core.security import SessionPrincipal, require_auth
@@ -19,6 +20,28 @@ def course_level(course_code: str) -> str:
 
 def _label(slot: TimeSlot) -> str:
     return f"{slot.start_time}-{slot.end_time}"
+
+
+def _authorize_preference_write(
+    principal: Optional[SessionPrincipal],
+    target_user_id: Optional[int] = None,
+) -> None:
+    if principal is None:
+        return
+    if principal.role != "instructor":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only faculty instructors can modify teaching preferences.",
+        )
+    if (
+        target_user_id is not None
+        and principal.linked_user_id is not None
+        and target_user_id != principal.linked_user_id
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Instructors can only modify their own preferences.",
+        )
 
 
 def resolve_slots(
@@ -70,14 +93,17 @@ def to_response(session: Session, pref: InstructorPreference) -> PreferenceRespo
     """Build the response, adding catalog slot ids for the stored labels (AC 5.14)."""
     labels = pref.preferred_slots if isinstance(pref.preferred_slots, list) else []
     by_label = {_label(s): s.id for s in session.exec(select(TimeSlot)).all()}
+    course = session.get(Course, pref.course_id) if pref.course_id is not None else None
     return PreferenceResponse(
         id=pref.id,
         user_id=pref.user_id,
         semester_id=pref.semester_id,
         course_id=pref.course_id,
+        course_code=course.course_code if course else None,
+        course_name=course.course_name if course else None,
         preferred_days=pref.preferred_days,
         preferred_slots=pref.preferred_slots,
-        preferred_slot_ids=[by_label[l] for l in labels if l in by_label],
+        preferred_slot_ids=[by_label[lbl] for lbl in labels if lbl in by_label],
         preferred_rooms=pref.preferred_rooms,
         preference_rank=pref.preference_rank,
     )
@@ -91,16 +117,7 @@ def submit_preference(
     principal: Optional[SessionPrincipal] = Depends(require_auth),
 ):
     """Submit instructor availability and course preferences with idempotent upsert."""
-    if (
-        principal is not None
-        and principal.role == "instructor"
-        and principal.linked_user_id is not None
-        and payload.user_id != principal.linked_user_id
-    ):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Instructors can only modify their own preferences.",
-        )
+    _authorize_preference_write(principal, payload.user_id)
 
     # 1. Validate User
     user = session.get(User, payload.user_id)
@@ -180,18 +197,33 @@ def get_preferences(
     user_id: Optional[int] = Query(
         default=None, description="Filter by instructor ID (optional for coordinator)"
     ),
-    semester_id: Optional[int] = Query(default=None, description="Filter by semester ID"),
+    semester_id: Optional[int] = Query(
+        default=None, description="Filter by semester ID"
+    ),
     course_id: Optional[int] = Query(default=None, description="Filter by course ID"),
+    general_only: bool = Query(
+        default=False,
+        description=(
+            "If true, return only general semester preferences where course_id is null"
+        ),
+    ),
     session: Session = Depends(get_session),
 ):
-    """Retrieve instructor preferences with optional filtering by instructor, semester, or course."""
+    """Retrieve instructor preferences filtered by instructor, semester, or course."""
     stmt = select(InstructorPreference)
     if user_id is not None:
         stmt = stmt.where(InstructorPreference.user_id == user_id)
     if semester_id is not None:
         stmt = stmt.where(InstructorPreference.semester_id == semester_id)
+    if general_only:
+        stmt = stmt.where(InstructorPreference.course_id.is_(None))
     if course_id is not None:
         stmt = stmt.where(InstructorPreference.course_id == course_id)
+    stmt = stmt.order_by(
+        case((InstructorPreference.course_id.is_(None), 0), else_=1),
+        InstructorPreference.course_id,
+        InstructorPreference.id,
+    )
     return [to_response(session, p) for p in session.exec(stmt).all()]
 
 
@@ -217,23 +249,14 @@ def delete_preference(
     principal: Optional[SessionPrincipal] = Depends(require_auth),
 ):
     """Delete an instructor preference record."""
+    _authorize_preference_write(principal)
     pref = session.get(InstructorPreference, preference_id)
     if not pref:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Preference not found",
         )
-    if (
-        principal is not None
-        and principal.role == "instructor"
-        and principal.linked_user_id is not None
-        and pref.user_id != principal.linked_user_id
-    ):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Instructors can only modify their own preferences.",
-        )
+    _authorize_preference_write(principal, pref.user_id)
     session.delete(pref)
     session.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
-

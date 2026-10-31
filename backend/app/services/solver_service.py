@@ -1,4 +1,5 @@
-from typing import Any, Dict, Set, Tuple
+import re
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from fastapi import HTTPException, status
 from ortools.sat.python import cp_model
@@ -9,6 +10,7 @@ from app.core.seeder import seed_database
 from app.models.entities import (
     Course,
     EditRequest,
+    InstructorPreference,
     Room,
     Schedule,
     Semester,
@@ -25,6 +27,155 @@ from app.solver.engine import (
 )
 
 SOLVER_TIME_LIMIT_SECONDS = 30.0
+
+_DAY_CODE_MAP = {
+    "M": "Monday",
+    "T": "Tuesday",
+    "W": "Wednesday",
+    "R": "Thursday",
+    "F": "Friday",
+}
+_DATE_BY_UPPER = {day.upper(): day for day in DATE}
+_TIME_RANGE_RE = re.compile(r"(\d{2}:\d{2})\s*-\s*(\d{2}:\d{2})")
+
+
+def _to_minutes(hhmm: str) -> int:
+    hours, mins = hhmm.split(":", 1)
+    return int(hours) * 60 + int(mins)
+
+
+def _expand_preferred_days(raw_days: Any) -> List[str]:
+    if not isinstance(raw_days, list):
+        return []
+    expanded: List[str] = []
+    for item in raw_days:
+        token = str(item).strip()
+        if not token:
+            continue
+        upper = token.upper()
+        if upper in _DATE_BY_UPPER:
+            day_name = _DATE_BY_UPPER[upper]
+            if day_name not in expanded:
+                expanded.append(day_name)
+        elif all(ch in _DAY_CODE_MAP for ch in upper):
+            for ch in upper:
+                day_name = _DAY_CODE_MAP[ch]
+                if day_name not in expanded:
+                    expanded.append(day_name)
+    return expanded
+
+
+def _map_preferred_slots(raw_slots: Any, loader: DataLoader) -> List[int]:
+    if not isinstance(raw_slots, list):
+        return []
+
+    exact_by_label: Dict[str, int] = {}
+    windows: List[Tuple[int, int, int]] = []
+    valid_ids: Set[int] = set()
+    for ts in loader.time_slots:
+        sid = int(ts["slot_id"])
+        start = str(ts["start_time"]).strip()
+        end = str(ts["end_time"]).strip()
+        valid_ids.add(sid)
+        exact_by_label[f"{start}-{end}"] = sid
+        windows.append((sid, _to_minutes(start), _to_minutes(end)))
+
+    mapped: List[int] = []
+    for item in raw_slots:
+        resolved: Optional[int] = None
+        if isinstance(item, int) and item in valid_ids:
+            resolved = item
+        else:
+            token = str(item).strip()
+            if token.isdigit() and int(token) in valid_ids:
+                resolved = int(token)
+            else:
+                match = _TIME_RANGE_RE.search(token)
+                if match:
+                    start_s, end_s = match.group(1), match.group(2)
+                    label = f"{start_s}-{end_s}"
+                    if label in exact_by_label:
+                        resolved = exact_by_label[label]
+                    else:
+                        s_min = _to_minutes(start_s)
+                        e_min = _to_minutes(end_s)
+                        best_overlap = 0
+                        for sid, w_start, w_end in windows:
+                            overlap = min(e_min, w_end) - max(s_min, w_start)
+                            if overlap > best_overlap:
+                                best_overlap = overlap
+                                resolved = sid
+        if resolved is not None and resolved not in mapped:
+            mapped.append(resolved)
+    return mapped
+
+
+def _overlay_sqlite_preferences(
+    session: Session,
+    semester_id: int,
+    profiles: Dict[str, Any],
+    valid_ic_pairs: Set[Tuple[str, str]],
+    loader: DataLoader,
+) -> None:
+    prefs = session.exec(
+        select(InstructorPreference)
+        .where(InstructorPreference.semester_id == semester_id)
+        .order_by(InstructorPreference.id)
+    ).all()
+    if not prefs:
+        return
+
+    user_name_by_id = {
+        u.id: u.full_name
+        for u in session.exec(select(User)).all()
+        if u.id is not None
+    }
+    loader_course_names = {c["course_name"] for c in loader.courses}
+    loader_course_by_id = {c["course_id"]: c["course_name"] for c in loader.courses}
+    db_course_by_id = {
+        c.id: c.course_name
+        for c in session.exec(select(Course)).all()
+        if c.id is not None
+    }
+
+    for pref in prefs:
+        inst_name = user_name_by_id.get(pref.user_id)
+        if not inst_name or inst_name not in profiles:
+            continue
+
+        days = _expand_preferred_days(pref.preferred_days)
+        slots = _map_preferred_slots(pref.preferred_slots, loader)
+        rooms = (
+            [str(r).strip() for r in pref.preferred_rooms if str(r).strip()]
+            if isinstance(pref.preferred_rooms, list)
+            else []
+        )
+
+        if pref.course_id is None:
+            general_prefs = profiles[inst_name].setdefault(
+                "preferences",
+                {"days": [], "slots": [], "classrooms": [], "layout": None},
+            )
+            if days:
+                general_prefs["days"] = days
+            if slots:
+                general_prefs["slots"] = slots
+            if rooms:
+                general_prefs["classrooms"] = rooms
+        else:
+            course_name = db_course_by_id.get(pref.course_id) or loader_course_by_id.get(
+                pref.course_id
+            )
+            if course_name and course_name in loader_course_names:
+                course_prefs = profiles[inst_name].setdefault("course_preferences", {})
+                existing = course_prefs.get(course_name, {})
+                course_prefs[course_name] = {
+                    "days": days,
+                    "slots": slots,
+                    "classrooms": rooms,
+                    "layout": existing.get("layout"),
+                }
+                valid_ic_pairs.add((inst_name, course_name))
 
 
 def _schedule_extra_sqlite_courses(
@@ -151,6 +302,14 @@ def run_solver_for_semester(
     # The solver works on the UMKC JSON tables, keyed by names; read-only here.
     loader = DataLoader()
     profiles = load_profiles_from_data(loader, semester_id=semester.semester_id)
+    valid_ic_pairs = set(loader.get_valid_ic_pairs())
+    _overlay_sqlite_preferences(
+        session=session,
+        semester_id=semester.id,
+        profiles=profiles,
+        valid_ic_pairs=valid_ic_pairs,
+        loader=loader,
+    )
     slots = loader.get_slots_dict()
     class_room = [r["room_number"] for r in loader.rooms]
     instructors = [u["name"] for u in loader.get_instructors()]
@@ -167,7 +326,7 @@ def run_solver_for_semester(
         room_capacities=room_caps,
         course_enrollments=course_enrolls,
         room_layouts=room_layouts,
-        valid_ic_pairs=loader.get_valid_ic_pairs(),
+        valid_ic_pairs=valid_ic_pairs,
         valid_rc_pairs=loader.get_valid_rc_pairs(),
         min_courses_per_instructor=min_courses_per_instructor,
         max_courses_per_instructor=max_courses_per_instructor,
