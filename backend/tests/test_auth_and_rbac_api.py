@@ -402,3 +402,265 @@ def test_schedule_section_validation_404_422_and_expired_token_401(
     assert lab_fail.status_code == 422
 
     assert client.delete("/api/v1/schedules/999999", headers=headers).status_code == 404
+
+
+def test_admin_create_instructor_links_user_and_enables_login(
+    client, session, monkeypatch
+):
+    """Instructor creation links a User row, surfaces in /instructors, and enables login."""
+    monkeypatch.setenv("REQUIRE_AUTH", "true")
+    seed_database(session=session)
+
+    coord = _login(client, "coordinator@umkc.edu", "coordinator123")
+    headers = _bearer(coord["access_token"])
+
+    created = client.post(
+        "/api/v1/auth/accounts",
+        headers=headers,
+        json={
+            "full_name": "Dr. Elena Vance",
+            "email": "DR_NEW@UMKC.EDU",
+            "password": "vance-password-1",
+            "role": "instructor",
+            "department": "ece",
+        },
+    )
+    assert created.status_code == 201, created.text
+    body = created.json()
+    assert body["email"] == "dr_new@umkc.edu"
+    assert body["username"] == "dr_new"
+    assert body["role"] == "instructor"
+    assert body["department"] == "ECE"
+    assert body["is_active"] is True
+    assert body["linked_user_id"] is not None
+
+    instructors_resp = client.get("/api/v1/instructors")
+    assert instructors_resp.status_code == 200
+    instructors = instructors_resp.json()
+    matched_inst = next(
+        (u for u in instructors if u["id"] == body["linked_user_id"]), None
+    )
+    assert matched_inst is not None
+    assert matched_inst["email"] == "dr_new@umkc.edu"
+    assert matched_inst["full_name"] == "Dr. Elena Vance"
+    assert matched_inst["department"] == "ECE"
+
+    logged_in = _login(client, "dr_new@umkc.edu", "vance-password-1")
+    assert logged_in["user"]["role"] == "instructor"
+    assert logged_in["user"]["linked_user_id"] == body["linked_user_id"]
+
+    auto_suffix = client.post(
+        "/api/v1/auth/accounts",
+        headers=headers,
+        json={
+            "full_name": "Dr. Another New",
+            "email": "dr_new@missouri.edu",
+            "password": "another-password",
+            "role": "instructor",
+            "department": "CS",
+        },
+    )
+    assert auto_suffix.status_code == 201
+    assert auto_suffix.json()["username"] == "dr_new1"
+
+    explicit_collision = client.post(
+        "/api/v1/auth/accounts",
+        headers=headers,
+        json={
+            "full_name": "Dr. Collision",
+            "email": "unique_person@umkc.edu",
+            "username": "DR_NEW",
+            "password": "collision-pass",
+            "role": "instructor",
+            "department": "CS",
+        },
+    )
+    assert explicit_collision.status_code == 409
+
+    patched = client.patch(
+        f"/api/v1/auth/accounts/{body['id']}",
+        headers=headers,
+        json={"full_name": "Dr. Elena Vance-Updated", "department": "math"},
+    )
+    assert patched.status_code == 200
+    assert patched.json()["department"] == "MATH"
+    updated_inst = next(
+        u
+        for u in client.get("/api/v1/instructors").json()
+        if u["id"] == body["linked_user_id"]
+    )
+    assert updated_inst["full_name"] == "Dr. Elena Vance-Updated"
+    assert updated_inst["department"] == "MATH"
+
+
+def test_admin_create_coordinator_ordering_filters_and_duplicate_conflict(
+    client, session, monkeypatch
+):
+    """Coordinator creation enforces 409 on duplicate email and sorts coordinators first."""
+    monkeypatch.setenv("REQUIRE_AUTH", "true")
+    seed_database(session=session)
+
+    coord = _login(client, "coordinator@umkc.edu", "coordinator123")
+    headers = _bearer(coord["access_token"])
+
+    created = client.post(
+        "/api/v1/auth/accounts",
+        headers=headers,
+        json={
+            "full_name": "Alex Coordinator",
+            "email": "coord2@umkc.edu",
+            "password": "coord2-password",
+            "role": "coordinator",
+            "department": "cs",
+        },
+    )
+    assert created.status_code == 201
+    c2 = created.json()
+    assert c2["role"] == "coordinator"
+    assert c2["linked_user_id"] is None
+
+    duplicate = client.post(
+        "/api/v1/auth/accounts",
+        headers=headers,
+        json={
+            "full_name": "Duplicate Coordinator",
+            "email": "COORD2@UMKC.EDU",
+            "password": "coord2-password",
+            "role": "coordinator",
+            "department": "CS",
+        },
+    )
+    assert duplicate.status_code == 409
+
+    all_accounts = client.get("/api/v1/auth/accounts", headers=headers)
+    assert all_accounts.status_code == 200
+    listing = all_accounts.json()
+    assert listing[0]["email"] == "coord2@umkc.edu"
+    assert listing[1]["email"] == "coordinator@umkc.edu"
+    assert all(a["role"] == "instructor" for a in listing[2:])
+
+    only_coords = client.get(
+        "/api/v1/auth/accounts?role=COORDINATOR", headers=headers
+    ).json()
+    assert len(only_coords) == 2
+
+    searched = client.get(
+        "/api/v1/auth/accounts?search=coord2@umkc.edu", headers=headers
+    ).json()
+    assert len(searched) == 1
+    assert searched[0]["id"] == c2["id"]
+
+
+def test_deactivating_account_immediately_revokes_active_jwt_and_blocks_login(
+    client, session, monkeypatch
+):
+    """PATCH is_active=False revokes active sessions so /auth/me and /auth/login return 401."""
+    monkeypatch.setenv("REQUIRE_AUTH", "true")
+    seed_database(session=session)
+
+    coord = _login(client, "coordinator@umkc.edu", "coordinator123")
+    coord_headers = _bearer(coord["access_token"])
+
+    faculty_login = _login(client, "leeyu@umkc.edu", "faculty123")
+    faculty_token = faculty_login["access_token"]
+    faculty_account_id = faculty_login["user"]["id"]
+
+    assert (
+        client.get("/api/v1/auth/me", headers=_bearer(faculty_token)).status_code == 200
+    )
+
+    deactivated = client.patch(
+        f"/api/v1/auth/accounts/{faculty_account_id}",
+        headers=coord_headers,
+        json={"is_active": False},
+    )
+    assert deactivated.status_code == 200
+    assert deactivated.json()["is_active"] is False
+
+    assert (
+        client.get("/api/v1/auth/me", headers=_bearer(faculty_token)).status_code == 401
+    )
+
+    relogin = client.post(
+        "/api/v1/auth/login",
+        json={"identifier": "leeyu@umkc.edu", "password": "faculty123"},
+    )
+    assert relogin.status_code == 401
+
+
+def test_self_lockout_self_delete_cascade_delete_and_instructor_rbac(
+    client, session, monkeypatch
+):
+    """Coordinator self-lockout/delete returns 400 and instructors receive 403 on /auth/accounts."""
+    monkeypatch.setenv("REQUIRE_AUTH", "true")
+    seed_database(session=session)
+
+    assert client.get("/api/v1/auth/accounts").status_code == 401
+
+    coord = _login(client, "coordinator@umkc.edu", "coordinator123")
+    coord_headers = _bearer(coord["access_token"])
+    coord_id = coord["user"]["id"]
+
+    assert (
+        client.patch(
+            f"/api/v1/auth/accounts/{coord_id}",
+            headers=coord_headers,
+            json={"is_active": False},
+        ).status_code
+        == 400
+    )
+    assert (
+        client.patch(
+            f"/api/v1/auth/accounts/{coord_id}",
+            headers=coord_headers,
+            json={"role": "instructor"},
+        ).status_code
+        == 400
+    )
+    assert (
+        client.delete(
+            f"/api/v1/auth/accounts/{coord_id}",
+            headers=coord_headers,
+        ).status_code
+        == 400
+    )
+
+    faculty = _login(client, "leeyu@umkc.edu", "faculty123")
+    faculty_headers = _bearer(faculty["access_token"])
+    faculty_account_id = faculty["user"]["id"]
+    faculty_uid = faculty["user"]["linked_user_id"]
+
+    assert (
+        client.get("/api/v1/auth/accounts", headers=faculty_headers).status_code == 403
+    )
+    assert (
+        client.post(
+            "/api/v1/auth/accounts",
+            headers=faculty_headers,
+            json={
+                "full_name": "Unauthorized Attempt",
+                "email": "unauth@umkc.edu",
+                "password": "password123",
+                "role": "instructor",
+                "department": "CS",
+            },
+        ).status_code
+        == 403
+    )
+
+    deleted = client.delete(
+        f"/api/v1/auth/accounts/{faculty_account_id}",
+        headers=coord_headers,
+    )
+    assert deleted.status_code == 204
+    assert (
+        client.get("/api/v1/auth/me", headers=faculty_headers).status_code == 401
+    )
+    remaining_ids = {u["id"] for u in client.get("/api/v1/instructors").json()}
+    assert faculty_uid not in remaining_ids
+    assert (
+        client.delete(
+            f"/api/v1/auth/accounts/{faculty_account_id}", headers=coord_headers
+        ).status_code
+        == 404
+    )

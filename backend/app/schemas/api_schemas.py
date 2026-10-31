@@ -325,3 +325,31 @@ class DemoAccountResponse(BaseModel):
     department: str
     password: str
     linked_user_id: Optional[int] = None
+
+
+class AccountAdminResponse(BaseModel):
+    id: int
+    email: str
+    username: str
+    full_name: str
+    role: str
+    department: str
+    linked_user_id: Optional[int] = None
+    is_active: bool
+
+
+class AccountCreateRequest(BaseModel):
+    full_name: str = Field(..., min_length=2, max_length=120)
+    email: str = Field(..., min_length=5, max_length=150)
+    username: Optional[str] = Field(default=None, max_length=80)
+    password: str = Field(..., min_length=6, max_length=128)
+    role: str = Field(default="instructor", pattern="^(coordinator|instructor)$")
+    department: str = Field(default="CS", min_length=2, max_length=40)
+
+
+class AccountUpdateRequest(BaseModel):
+    full_name: Optional[str] = Field(default=None, min_length=2, max_length=120)
+    department: Optional[str] = Field(default=None, min_length=2, max_length=40)
+    role: Optional[str] = Field(default=None, pattern="^(coordinator|instructor)$")
+    password: Optional[str] = Field(default=None, min_length=6, max_length=128)
+    is_active: Optional[bool] = None

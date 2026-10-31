@@ -61,6 +61,20 @@ def list_users(
     return session.exec(stmt).all()
 
 
+@router.get("/instructors", response_model=List[UserResponse], tags=["Users"])
+def list_instructors(
+    department: Optional[str] = Query(
+        default=None, description="Filter instructors by department"
+    ),
+    session: Session = Depends(get_session),
+):
+    """List all instructor profiles from the users catalog."""
+    stmt = select(User).where(User.role == "instructor")
+    if department:
+        stmt = stmt.where(User.department == department.strip().upper())
+    return session.exec(stmt.order_by(User.id)).all()
+
+
 @router.get("/semesters", response_model=List[SemesterResponse], tags=["Semesters"])
 def list_semesters(session: Session = Depends(get_session)):
     """List available academic semesters."""
