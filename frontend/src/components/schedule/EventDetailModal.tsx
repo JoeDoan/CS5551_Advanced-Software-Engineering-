@@ -20,6 +20,7 @@ import { useAuth } from '../../context/AuthContext'
 import { editRequestService } from '../../services/editRequestService'
 import { roomService } from '../../services/roomService'
 import { timeSlotService } from '../../services/timeSlotService'
+import { formatRoomWithBuilding } from '../../utils/academicDomain'
 
 export interface EventDetailModalProps {
   isOpen: boolean
@@ -278,7 +279,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
                       <option value="">Keep current ({event.room_number})</option>
                       {rooms.map((room) => (
                         <option key={room.id} value={String(room.id)}>
-                          {room.room_number} (Cap {room.capacity})
+                          {formatRoomWithBuilding(room)} (Cap {room.capacity})
                         </option>
                       ))}
                     </select>

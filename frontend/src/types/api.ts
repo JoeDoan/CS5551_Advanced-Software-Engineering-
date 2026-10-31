@@ -295,4 +295,28 @@ export interface InstructorSummary {
   priority_score: number;
 }
 
+export interface CourseAssignment {
+  id: number;
+  semester_id: number;
+  user_id: number;
+  instructor_name: string;
+  instructor_department: string;
+  course_id: number;
+  course_code: string;
+  course_name: string;
+  department: string;
+  course_level: 'undergraduate' | 'graduate';
+}
 
+export interface CourseAssignmentBulkPayload {
+  semester_id: number;
+  user_id: number;
+  course_ids: number[];
+}
+
+export interface CourseAssignmentFilterParams {
+  semester_id?: number;
+  user_id?: number;
+  department?: string;
+  level?: 'undergraduate' | 'graduate';
+}

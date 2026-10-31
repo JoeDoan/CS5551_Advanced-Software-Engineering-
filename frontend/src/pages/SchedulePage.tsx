@@ -22,24 +22,20 @@ import { ScheduleEvent } from '../types/api'
 import { resolveDepartment } from '../utils/scheduleParser'
 import { useAuth } from '../context/AuthContext'
 import { Button } from '../components/ui'
+import {
+  ACADEMIC_SEMESTERS,
+  CURRENT_SEMESTER_ID,
+  CURRENT_SEMESTER_NAME,
+} from '../utils/academicDomain'
 
 export type ScheduleViewMode = 'table' | 'matrix' | 'calendar'
 export type ScheduleScopeMode = 'mine' | 'all'
-
-const semesters = [
-  { id: 1, name: 'Fall 2024' },
-  { id: 2, name: 'Spring 2025' },
-  { id: 3, name: 'Fall 2025' },
-  { id: 4, name: 'Spring 2026' },
-  { id: 5, name: 'Fall 2026' },
-  { id: 6, name: 'Spring 2027' },
-]
 
 export const SchedulePage: React.FC = () => {
   const { user, isStandaloneFallback } = useAuth()
   const isInstructorSession = !isStandaloneFallback && user?.role === 'instructor'
 
-  const [selectedSemester, setSelectedSemester] = useState<number>(1)
+  const [selectedSemester, setSelectedSemester] = useState<number>(CURRENT_SEMESTER_ID)
   const [rawEvents, setRawEvents] = useState<ScheduleEvent[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [viewMode, setViewMode] = useState<ScheduleViewMode>(() =>
@@ -59,6 +55,14 @@ export const SchedulePage: React.FC = () => {
     search: '',
   })
 
+  const effectiveSemester = isInstructorSession ? CURRENT_SEMESTER_ID : selectedSemester
+
+  useEffect(() => {
+    if (isInstructorSession && selectedSemester !== CURRENT_SEMESTER_ID) {
+      setSelectedSemester(CURRENT_SEMESTER_ID)
+    }
+  }, [isInstructorSession, selectedSemester])
+
   useEffect(() => {
     if (hasCustomViewSelection) return
     if (isInstructorSession) {
@@ -74,7 +78,7 @@ export const SchedulePage: React.FC = () => {
     let active = true
     setLoading(true)
     scheduleService
-      .getSchedules(selectedSemester)
+      .getSchedules(effectiveSemester)
       .then((events) => {
         if (active) {
           setRawEvents(events)
@@ -93,16 +97,19 @@ export const SchedulePage: React.FC = () => {
     return () => {
       active = false
     }
-  }, [selectedSemester])
+  }, [effectiveSemester])
 
   const currentSemesterName = useMemo(() => {
-    return semesters.find((s) => s.id === selectedSemester)?.name || `Semester_${selectedSemester}`
-  }, [selectedSemester])
+    return (
+      ACADEMIC_SEMESTERS.find((s) => s.id === effectiveSemester)?.name ||
+      `Semester_${effectiveSemester}`
+    )
+  }, [effectiveSemester])
 
-  const comparisonSemesterId = selectedSemester < 6 ? selectedSemester + 1 : 1
+  const comparisonSemesterId = effectiveSemester < 6 ? effectiveSemester + 1 : 1
   const comparisonSemesterName = useMemo(() => {
     return (
-      semesters.find((s) => s.id === comparisonSemesterId)?.name ||
+      ACADEMIC_SEMESTERS.find((s) => s.id === comparisonSemesterId)?.name ||
       `Semester_${comparisonSemesterId}`
     )
   }, [comparisonSemesterId])
@@ -269,28 +276,40 @@ export const SchedulePage: React.FC = () => {
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Master Schedule Matrix</h1>
           <p className="text-sm text-slate-500 mt-1">
-            Browse and inspect optimized timetables across all 6 simulated academic semesters.
+            {isInstructorSession
+              ? 'Inspect your Fall 2026 teaching timetable and department room assignments.'
+              : 'Browse and inspect optimized timetables across all 6 simulated academic semesters.'}
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center space-x-2 bg-white px-3 py-2 rounded-xl border border-slate-200 shadow-sm text-xs">
-            <Filter className="w-4 h-4 text-slate-400" />
-            <span className="font-semibold text-slate-600">Semester:</span>
-            <select
-              aria-label="Select semester"
-              data-testid="semester-select"
-              value={selectedSemester}
-              onChange={(e) => setSelectedSemester(Number(e.target.value))}
-              className="bg-transparent font-semibold text-blue-700 outline-none cursor-pointer"
+          {isInstructorSession ? (
+            <div
+              data-testid="active-semester-badge"
+              className="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-800"
             >
-              {semesters.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.name}
-                </option>
-              ))}
-            </select>
-          </div>
+              <CalendarIcon className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>Current Term: {CURRENT_SEMESTER_NAME}</span>
+            </div>
+          ) : (
+            <div className="flex items-center space-x-2 bg-white px-3 py-2 rounded-xl border border-slate-200 shadow-sm text-xs">
+              <Filter className="w-4 h-4 text-slate-400" />
+              <span className="font-semibold text-slate-600">Semester:</span>
+              <select
+                aria-label="Select semester"
+                data-testid="semester-select"
+                value={selectedSemester}
+                onChange={(e) => setSelectedSemester(Number(e.target.value))}
+                className="bg-transparent font-semibold text-blue-700 outline-none cursor-pointer"
+              >
+                {ACADEMIC_SEMESTERS.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.isActive ? `${s.name} (Current)` : s.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           <Button
             variant="outline"
@@ -390,7 +409,7 @@ export const SchedulePage: React.FC = () => {
 
       <ConflictInspectorPanel
         events={filteredEvents}
-        onOpenComparison={() => setIsComparisonOpen(true)}
+        onOpenComparison={isInstructorSession ? undefined : () => setIsComparisonOpen(true)}
       />
 
       {viewMode === 'table' && (
@@ -412,7 +431,7 @@ export const SchedulePage: React.FC = () => {
 
       {viewMode === 'calendar' && (
         <ScheduleCalendar
-          semesterId={selectedSemester}
+          semesterId={effectiveSemester}
           eventsData={filteredEvents}
           loadingOverride={loading}
           onSelectEvent={setSelectedEvent}
@@ -426,14 +445,16 @@ export const SchedulePage: React.FC = () => {
         onClose={() => setSelectedEvent(null)}
       />
 
-      <SemesterComparisonModal
-        isOpen={isComparisonOpen}
-        onClose={() => setIsComparisonOpen(false)}
-        baseSemesterLabel={`Semester ${selectedSemester} (${currentSemesterName})`}
-        targetSemesterLabel={`Semester ${comparisonSemesterId} (${comparisonSemesterName})`}
-        baseEvents={rawEvents}
-        targetEvents={comparisonEvents}
-      />
+      {!isInstructorSession && (
+        <SemesterComparisonModal
+          isOpen={isComparisonOpen}
+          onClose={() => setIsComparisonOpen(false)}
+          baseSemesterLabel={`Semester ${effectiveSemester} (${currentSemesterName})`}
+          targetSemesterLabel={`Semester ${comparisonSemesterId} (${comparisonSemesterName})`}
+          baseEvents={rawEvents}
+          targetEvents={comparisonEvents}
+        />
+      )}
     </div>
   )
 }

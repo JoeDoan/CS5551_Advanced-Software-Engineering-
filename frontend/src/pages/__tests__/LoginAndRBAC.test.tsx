@@ -15,12 +15,14 @@ import {
   DEMO_INSTRUCTOR_TOKEN,
   resetMockAccounts,
 } from '../../services/authService'
+import { resetMockCourseAssignments } from '../../services/courseAssignmentService'
 
 describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Account CRUD', () => {
   beforeEach(() => {
     vi.restoreAllMocks()
     clearAuthToken()
     resetMockAccounts()
+    resetMockCourseAssignments()
     window.history.pushState({}, '', '/')
   })
 
@@ -460,7 +462,7 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
     )
 
     const solverBtn = await screen.findByTestId('execute-solver-button')
-    expect(solverBtn).toHaveTextContent('Execute Solver (Fall 2024)')
+    expect(solverBtn).toHaveTextContent('Execute Solver (Fall 2026)')
 
     fireEvent.click(screen.getByTestId('notifications-bell-btn'))
     await waitFor(() => {
@@ -487,5 +489,115 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
       expect(screen.getByText('Solver infeasible for Fall 2025')).toBeInTheDocument()
     })
   })
-})
 
+  it('locks logged-in Instructor to Current Term Fall 2026 on /schedule and /preferences and hides past semester and course selectors', async () => {
+    setAuthToken(DEMO_INSTRUCTOR_TOKEN)
+
+    render(
+      <MemoryRouter initialEntries={['/schedule']}>
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+      </MemoryRouter>
+    )
+
+    await waitFor(() => {
+      expect(screen.getByTestId('active-semester-badge')).toHaveTextContent(
+        'Current Term: Fall 2026'
+      )
+    })
+    expect(screen.queryByTestId('semester-select')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('open-semester-comparison-btn')).not.toBeInTheDocument()
+
+    fireEvent.click(screen.getByText('Instructor Prefs'))
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: /Instructor Preferences/i })).toBeInTheDocument()
+    })
+    expect(screen.getByTestId('active-semester-badge')).toHaveTextContent(
+      'Current Term: Fall 2026'
+    )
+    expect(screen.queryByTestId('preference-semester-select')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('preference-course-select')).not.toBeInTheDocument()
+    expect(screen.getByTestId('coordinator-assigned-courses')).toBeInTheDocument()
+  })
+
+  it('allows Coordinator on /courses to filter by Department and Course Level and assign multiple courses to an instructor', async () => {
+    setAuthToken(DEMO_COORDINATOR_TOKEN)
+
+    render(
+      <MemoryRouter initialEntries={['/courses']}>
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+      </MemoryRouter>
+    )
+
+    await waitFor(() => {
+      expect(screen.getByTestId('catalog-management-page')).toBeInTheDocument()
+    })
+
+    fireEvent.click(screen.getByTestId('tab-assignments'))
+
+    const manager = await screen.findByTestId('faculty-assignment-manager')
+    await waitFor(() => {
+      expect(within(manager).getByTestId('assign-course-toggle-3')).toBeInTheDocument()
+    })
+
+    fireEvent.change(within(manager).getByTestId('assignment-dept-filter'), {
+      target: { value: 'CS' },
+    })
+    fireEvent.change(within(manager).getByTestId('assignment-level-filter'), {
+      target: { value: 'undergraduate' },
+    })
+
+    expect(within(manager).getByTestId('assign-course-toggle-3')).toBeInTheDocument()
+    expect(within(manager).queryByTestId('assign-course-toggle-5')).not.toBeInTheDocument()
+    expect(within(manager).queryByTestId('assign-course-toggle-6')).not.toBeInTheDocument()
+
+    fireEvent.click(within(manager).getByTestId('assign-course-toggle-3'))
+
+    fireEvent.change(within(manager).getByTestId('assignment-level-filter'), {
+      target: { value: 'graduate' },
+    })
+
+    expect(within(manager).getByTestId('assign-course-toggle-5')).toBeInTheDocument()
+    expect(within(manager).queryByTestId('assign-course-toggle-3')).not.toBeInTheDocument()
+
+    fireEvent.click(within(manager).getByTestId('assign-course-toggle-5'))
+    fireEvent.click(within(manager).getByTestId('save-instructor-assignments-btn'))
+
+    await waitFor(() => {
+      const summary = within(manager).getByTestId('instructor-assignment-summary-1')
+      expect(summary).toHaveTextContent('Dr. Yugyung Lee')
+      expect(summary).toHaveTextContent('CS 303 · Undergraduate')
+      expect(summary).toHaveTextContent('CS 5551 · Graduate')
+    })
+
+    fireEvent.click(screen.getByTestId('tab-sections'))
+    const sectionMgr = await screen.findByTestId('section-manager')
+    fireEvent.click(within(sectionMgr).getByTestId('add-section-btn'))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('modal-section-dept-filter')).toBeInTheDocument()
+      expect(screen.getByTestId('modal-section-level-filter')).toBeInTheDocument()
+    })
+
+    fireEvent.change(screen.getByTestId('modal-section-dept-filter'), {
+      target: { value: 'CS' },
+    })
+    fireEvent.change(screen.getByTestId('modal-section-level-filter'), {
+      target: { value: 'graduate' },
+    })
+
+    await waitFor(() => {
+      const courseSelect = screen.getByTestId('modal-section-course') as HTMLSelectElement
+      expect(courseSelect.value).toBe('5')
+      expect(courseSelect).toHaveTextContent('CS 5551 [Graduate]')
+
+      const roomSelect = screen.getByTestId('modal-section-room')
+      expect(roomSelect).toHaveTextContent('RH 204 — Royall Hall')
+      expect(roomSelect).toHaveTextContent('FH 464 — Flarsheim Hall')
+    })
+  })
+})

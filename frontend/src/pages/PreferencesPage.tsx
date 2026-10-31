@@ -1,7 +1,16 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { Clock, Check, Trash2, Edit3, Building2, BookOpen, UserCheck } from 'lucide-react'
 import {
-  Alert,
+  Clock,
+  Check,
+  Trash2,
+  Edit3,
+  Building2,
+  BookOpen,
+  UserCheck,
+  CalendarDays,
+  GraduationCap,
+} from 'lucide-react'
+import {
   Badge,
   Card,
   CardHeader,
@@ -14,18 +23,24 @@ import { Toast } from '../components/common/Toast'
 import { preferenceService } from '../services/preferenceService'
 import { DEFAULT_INSTRUCTORS, instructorService } from '../services/instructorService'
 import { timeSlotService, toSlotKey } from '../services/timeSlotService'
-import { courseService } from '../services/courseService'
 import { roomService } from '../services/roomService'
+import { courseAssignmentService } from '../services/courseAssignmentService'
+import { scheduleService } from '../services/scheduleService'
 import {
-  Course,
   InstructorPreference,
   InstructorSummary,
   Room,
   TimeSlot,
 } from '../types/api'
 import { useAuth } from '../context/AuthContext'
-
-export type PreferenceScope = { kind: 'general' } | { kind: 'course'; courseId: number }
+import {
+  CURRENT_SEMESTER_ID,
+  CURRENT_SEMESTER_NAME,
+  CourseLevel,
+  formatCourseLevel,
+  getCourseLevel,
+  resolveBuildingName,
+} from '../utils/academicDomain'
 
 const DAY_CATALOG = [
   { code: 'M', aliases: ['monday', 'mon'], label: 'Monday (M)' },
@@ -37,14 +52,12 @@ const DAY_CATALOG = [
 
 const DAY_OPTIONS = DAY_CATALOG.map((d) => d.label)
 
-const SEMESTER_OPTIONS = [
-  { value: '1', label: 'Semester 1 — Fall 2024' },
-  { value: '2', label: 'Semester 2 — Spring 2025' },
-  { value: '3', label: 'Semester 3 — Fall 2025' },
-  { value: '4', label: 'Semester 4 — Spring 2026' },
-  { value: '5', label: 'Semester 5 — Fall 2026' },
-  { value: '6', label: 'Semester 6 — Spring 2027' },
-]
+interface AssignedCourseDisplay {
+  course_id: number
+  course_code: string
+  course_name: string
+  course_level: CourseLevel
+}
 
 export const normalizeStoredDaysToLabels = (
   rawDays: string[] | string | undefined | null
@@ -97,13 +110,11 @@ export const PreferencesPage: React.FC = () => {
   const [selectedInstructor, setSelectedInstructor] = useState<string>(() =>
     isLockedInstructor && user?.linked_user_id ? String(user.linked_user_id) : '1'
   )
-  const [selectedSemester, setSelectedSemester] = useState<number>(1)
-  const [scope, setScope] = useState<PreferenceScope>({ kind: 'general' })
 
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([])
-  const [courses, setCourses] = useState<Course[]>([])
   const [rooms, setRooms] = useState<Room[]>([])
   const [savedPreferences, setSavedPreferences] = useState<InstructorPreference[]>([])
+  const [assignedCourses, setAssignedCourses] = useState<AssignedCourseDisplay[]>([])
 
   const [selectedDays, setSelectedDays] = useState<string[]>(['Monday (M)', 'Wednesday (W)'])
   const [selectedSlots, setSelectedSlots] = useState<string[]>([])
@@ -120,9 +131,6 @@ export const PreferencesPage: React.FC = () => {
     let active = true
     timeSlotService.getTimeSlots().then((slots) => {
       if (active) setTimeSlots(slots)
-    })
-    courseService.getCourses().then((catalogCourses) => {
-      if (active) setCourses(catalogCourses)
     })
     roomService.getRooms().then((catalogRooms) => {
       if (active) setRooms(catalogRooms)
@@ -144,33 +152,84 @@ export const PreferencesPage: React.FC = () => {
     }
   }, [isLockedInstructor, user?.linked_user_id])
 
+  const activeInstructorName = useMemo(() => {
+    if (isLockedInstructor && user?.full_name) return user.full_name
+    return instructorList.find((inst) => String(inst.id) === selectedInstructor)?.full_name ?? ''
+  }, [isLockedInstructor, user, instructorList, selectedInstructor])
+
   useEffect(() => {
     let active = true
     const userId = Number(selectedInstructor)
     if (!userId) return
 
     preferenceService
-      .getPreferences({ user_id: userId, semester_id: selectedSemester })
+      .getPreferences({
+        user_id: userId,
+        semester_id: CURRENT_SEMESTER_ID,
+        general_only: true,
+      })
       .then((list) => {
         if (!active) return
-        setSavedPreferences(Array.isArray(list) ? list : [])
+        const generalOnly = (Array.isArray(list) ? list : []).filter(
+          (p) => p.course_id == null
+        )
+        setSavedPreferences(generalOnly)
       })
       .catch(() => {
         if (active) setSavedPreferences([])
       })
 
+    Promise.all([
+      courseAssignmentService
+        .getAssignments({ semester_id: CURRENT_SEMESTER_ID, user_id: userId })
+        .catch(() => []),
+      scheduleService.getSchedules(CURRENT_SEMESTER_ID).catch(() => []),
+    ]).then(([explicitAssignments, semesterSchedules]) => {
+      if (!active) return
+      const normalizedTargetName = activeInstructorName.trim().toLowerCase()
+      const byCode = new Map<string, AssignedCourseDisplay>()
+
+      for (const item of explicitAssignments) {
+        if (item.user_id !== userId) continue
+        const key = item.course_code.trim().toUpperCase()
+        if (!key) continue
+        byCode.set(key, {
+          course_id: item.course_id,
+          course_code: item.course_code,
+          course_name: item.course_name,
+          course_level: item.course_level ?? getCourseLevel(item.course_code),
+        })
+      }
+
+      for (const ev of semesterSchedules) {
+        const matchesId = ev.user_id === userId || ev.instructor_id === userId
+        const matchesName =
+          Boolean(normalizedTargetName) &&
+          (ev.instructor_name || '').trim().toLowerCase() === normalizedTargetName
+        if (!matchesId && !matchesName) continue
+        const key = (ev.course_code || '').trim().toUpperCase()
+        if (!key || byCode.has(key)) continue
+        byCode.set(key, {
+          course_id: ev.course_id,
+          course_code: ev.course_code,
+          course_name: ev.course_name,
+          course_level: getCourseLevel(ev.course_code),
+        })
+      }
+
+      const merged = Array.from(byCode.values()).sort((a, b) =>
+        a.course_code.localeCompare(b.course_code)
+      )
+      setAssignedCourses(merged)
+    })
+
     return () => {
       active = false
     }
-  }, [selectedInstructor, selectedSemester])
-
-  const activeScopeKey = scope.kind === 'general' ? 'GENERAL' : `COURSE:${scope.courseId}`
+  }, [selectedInstructor, activeInstructorName])
 
   useEffect(() => {
-    const match =
-      scope.kind === 'general'
-        ? savedPreferences.find((p) => p.course_id == null)
-        : savedPreferences.find((p) => p.course_id === scope.courseId)
+    const match = savedPreferences.find((p) => p.course_id == null)
 
     if (match) {
       if (!hasUserEditedRef.current) {
@@ -183,7 +242,7 @@ export const PreferencesPage: React.FC = () => {
       setSelectedSlots([])
       setSelectedRooms([])
     }
-  }, [savedPreferences, activeScopeKey, scope])
+  }, [savedPreferences])
 
   const instructors = useMemo(() => {
     const base = toInstructorOptions(instructorList)
@@ -199,44 +258,6 @@ export const PreferencesPage: React.FC = () => {
     }
     return base
   }, [instructorList, isLockedInstructor, user])
-
-  const activeDepartment = useMemo(() => {
-    if (isLockedInstructor && user?.department) return user.department
-    const found = instructorList.find((inst) => String(inst.id) === selectedInstructor)
-    return found?.department ?? ''
-  }, [isLockedInstructor, user, instructorList, selectedInstructor])
-
-  const courseOptions = useMemo(() => {
-    const deptUpper = activeDepartment.toUpperCase()
-    const sorted = [...courses].sort((a, b) => {
-      const aMatch = deptUpper && a.department.toUpperCase() === deptUpper ? 0 : 1
-      const bMatch = deptUpper && b.department.toUpperCase() === deptUpper ? 0 : 1
-      if (aMatch !== bMatch) return aMatch - bMatch
-      return a.course_code.localeCompare(b.course_code)
-    })
-
-    return [
-      {
-        value: 'GENERAL',
-        label: 'General Semester Availability (All Assigned Courses)',
-      },
-      ...sorted.map((c) => ({
-        value: String(c.id),
-        label: `${c.course_code} — ${c.course_name} (Dept: ${c.department})`,
-      })),
-    ]
-  }, [courses, activeDepartment])
-
-  const courseById = useMemo(() => {
-    const map = new Map<number, Course>()
-    for (const c of courses) {
-      map.set(c.id, c)
-    }
-    return map
-  }, [courses])
-
-  const hasSavedGeneral = savedPreferences.some((p) => p.course_id == null)
-  const courseSpecificCount = savedPreferences.filter((p) => p.course_id != null).length
 
   const toggleDay = (day: string) => {
     hasUserEditedRef.current = true
@@ -268,11 +289,6 @@ export const PreferencesPage: React.FC = () => {
 
   const handleLoadSaved = (pref: InstructorPreference) => {
     hasUserEditedRef.current = false
-    const nextScope: PreferenceScope =
-      pref.course_id == null
-        ? { kind: 'general' }
-        : { kind: 'course', courseId: pref.course_id }
-    setScope(nextScope)
     setSelectedDays(normalizeStoredDaysToLabels(pref.preferred_days))
     setSelectedSlots(Array.isArray(pref.preferred_slots) ? [...pref.preferred_slots] : [])
     setSelectedRooms(Array.isArray(pref.preferred_rooms) ? [...pref.preferred_rooms] : [])
@@ -283,13 +299,7 @@ export const PreferencesPage: React.FC = () => {
     if (pref.id == null) return
     try {
       await preferenceService.deletePreference(pref.id)
-      const matchesActiveScope =
-        scope.kind === 'general'
-          ? pref.course_id == null
-          : pref.course_id === scope.courseId
-      if (matchesActiveScope) {
-        hasUserEditedRef.current = false
-      }
+      hasUserEditedRef.current = false
       setSavedPreferences((prev) => prev.filter((item) => item.id !== pref.id))
       setToast({
         type: 'success',
@@ -320,12 +330,11 @@ export const PreferencesPage: React.FC = () => {
       const mappedDays = DAY_CATALOG.filter((d) => selectedDays.includes(d.label)).map(
         (d) => d.code
       )
-      const targetCourseId = scope.kind === 'course' ? scope.courseId : null
 
       const saved = await preferenceService.submitPreference({
         user_id: Number(selectedInstructor),
-        semester_id: selectedSemester,
-        course_id: targetCourseId,
+        semester_id: CURRENT_SEMESTER_ID,
+        course_id: null,
         preferred_days: mappedDays,
         preferred_slots: selectedSlots,
         preferred_rooms: selectedRooms,
@@ -335,14 +344,13 @@ export const PreferencesPage: React.FC = () => {
       setSavedPreferences((prev) => {
         const normalizedSaved: InstructorPreference = {
           ...saved,
-          course_id: saved.course_id !== undefined ? saved.course_id : targetCourseId,
+          semester_id: CURRENT_SEMESTER_ID,
+          course_id: null,
           preferred_days: saved.preferred_days ?? mappedDays,
           preferred_slots: saved.preferred_slots ?? selectedSlots,
           preferred_rooms: saved.preferred_rooms ?? selectedRooms,
         }
-        const idx = prev.findIndex(
-          (item) => (item.course_id ?? null) === (normalizedSaved.course_id ?? null)
-        )
+        const idx = prev.findIndex((item) => item.course_id == null)
         if (idx !== -1) {
           const next = [...prev]
           next[idx] = { ...prev[idx], ...normalizedSaved }
@@ -380,57 +388,93 @@ export const PreferencesPage: React.FC = () => {
     setToast(null)
   }
 
-  const activeSemesterLabel =
-    SEMESTER_OPTIONS.find((s) => Number(s.value) === selectedSemester)?.label ??
-    `Semester ${selectedSemester}`
-
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Instructor Preferences</h1>
           <p className="text-sm text-slate-500 mt-1">
-            Configure semester availability, course-specific preferences, and preferred classrooms for
+            Configure your {CURRENT_SEMESTER_NAME} teaching availability and preferred classrooms for
             the CP-SAT schedule optimizer.
           </p>
         </div>
 
-        {isLockedInstructor && user && (
-          <div className="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-800">
-            <UserCheck className="w-4 h-4 text-blue-600 shrink-0" />
-            <span className="font-semibold">{user.full_name}</span>
-            <Badge variant="info">{user.department}</Badge>
+        <div className="flex flex-wrap items-center gap-2.5">
+          <div
+            data-testid="active-semester-badge"
+            className="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-800"
+          >
+            <CalendarDays className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>Current Term: {CURRENT_SEMESTER_NAME}</span>
           </div>
-        )}
+
+          {isLockedInstructor && user && (
+            <div className="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-800">
+              <UserCheck className="w-4 h-4 text-blue-600 shrink-0" />
+              <span className="font-semibold">{user.full_name}</span>
+              <Badge variant="info">{user.department}</Badge>
+            </div>
+          )}
+        </div>
       </div>
 
-      {!isStandaloneFallback &&
-        scope.kind === 'general' &&
-        !hasSavedGeneral &&
-        courseSpecificCount > 0 && (
-          <Alert variant="info" title="Saved Course Preferences Available">
-            You have {courseSpecificCount} course-specific preference(s) saved below. Select one to
-            edit or save general availability.
-          </Alert>
-        )}
+      <Card data-testid="coordinator-assigned-courses">
+        <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 py-3.5">
+          <div className="flex items-center space-x-2.5">
+            <div className="p-2 rounded-xl bg-blue-50 text-blue-600">
+              <GraduationCap className="w-4 h-4" />
+            </div>
+            <div>
+              <CardTitle className="text-sm">
+                Coordinator-Assigned Courses ({CURRENT_SEMESTER_NAME})
+              </CardTitle>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Read-only teaching load assigned by your Course Coordinator
+              </p>
+            </div>
+          </div>
+          <Badge variant="neutral">
+            {assignedCourses.length} Assigned {assignedCourses.length === 1 ? 'Course' : 'Courses'}
+          </Badge>
+        </CardHeader>
+        <CardContent className="pt-0 pb-4">
+          {assignedCourses.length === 0 ? (
+            <p className="text-xs text-slate-500">
+              Course teaching assignments for {CURRENT_SEMESTER_NAME} are managed by your Course
+              Coordinator.
+            </p>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {assignedCourses.map((course) => (
+                <div
+                  key={`${course.course_id}-${course.course_code}`}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-xs"
+                >
+                  <span className="font-bold text-slate-900">{course.course_code}</span>
+                  <span className="text-slate-600">{course.course_name}</span>
+                  <Badge variant={course.course_level === 'graduate' ? 'gold' : 'info'}>
+                    {formatCourseLevel(course.course_level)}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <div>
             <CardTitle>Teaching Availability & Classroom Preferences</CardTitle>
             <p className="text-xs text-slate-500 mt-0.5">
-              Saved preferences load automatically when switching semester or course target.
+              General availability applies across all courses assigned to you in {CURRENT_SEMESTER_NAME}.
             </p>
           </div>
-          <Badge variant={scope.kind === 'general' ? 'info' : 'gold'}>
-            {scope.kind === 'general'
-              ? 'General Availability'
-              : courseById.get(scope.courseId)?.course_code ?? `Course #${scope.courseId}`}
-          </Badge>
+          <Badge variant="info">General Availability</Badge>
         </CardHeader>
 
         <CardContent className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Select
               label="Select Instructor"
               options={instructors}
@@ -446,32 +490,6 @@ export const PreferencesPage: React.FC = () => {
                 setSelectedInstructor(e.target.value)
               }}
               data-testid="instructor-select"
-            />
-
-            <Select
-              label="Academic Semester"
-              options={SEMESTER_OPTIONS}
-              value={String(selectedSemester)}
-              onChange={(e) => {
-                hasUserEditedRef.current = false
-                setSelectedSemester(Number(e.target.value))
-              }}
-              data-testid="preference-semester-select"
-            />
-
-            <Select
-              label="Course Preference Target"
-              options={courseOptions}
-              value={scope.kind === 'general' ? 'GENERAL' : String(scope.courseId)}
-              onChange={(e) => {
-                hasUserEditedRef.current = false
-                if (e.target.value === 'GENERAL') {
-                  setScope({ kind: 'general' })
-                } else {
-                  setScope({ kind: 'course', courseId: Number(e.target.value) })
-                }
-              }}
-              data-testid="preference-course-select"
             />
           </div>
 
@@ -539,7 +557,6 @@ export const PreferencesPage: React.FC = () => {
               {timeSlots.map((timeSlot) => {
                 const slot = toSlotKey(timeSlot)
                 const isSelected = selectedSlots.includes(slot)
-                const isGraduateSlot = timeSlot.level === 'graduate'
                 return (
                   <button
                     key={slot}
@@ -561,11 +578,6 @@ export const PreferencesPage: React.FC = () => {
                       />
                       <span className="truncate">{`${timeSlot.start_time} - ${timeSlot.end_time}`}</span>
                     </span>
-                    {isGraduateSlot && (
-                      <span className="px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 text-[10px] font-bold shrink-0">
-                        Grad 5000+
-                      </span>
-                    )}
                   </button>
                 )
               })}
@@ -584,10 +596,11 @@ export const PreferencesPage: React.FC = () => {
                 </span>
               )}
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {rooms.map((room) => {
                 const isSelected = selectedRooms.includes(room.room_number)
                 const isLab = room.room_type.toLowerCase().includes('lab')
+                const buildingName = resolveBuildingName(room)
                 return (
                   <button
                     key={room.id}
@@ -595,7 +608,7 @@ export const PreferencesPage: React.FC = () => {
                     data-testid={`room-chip-${room.room_number}`}
                     aria-pressed={isSelected}
                     onClick={() => toggleRoom(room.room_number)}
-                    className={`px-3 py-2 rounded-xl border text-xs flex items-center justify-between gap-2 transition-all cursor-pointer text-left focus:outline-none ${
+                    className={`px-3 py-2.5 rounded-xl border text-xs flex items-center justify-between gap-2 transition-all cursor-pointer text-left focus:outline-none ${
                       isSelected
                         ? 'bg-blue-50 border-blue-600 text-blue-800 font-semibold ring-2 ring-blue-500/20'
                         : 'border-slate-200 text-slate-700 bg-slate-50 hover:bg-slate-100/80 hover:border-slate-300'
@@ -607,9 +620,14 @@ export const PreferencesPage: React.FC = () => {
                           isSelected ? 'text-blue-600' : 'text-slate-400'
                         }`}
                       />
-                      <span className="truncate font-semibold">{room.room_number}</span>
+                      <span className="font-semibold shrink-0">{room.room_number}</span>
+                      {buildingName && (
+                        <span className="text-slate-600 font-normal truncate">
+                          · {buildingName}
+                        </span>
+                      )}
                       <span className="text-slate-500 font-normal shrink-0">
-                        Cap {room.capacity}
+                        · Cap {room.capacity}
                       </span>
                     </span>
                     <span
@@ -657,9 +675,9 @@ export const PreferencesPage: React.FC = () => {
               <BookOpen className="w-4 h-4" />
             </div>
             <div>
-              <CardTitle>Saved Preferences for Selected Semester</CardTitle>
+              <CardTitle>Saved Availability Profile ({CURRENT_SEMESTER_NAME})</CardTitle>
               <p className="text-xs text-slate-500 mt-0.5">
-                {activeSemesterLabel} ({savedPreferences.length} saved profile
+                {CURRENT_SEMESTER_NAME} ({savedPreferences.length} saved profile
                 {savedPreferences.length === 1 ? '' : 's'})
               </p>
             </div>
@@ -669,23 +687,12 @@ export const PreferencesPage: React.FC = () => {
         <CardContent>
           {savedPreferences.length === 0 ? (
             <p className="text-xs text-slate-500 py-3">
-              No saved preferences recorded for this semester yet. Select days and time slots above to
-              save your availability.
+              No saved preferences recorded for {CURRENT_SEMESTER_NAME} yet. Select days and time
+              slots above to save your availability.
             </p>
           ) : (
             <div className="space-y-3">
               {savedPreferences.map((pref) => {
-                const matchedCourse =
-                  pref.course_id != null ? courseById.get(pref.course_id) : undefined
-                const courseCode =
-                  pref.course_code ??
-                  matchedCourse?.course_code ??
-                  (pref.course_id != null ? `Course #${pref.course_id}` : null)
-                const courseName = pref.course_name ?? matchedCourse?.course_name ?? null
-                const isActiveTarget =
-                  scope.kind === 'general'
-                    ? pref.course_id == null
-                    : pref.course_id === scope.courseId
                 const dayBadges = normalizeStoredDaysToLabels(pref.preferred_days).map((label) => {
                   const m = label.match(/\(([MTWRF])\)/)
                   return m ? m[1] : label
@@ -693,21 +700,13 @@ export const PreferencesPage: React.FC = () => {
 
                 return (
                   <div
-                    key={pref.id ?? `${pref.user_id}-${pref.semester_id}-${pref.course_id ?? 'gen'}`}
-                    className={`flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3.5 rounded-xl border transition-colors ${
-                      isActiveTarget
-                        ? 'border-blue-300 bg-blue-50/40'
-                        : 'border-slate-200 bg-slate-50/60'
-                    }`}
+                    key={pref.id ?? `${pref.user_id}-${pref.semester_id}-gen`}
+                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3.5 rounded-xl border border-blue-300 bg-blue-50/40 transition-colors"
                   >
                     <div className="space-y-1.5">
                       <div className="flex flex-wrap items-center gap-2">
-                        <Badge variant={pref.course_id == null ? 'info' : 'gold'}>
-                          {pref.course_id == null
-                            ? 'General Availability'
-                            : `${courseCode}${courseName ? ` — ${courseName}` : ''}`}
-                        </Badge>
-                        {isActiveTarget && <Badge variant="success">Editing</Badge>}
+                        <Badge variant="info">General Availability</Badge>
+                        <Badge variant="success">Active Term</Badge>
                       </div>
 
                       <div className="flex flex-wrap items-center gap-1.5 text-xs text-slate-600">

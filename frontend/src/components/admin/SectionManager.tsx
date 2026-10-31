@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Plus, Edit2, Trash2, Search } from 'lucide-react'
 import {
   Alert,
@@ -25,15 +25,20 @@ import {
   ScheduleEvent,
   TimeSlot,
 } from '../../types/api'
+import {
+  ACADEMIC_SEMESTERS,
+  CURRENT_SEMESTER_ID,
+  CourseLevel,
+  STANDARD_DEPARTMENTS,
+  formatCourseLevel,
+  formatRoomWithBuilding,
+  getCourseLevel,
+} from '../../utils/academicDomain'
 
-const SEMESTERS = [
-  { value: '1', label: 'Semester 1 (Fall 2024)' },
-  { value: '2', label: 'Semester 2 (Spring 2025)' },
-  { value: '3', label: 'Semester 3 (Fall 2025)' },
-  { value: '4', label: 'Semester 4 (Spring 2026)' },
-  { value: '5', label: 'Semester 5 (Fall 2026)' },
-  { value: '6', label: 'Semester 6 (Spring 2027)' },
-]
+const SEMESTERS = ACADEMIC_SEMESTERS.map((s) => ({
+  value: String(s.id),
+  label: s.isActive ? `Semester ${s.id} (${s.name} — Current)` : `Semester ${s.id} (${s.name})`,
+}))
 
 export interface SectionManagerProps {
   preselectedCourse?: Course | null
@@ -48,7 +53,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
   catalogVersion = 0,
   roomsVersion = 0,
 }) => {
-  const [selectedSemester, setSelectedSemester] = useState<number>(1)
+  const [selectedSemester, setSelectedSemester] = useState<number>(CURRENT_SEMESTER_ID)
   const [schedules, setSchedules] = useState<ScheduleEvent[]>([])
   const [courses, setCourses] = useState<Course[]>([])
   const [instructors, setInstructors] = useState<InstructorSummary[]>([])
@@ -62,6 +67,8 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
   const [saving, setSaving] = useState(false)
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
 
+  const [modalDeptFilter, setModalDeptFilter] = useState<string>('ALL')
+  const [modalLevelFilter, setModalLevelFilter] = useState<'ALL' | CourseLevel>('ALL')
   const [courseId, setCourseId] = useState<string>('')
   const [instructorId, setInstructorId] = useState<string>('')
   const [roomId, setRoomId] = useState<string>('')
@@ -103,6 +110,8 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
     )
     setEditingSection(null)
     setModalError(null)
+    setModalDeptFilter('ALL')
+    setModalLevelFilter('ALL')
     setCourseId(String(preselectedCourse.id))
     setInstructorId((prev) => prev || String(instructors[0]?.id ?? 1))
     setRoomId((prev) => {
@@ -120,6 +129,8 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
   const openAssignModal = () => {
     setEditingSection(null)
     setModalError(null)
+    setModalDeptFilter('ALL')
+    setModalLevelFilter('ALL')
     setCourseId(String(courses[0]?.id ?? 1))
     setInstructorId(String(instructors[0]?.id ?? 1))
     setRoomId(String(rooms[0]?.id ?? 1))
@@ -130,6 +141,8 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
   const openEditModal = (section: ScheduleEvent) => {
     setEditingSection(section)
     setModalError(null)
+    setModalDeptFilter('ALL')
+    setModalLevelFilter('ALL')
     setCourseId(String(section.course_id))
     setInstructorId(
       String(section.user_id ?? section.instructor_id ?? instructors[0]?.id ?? 1)
@@ -205,6 +218,87 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
       })
     }
   }
+
+  const modalDepartmentOptions = useMemo(() => {
+    const seen = new Set<string>(STANDARD_DEPARTMENTS)
+    for (const c of courses) {
+      const normalized = c.department?.trim().toUpperCase()
+      if (normalized) seen.add(normalized)
+    }
+    return [
+      { value: 'ALL', label: 'All Departments' },
+      ...Array.from(seen).map((dept) => ({
+        value: dept,
+        label: dept,
+      })),
+    ]
+  }, [courses])
+
+  const filterModalCourses = useCallback(
+    (dept: string, level: 'ALL' | CourseLevel): Course[] => {
+      return courses.filter((c) => {
+        if (dept !== 'ALL' && c.department.trim().toUpperCase() !== dept) {
+          return false
+        }
+        if (level !== 'ALL' && getCourseLevel(c.course_code) !== level) {
+          return false
+        }
+        return true
+      })
+    },
+    [courses]
+  )
+
+  const modalCourseList = useMemo(() => {
+    if (editingSection) return courses
+    const matching = filterModalCourses(modalDeptFilter, modalLevelFilter)
+    if (matching.length > 0) return matching
+    const selected = courses.find((c) => String(c.id) === courseId)
+    return selected ? [selected] : []
+  }, [editingSection, courses, filterModalCourses, modalDeptFilter, modalLevelFilter, courseId])
+
+  const handleModalDeptFilterChange = (nextDept: string) => {
+    setModalDeptFilter(nextDept)
+    const matching = filterModalCourses(nextDept, modalLevelFilter)
+    if (matching.length > 0 && !matching.some((c) => String(c.id) === courseId)) {
+      setCourseId(String(matching[0].id))
+    }
+  }
+
+  const handleModalLevelFilterChange = (nextLevel: 'ALL' | CourseLevel) => {
+    setModalLevelFilter(nextLevel)
+    const matching = filterModalCourses(modalDeptFilter, nextLevel)
+    if (matching.length > 0 && !matching.some((c) => String(c.id) === courseId)) {
+      setCourseId(String(matching[0].id))
+    }
+  }
+
+  useEffect(() => {
+    if (!isModalOpen || editingSection) return
+    if (modalCourseList.length > 0 && !modalCourseList.some((c) => String(c.id) === courseId)) {
+      setCourseId(String(modalCourseList[0].id))
+    }
+    if (instructors.length > 0 && !instructors.some((i) => String(i.id) === instructorId)) {
+      setInstructorId(String(instructors[0].id))
+    }
+    if (rooms.length > 0 && !rooms.some((r) => String(r.id) === roomId)) {
+      setRoomId(String(rooms[0].id))
+    }
+    if (timeSlots.length > 0 && !timeSlots.some((s) => String(s.id) === timeSlotId)) {
+      setTimeSlotId(String(timeSlots[0].id))
+    }
+  }, [
+    isModalOpen,
+    editingSection,
+    modalCourseList,
+    courseId,
+    instructors,
+    instructorId,
+    rooms,
+    roomId,
+    timeSlots,
+    timeSlotId,
+  ])
 
   const filteredSchedules = schedules.filter((s) => {
     const q = search.trim().toLowerCase()
@@ -356,17 +450,45 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
             </Alert>
           )}
 
+          {!editingSection && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Select
+                label="Department Filter"
+                value={modalDeptFilter}
+                onChange={(e) => handleModalDeptFilterChange(e.target.value)}
+                options={modalDepartmentOptions}
+                data-testid="modal-section-dept-filter"
+              />
+              <Select
+                label="Course Level"
+                value={modalLevelFilter}
+                onChange={(e) =>
+                  handleModalLevelFilterChange(e.target.value as 'ALL' | CourseLevel)
+                }
+                options={[
+                  { value: 'ALL', label: 'All Levels' },
+                  { value: 'undergraduate', label: 'Undergraduate' },
+                  { value: 'graduate', label: 'Graduate' },
+                ]}
+                data-testid="modal-section-level-filter"
+              />
+            </div>
+          )}
+
           <Select
             label="Course"
             value={courseId}
             disabled={Boolean(editingSection)}
             onChange={(e) => setCourseId(e.target.value)}
-            options={courses.map((c) => ({
-              value: String(c.id),
-              label: `${c.course_code}: ${c.course_name} (${c.expected_enrollment} seats${
-                c.requires_lab ? ', Lab' : ''
-              })`,
-            }))}
+            options={modalCourseList.map((c) => {
+              const levelLabel = formatCourseLevel(getCourseLevel(c.course_code))
+              return {
+                value: String(c.id),
+                label: `${c.course_code} [${levelLabel}]: ${c.course_name} (${
+                  c.expected_enrollment
+                } seats${c.requires_lab ? ', Lab' : ''})`,
+              }
+            })}
             data-testid="modal-section-course"
           />
 
@@ -387,7 +509,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
             onChange={(e) => setRoomId(e.target.value)}
             options={rooms.map((r) => ({
               value: String(r.id),
-              label: `${r.room_number} (${r.capacity} seats, ${r.room_type})`,
+              label: `${formatRoomWithBuilding(r)} (${r.capacity} seats, ${r.room_type})`,
             }))}
             data-testid="modal-section-room"
           />

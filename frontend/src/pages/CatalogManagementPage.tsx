@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
-import { BookOpen, CalendarRange, School, Layers } from 'lucide-react'
+import { BookOpen, CalendarRange, School, Layers, UserCheck } from 'lucide-react'
 import { CourseManager } from '../components/admin/CourseManager'
+import { FacultyCourseAssignmentManager } from '../components/admin/FacultyCourseAssignmentManager'
 import { SectionManager } from '../components/admin/SectionManager'
 import { RoomManager } from '../components/admin/RoomManager'
 import { Alert, Button } from '../components/ui'
 import { Course } from '../types/api'
 
-type CatalogTab = 'all' | 'courses' | 'sections' | 'rooms'
+type CatalogTab = 'all' | 'courses' | 'assignments' | 'sections' | 'rooms'
 
 export const CatalogManagementPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<CatalogTab>('all')
@@ -16,7 +17,7 @@ export const CatalogManagementPage: React.FC = () => {
 
   const handleScheduleCourse = (course: Course) => {
     setPreselectedCourse(course)
-    if (activeTab === 'courses' || activeTab === 'rooms') {
+    if (activeTab === 'courses' || activeTab === 'assignments' || activeTab === 'rooms') {
       setActiveTab('sections')
     }
   }
@@ -29,8 +30,8 @@ export const CatalogManagementPage: React.FC = () => {
             Courses, Scheduled Sections & Classrooms
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            Coordinator catalog CRUD workspace for academic courses, semester section assignments,
-            and facility inventory.
+            Coordinator catalog CRUD workspace for academic courses, faculty teaching assignments,
+            semester section assignments, and facility inventory.
           </p>
         </div>
 
@@ -55,6 +56,15 @@ export const CatalogManagementPage: React.FC = () => {
           </Button>
           <Button
             size="sm"
+            variant={activeTab === 'assignments' ? 'primary' : 'outline'}
+            leftIcon={<UserCheck className="w-4 h-4" />}
+            onClick={() => setActiveTab('assignments')}
+            data-testid="tab-assignments"
+          >
+            Faculty Assignments
+          </Button>
+          <Button
+            size="sm"
             variant={activeTab === 'sections' ? 'primary' : 'outline'}
             leftIcon={<CalendarRange className="w-4 h-4" />}
             onClick={() => setActiveTab('sections')}
@@ -75,8 +85,9 @@ export const CatalogManagementPage: React.FC = () => {
       </div>
 
       <Alert variant="info" title="Coordinator Catalog & Timetable CRUD">
-        Create or update courses in the catalog, click <strong>Schedule Section</strong> on any row
-        to assign an instructor, classroom, and time slot immediately, or manage room capacities.
+        Create or update courses in the catalog, assign undergraduate or graduate courses to faculty
+        by department, click <strong>Schedule Section</strong> on any row to assign a classroom and
+        time slot immediately, or manage room capacities.
       </Alert>
 
       {(activeTab === 'all' || activeTab === 'courses') && (
@@ -84,6 +95,10 @@ export const CatalogManagementPage: React.FC = () => {
           onScheduleCourse={handleScheduleCourse}
           onCatalogChanged={() => setCatalogVersion((v) => v + 1)}
         />
+      )}
+
+      {(activeTab === 'all' || activeTab === 'assignments') && (
+        <FacultyCourseAssignmentManager catalogVersion={catalogVersion} />
       )}
 
       {(activeTab === 'all' || activeTab === 'sections') && (
@@ -103,3 +118,4 @@ export const CatalogManagementPage: React.FC = () => {
 }
 
 export default CatalogManagementPage
+

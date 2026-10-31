@@ -11,9 +11,29 @@ import { roomService } from './roomService'
 import { instructorService } from './instructorService'
 import { timeSlotService } from './timeSlotService'
 
-const offlineSchedules: ScheduleEvent[] = (mockScheduleData as ScheduleEvent[]).map((item) => ({
+const baselineMockSchedules: readonly ScheduleEvent[] = (
+  mockScheduleData as ScheduleEvent[]
+).map((item) => ({
   ...item,
 }))
+
+const offlineSchedules: ScheduleEvent[] = baselineMockSchedules.map((item) => ({
+  ...item,
+}))
+
+const ensureMockSemester = (semesterId: number): void => {
+  if (offlineSchedules.some((item) => item.semester_id === semesterId)) {
+    return
+  }
+  const projected = baselineMockSchedules
+    .filter((item) => item.semester_id === 1)
+    .map((item) => ({
+      ...item,
+      id: item.id + semesterId * 100,
+      semester_id: semesterId,
+    }))
+  offlineSchedules.push(...projected)
+}
 
 export const scheduleService = {
   /**
@@ -81,6 +101,7 @@ export const scheduleService = {
       if (hasHttpStatus(err)) {
         throw err
       }
+      ensureMockSemester(payload.semester_id)
       const [courses, rooms, instructors, slots] = await Promise.all([
         courseService.getCourses(),
         roomService.getRooms(),
@@ -191,6 +212,7 @@ export const scheduleService = {
     semesterId: number,
     filters?: ScheduleFilterParams
   ): ScheduleEvent[] {
+    ensureMockSemester(semesterId)
     let result = offlineSchedules.filter(
       (item) => item.semester_id === semesterId
     )

@@ -7,3 +7,5 @@ export * from './roomService'
 export * from './preferenceService'
 export * from './timeSlotService'
 export * from './editRequestService'
+export * from './courseAssignmentService'
+

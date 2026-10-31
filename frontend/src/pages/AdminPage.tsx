@@ -15,6 +15,7 @@ import { apiClient, hasHttpStatus } from '../services/apiClient'
 import { SimulationResult } from '../types/api'
 import { FairnessAnalyticsPanel } from '../components/admin/FairnessAnalyticsPanel'
 import { RoomUtilizationChart } from '../components/admin/RoomUtilizationChart'
+import { ACADEMIC_SEMESTERS, CURRENT_SEMESTER_ID } from '../utils/academicDomain'
 
 interface SolverMetrics {
   status: string
@@ -23,17 +24,14 @@ interface SolverMetrics {
   satisfaction_rate: number
 }
 
-const ADMIN_SEMESTERS = [
-  { id: 1, name: 'Fall 2024', label: 'Semester 1 — Fall 2024' },
-  { id: 2, name: 'Spring 2025', label: 'Semester 2 — Spring 2025' },
-  { id: 3, name: 'Fall 2025', label: 'Semester 3 — Fall 2025' },
-  { id: 4, name: 'Spring 2026', label: 'Semester 4 — Spring 2026' },
-  { id: 5, name: 'Fall 2026', label: 'Semester 5 — Fall 2026' },
-  { id: 6, name: 'Spring 2027', label: 'Semester 6 — Spring 2027' },
-]
+const ADMIN_SEMESTERS = ACADEMIC_SEMESTERS.map((s) => ({
+  id: s.id,
+  name: s.name,
+  label: s.isActive ? `Semester ${s.id} — ${s.name} (Current)` : `Semester ${s.id} — ${s.name}`,
+}))
 
 export const AdminPage: React.FC = () => {
-  const [selectedSemester, setSelectedSemester] = useState<number>(1)
+  const [selectedSemester, setSelectedSemester] = useState<number>(CURRENT_SEMESTER_ID)
   const [analyticsRefreshTick, setAnalyticsRefreshTick] = useState<number>(0)
   const [runningSolver, setRunningSolver] = useState(false)
   const [solverResult, setSolverResult] = useState<SolverMetrics | null>(null)
