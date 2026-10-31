@@ -25,7 +25,14 @@ export const AppRoutes: React.FC = () => {
       >
         <Route index element={<DashboardPage />} />
         <Route path="schedule" element={<SchedulePage />} />
-        <Route path="preferences" element={<PreferencesPage />} />
+        <Route
+          path="preferences"
+          element={
+            <ProtectedRoute allowedRoles={['instructor']}>
+              <PreferencesPage />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="courses"
           element={

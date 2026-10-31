@@ -24,7 +24,7 @@ const navItems: NavItem[] = [
   { to: '/schedule', label: 'Master Schedule', icon: CalendarDays },
   { to: '/courses', label: 'Courses & Sections', icon: Layers, roles: ['coordinator'] },
   { to: '/users', label: 'User Accounts', icon: Users, roles: ['coordinator'] },
-  { to: '/preferences', label: 'Instructor Prefs', icon: Sliders },
+  { to: '/preferences', label: 'Instructor Prefs', icon: Sliders, roles: ['instructor'] },
   { to: '/admin', label: 'Administration', icon: ShieldCheck, roles: ['coordinator'] },
 ]
 
@@ -79,7 +79,7 @@ export const Sidebar: React.FC = () => {
         </div>
         <p className="text-slate-500 leading-relaxed">
           {activeRole === 'coordinator'
-            ? 'Coordinator Access: Catalog CRUD, Section Assignment & OR-Tools Solver'
+            ? 'Coordinator Access: Catalog CRUD, User Accounts, Section Assignment & OR-Tools Solver'
             : 'Faculty Access: Master Schedule, Teaching Preferences & Edit Requests'}
         </p>
       </div>

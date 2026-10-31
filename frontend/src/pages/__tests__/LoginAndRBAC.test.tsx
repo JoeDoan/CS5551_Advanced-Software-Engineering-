@@ -43,6 +43,7 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
     expect(screen.getByText('Courses & Sections')).toBeInTheDocument()
     expect(screen.getByText('User Accounts')).toBeInTheDocument()
     expect(screen.getByText('Administration')).toBeInTheDocument()
+    expect(screen.queryByText('Instructor Prefs')).not.toBeInTheDocument()
 
     fireEvent.click(screen.getByText('Administration'))
     await waitFor(() => {
@@ -58,6 +59,25 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
       expect(screen.getByTestId('login-page')).toBeInTheDocument()
     })
     expect(getAuthToken()).toBeNull()
+  })
+
+  it('blocks Course Coordinators from accessing /preferences with Faculty Instructor Role Required 403 guard', async () => {
+    setAuthToken(DEMO_COORDINATOR_TOKEN)
+
+    render(
+      <MemoryRouter initialEntries={['/preferences']}>
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+      </MemoryRouter>
+    )
+
+    await waitFor(() => {
+      expect(screen.getByTestId('role-guard-403')).toBeInTheDocument()
+    })
+    expect(screen.getByText(/Faculty Instructor Role Required/i)).toBeInTheDocument()
+    expect(screen.queryByText('Instructor Prefs')).not.toBeInTheDocument()
+    expect(screen.getByTestId('return-to-schedule-btn')).toHaveTextContent('Return to Dashboard')
   })
 
   it('enforces Faculty Instructor RBAC across Sidebar, Edit Requests, Preferences, and /admin + /courses + /users guards', async () => {
@@ -425,6 +445,46 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
     await waitFor(() => {
       const sectionTable = screen.getByTestId('section-manager')
       expect(within(sectionTable).queryByText('CS 495')).not.toBeInTheDocument()
+    })
+  })
+
+  it('toggles Navbar notifications popover, updates AdminPage solver target semester, and surfaces real HTTP solver errors', async () => {
+    setAuthToken(DEMO_COORDINATOR_TOKEN)
+
+    render(
+      <MemoryRouter initialEntries={['/admin']}>
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+      </MemoryRouter>
+    )
+
+    const solverBtn = await screen.findByTestId('execute-solver-button')
+    expect(solverBtn).toHaveTextContent('Execute Solver (Fall 2024)')
+
+    fireEvent.click(screen.getByTestId('notifications-bell-btn'))
+    await waitFor(() => {
+      expect(screen.getByTestId('notifications-popover')).toBeInTheDocument()
+      expect(screen.getByText('View Full Request Queue')).toBeInTheDocument()
+    })
+
+    fireEvent.change(screen.getByTestId('admin-semester-select'), {
+      target: { value: '3' },
+    })
+    expect(screen.getByTestId('execute-solver-button')).toHaveTextContent(
+      'Execute Solver (Fall 2025)'
+    )
+
+    const postSpy = vi
+      .spyOn(apiClient, 'post')
+      .mockRejectedValueOnce(new ApiError('Solver infeasible for Fall 2025', 422))
+
+    fireEvent.click(screen.getByTestId('execute-solver-button'))
+
+    await waitFor(() => {
+      expect(postSpy).toHaveBeenCalledWith('/solver/run', { semester_id: 3 })
+      expect(screen.getByText('Solver Execution Error')).toBeInTheDocument()
+      expect(screen.getByText('Solver infeasible for Fall 2025')).toBeInTheDocument()
     })
   })
 })

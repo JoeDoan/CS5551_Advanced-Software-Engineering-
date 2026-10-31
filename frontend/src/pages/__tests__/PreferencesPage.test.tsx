@@ -3,6 +3,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { PreferencesPage } from '../PreferencesPage'
 import { preferenceService } from '../../services/preferenceService'
 import { timeSlotService } from '../../services/timeSlotService'
+import { courseService } from '../../services/courseService'
+import { roomService } from '../../services/roomService'
 
 describe('PreferencesPage Component', () => {
   beforeEach(() => {
@@ -11,6 +13,42 @@ describe('PreferencesPage Component', () => {
       { id: 1, day_pattern: 'MW', start_time: '08:00', end_time: '09:15' },
       { id: 2, day_pattern: 'MW', start_time: '09:30', end_time: '10:45' },
       { id: 3, day_pattern: 'MW', start_time: '11:00', end_time: '12:15' },
+    ])
+    vi.spyOn(courseService, 'getCourses').mockResolvedValue([
+      {
+        id: 1,
+        course_code: 'CS 101',
+        course_name: 'Problem Solving & Programming I',
+        department: 'CS',
+        credits: 3,
+        expected_enrollment: 45,
+        requires_lab: false,
+      },
+      {
+        id: 5,
+        course_code: 'CS 5551',
+        course_name: 'Advanced Software Engineering',
+        department: 'CS',
+        credits: 3,
+        expected_enrollment: 30,
+        requires_lab: false,
+      },
+    ])
+    vi.spyOn(roomService, 'getRooms').mockResolvedValue([
+      {
+        id: 1,
+        room_number: 'RH 204',
+        capacity: 48,
+        room_type: 'lecture',
+        building_id: 1,
+      },
+      {
+        id: 5,
+        room_number: 'FH 464',
+        capacity: 30,
+        room_type: 'lab',
+        building_id: 2,
+      },
     ])
   })
 
@@ -36,13 +74,10 @@ describe('PreferencesPage Component', () => {
     render(<PreferencesPage />)
 
     const fridayBtn = screen.getByRole('button', { name: 'Friday (F)' })
-    // Friday is not selected by default
     expect(fridayBtn).toBeInTheDocument()
 
-    // Toggle Friday on
     fireEvent.click(fridayBtn)
 
-    // Toggle Monday off (Monday was selected by default)
     const mondayBtn = screen.getByRole('button', { name: 'Monday (M)' })
     fireEvent.click(mondayBtn)
   })
@@ -51,16 +86,12 @@ describe('PreferencesPage Component', () => {
     render(<PreferencesPage />)
 
     const slotBtn = await screen.findByTestId('slot-09:30-10:45')
-
-    // Initially not active
     expect(slotBtn.className).toContain('bg-slate-50')
 
-    // Click to select
     fireEvent.click(slotBtn)
     expect(slotBtn.className).toContain('bg-blue-50')
     expect(slotBtn.className).toContain('border-blue-600')
 
-    // Click again to deselect
     fireEvent.click(slotBtn)
     expect(slotBtn.className).toContain('bg-slate-50')
   })
@@ -68,7 +99,6 @@ describe('PreferencesPage Component', () => {
   it('displays error toast when submitted without day or time slot', async () => {
     render(<PreferencesPage />)
 
-    // Click Save without selecting any time slot
     const saveBtn = screen.getByRole('button', { name: /save preferences/i })
     fireEvent.click(saveBtn)
 
@@ -91,10 +121,8 @@ describe('PreferencesPage Component', () => {
 
     render(<PreferencesPage />)
 
-    // Select a time slot (Monday and Wednesday are already selected by default)
     fireEvent.click(await screen.findByTestId('slot-09:30-10:45'))
 
-    // Click Save Preferences
     const saveBtn = screen.getByRole('button', { name: /save preferences/i })
     fireEvent.click(saveBtn)
 
@@ -113,10 +141,8 @@ describe('PreferencesPage Component', () => {
 
     render(<PreferencesPage />)
 
-    // Select a time slot
     fireEvent.click(await screen.findByTestId('slot-11:00-12:15'))
 
-    // Click Save
     const saveBtn = screen.getByRole('button', { name: /save preferences/i })
     fireEvent.click(saveBtn)
 
@@ -138,5 +164,134 @@ describe('PreferencesPage Component', () => {
     fireEvent.click(resetBtn)
 
     expect(slotBtn.className).toContain('bg-slate-50')
+  })
+
+  it('automatically hydrates saved General preference days, slots, and preferred rooms on page load', async () => {
+    vi.spyOn(preferenceService, 'getPreferences').mockResolvedValue([
+      {
+        id: 42,
+        user_id: 1,
+        semester_id: 1,
+        course_id: null,
+        preferred_days: ['T', 'R'],
+        preferred_slots: ['11:00-12:15'],
+        preferred_rooms: ['RH 204'],
+      },
+    ])
+
+    render(<PreferencesPage />)
+
+    const slotBtn = await screen.findByTestId('slot-11:00-12:15')
+    const roomChip = await screen.findByTestId('room-chip-RH 204')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('day-btn-Tuesday (T)')).toHaveAttribute('aria-pressed', 'true')
+      expect(screen.getByTestId('day-btn-Thursday (R)')).toHaveAttribute('aria-pressed', 'true')
+      expect(screen.getByTestId('day-btn-Monday (M)')).toHaveAttribute('aria-pressed', 'false')
+      expect(screen.getByTestId('day-btn-Wednesday (W)')).toHaveAttribute('aria-pressed', 'false')
+      expect(slotBtn.className).toContain('bg-blue-50')
+      expect(roomChip).toHaveAttribute('aria-pressed', 'true')
+      expect(roomChip.className).toContain('bg-blue-50')
+    })
+  })
+
+  it('submits course-specific preference scope and preferred classrooms and supports Load & Edit and Delete', async () => {
+    vi.spyOn(preferenceService, 'getPreferences').mockResolvedValue([])
+    const deleteSpy = vi.spyOn(preferenceService, 'deletePreference').mockResolvedValue()
+    const submitSpy = vi.spyOn(preferenceService, 'submitPreference').mockResolvedValueOnce({
+      id: 205,
+      user_id: 1,
+      semester_id: 2,
+      course_id: 5,
+      course_code: 'CS 5551',
+      course_name: 'Advanced Software Engineering',
+      preferred_days: ['T', 'R'],
+      preferred_slots: ['09:30-10:45'],
+      preferred_rooms: ['RH 204', 'FH 464'],
+    })
+
+    render(<PreferencesPage />)
+
+    await screen.findByTestId('room-chip-RH 204')
+    await waitFor(() => {
+      expect(screen.getByTestId('preference-course-select').querySelectorAll('option').length).toBe(
+        3
+      )
+    })
+
+    fireEvent.change(screen.getByTestId('preference-semester-select'), {
+      target: { value: '2' },
+    })
+    fireEvent.change(screen.getByTestId('preference-course-select'), {
+      target: { value: '5' },
+    })
+    fireEvent.click(screen.getByTestId('preset-days-tr'))
+    fireEvent.click(screen.getByTestId('slot-09:30-10:45'))
+    fireEvent.click(screen.getByTestId('room-chip-RH 204'))
+    fireEvent.click(screen.getByTestId('room-chip-FH 464'))
+
+    fireEvent.click(screen.getByTestId('save-preferences-button'))
+
+    await waitFor(() => {
+      expect(submitSpy).toHaveBeenCalledWith({
+        user_id: 1,
+        semester_id: 2,
+        course_id: 5,
+        preferred_days: ['T', 'R'],
+        preferred_slots: ['09:30-10:45'],
+        preferred_rooms: ['RH 204', 'FH 464'],
+      })
+      expect(screen.getByTestId('edit-pref-205')).toBeInTheDocument()
+      expect(screen.getByTestId('delete-pref-205')).toBeInTheDocument()
+    })
+
+    fireEvent.click(screen.getByTestId('delete-pref-205'))
+
+    await waitFor(() => {
+      expect(deleteSpy).toHaveBeenCalledWith(205)
+      expect(screen.queryByTestId('delete-pref-205')).not.toBeInTheDocument()
+    })
+  })
+
+  it('loads and hydrates a saved course preference via Load & Edit and surfaces domain validation messages', async () => {
+    vi.spyOn(preferenceService, 'getPreferences').mockResolvedValue([
+      {
+        id: 77,
+        user_id: 1,
+        semester_id: 1,
+        course_id: 1,
+        course_code: 'CS 101',
+        course_name: 'Problem Solving & Programming I',
+        preferred_days: ['MWF'],
+        preferred_slots: ['08:00-09:15'],
+        preferred_rooms: ['FH 464'],
+      },
+    ])
+    vi.spyOn(preferenceService, 'submitPreference').mockRejectedValueOnce(
+      new Error('Slot 17:30-18:45 is graduate-only')
+    )
+
+    render(<PreferencesPage />)
+
+    const loadEditBtn = await screen.findByTestId('edit-pref-77')
+    const slotBtn = await screen.findByTestId('slot-08:00-09:15')
+    const labChip = await screen.findByTestId('room-chip-FH 464')
+
+    fireEvent.click(loadEditBtn)
+
+    await waitFor(() => {
+      expect((screen.getByTestId('preference-course-select') as HTMLSelectElement).value).toBe('1')
+      expect(screen.getByTestId('day-btn-Monday (M)')).toHaveAttribute('aria-pressed', 'true')
+      expect(screen.getByTestId('day-btn-Wednesday (W)')).toHaveAttribute('aria-pressed', 'true')
+      expect(screen.getByTestId('day-btn-Friday (F)')).toHaveAttribute('aria-pressed', 'true')
+      expect(slotBtn.className).toContain('bg-blue-50')
+      expect(labChip).toHaveAttribute('aria-pressed', 'true')
+    })
+
+    fireEvent.click(screen.getByTestId('save-preferences-button'))
+
+    await waitFor(() => {
+      expect(screen.getByText('Slot 17:30-18:45 is graduate-only')).toBeInTheDocument()
+    })
   })
 })

@@ -97,22 +97,42 @@ export const DashboardPage: React.FC = () => {
               The Google OR-Tools CP-SAT core solver is verified against 25/25 automated test cases spanning 6 consecutive academic terms. FastAPI endpoints enforce role-based session gates for Course Coordinators and Faculty Instructors.
             </p>
             <div className="pt-2 flex flex-wrap items-center gap-3">
-              <Link to="/schedule">
-                <Button variant="primary" size="sm" rightIcon={<ArrowRight className="w-4 h-4" />}>
-                  View Master Schedule
-                </Button>
-              </Link>
-              <Link to="/preferences">
-                <Button variant="secondary" size="sm">
-                  Preference Setup
-                </Button>
-              </Link>
-              {isCoordinator && (
-                <Link to="/courses">
-                  <Button variant="outline" size="sm">
-                    Manage Courses & Sections
-                  </Button>
-                </Link>
+              {isCoordinator ? (
+                <>
+                  <Link to="/schedule">
+                    <Button variant="primary" size="sm" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                      View Master Schedule
+                    </Button>
+                  </Link>
+                  <Link to="/courses">
+                    <Button variant="secondary" size="sm">
+                      Manage Courses & Sections
+                    </Button>
+                  </Link>
+                  <Link to="/users">
+                    <Button variant="outline" size="sm">
+                      Manage User Accounts
+                    </Button>
+                  </Link>
+                  <Link to="/admin">
+                    <Button variant="outline" size="sm">
+                      Solver & Analytics
+                    </Button>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/schedule">
+                    <Button variant="primary" size="sm" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                      View My Schedule
+                    </Button>
+                  </Link>
+                  <Link to="/preferences">
+                    <Button variant="secondary" size="sm">
+                      My Teaching Preferences
+                    </Button>
+                  </Link>
+                </>
               )}
             </div>
           </CardContent>

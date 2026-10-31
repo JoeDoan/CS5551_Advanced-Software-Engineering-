@@ -42,6 +42,9 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles, ch
 
     case 'authenticated': {
       if (allowedRoles && !allowedRoles.includes(session.user.role)) {
+        const isInstructorOnly =
+          allowedRoles.includes('instructor') && !allowedRoles.includes('coordinator')
+
         return (
           <div className="py-12 max-w-xl mx-auto" data-testid="role-guard-403">
             <Card className="border-red-200">
@@ -51,23 +54,26 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles, ch
                 </div>
                 <Badge variant="danger">403 Access Restricted</Badge>
                 <h2 className="text-xl font-bold text-slate-900">
-                  Coordinator Role Required
+                  {isInstructorOnly
+                    ? 'Faculty Instructor Role Required'
+                    : 'Coordinator Role Required'}
                 </h2>
                 <p className="text-xs text-slate-600 leading-relaxed">
                   Signed in as <span className="font-semibold">{session.user.full_name}</span> (
-                  <span className="uppercase font-semibold">{session.user.role}</span>). Catalog
-                  modification, room inventory changes, and CP-SAT solver controls are restricted to
-                  UMKC Course Coordinators.
+                  <span className="uppercase font-semibold">{session.user.role}</span>).{' '}
+                  {isInstructorOnly
+                    ? 'Teaching availability, course preferences, and classroom preferences are configured exclusively by Faculty Instructors. Course Coordinators cannot modify instructor preferences.'
+                    : 'Catalog modification, room inventory changes, and CP-SAT solver controls are restricted to UMKC Course Coordinators.'}
                 </p>
                 <div className="pt-2">
-                  <Link to="/schedule">
+                  <Link to={isInstructorOnly ? '/' : '/schedule'}>
                     <Button
                       variant="primary"
                       size="sm"
                       leftIcon={<ArrowLeft className="w-4 h-4" />}
                       data-testid="return-to-schedule-btn"
                     >
-                      Return to Master Schedule
+                      {isInstructorOnly ? 'Return to Dashboard' : 'Return to Master Schedule'}
                     </Button>
                   </Link>
                 </div>
