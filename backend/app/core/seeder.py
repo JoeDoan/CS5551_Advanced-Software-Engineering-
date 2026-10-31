@@ -12,6 +12,7 @@ from app.models.entities import (
     Campus,
     Course,
     EditRequest,
+    EnrollmentObservation,
     InstructorCourseAssignment,
     InstructorPreference,
     Room,
@@ -58,6 +59,7 @@ _MODELS_WITH_COUNTS = (
     ("semesters", Semester),
     ("preferences", InstructorPreference),
     ("schedules", Schedule),
+    ("enrollment_observations", EnrollmentObservation),
 )
 
 
@@ -90,6 +92,7 @@ def _reset_tables(session: Session) -> None:
     session.execute(update(AuthCredential).values(linked_user_id=None))
     for model in (
         EditRequest,
+        EnrollmentObservation,
         Schedule,
         InstructorCourseAssignment,
         InstructorPreference,
@@ -209,6 +212,22 @@ def _seed_schedules(session: Session, data_dir: str) -> None:
     session.commit()
 
 
+def _seed_enrollment_history(session: Session, data_dir: str) -> None:
+    """Loads enrollment_history.json; rows for unknown courses/semesters are skipped."""
+    if not _is_empty(session, EnrollmentObservation):
+        return
+    course_ids = {c.id for c in session.exec(select(Course)).all()}
+    semester_ids = {s.id for s in session.exec(select(Semester)).all()}
+    for row in _load_json(data_dir, "enrollment_history.json"):
+        if row["course_id"] not in course_ids or row["semester_id"] not in semester_ids:
+            continue
+        session.add(EnrollmentObservation(
+            course_id=row["course_id"], semester_id=row["semester_id"],
+            enrolled=row["enrolled"], waitlist=row.get("waitlist", 0),
+            source=row.get("source", "synthetic")))
+    session.commit()
+
+
 def seed_database(
     session: Optional[Session] = None,
     data_dir: str = DEFAULT_DATA_DIR,
@@ -237,6 +256,7 @@ def seed_database(
         _seed_semesters(session, data_dir)
         _seed_preferences(session, data_dir, slot_labels)
         _seed_schedules(session, data_dir)
+        _seed_enrollment_history(session, data_dir)
 
         if not _is_empty(session, AuthCredential):
             from app.core.security import ensure_auth_accounts

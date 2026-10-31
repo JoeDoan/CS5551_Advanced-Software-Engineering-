@@ -17,8 +17,10 @@ from app.api.v1 import (
     routes_courses,
     routes_edit_requests,
     routes_export,
+    routes_forecast,
     routes_rooms,
     routes_preferences,
+    routes_scenarios,
     routes_schedules,
     routes_time_slots,
     routes_solver,
@@ -51,6 +53,12 @@ router.include_router(
 )
 router.include_router(
     routes_analytics.router, prefix="/analytics", tags=["Analytics"]
+)
+router.include_router(
+    routes_forecast.router, prefix="/forecast", tags=["Forecast"]
+)
+router.include_router(
+    routes_scenarios.router, prefix="/scenarios", tags=["Scenarios"]
 )
 
 

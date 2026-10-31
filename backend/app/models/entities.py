@@ -116,6 +116,20 @@ class EditRequest(SQLModel, table=True):
     created_at: Optional[str] = None
 
 
+class EnrollmentObservation(SQLModel, table=True):
+    """Per-course, per-semester enrollment history used by the forecasting engine."""
+
+    __tablename__ = "enrollment_observations"
+    __table_args__ = (UniqueConstraint("course_id", "semester_id"),)
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    course_id: int = Field(foreign_key="courses.id")
+    semester_id: int = Field(foreign_key="semesters.id")
+    enrolled: int
+    waitlist: int = 0
+    source: str = "synthetic"  # "synthetic" until real registrar data is loaded
+
+
 class AuthCredential(SQLModel, table=True):
     __tablename__ = "auth_credentials"
     id: Optional[int] = Field(default=None, primary_key=True)

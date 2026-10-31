@@ -136,10 +136,13 @@ class PrunedVarDict(dict):
 def build_schedule_model(profiles, date, class_room, instructors, courses, slots,
                          seed=None, room_capacities=None, course_enrollments=None, room_layouts=None,
                          valid_ic_pairs=None, valid_rc_pairs=None,
-                         min_courses_per_instructor=1, max_courses_per_instructor=2):
+                         min_courses_per_instructor=1, max_courses_per_instructor=2,
+                         y_bonus=None):
     """Builds CP-SAT model with hard constraints (including capacity) and preference optimization objective.
     Supports domain pruning via valid_ic_pairs (instructor-course qualifications) and valid_rc_pairs (room capacities).
     Enforces maximum teaching load (default 2 courses per instructor).
+    y_bonus: optional {(room, slot, instructor, course): weight} adding a small tie-break reward for
+    keeping those placements (used by what-if scenarios for minimum-disruption re-solves).
     """
     if seed is not None:
         random.seed(seed)
@@ -287,6 +290,11 @@ def build_schedule_model(profiles, date, class_room, instructors, courses, slots
                         for s in slots.keys():
                             if (r, s, i, c) in Y:
                                 objective_terms.append(W_i * (WEIGHT_ROOM // 2) * Y[r, s, i, c])
+
+    if y_bonus:
+        for (r, s, i, c), weight in y_bonus.items():
+            if (r, s, i, c) in Y:
+                objective_terms.append(weight * Y[r, s, i, c])
 
     if objective_terms:
         model.Maximize(sum(objective_terms))

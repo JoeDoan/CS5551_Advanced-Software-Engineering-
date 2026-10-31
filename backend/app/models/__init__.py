@@ -9,9 +9,11 @@ from app.models.entities import (
     InstructorPreference,
     Schedule,
     EditRequest,
+    EnrollmentObservation,
 )
 
 __all__ = [
+    "EnrollmentObservation",
     "Campus",
     "Building",
     "Room",
