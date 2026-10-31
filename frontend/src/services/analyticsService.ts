@@ -26,6 +26,7 @@ export interface FairnessReport {
   priority_gini_index: number
   workload_gini_index: number
   average_satisfaction_rate: number
+  is_demo_fallback?: boolean
   instructors: InstructorFairnessStat[]
   departments: DepartmentFairnessStat[]
 }
@@ -51,10 +52,12 @@ export interface RoomUtilizationReport {
   overall_seat_occupancy_pct: number
   underutilized_rooms_count: number
   heavily_booked_rooms_count: number
+  is_demo_fallback?: boolean
   rooms: RoomUtilizationStat[]
 }
 
 const FALLBACK_FAIRNESS: FairnessReport = {
+  is_demo_fallback: true,
   semester_id: 1,
   total_instructors: 6,
   total_scheduled_courses: 12,
@@ -79,6 +82,7 @@ const FALLBACK_FAIRNESS: FairnessReport = {
 }
 
 const FALLBACK_UTILIZATION: RoomUtilizationReport = {
+  is_demo_fallback: true,
   semester_id: 1,
   total_rooms: 5,
   total_time_slots: 13,

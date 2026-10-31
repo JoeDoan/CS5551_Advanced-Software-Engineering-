@@ -46,6 +46,12 @@ export const RoomUtilizationChart: React.FC<RoomUtilizationChartProps> = ({
           </div>
         </div>
 
+        {report.is_demo_fallback && (
+          <Badge variant="warning" data-testid="demo-data-badge">
+            Demo data: API unavailable
+          </Badge>
+        )}
+
         <div className="w-44">
           <Select
             value={tierFilter}

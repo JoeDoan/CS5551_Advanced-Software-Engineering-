@@ -47,6 +47,11 @@ export const FairnessAnalyticsPanel: React.FC<FairnessAnalyticsPanelProps> = ({
         </div>
 
         <div className="flex items-center space-x-2">
+          {report.is_demo_fallback && (
+            <Badge variant="warning" data-testid="demo-data-badge">
+              Demo data: API unavailable
+            </Badge>
+          )}
           <Badge variant="success" dot>
             Gini Index: {report.priority_gini_index.toFixed(4)}
           </Badge>

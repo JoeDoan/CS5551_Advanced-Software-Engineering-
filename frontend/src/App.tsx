@@ -10,6 +10,7 @@ import { PreferencesPage } from './pages/PreferencesPage'
 import { CatalogManagementPage } from './pages/CatalogManagementPage'
 import { AccountManagementPage } from './pages/AccountManagementPage'
 import { AdminPage } from './pages/AdminPage'
+import { InsightsPage } from './pages/InsightsPage'
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ export const AppRoutes: React.FC = () => {
       >
         <Route index element={<DashboardPage />} />
         <Route path="schedule" element={<SchedulePage />} />
+        <Route path="insights" element={<InsightsPage />} />
         <Route
           path="preferences"
           element={
