@@ -10,6 +10,7 @@ from app.core.seeder import seed_database
 from app.models.entities import (
     Course,
     EditRequest,
+    InstructorCourseAssignment,
     InstructorPreference,
     Room,
     Schedule,
@@ -27,6 +28,7 @@ from app.solver.engine import (
 )
 
 SOLVER_TIME_LIMIT_SECONDS = 30.0
+FALLBACK_TIME_LIMIT_SECONDS = 5.0
 
 _DAY_CODE_MAP = {
     "M": "Monday",
@@ -163,9 +165,9 @@ def _overlay_sqlite_preferences(
             if rooms:
                 general_prefs["classrooms"] = rooms
         else:
-            course_name = db_course_by_id.get(pref.course_id) or loader_course_by_id.get(
+            course_name = db_course_by_id.get(
                 pref.course_id
-            )
+            ) or loader_course_by_id.get(pref.course_id)
             if course_name and course_name in loader_course_names:
                 course_prefs = profiles[inst_name].setdefault("course_preferences", {})
                 existing = course_prefs.get(course_name, {})
@@ -178,6 +180,113 @@ def _overlay_sqlite_preferences(
                 valid_ic_pairs.add((inst_name, course_name))
 
 
+def _resolve_pinned_assignments(
+    session: Session,
+    semester_id: int,
+    loader: DataLoader,
+    instructors: List[str],
+    courses: List[str],
+    valid_ic_pairs: Set[Tuple[str, str]],
+    valid_rc_pairs: Set[Tuple[str, str]],
+) -> Tuple[
+    List[Tuple[str, str]],
+    Dict[int, List[int]],
+    Dict[str, int],
+    Dict[str, int],
+]:
+    rows = session.exec(
+        select(InstructorCourseAssignment)
+        .where(InstructorCourseAssignment.semester_id == semester_id)
+        .order_by(InstructorCourseAssignment.id)
+    ).all()
+    if not rows:
+        return [], {}, {}, {}
+
+    user_name_by_id = {
+        u.id: u.full_name
+        for u in session.exec(select(User)).all()
+        if u.id is not None
+    }
+    loader_inst_by_id = {u["user_id"]: u["name"] for u in loader.get_instructors()}
+    db_course_by_id = {
+        c.id: c.course_name
+        for c in session.exec(select(Course)).all()
+        if c.id is not None
+    }
+    loader_course_by_id = {c["course_id"]: c["course_name"] for c in loader.courses}
+
+    instructors_set = set(instructors)
+    courses_set = set(courses)
+    courses_with_rc = {c_name for (_r_num, c_name) in valid_rc_pairs}
+
+    pinned_ic_pairs: List[Tuple[str, str]] = []
+    pinned_by_course: Dict[str, int] = {}
+    pinned_by_inst: Dict[str, int] = {}
+    assigned_user_ids_by_course: Dict[int, List[int]] = {}
+
+    for row in rows:
+        uid_list = assigned_user_ids_by_course.setdefault(row.course_id, [])
+        if row.user_id not in uid_list:
+            uid_list.append(row.user_id)
+
+        inst_name = loader_inst_by_id.get(row.user_id) or user_name_by_id.get(
+            row.user_id
+        )
+        course_name = loader_course_by_id.get(row.course_id) or db_course_by_id.get(
+            row.course_id
+        )
+        if (
+            not inst_name
+            or not course_name
+            or inst_name not in instructors_set
+            or course_name not in courses_set
+        ):
+            continue
+
+        valid_ic_pairs.add((inst_name, course_name))
+        if (
+            (inst_name, course_name) not in pinned_ic_pairs
+            and course_name in courses_with_rc
+            and pinned_by_course.get(course_name, 0) < 2
+        ):
+            pinned_ic_pairs.append((inst_name, course_name))
+            pinned_by_course[course_name] = pinned_by_course.get(course_name, 0) + 1
+            pinned_by_inst[inst_name] = pinned_by_inst.get(inst_name, 0) + 1
+
+    return (
+        pinned_ic_pairs,
+        assigned_user_ids_by_course,
+        pinned_by_course,
+        pinned_by_inst,
+    )
+
+
+def _expand_subject_cluster_pairs(
+    base_valid_ic: Set[Tuple[str, str]],
+    pinned_ic_pairs: List[Tuple[str, str]],
+    courses: List[str],
+) -> Set[Tuple[str, str]]:
+    inst_prefixes: Dict[str, Set[str]] = {}
+    for inst_name, course_name in base_valid_ic:
+        parts = course_name.split()
+        if parts:
+            inst_prefixes.setdefault(inst_name, set()).add(parts[0])
+
+    pinned_prefixes = {
+        c_name.split()[0] for (_i_name, c_name) in pinned_ic_pairs if c_name.split()
+    }
+    expanded = set(base_valid_ic)
+    for inst_name, prefixes in inst_prefixes.items():
+        shared = prefixes & pinned_prefixes
+        if not shared:
+            continue
+        for course_name in courses:
+            parts = course_name.split()
+            if parts and parts[0] in shared:
+                expanded.add((inst_name, course_name))
+    return expanded
+
+
 def _schedule_extra_sqlite_courses(
     session: Session,
     semester_id: int,
@@ -186,6 +295,7 @@ def _schedule_extra_sqlite_courses(
     occupied_room_slots: Set[Tuple[int, int]],
     occupied_inst_slots: Set[Tuple[int, int]],
     inst_load: Dict[int, int],
+    assigned_user_ids_by_course: Optional[Dict[int, List[int]]] = None,
 ) -> int:
     all_courses = session.exec(select(Course).order_by(Course.id)).all()
     extra_courses = [
@@ -216,10 +326,18 @@ def _schedule_extra_sqlite_courses(
         if not eligible_rooms:
             continue
 
+        assigned_ids = (
+            assigned_user_ids_by_course.get(extra.id, [])
+            if assigned_user_ids_by_course and extra.id is not None
+            else []
+        )
+        assigned_rank = {uid: idx for idx, uid in enumerate(assigned_ids)}
         dept_upper = extra.department.upper()
         ranked_instructors = sorted(
             all_instructors,
             key=lambda u: (
+                0 if u.id in assigned_rank else 1,
+                assigned_rank.get(u.id, 0),
                 0 if u.department.upper() == dept_upper else 1,
                 inst_load.get(u.id, 0),
                 u.id or 0,
@@ -299,10 +417,10 @@ def run_solver_for_semester(
             ),
         )
 
-    # The solver works on the UMKC JSON tables, keyed by names; read-only here.
     loader = DataLoader()
     profiles = load_profiles_from_data(loader, semester_id=semester.semester_id)
-    valid_ic_pairs = set(loader.get_valid_ic_pairs())
+    base_valid_ic = set(loader.get_valid_ic_pairs())
+    valid_ic_pairs = set(base_valid_ic)
     _overlay_sqlite_preferences(
         session=session,
         semester_id=semester.id,
@@ -315,26 +433,107 @@ def run_solver_for_semester(
     instructors = [u["name"] for u in loader.get_instructors()]
     courses = [c["course_name"] for c in loader.courses]
     room_caps, course_enrolls, room_layouts = get_metadata(loader)
+    valid_rc_pairs = loader.get_valid_rc_pairs()
 
-    model, X, Y, Z, _ = build_schedule_model(
-        profiles,
-        DATE,
-        class_room,
-        instructors,
-        courses,
-        slots,
-        room_capacities=room_caps,
-        course_enrollments=course_enrolls,
-        room_layouts=room_layouts,
+    (
+        pinned_ic_pairs,
+        assigned_user_ids_by_course,
+        pinned_by_course,
+        pinned_by_inst,
+    ) = _resolve_pinned_assignments(
+        session=session,
+        semester_id=semester.id,
+        loader=loader,
+        instructors=instructors,
+        courses=courses,
         valid_ic_pairs=valid_ic_pairs,
-        valid_rc_pairs=loader.get_valid_rc_pairs(),
-        min_courses_per_instructor=min_courses_per_instructor,
-        max_courses_per_instructor=max_courses_per_instructor,
+        valid_rc_pairs=valid_rc_pairs,
+    )
+    max_pinned_per_inst = max(pinned_by_inst.values(), default=0)
+    effective_max_courses = max(max_courses_per_instructor, max_pinned_per_inst)
+    total_min_load = sum(
+        max(min_courses_per_instructor, pinned_by_inst.get(inst_name, 0))
+        for inst_name in instructors
+    )
+    target_total_sections = sum(
+        max(1, pinned_by_course.get(c_name, 0)) for c_name in courses
     )
 
-    solver = cp_model.CpSolver()
-    solver.parameters.max_time_in_seconds = SOLVER_TIME_LIMIT_SECONDS
-    solve_status = solver.Solve(model)
+    def _build_and_solve(
+        ic_pairs: Set[Tuple[str, str]],
+        time_limit: float,
+    ) -> Tuple[
+        cp_model.CpSolver,
+        int,
+        Any,
+        Any,
+        Any,
+    ]:
+        built_model, built_x, built_y, built_z, _ = build_schedule_model(
+            profiles,
+            DATE,
+            class_room,
+            instructors,
+            courses,
+            slots,
+            room_capacities=room_caps,
+            course_enrollments=course_enrolls,
+            room_layouts=room_layouts,
+            valid_ic_pairs=ic_pairs,
+            valid_rc_pairs=valid_rc_pairs,
+            min_courses_per_instructor=min_courses_per_instructor,
+            max_courses_per_instructor=effective_max_courses,
+        )
+        for inst_name, course_name in pinned_ic_pairs:
+            if (inst_name, course_name) in built_z:
+                built_model.Add(built_z[inst_name, course_name] == 1)
+
+        if effective_max_courses > max_courses_per_instructor:
+            for inst_name in instructors:
+                inst_cap = max(
+                    max_courses_per_instructor,
+                    pinned_by_inst.get(inst_name, 0),
+                )
+                if inst_cap < effective_max_courses:
+                    qual_courses = [
+                        c_name
+                        for c_name in courses
+                        if (inst_name, c_name) in built_z
+                    ]
+                    if qual_courses:
+                        built_model.Add(
+                            sum(built_z[inst_name, c_name] for c_name in qual_courses)
+                            <= inst_cap
+                        )
+            if target_total_sections >= total_min_load:
+                for c_name in courses:
+                    qual_insts = [
+                        inst_name
+                        for inst_name in instructors
+                        if (inst_name, c_name) in built_z
+                    ]
+                    if qual_insts:
+                        built_model.Add(
+                            sum(built_z[inst_name, c_name] for inst_name in qual_insts)
+                            == max(1, pinned_by_course.get(c_name, 0))
+                        )
+
+        cp_solver = cp_model.CpSolver()
+        cp_solver.parameters.max_time_in_seconds = time_limit
+        st = cp_solver.Solve(built_model)
+        return cp_solver, st, built_x, built_y, built_z
+
+    solver, solve_status, X, Y, Z = _build_and_solve(
+        valid_ic_pairs, SOLVER_TIME_LIMIT_SECONDS
+    )
+    if solve_status not in (cp_model.OPTIMAL, cp_model.FEASIBLE) and pinned_ic_pairs:
+        expanded_ic = _expand_subject_cluster_pairs(
+            base_valid_ic | valid_ic_pairs, pinned_ic_pairs, courses
+        )
+        solver, solve_status, X, Y, Z = _build_and_solve(
+            expanded_ic, FALLBACK_TIME_LIMIT_SECONDS
+        )
+
     if solve_status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -438,6 +637,7 @@ def run_solver_for_semester(
         occupied_room_slots=occupied_room_slots,
         occupied_inst_slots=occupied_inst_slots,
         inst_load=inst_load,
+        assigned_user_ids_by_course=assigned_user_ids_by_course,
     )
     session.commit()
 

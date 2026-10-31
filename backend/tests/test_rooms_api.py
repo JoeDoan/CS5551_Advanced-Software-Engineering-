@@ -2,7 +2,7 @@ from app.models.entities import Campus, Building, Room, Course, User, Semester, 
 
 
 def test_create_room_success_with_building_name(client, session):
-    """AC 4.1 & Fix 5: Create room returns 201 with populated building_name."""
+    """AC 4.1 & Fix 5: Create room returns 201 with building_name and building_code."""
     campus = Campus(name="Volker", code="VK")
     session.add(campus)
     session.commit()
@@ -23,6 +23,15 @@ def test_create_room_success_with_building_name(client, session):
     assert data["id"] is not None
     assert data["room_number"] == "FH 260"
     assert data["building_name"] == "Flarsheim Hall"
+    assert data["building_code"] == "FH"
+
+    listed = client.get("/api/v1/rooms").json()
+    assert listed[0]["building_name"] == "Flarsheim Hall"
+    assert listed[0]["building_code"] == "FH"
+
+    fetched = client.get(f"/api/v1/rooms/{data['id']}").json()
+    assert fetched["building_name"] == "Flarsheim Hall"
+    assert fetched["building_code"] == "FH"
 
 
 def test_create_room_capacity_boundary_validation(client, session):

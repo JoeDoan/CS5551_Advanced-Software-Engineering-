@@ -25,6 +25,7 @@ from app.models.entities import (
     AuthCredential,
     AuthSession,
     EditRequest,
+    InstructorCourseAssignment,
     InstructorPreference,
     Schedule,
     User,
@@ -527,6 +528,11 @@ def delete_account(
                 delete(EditRequest).where(EditRequest.requester_id == linked_uid)
             )
         session.execute(delete(Schedule).where(Schedule.user_id == linked_uid))
+        session.execute(
+            delete(InstructorCourseAssignment).where(
+                InstructorCourseAssignment.user_id == linked_uid
+            )
+        )
         session.execute(
             delete(InstructorPreference).where(
                 InstructorPreference.user_id == linked_uid

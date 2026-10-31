@@ -85,6 +85,16 @@ class InstructorPreference(SQLModel, table=True):
     preference_rank: int = 1
 
 
+class InstructorCourseAssignment(SQLModel, table=True):
+    __tablename__ = "instructor_course_assignments"
+    __table_args__ = (UniqueConstraint("semester_id", "user_id", "course_id"),)
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    semester_id: int = Field(foreign_key="semesters.id")
+    user_id: int = Field(foreign_key="users.id")
+    course_id: int = Field(foreign_key="courses.id")
+
+
 class Schedule(SQLModel, table=True):
     __tablename__ = "schedules"
     id: Optional[int] = Field(default=None, primary_key=True)

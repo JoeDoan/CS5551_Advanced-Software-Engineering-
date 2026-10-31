@@ -12,6 +12,7 @@ from app.models.entities import (
     Campus,
     Course,
     EditRequest,
+    InstructorCourseAssignment,
     InstructorPreference,
     Room,
     Schedule,
@@ -87,8 +88,19 @@ def _count(session: Session, model) -> int:
 def _reset_tables(session: Session) -> None:
     """Delete children before parents so foreign keys never block the reset."""
     session.execute(update(AuthCredential).values(linked_user_id=None))
-    for model in (EditRequest, Schedule, InstructorPreference, Course, Room,
-                  Building, Campus, TimeSlot, Semester, User):
+    for model in (
+        EditRequest,
+        Schedule,
+        InstructorCourseAssignment,
+        InstructorPreference,
+        Course,
+        Room,
+        Building,
+        Campus,
+        TimeSlot,
+        Semester,
+        User,
+    ):
         session.execute(delete(model))
     session.commit()
 

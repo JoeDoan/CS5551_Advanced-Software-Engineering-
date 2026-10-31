@@ -22,7 +22,7 @@ def list_rooms(
     session: Session = Depends(get_session),
 ):
     """Retrieve classrooms and labs with building name and optional filters."""
-    stmt = select(Room, Building.name).join(
+    stmt = select(Room, Building.name, Building.code).join(
         Building, Building.id == Room.building_id, isouter=True
     )
     if min_capacity is not None:
@@ -34,8 +34,12 @@ def list_rooms(
 
     rows = session.exec(stmt.offset(offset).limit(limit)).all()
     return [
-        RoomResponse(**room.model_dump(), building_name=building_name)
-        for room, building_name in rows
+        RoomResponse(
+            **room.model_dump(),
+            building_name=building_name,
+            building_code=building_code,
+        )
+        for room, building_name, building_code in rows
     ]
 
 
@@ -62,14 +66,22 @@ def create_room(
     if existing:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail=f"Room '{payload.room_number}' already exists in building {payload.building_id}",
+            detail=(
+                f"Room '{payload.room_number}' already exists in building "
+                f"{payload.building_id}"
+            ),
         )
 
+    room_type_val = (
+        payload.room_type.value
+        if hasattr(payload.room_type, "value")
+        else str(payload.room_type)
+    )
     room = Room(
         building_id=payload.building_id,
         room_number=payload.room_number,
         capacity=payload.capacity,
-        room_type=payload.room_type.value if hasattr(payload.room_type, "value") else str(payload.room_type),
+        room_type=room_type_val,
     )
     try:
         session.add(room)
@@ -81,7 +93,11 @@ def create_room(
             status_code=status.HTTP_409_CONFLICT,
             detail="Room conflict in building",
         )
-    return RoomResponse(**room.model_dump(), building_name=building.name)
+    return RoomResponse(
+        **room.model_dump(),
+        building_name=building.name,
+        building_code=building.code,
+    )
 
 
 @router.get("/{room_id}", response_model=RoomResponse)
@@ -91,7 +107,7 @@ def get_room(
 ):
     """Retrieve a single room by its unique ID."""
     row = session.exec(
-        select(Room, Building.name)
+        select(Room, Building.name, Building.code)
         .join(Building, Building.id == Room.building_id, isouter=True)
         .where(Room.id == room_id)
     ).first()
@@ -100,8 +116,12 @@ def get_room(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Room not found",
         )
-    room, building_name = row
-    return RoomResponse(**room.model_dump(), building_name=building_name)
+    room, building_name, building_code = row
+    return RoomResponse(
+        **room.model_dump(),
+        building_name=building_name,
+        building_code=building_code,
+    )
 
 
 @router.put("/{room_id}", response_model=RoomResponse)
@@ -142,14 +162,21 @@ def update_room(
         if duplicate:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail=f"Room '{target_room_num}' already exists in building {target_bldg_id}",
+                detail=(
+                    f"Room '{target_room_num}' already exists in building "
+                    f"{target_bldg_id}"
+                ),
             )
         room.room_number = payload.room_number
 
     if payload.capacity is not None:
         room.capacity = payload.capacity
     if payload.room_type is not None:
-        room.room_type = payload.room_type.value if hasattr(payload.room_type, "value") else str(payload.room_type)
+        room.room_type = (
+            payload.room_type.value
+            if hasattr(payload.room_type, "value")
+            else str(payload.room_type)
+        )
 
     try:
         session.add(room)
@@ -162,8 +189,12 @@ def update_room(
             detail="Database integrity error updating room",
         )
 
-    bldg_name = session.exec(select(Building.name).where(Building.id == room.building_id)).first()
-    return RoomResponse(**room.model_dump(), building_name=bldg_name)
+    bldg = session.get(Building, room.building_id)
+    return RoomResponse(
+        **room.model_dump(),
+        building_name=bldg.name if bldg else None,
+        building_code=bldg.code if bldg else None,
+    )
 
 
 @router.delete("/{room_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -208,4 +239,3 @@ def delete_room(
     session.delete(room)
     session.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
-

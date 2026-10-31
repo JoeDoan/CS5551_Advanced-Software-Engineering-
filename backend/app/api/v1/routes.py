@@ -7,10 +7,12 @@ from app.core.database import get_session
 from app.schemas.api_schemas import (
     HealthResponse,
     ScheduleEventResponse,
+    SemesterResponse,
 )
-from app.models.entities import Schedule, Course, User, Room, TimeSlot
+from app.models.entities import Schedule, Course, User, Room, TimeSlot, Semester
 from app.api.v1 import (
     routes_analytics,
+    routes_assignments,
     routes_auth,
     routes_courses,
     routes_edit_requests,
@@ -34,6 +36,11 @@ router.include_router(
     routes_preferences.router, prefix="/preferences", tags=["Preferences"]
 )
 router.include_router(
+    routes_assignments.router,
+    prefix="/course-assignments",
+    tags=["Course Assignments"],
+)
+router.include_router(
     routes_time_slots.router, prefix="/time-slots", tags=["Time Slots"]
 )
 router.include_router(routes_solver.router, prefix="")
@@ -45,6 +52,12 @@ router.include_router(
 router.include_router(
     routes_analytics.router, prefix="/analytics", tags=["Analytics"]
 )
+
+
+@router.get("/semesters", response_model=List[SemesterResponse], tags=["Semesters"])
+def list_semesters(session: Session = Depends(get_session)):
+    """List available academic semesters."""
+    return session.exec(select(Semester).order_by(Semester.semester_id)).all()
 
 
 @router.get("/health", response_model=HealthResponse, tags=["System"])

@@ -83,6 +83,7 @@ class RoomUpdate(BaseModel):
 class RoomResponse(RoomBase):
     id: int
     building_name: Optional[str] = None
+    building_code: Optional[str] = None
 
 
 class TimeSlotResponse(BaseModel):
@@ -362,3 +363,28 @@ class AccountUpdateRequest(BaseModel):
     role: Optional[str] = Field(default=None, pattern="^(coordinator|instructor)$")
     password: Optional[str] = Field(default=None, min_length=6, max_length=128)
     is_active: Optional[bool] = None
+
+
+class CourseAssignmentCreate(BaseModel):
+    semester_id: int
+    user_id: int
+    course_id: int
+
+
+class CourseAssignmentBulkPut(BaseModel):
+    semester_id: int
+    user_id: int
+    course_ids: List[int] = Field(default_factory=list)
+
+
+class CourseAssignmentResponse(BaseModel):
+    id: int
+    semester_id: int
+    user_id: int
+    instructor_name: str
+    instructor_department: str
+    course_id: int
+    course_code: str
+    course_name: str
+    department: str
+    course_level: str

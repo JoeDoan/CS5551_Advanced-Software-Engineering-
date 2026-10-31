@@ -6,10 +6,9 @@ from sqlmodel import Session, select
 from app.core.database import get_session
 from app.core.security import SessionPrincipal, require_coordinator
 from app.core.seeder import seed_database
-from app.models.entities import Semester, User
+from app.models.entities import User
 from app.schemas.api_schemas import (
     SeedResponse,
-    SemesterResponse,
     SolverRunRequest,
     SolverRunResponse,
     UserResponse,
@@ -73,9 +72,3 @@ def list_instructors(
     if department:
         stmt = stmt.where(User.department == department.strip().upper())
     return session.exec(stmt.order_by(User.id)).all()
-
-
-@router.get("/semesters", response_model=List[SemesterResponse], tags=["Semesters"])
-def list_semesters(session: Session = Depends(get_session)):
-    """List available academic semesters."""
-    return session.exec(select(Semester).order_by(Semester.semester_id)).all()

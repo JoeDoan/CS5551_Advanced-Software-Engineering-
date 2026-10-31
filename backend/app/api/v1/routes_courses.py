@@ -6,7 +6,13 @@ from sqlalchemy.exc import IntegrityError
 
 from app.core.database import get_session
 from app.core.security import SessionPrincipal, require_coordinator
-from app.models.entities import Course, EditRequest, Schedule, InstructorPreference
+from app.models.entities import (
+    Course,
+    EditRequest,
+    InstructorCourseAssignment,
+    InstructorPreference,
+    Schedule,
+)
 from app.schemas.api_schemas import CourseCreate, CourseUpdate, CourseResponse
 
 router = APIRouter()
@@ -155,6 +161,11 @@ def delete_course(
             )
             session.execute(delete(Schedule).where(Schedule.course_id == course_id))
         session.execute(
+            delete(InstructorCourseAssignment).where(
+                InstructorCourseAssignment.course_id == course_id
+            )
+        )
+        session.execute(
             delete(InstructorPreference).where(
                 InstructorPreference.course_id == course_id
             )
@@ -163,20 +174,23 @@ def delete_course(
         session.commit()
         return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-    # Delete guard: check if used in active schedule or instructor preference
     used_sched = session.exec(
         select(Schedule.id).where(Schedule.course_id == course_id)
     ).first()
     used_pref = session.exec(
         select(InstructorPreference.id).where(InstructorPreference.course_id == course_id)
     ).first()
-    if used_sched or used_pref:
+    used_assign = session.exec(
+        select(InstructorCourseAssignment.id).where(
+            InstructorCourseAssignment.course_id == course_id
+        )
+    ).first()
+    if used_sched or used_pref or used_assign:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="Course is used by a schedule or preference",
+            detail="Course is used by a schedule, preference, or assignment",
         )
 
     session.delete(course)
     session.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
-

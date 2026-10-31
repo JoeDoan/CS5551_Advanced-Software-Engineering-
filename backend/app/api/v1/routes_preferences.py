@@ -13,9 +13,14 @@ router = APIRouter()
 
 
 def course_level(course_code: str) -> str:
-    """Course numbers 5000+ are graduate-level (derived from the course code)."""
+    """Classify 5000+ (4-digit) and 500-999 (3-digit) codes as graduate."""
     m = re.search(r"\d+", course_code)
-    return "graduate" if m and int(m.group()) >= 5000 else "undergraduate"
+    if not m:
+        return "undergraduate"
+    num = int(m.group())
+    if num >= 5000 or 500 <= num < 1000:
+        return "graduate"
+    return "undergraduate"
 
 
 def _label(slot: TimeSlot) -> str:
@@ -118,6 +123,18 @@ def submit_preference(
 ):
     """Submit instructor availability and course preferences with idempotent upsert."""
     _authorize_preference_write(principal, payload.user_id)
+    if (
+        principal is not None
+        and principal.role == "instructor"
+        and payload.course_id is not None
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=(
+                "Course assignments are managed by Course Coordinators. "
+                "Instructors can only submit general semester availability."
+            ),
+        )
 
     # 1. Validate User
     user = session.get(User, payload.user_id)
