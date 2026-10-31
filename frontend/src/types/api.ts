@@ -22,9 +22,12 @@ export interface InstructorPreference {
   id?: number;
   user_id: number;
   semester_id: number;
-  course_id?: number;
+  course_id?: number | null;
+  course_code?: string | null;
+  course_name?: string | null;
   preferred_days: string[];
   preferred_slots: string[];
+  preferred_slot_ids?: number[];
   preferred_rooms: string[];
   preferred_layout?: string;
   preference_rank?: number;
@@ -109,6 +112,7 @@ export interface PreferenceFilterParams {
   user_id?: number;
   semester_id?: number;
   course_id?: number;
+  general_only?: boolean;
 }
 
 export interface TimeSlot {
@@ -164,6 +168,13 @@ export interface EditRequest {
   reviewer_notes?: string | null;
   status: 'pending' | 'approved' | 'rejected';
   created_at?: string;
+  course_code?: string | null;
+  course_name?: string | null;
+  requester_name?: string | null;
+  current_room_number?: string | null;
+  current_time_slot?: string | null;
+  proposed_room_number?: string | null;
+  proposed_time_slot?: string | null;
 }
 
 export interface EditRequestCreatePayload {

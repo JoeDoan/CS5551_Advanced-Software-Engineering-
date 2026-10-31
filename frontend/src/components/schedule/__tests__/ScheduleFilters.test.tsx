@@ -1,8 +1,83 @@
-import { render, screen, fireEvent } from '@testing-library/react'
-import { describe, it, expect, vi } from 'vitest'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { MemoryRouter } from 'react-router-dom'
 import { ScheduleFilters } from '../ScheduleFilters'
+import { ScheduleTable } from '../ScheduleTable'
+import { ScheduleRoomMatrix } from '../ScheduleRoomMatrix'
+import { SchedulePage } from '../../../pages/SchedulePage'
+import AuthContext, { AuthContextValue } from '../../../context/AuthContext'
+import { scheduleService } from '../../../services/scheduleService'
+import { ScheduleEvent } from '../../../types/api'
+
+const sampleSchedules: ScheduleEvent[] = [
+  {
+    id: 1,
+    semester_id: 1,
+    course_id: 10,
+    course_code: 'CS 101',
+    course_name: 'Problem Solving & Programming I',
+    user_id: 1,
+    instructor_id: 1,
+    instructor_name: 'Dr. Yugyung Lee',
+    room_number: 'RH 204',
+    department: 'CS',
+    day_pattern: 'MWF',
+    start_time: '09:00',
+    end_time: '09:50',
+    status: 'confirmed',
+  },
+  {
+    id: 2,
+    semester_id: 1,
+    course_id: 20,
+    course_code: 'ECE 216',
+    course_name: 'Circuit Theory I',
+    user_id: 2,
+    instructor_id: 2,
+    instructor_name: 'Dr. Praveen Rao',
+    room_number: 'FH 256',
+    department: 'ECE',
+    day_pattern: 'TR',
+    start_time: '10:30',
+    end_time: '11:45',
+    status: 'revised',
+  },
+]
+
+const makeAuthContext = (
+  role: 'coordinator' | 'instructor',
+  fullName: string,
+  linkedUserId: number | null
+): AuthContextValue => {
+  const user = {
+    id: role === 'coordinator' ? 100 : 101,
+    email: `${role}@umkc.edu`,
+    username: role,
+    full_name: fullName,
+    role,
+    department: 'CS',
+    linked_user_id: linkedUserId,
+  }
+  return {
+    session: {
+      status: 'authenticated',
+      user,
+      sessionId: 'sess-1',
+      expiresAt: '2026-12-31T00:00:00Z',
+    },
+    user,
+    login: vi.fn(),
+    logout: vi.fn(),
+    clearAuthError: vi.fn(),
+    isStandaloneFallback: false,
+  }
+}
 
 describe('ScheduleFilters Component', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks()
+  })
+
   it('renders department selector and search input', () => {
     const handleFilterChange = vi.fn()
     render(<ScheduleFilters onFilterChange={handleFilterChange} />)
@@ -49,18 +124,14 @@ describe('ScheduleFilters Component', () => {
     const handleFilterChange = vi.fn()
     render(<ScheduleFilters onFilterChange={handleFilterChange} />)
 
-    // Reset button should not be present initially
     expect(screen.queryByRole('button', { name: /reset filters/i })).not.toBeInTheDocument()
 
-    // Change department
     const select = screen.getByLabelText(/filter by department/i)
     fireEvent.change(select, { target: { value: 'MATH' } })
 
-    // Reset button should now be visible
     const resetBtn = screen.getByRole('button', { name: /reset filters/i })
     expect(resetBtn).toBeInTheDocument()
 
-    // Click Reset
     fireEvent.click(resetBtn)
 
     expect(handleFilterChange).toHaveBeenLastCalledWith({
@@ -68,5 +139,143 @@ describe('ScheduleFilters Component', () => {
       search: '',
     })
     expect(screen.queryByRole('button', { name: /reset filters/i })).not.toBeInTheDocument()
+  })
+
+  it('renders instructor and classroom dropdowns when provided and resets all filters together', () => {
+    const handleFilterChange = vi.fn()
+    const handleInstructorChange = vi.fn()
+    const handleRoomChange = vi.fn()
+
+    const { rerender } = render(
+      <ScheduleFilters
+        onFilterChange={handleFilterChange}
+        instructors={['Dr. Praveen Rao', 'Dr. Yugyung Lee']}
+        rooms={['FH 256', 'RH 204']}
+        selectedInstructor="ALL"
+        selectedRoom="ALL"
+        onInstructorChange={handleInstructorChange}
+        onRoomChange={handleRoomChange}
+      />
+    )
+
+    const instructorSelect = screen.getByTestId('instructor-filter')
+    const roomSelect = screen.getByTestId('room-filter')
+
+    fireEvent.change(instructorSelect, { target: { value: 'Dr. Yugyung Lee' } })
+    expect(handleInstructorChange).toHaveBeenCalledWith('Dr. Yugyung Lee')
+
+    fireEvent.change(roomSelect, { target: { value: 'RH 204' } })
+    expect(handleRoomChange).toHaveBeenCalledWith('RH 204')
+
+    rerender(
+      <ScheduleFilters
+        onFilterChange={handleFilterChange}
+        instructors={['Dr. Praveen Rao', 'Dr. Yugyung Lee']}
+        rooms={['FH 256', 'RH 204']}
+        selectedInstructor="Dr. Yugyung Lee"
+        selectedRoom="RH 204"
+        onInstructorChange={handleInstructorChange}
+        onRoomChange={handleRoomChange}
+      />
+    )
+
+    const resetBtn = screen.getByTestId('reset-filters-button')
+    fireEvent.click(resetBtn)
+    expect(handleInstructorChange).toHaveBeenLastCalledWith('ALL')
+    expect(handleRoomChange).toHaveBeenLastCalledWith('ALL')
+  })
+})
+
+describe('ScheduleTable, ScheduleRoomMatrix & SchedulePage Views', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it('filters ScheduleTable by day-group pills and invokes onSelectEvent', () => {
+    const onSelectEvent = vi.fn()
+    render(<ScheduleTable events={sampleSchedules} onSelectEvent={onSelectEvent} />)
+
+    expect(screen.getByText('CS 101')).toBeInTheDocument()
+    expect(screen.getByText('ECE 216')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByTestId('day-group-tr'))
+    expect(screen.queryByText('CS 101')).not.toBeInTheDocument()
+    expect(screen.getByText('ECE 216')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByTestId('schedule-row-details-2'))
+    expect(onSelectEvent).toHaveBeenCalledWith(sampleSchedules[1])
+  })
+
+  it('renders ScheduleRoomMatrix with Open indicators and clickable course chips', () => {
+    const onSelectEvent = vi.fn()
+    render(
+      <ScheduleRoomMatrix
+        events={sampleSchedules}
+        rooms={['FH 256', 'RH 204']}
+        onSelectEvent={onSelectEvent}
+      />
+    )
+
+    expect(screen.getAllByText('Open').length).toBeGreaterThan(0)
+    const chip = screen.getByTestId('matrix-event-chip-1')
+    expect(chip).toHaveTextContent('CS 101')
+    expect(chip).toHaveTextContent('Lee')
+
+    fireEvent.click(chip)
+    expect(onSelectEvent).toHaveBeenCalledWith(sampleSchedules[0])
+  })
+
+  it('defaults Coordinator to Table View and switches views without refetching schedules', async () => {
+    const getSchedulesSpy = vi
+      .spyOn(scheduleService, 'getSchedules')
+      .mockResolvedValue(sampleSchedules)
+
+    render(
+      <MemoryRouter>
+        <AuthContext.Provider value={makeAuthContext('coordinator', 'Course Coordinator', null)}>
+          <SchedulePage />
+        </AuthContext.Provider>
+      </MemoryRouter>
+    )
+
+    await waitFor(() => {
+      expect(screen.getByTestId('schedule-section-count')).toHaveTextContent(
+        'Showing 2 of 2 sections'
+      )
+    })
+    expect(screen.getByTestId('schedule-table-view')).toBeInTheDocument()
+    expect(getSchedulesSpy).toHaveBeenCalledTimes(1)
+
+    fireEvent.click(screen.getByTestId('view-mode-matrix'))
+    expect(screen.getByTestId('schedule-room-matrix-view')).toBeInTheDocument()
+    expect(getSchedulesSpy).toHaveBeenCalledTimes(1)
+
+    fireEvent.click(screen.getByTestId('view-mode-calendar'))
+    expect(screen.getByTestId('schedule-calendar-view')).toBeInTheDocument()
+    expect(getSchedulesSpy).toHaveBeenCalledTimes(1)
+  })
+
+  it('defaults Instructor to My Teaching Schedule in Weekly Calendar with 1-click toggle to All Department Schedule', async () => {
+    vi.spyOn(scheduleService, 'getSchedules').mockResolvedValue(sampleSchedules)
+
+    render(
+      <MemoryRouter>
+        <AuthContext.Provider value={makeAuthContext('instructor', 'Dr. Yugyung Lee', 1)}>
+          <SchedulePage />
+        </AuthContext.Provider>
+      </MemoryRouter>
+    )
+
+    await waitFor(() => {
+      expect(screen.getByTestId('schedule-section-count')).toHaveTextContent(
+        'Showing 1 of 2 sections'
+      )
+    })
+    expect(screen.getByTestId('schedule-calendar-view')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByTestId('schedule-scope-all'))
+    expect(screen.getByTestId('schedule-section-count')).toHaveTextContent(
+      'Showing 2 of 2 sections'
+    )
   })
 })

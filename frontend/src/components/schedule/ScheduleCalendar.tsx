@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { EventClickArg } from '@fullcalendar/core'
+import { EventClickArg, EventContentArg } from '@fullcalendar/core'
+import { Info, Loader2 } from 'lucide-react'
 import { scheduleService } from '../../services/scheduleService'
 import { transformToCalendarEvents, resolveDepartment } from '../../utils/scheduleParser'
 import { CalendarEventItem, ScheduleEvent } from '../../types/api'
 import { EventDetailModal } from './EventDetailModal'
-import { Loader2 } from 'lucide-react'
 
 export interface ScheduleCalendarProps {
   semesterId?: number
   filter?: { department?: string; search?: string }
   onEventsLoaded?: (rawEvents: ScheduleEvent[]) => void
+  eventsData?: ScheduleEvent[]
+  loadingOverride?: boolean
+  onSelectEvent?: (event: ScheduleEvent) => void
+  hasEntityFilter?: boolean
 }
 
 const DEPT_LEGEND = [
@@ -26,32 +30,50 @@ export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({
   semesterId = 1,
   filter,
   onEventsLoaded,
+  eventsData,
+  loadingOverride,
+  onSelectEvent,
+  hasEntityFilter = false,
 }) => {
-  const [rawEvents, setRawEvents] = useState<ScheduleEvent[]>([])
-  const [events, setEvents] = useState<CalendarEventItem[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
+  const isControlled = eventsData !== undefined
+  const [internalRawEvents, setInternalRawEvents] = useState<ScheduleEvent[]>([])
+  const [internalLoading, setInternalLoading] = useState<boolean>(!isControlled)
   const [selectedEvent, setSelectedEvent] = useState<ScheduleEvent | null>(null)
 
   useEffect(() => {
+    if (isControlled) {
+      return
+    }
+    let active = true
     async function loadData() {
-      setLoading(true)
+      setInternalLoading(true)
       try {
         const data = await scheduleService.getSchedules(semesterId)
-        setRawEvents(data)
+        if (!active) return
+        setInternalRawEvents(data)
         onEventsLoaded?.(data)
       } catch (err) {
         console.error('Failed to load schedule events:', err)
-        setRawEvents([])
+        if (!active) return
+        setInternalRawEvents([])
         onEventsLoaded?.([])
       } finally {
-        setLoading(false)
+        if (active) {
+          setInternalLoading(false)
+        }
       }
     }
     loadData()
-  }, [semesterId, onEventsLoaded])
+    return () => {
+      active = false
+    }
+  }, [isControlled, semesterId, onEventsLoaded])
 
-  useEffect(() => {
-    let filtered = [...rawEvents]
+  const sourceEvents = isControlled ? eventsData : internalRawEvents
+  const loading = isControlled ? Boolean(loadingOverride) : internalLoading
+
+  const filteredScheduleEvents = useMemo(() => {
+    let filtered = [...sourceEvents]
     if (filter?.department && filter.department !== 'ALL') {
       const targetDept = filter.department.toUpperCase()
       filtered = filtered.filter(
@@ -68,19 +90,53 @@ export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({
           e.room_number.toLowerCase().includes(q)
       )
     }
-    setEvents(transformToCalendarEvents(filtered))
-  }, [rawEvents, filter])
+    return filtered
+  }, [sourceEvents, filter])
+
+  const calendarEvents: CalendarEventItem[] = useMemo(
+    () => transformToCalendarEvents(filteredScheduleEvents),
+    [filteredScheduleEvents]
+  )
 
   const handleEventClick = (clickInfo: EventClickArg) => {
     const rawId = Number(clickInfo.event.id.split('-')[0])
-    const found = rawEvents.find((item) => item.id === rawId)
-    if (found) {
+    const found = sourceEvents.find((item) => item.id === rawId)
+    if (!found) return
+    if (onSelectEvent) {
+      onSelectEvent(found)
+    } else {
       setSelectedEvent(found)
     }
   }
 
+  const renderEventContent = (eventInfo: EventContentArg) => {
+    const props = eventInfo.event.extendedProps as {
+      course_code?: string
+      room?: string
+      instructor?: string
+    }
+    return (
+      <div className="px-1.5 py-0.5 overflow-hidden leading-tight text-white">
+        <div className="font-bold text-[11px] truncate">
+          {props.course_code || eventInfo.event.title}
+        </div>
+        {props.room && (
+          <div className="text-[10px] opacity-95 truncate">{props.room}</div>
+        )}
+        {props.instructor && (
+          <div className="text-[10px] opacity-85 truncate">{props.instructor}</div>
+        )}
+      </div>
+    )
+  }
+
+  const showDensityTip = filteredScheduleEvents.length > 15 && !hasEntityFilter
+
   return (
-    <div className="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-card">
+    <div
+      data-testid="schedule-calendar-view"
+      className="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-card"
+    >
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-5 pb-4 border-b border-slate-100">
         <div>
           <h2 className="text-lg font-bold text-slate-800">Weekly Schedule Matrix</h2>
@@ -92,7 +148,10 @@ export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({
         <div className="flex items-center space-x-4">
           <div className="flex flex-wrap items-center gap-3">
             {DEPT_LEGEND.map((dept) => (
-              <div key={dept.label} className="flex items-center space-x-1.5 text-xs text-slate-600 font-medium">
+              <div
+                key={dept.label}
+                className="flex items-center space-x-1.5 text-xs text-slate-600 font-medium"
+              >
                 <span className={`w-2.5 h-2.5 rounded-full ${dept.color} shadow-sm`} />
                 <span>{dept.label}</span>
               </div>
@@ -108,6 +167,22 @@ export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({
         </div>
       </div>
 
+      {showDensityTip && (
+        <div
+          data-testid="calendar-density-tip"
+          className="mb-4 flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50/70 px-3.5 py-2.5 text-xs text-blue-900"
+        >
+          <Info className="w-4 h-4 text-blue-600 shrink-0" />
+          <span>
+            Displaying {filteredScheduleEvents.length} concurrent sections across campus. Filter by{' '}
+            <strong className="font-semibold">Instructor</strong> or{' '}
+            <strong className="font-semibold">Classroom</strong> above, or switch to{' '}
+            <strong className="font-semibold">Table View</strong> or{' '}
+            <strong className="font-semibold">Room Matrix</strong> for a full-campus overview.
+          </span>
+        </div>
+      )}
+
       <div className="h-[680px]">
         <FullCalendar
           plugins={[timeGridPlugin, interactionPlugin]}
@@ -122,19 +197,23 @@ export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({
           slotMinTime="08:00:00"
           slotMaxTime="21:00:00"
           slotDuration="00:30:00"
-          events={events}
+          slotEventOverlap={false}
+          events={calendarEvents}
           eventClick={handleEventClick}
+          eventContent={renderEventContent}
           eventTextColor="#ffffff"
           height="100%"
           expandRows={true}
         />
       </div>
 
-      <EventDetailModal
-        isOpen={selectedEvent !== null}
-        event={selectedEvent}
-        onClose={() => setSelectedEvent(null)}
-      />
+      {!onSelectEvent && (
+        <EventDetailModal
+          isOpen={selectedEvent !== null}
+          event={selectedEvent}
+          onClose={() => setSelectedEvent(null)}
+        />
+      )}
     </div>
   )
 }
