@@ -12,6 +12,7 @@ connect_args = (
 engine = create_engine(settings.DATABASE_URL, echo=False, connect_args=connect_args)
 
 if settings.DATABASE_URL.startswith("sqlite"):
+
     @event.listens_for(engine, "connect")
     def _enable_sqlite_fk(dbapi_conn, _record):
         cur = dbapi_conn.cursor()
@@ -21,6 +22,8 @@ if settings.DATABASE_URL.startswith("sqlite"):
 
 def init_db() -> None:
     """Creates database tables if they do not exist."""
+    import app.models.entities  # noqa: F401
+
     SQLModel.metadata.create_all(engine)
 
 

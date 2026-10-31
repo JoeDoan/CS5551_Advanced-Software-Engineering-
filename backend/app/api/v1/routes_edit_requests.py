@@ -7,6 +7,11 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlmodel import Session, select
 
 from app.core.database import get_session
+from app.core.security import (
+    SessionPrincipal,
+    require_auth,
+    require_coordinator,
+)
 from app.models.entities import Course, EditRequest, Room, Schedule, TimeSlot, User
 from app.schemas.api_schemas import (
     EditRequestCreate,
@@ -166,6 +171,7 @@ def _apply_approved_schedule_changes(
 def create_edit_request(
     payload: EditRequestCreate,
     session: Session = Depends(get_session),
+    _principal: Optional[SessionPrincipal] = Depends(require_auth),
 ):
     """Submit an instructor schedule change request."""
     sched = session.get(Schedule, payload.schedule_id)
@@ -262,6 +268,7 @@ def review_edit_request(
     request_id: int,
     payload: EditRequestReview,
     session: Session = Depends(get_session),
+    _principal: Optional[SessionPrincipal] = Depends(require_coordinator),
 ):
     """Approve or reject a pending edit request and update schedule on approval."""
     er = session.get(EditRequest, request_id)
@@ -299,6 +306,7 @@ def review_edit_request(
 def delete_edit_request(
     request_id: int,
     session: Session = Depends(get_session),
+    _principal: Optional[SessionPrincipal] = Depends(require_auth),
 ):
     """Delete an edit request."""
     er = session.get(EditRequest, request_id)

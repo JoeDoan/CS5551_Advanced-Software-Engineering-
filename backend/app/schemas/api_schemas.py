@@ -132,6 +132,10 @@ class ScheduleEventResponse(BaseModel):
     id: int
     semester_id: int
     course_id: int
+    user_id: Optional[int] = None
+    room_id: Optional[int] = None
+    time_slot_id: Optional[int] = None
+    department: Optional[str] = None
     course_code: str
     course_name: str
     instructor_name: str
@@ -236,6 +240,15 @@ class MultiSemesterSimulationResponse(BaseModel):
     final_priorities: Dict[str, int]
 
 
+class ScheduleCreateRequest(BaseModel):
+    semester_id: int
+    course_id: int
+    user_id: int
+    room_id: int
+    time_slot_id: int
+    status: str = "confirmed"
+
+
 class ScheduleOverrideRequest(BaseModel):
     room_id: Optional[int] = None
     time_slot_id: Optional[int] = None
@@ -266,3 +279,49 @@ class EditRequestResponse(BaseModel):
     reviewer_notes: Optional[str] = None
     status: str
     created_at: Optional[str] = None
+
+
+class LoginRequest(BaseModel):
+    identifier: Optional[str] = None
+    email: Optional[str] = None
+    username: Optional[str] = None
+    password: str
+
+
+class AuthUserResponse(BaseModel):
+    id: int
+    email: str
+    username: str
+    full_name: str
+    role: str
+    department: str
+    linked_user_id: Optional[int] = None
+
+
+class LoginResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    session_id: str
+    expires_at: str
+    user: AuthUserResponse
+
+
+class SessionMeResponse(BaseModel):
+    session_id: str
+    expires_at: str
+    user: AuthUserResponse
+
+
+class LogoutResponse(BaseModel):
+    status: str = "logged_out"
+    revoked_session_id: str
+
+
+class DemoAccountResponse(BaseModel):
+    email: str
+    username: str
+    full_name: str
+    role: str
+    department: str
+    password: str
+    linked_user_id: Optional[int] = None

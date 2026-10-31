@@ -1,6 +1,8 @@
 import os
 
 os.environ.setdefault("AUTO_SEED", "false")
+os.environ.setdefault("REQUIRE_AUTH", "false")
+
 
 import pytest
 from fastapi.testclient import TestClient

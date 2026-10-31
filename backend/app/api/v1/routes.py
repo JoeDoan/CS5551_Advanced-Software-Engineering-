@@ -11,6 +11,7 @@ from app.schemas.api_schemas import (
 from app.models.entities import Schedule, Course, User, Room, TimeSlot
 from app.api.v1 import (
     routes_analytics,
+    routes_auth,
     routes_courses,
     routes_edit_requests,
     routes_export,
@@ -24,6 +25,9 @@ from app.api.v1 import (
 router = APIRouter()
 
 # Mount dedicated CRUD and Catalog routers
+router.include_router(
+    routes_auth.router, prefix="/auth", tags=["Authentication"]
+)
 router.include_router(routes_courses.router, prefix="/courses", tags=["Courses"])
 router.include_router(routes_rooms.router, prefix="/rooms", tags=["Rooms"])
 router.include_router(
@@ -83,6 +87,10 @@ def get_schedule(
                 id=sched.id,
                 semester_id=sched.semester_id,
                 course_id=sched.course_id,
+                user_id=sched.user_id,
+                room_id=sched.room_id,
+                time_slot_id=sched.time_slot_id,
+                department=course.department,
                 course_code=course.course_code,
                 course_name=course.course_name,
                 instructor_name=user.full_name,

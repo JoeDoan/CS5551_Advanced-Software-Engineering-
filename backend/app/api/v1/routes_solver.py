@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, Query
 from sqlmodel import Session, select
 
 from app.core.database import get_session
+from app.core.security import SessionPrincipal, require_coordinator
 from app.core.seeder import seed_database
 from app.models.entities import Semester, User
 from app.schemas.api_schemas import (
@@ -20,8 +21,11 @@ router = APIRouter()
 
 @router.post("/admin/seed", response_model=SeedResponse, tags=["Admin"])
 def trigger_seed_database(
-    force_reset: bool = Query(default=False, description="Reset existing records before seeding"),
+    force_reset: bool = Query(
+        default=False, description="Reset existing records before seeding"
+    ),
     session: Session = Depends(get_session),
+    _principal: Optional[SessionPrincipal] = Depends(require_coordinator),
 ):
     """Populate SQLite with the UMKC catalog, faculty, rooms, and time slots (idempotent)."""
     counts = seed_database(session=session, force_reset=force_reset)
@@ -32,6 +36,7 @@ def trigger_seed_database(
 def trigger_solver_run(
     payload: SolverRunRequest,
     session: Session = Depends(get_session),
+    _principal: Optional[SessionPrincipal] = Depends(require_coordinator),
 ):
     """Run the CP-SAT solver for a semester and persist the resulting schedule."""
     result = run_solver_for_semester(

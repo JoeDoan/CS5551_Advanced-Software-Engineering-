@@ -1,10 +1,12 @@
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
+from sqlalchemy import delete
 from sqlmodel import Session, select, or_
 from sqlalchemy.exc import IntegrityError
 
 from app.core.database import get_session
-from app.models.entities import Course, Schedule, InstructorPreference
+from app.core.security import SessionPrincipal, require_coordinator
+from app.models.entities import Course, EditRequest, Schedule, InstructorPreference
 from app.schemas.api_schemas import CourseCreate, CourseUpdate, CourseResponse
 
 router = APIRouter()
@@ -34,6 +36,7 @@ def list_courses(
 def create_course(
     payload: CourseCreate,
     session: Session = Depends(get_session),
+    _principal: Optional[SessionPrincipal] = Depends(require_coordinator),
 ):
     """Add a new course to the catalog with duplicate code detection."""
     existing = session.exec(
@@ -79,6 +82,7 @@ def update_course(
     course_id: int,
     payload: CourseUpdate,
     session: Session = Depends(get_session),
+    _principal: Optional[SessionPrincipal] = Depends(require_coordinator),
 ):
     """Update course attributes."""
     course = session.get(Course, course_id)
@@ -126,15 +130,38 @@ def update_course(
 @router.delete("/{course_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_course(
     course_id: int,
+    cascade: bool = Query(
+        default=False,
+        description="Cascade delete dependent schedules, edit requests, and preferences",
+    ),
     session: Session = Depends(get_session),
+    _principal: Optional[SessionPrincipal] = Depends(require_coordinator),
 ):
-    """Delete a course with foreign key dependency protection."""
+    """Delete a course with foreign key dependency protection or cascade cleanup."""
     course = session.get(Course, course_id)
     if not course:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Course not found",
         )
+
+    if cascade:
+        sched_ids = list(
+            session.exec(select(Schedule.id).where(Schedule.course_id == course_id)).all()
+        )
+        if sched_ids:
+            session.execute(
+                delete(EditRequest).where(EditRequest.schedule_id.in_(sched_ids))
+            )
+            session.execute(delete(Schedule).where(Schedule.course_id == course_id))
+        session.execute(
+            delete(InstructorPreference).where(
+                InstructorPreference.course_id == course_id
+            )
+        )
+        session.delete(course)
+        session.commit()
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
 
     # Delete guard: check if used in active schedule or instructor preference
     used_sched = session.exec(
@@ -152,3 +179,4 @@ def delete_course(
     session.delete(course)
     session.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+

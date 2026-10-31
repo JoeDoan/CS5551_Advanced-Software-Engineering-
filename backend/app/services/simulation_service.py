@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
 
 from fastapi import HTTPException, status
 from ortools.sat.python import cp_model
@@ -7,10 +7,19 @@ from sqlalchemy import delete
 from sqlmodel import Session, select
 
 from app.core.seeder import seed_database
-from app.models.entities import Course, Room, Schedule, Semester, TimeSlot, User
+from app.models.entities import (
+    Course,
+    EditRequest,
+    Room,
+    Schedule,
+    Semester,
+    TimeSlot,
+    User,
+)
 from app.schemas.api_schemas import (
     InstructorPriorityDelta,
     MultiSemesterSimulationResponse,
+    ScheduleCreateRequest,
     ScheduleEventResponse,
     ScheduleOverrideRequest,
     SemesterSimulationResult,
@@ -54,6 +63,10 @@ def build_schedule_event_response(
         id=sched.id,
         semester_id=sched.semester_id,
         course_id=sched.course_id,
+        user_id=sched.user_id,
+        room_id=sched.room_id,
+        time_slot_id=sched.time_slot_id,
+        department=course.department,
         course_code=course.course_code,
         course_name=course.course_name,
         instructor_name=user.full_name,
@@ -118,62 +131,79 @@ def _resolve_override_target(
     )
 
 
+def _validate_assignment_constraints(
+    session: Session,
+    semester_id: int,
+    course: Course,
+    room: Room,
+    slot: TimeSlot,
+    user: User,
+    exclude_schedule_id: Optional[int] = None,
+) -> None:
+    if room.capacity < course.expected_enrollment:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=(
+                f"Room '{room.room_number}' capacity ({room.capacity}) "
+                f"is less than course '{course.course_code}' expected "
+                f"enrollment ({course.expected_enrollment})"
+            ),
+        )
+
+    if course.requires_lab and room.room_type.lower() != "lab":
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=(
+                f"Course '{course.course_code}' requires a lab room, but room "
+                f"'{room.room_number}' has type '{room.room_type}'"
+            ),
+        )
+
+    room_stmt = select(Schedule).where(
+        Schedule.semester_id == semester_id,
+        Schedule.room_id == room.id,
+        Schedule.time_slot_id == slot.id,
+    )
+    if exclude_schedule_id is not None:
+        room_stmt = room_stmt.where(Schedule.id != exclude_schedule_id)
+    if session.exec(room_stmt).first():
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                f"Room '{room.room_number}' is already booked in time slot "
+                f"{slot.id} for semester {semester_id}"
+            ),
+        )
+
+    inst_stmt = select(Schedule).where(
+        Schedule.semester_id == semester_id,
+        Schedule.user_id == user.id,
+        Schedule.time_slot_id == slot.id,
+    )
+    if exclude_schedule_id is not None:
+        inst_stmt = inst_stmt.where(Schedule.id != exclude_schedule_id)
+    if session.exec(inst_stmt).first():
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                f"Instructor '{user.full_name}' is already assigned to another "
+                f"course in time slot {slot.id} for semester {semester_id}"
+            ),
+        )
+
+
 def _validate_override_constraints(
     session: Session, target: ResolvedOverrideTarget
 ) -> None:
-    if target.room.capacity < target.course.expected_enrollment:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail=(
-                f"Room '{target.room.room_number}' capacity ({target.room.capacity}) "
-                f"is less than course '{target.course.course_code}' expected "
-                f"enrollment ({target.course.expected_enrollment})"
-            ),
-        )
-
-    if target.course.requires_lab and target.room.room_type.lower() != "lab":
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail=(
-                f"Course '{target.course.course_code}' requires a lab room, but room "
-                f"'{target.room.room_number}' has type '{target.room.room_type}'"
-            ),
-        )
-
-    room_conflict = session.exec(
-        select(Schedule).where(
-            Schedule.semester_id == target.schedule.semester_id,
-            Schedule.room_id == target.room.id,
-            Schedule.time_slot_id == target.slot.id,
-            Schedule.id != target.schedule.id,
-        )
-    ).first()
-    if room_conflict:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail=(
-                f"Room '{target.room.room_number}' is already booked in time slot "
-                f"{target.slot.id} for semester {target.schedule.semester_id}"
-            ),
-        )
-
-    inst_conflict = session.exec(
-        select(Schedule).where(
-            Schedule.semester_id == target.schedule.semester_id,
-            Schedule.user_id == target.user.id,
-            Schedule.time_slot_id == target.slot.id,
-            Schedule.id != target.schedule.id,
-        )
-    ).first()
-    if inst_conflict:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail=(
-                f"Instructor '{target.user.full_name}' is already assigned to another "
-                f"course in time slot {target.slot.id} for semester "
-                f"{target.schedule.semester_id}"
-            ),
-        )
+    _validate_assignment_constraints(
+        session=session,
+        semester_id=target.schedule.semester_id,
+        course=target.course,
+        room=target.room,
+        slot=target.slot,
+        user=target.user,
+        exclude_schedule_id=target.schedule.id,
+    )
 
 
 def run_multi_semester_simulation(
@@ -204,9 +234,7 @@ def run_multi_semester_simulation(
     resolved_semesters: List[Semester] = []
     for sid in semester_ids:
         sem = session.exec(
-            select(Semester).where(
-                (Semester.id == sid) | (Semester.semester_id == sid)
-            )
+            select(Semester).where((Semester.id == sid) | (Semester.semester_id == sid))
         ).first()
         if sem is None:
             raise HTTPException(
@@ -224,9 +252,7 @@ def run_multi_semester_simulation(
             session.add(db_user)
         session.commit()
     else:
-        db_scores = {
-            u.id: u.priority_score for u in session.exec(select(User)).all()
-        }
+        db_scores = {u.id: u.priority_score for u in session.exec(select(User)).all()}
         for u in loader.users:
             if u["user_id"] in db_scores:
                 u["priority_points"] = db_scores[u["user_id"]]
@@ -301,9 +327,7 @@ def run_multi_semester_simulation(
             for r in report.values()
             if r.get("has_preferences") and r.get("satisfaction_rate") is not None
         ]
-        avg_satisfaction = (
-            round(sum(rates) / len(rates) * 100.0, 2) if rates else 100.0
-        )
+        avg_satisfaction = round(sum(rates) / len(rates) * 100.0, 2) if rates else 100.0
 
         deltas: List[InstructorPriorityDelta] = []
         for inst_name, rep in report.items():
@@ -328,6 +352,17 @@ def run_multi_semester_simulation(
                 )
             )
 
+        existing_sched_ids = list(
+            session.exec(
+                select(Schedule.id).where(Schedule.semester_id == sem.id)
+            ).all()
+        )
+        if existing_sched_ids:
+            session.execute(
+                delete(EditRequest).where(
+                    EditRequest.schedule_id.in_(existing_sched_ids)
+                )
+            )
         session.execute(delete(Schedule).where(Schedule.semester_id == sem.id))
         scheduled_count = 0
         for c in courses:
@@ -390,6 +425,89 @@ def run_multi_semester_simulation(
         results=results,
         final_priorities=final_priorities,
     )
+
+
+def create_schedule_assignment(
+    session: Session,
+    payload: ScheduleCreateRequest,
+) -> ScheduleEventResponse:
+    """Create a manually scheduled course section after constraint validation."""
+    sem = session.get(Semester, payload.semester_id)
+    if sem is None:
+        sem = session.exec(
+            select(Semester).where(Semester.semester_id == payload.semester_id)
+        ).first()
+    if sem is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Semester {payload.semester_id} not found",
+        )
+
+    course = session.get(Course, payload.course_id)
+    if course is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Course {payload.course_id} not found",
+        )
+
+    user = session.get(User, payload.user_id)
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User {payload.user_id} not found",
+        )
+
+    room = session.get(Room, payload.room_id)
+    if room is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Room {payload.room_id} not found",
+        )
+
+    slot = session.get(TimeSlot, payload.time_slot_id)
+    if slot is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Time slot {payload.time_slot_id} not found",
+        )
+
+    _validate_assignment_constraints(
+        session=session,
+        semester_id=sem.id,
+        course=course,
+        room=room,
+        slot=slot,
+        user=user,
+    )
+
+    sched = Schedule(
+        semester_id=sem.id,
+        course_id=course.id,
+        user_id=user.id,
+        room_id=room.id,
+        time_slot_id=slot.id,
+        status=payload.status or "confirmed",
+    )
+    session.add(sched)
+    session.commit()
+    session.refresh(sched)
+    return build_schedule_event_response(session, sched)
+
+
+def delete_schedule_assignment(
+    session: Session,
+    schedule_id: int,
+) -> None:
+    """Delete a scheduled section and any dependent edit requests."""
+    sched = session.get(Schedule, schedule_id)
+    if sched is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Schedule {schedule_id} not found",
+        )
+    session.execute(delete(EditRequest).where(EditRequest.schedule_id == schedule_id))
+    session.delete(sched)
+    session.commit()
 
 
 def override_schedule_assignment(

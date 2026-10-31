@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlmodel import Session, select, or_
 
 from app.core.database import get_session
+from app.core.security import SessionPrincipal, require_auth
 from app.models.entities import InstructorPreference, User, Semester, Course, TimeSlot
 from app.schemas.api_schemas import PreferenceCreate, PreferenceResponse
 
@@ -87,8 +88,20 @@ def submit_preference(
     payload: PreferenceCreate,
     response: Response,
     session: Session = Depends(get_session),
+    principal: Optional[SessionPrincipal] = Depends(require_auth),
 ):
     """Submit instructor availability and course preferences with idempotent upsert."""
+    if (
+        principal is not None
+        and principal.role == "instructor"
+        and principal.linked_user_id is not None
+        and payload.user_id != principal.linked_user_id
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Instructors can only modify their own preferences.",
+        )
+
     # 1. Validate User
     user = session.get(User, payload.user_id)
     if not user:
@@ -150,7 +163,9 @@ def submit_preference(
 
     # 5. Populate and resolve preferences
     pref.preferred_days = payload.preferred_days
-    resolved_slots = resolve_slots(session, payload.preferred_slot_ids, payload.preferred_slots, course)
+    resolved_slots = resolve_slots(
+        session, payload.preferred_slot_ids, payload.preferred_slots, course
+    )
     pref.preferred_slots = resolved_slots
     pref.preferred_rooms = payload.preferred_rooms
 
@@ -162,7 +177,9 @@ def submit_preference(
 
 @router.get("", response_model=List[PreferenceResponse])
 def get_preferences(
-    user_id: Optional[int] = Query(default=None, description="Filter by instructor ID (optional for coordinator)"),
+    user_id: Optional[int] = Query(
+        default=None, description="Filter by instructor ID (optional for coordinator)"
+    ),
     semester_id: Optional[int] = Query(default=None, description="Filter by semester ID"),
     course_id: Optional[int] = Query(default=None, description="Filter by course ID"),
     session: Session = Depends(get_session),
@@ -197,6 +214,7 @@ def get_preference(
 def delete_preference(
     preference_id: int,
     session: Session = Depends(get_session),
+    principal: Optional[SessionPrincipal] = Depends(require_auth),
 ):
     """Delete an instructor preference record."""
     pref = session.get(InstructorPreference, preference_id)
@@ -205,6 +223,17 @@ def delete_preference(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Preference not found",
         )
+    if (
+        principal is not None
+        and principal.role == "instructor"
+        and principal.linked_user_id is not None
+        and pref.user_id != principal.linked_user_id
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Instructors can only modify their own preferences.",
+        )
     session.delete(pref)
     session.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+

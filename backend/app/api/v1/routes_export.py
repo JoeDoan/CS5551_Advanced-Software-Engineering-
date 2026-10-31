@@ -10,8 +10,17 @@ from sqlalchemy import delete
 from sqlmodel import Session, select
 
 from app.core.database import get_session
+from app.core.security import SessionPrincipal, require_coordinator
 from app.core.seeder import seed_database
-from app.models.entities import Course, Room, Schedule, Semester, TimeSlot, User
+from app.models.entities import (
+    Course,
+    EditRequest,
+    Room,
+    Schedule,
+    Semester,
+    TimeSlot,
+    User,
+)
 
 router = APIRouter()
 
@@ -283,6 +292,7 @@ def export_schedules_ics(
 def clone_semester_schedules(
     payload: CloneSemesterRequest,
     session: Session = Depends(get_session),
+    _principal: Optional[SessionPrincipal] = Depends(require_coordinator),
 ):
     """Clone all schedule rows from source_semester_id into target_semester_id."""
     if payload.source_semester_id == payload.target_semester_id:
@@ -328,6 +338,11 @@ def clone_semester_schedules(
         )
 
     if existing_target and payload.overwrite:
+        target_sched_ids = [row.id for row in existing_target if row.id is not None]
+        if target_sched_ids:
+            session.execute(
+                delete(EditRequest).where(EditRequest.schedule_id.in_(target_sched_ids))
+            )
         session.execute(
             delete(Schedule).where(Schedule.semester_id == tgt_sem.id)
         )

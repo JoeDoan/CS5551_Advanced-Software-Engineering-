@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, Set, Tuple
 
 from fastapi import HTTPException, status
 from ortools.sat.python import cp_model
@@ -6,7 +6,15 @@ from sqlalchemy import delete
 from sqlmodel import Session, select
 
 from app.core.seeder import seed_database
-from app.models.entities import Schedule, Semester
+from app.models.entities import (
+    Course,
+    EditRequest,
+    Room,
+    Schedule,
+    Semester,
+    TimeSlot,
+    User,
+)
 from app.solver.data_loader import DataLoader
 from app.solver.engine import (
     DATE,
@@ -17,6 +25,91 @@ from app.solver.engine import (
 )
 
 SOLVER_TIME_LIMIT_SECONDS = 30.0
+
+
+def _schedule_extra_sqlite_courses(
+    session: Session,
+    semester_id: int,
+    json_course_ids: Set[int],
+    json_course_names: Set[str],
+    occupied_room_slots: Set[Tuple[int, int]],
+    occupied_inst_slots: Set[Tuple[int, int]],
+    inst_load: Dict[int, int],
+) -> int:
+    all_courses = session.exec(select(Course).order_by(Course.id)).all()
+    extra_courses = [
+        course
+        for course in all_courses
+        if course.id not in json_course_ids
+        and course.course_name not in json_course_names
+    ]
+    if not extra_courses:
+        return 0
+
+    all_rooms = session.exec(select(Room).order_by(Room.capacity, Room.id)).all()
+    all_slots = session.exec(select(TimeSlot).order_by(TimeSlot.id)).all()
+    all_instructors = session.exec(
+        select(User).where(User.role == "instructor").order_by(User.id)
+    ).all()
+    if not all_rooms or not all_slots or not all_instructors:
+        return 0
+
+    added = 0
+    for extra in extra_courses:
+        eligible_rooms = [
+            room
+            for room in all_rooms
+            if room.capacity >= extra.expected_enrollment
+            and (not extra.requires_lab or room.room_type.lower() == "lab")
+        ]
+        if not eligible_rooms:
+            continue
+
+        dept_upper = extra.department.upper()
+        ranked_instructors = sorted(
+            all_instructors,
+            key=lambda u: (
+                0 if u.department.upper() == dept_upper else 1,
+                inst_load.get(u.id, 0),
+                u.id or 0,
+            ),
+        )
+
+        placed = False
+        for slot in all_slots:
+            if placed:
+                break
+            for room in eligible_rooms:
+                if (room.id, slot.id) in occupied_room_slots:
+                    continue
+                chosen_inst = next(
+                    (
+                        inst
+                        for inst in ranked_instructors
+                        if (inst.id, slot.id) not in occupied_inst_slots
+                    ),
+                    None,
+                )
+                if chosen_inst is None:
+                    continue
+                session.add(
+                    Schedule(
+                        semester_id=semester_id,
+                        course_id=extra.id,
+                        user_id=chosen_inst.id,
+                        room_id=room.id,
+                        time_slot_id=slot.id,
+                        status="confirmed",
+                    )
+                )
+                occupied_room_slots.add((room.id, slot.id))
+                occupied_inst_slots.add((chosen_inst.id, slot.id))
+                inst_load[chosen_inst.id] = inst_load.get(chosen_inst.id, 0) + 1
+                added += 1
+                placed = True
+                break
+
+    return added
 
 
 def run_solver_for_semester(
@@ -65,7 +158,12 @@ def run_solver_for_semester(
     room_caps, course_enrolls, room_layouts = get_metadata(loader)
 
     model, X, Y, Z, _ = build_schedule_model(
-        profiles, DATE, class_room, instructors, courses, slots,
+        profiles,
+        DATE,
+        class_room,
+        instructors,
+        courses,
+        slots,
         room_capacities=room_caps,
         course_enrollments=course_enrolls,
         room_layouts=room_layouts,
@@ -81,45 +179,107 @@ def run_solver_for_semester(
     if solve_status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="Solver could not find a feasible schedule satisfying all hard constraints.",
+            detail=(
+                "Solver could not find a feasible schedule satisfying all "
+                "hard constraints."
+            ),
         )
     status_str = "OPTIMAL" if solve_status == cp_model.OPTIMAL else "FEASIBLE"
     wall_time = round(solver.WallTime(), 4)
 
     report = evaluate_satisfaction_and_update(
-        solver, profiles, X, Y, Z, DATE, class_room, instructors, courses, slots,
-        room_layouts=room_layouts, loader=loader,
+        solver,
+        profiles,
+        X,
+        Y,
+        Z,
+        DATE,
+        class_room,
+        instructors,
+        courses,
+        slots,
+        room_layouts=room_layouts,
+        loader=loader,
     )
-    rates = [r["satisfaction_rate"] for r in report.values() if r.get("has_preferences")]
+    rates = [
+        r["satisfaction_rate"] for r in report.values() if r.get("has_preferences")
+    ]
     avg_satisfaction = round(sum(rates) / len(rates) * 100.0, 2) if rates else 100.0
 
     inst_ids = {u["name"]: u["user_id"] for u in loader.get_instructors()}
     course_ids = {c["course_name"]: c["course_id"] for c in loader.courses}
     room_ids = {r["room_number"]: r["room_id"] for r in loader.rooms}
 
+    db_course_ids = {c.id for c in session.exec(select(Course)).all()}
+    db_room_ids = {r.id for r in session.exec(select(Room)).all()}
+    db_user_ids = {u.id for u in session.exec(select(User)).all()}
+
+    old_sched_ids = list(
+        session.exec(
+            select(Schedule.id).where(Schedule.semester_id == semester.id)
+        ).all()
+    )
+    if old_sched_ids:
+        session.execute(
+            delete(EditRequest).where(EditRequest.schedule_id.in_(old_sched_ids))
+        )
     session.execute(delete(Schedule).where(Schedule.semester_id == semester.id))
+
+    occupied_room_slots: Set[Tuple[int, int]] = set()
+    occupied_inst_slots: Set[Tuple[int, int]] = set()
+    inst_load: Dict[int, int] = {}
     scheduled_count = 0
+
     for c in courses:
         for i in instructors:
             if (i, c) not in Z or solver.Value(Z[i, c]) != 1:
                 continue
             placement = next(
-                ((r, s) for r in class_room for s in slots
-                 if (r, s, i, c) in Y and solver.Value(Y[r, s, i, c]) == 1),
+                (
+                    (r, s)
+                    for r in class_room
+                    for s in slots
+                    if (r, s, i, c) in Y and solver.Value(Y[r, s, i, c]) == 1
+                ),
                 None,
             )
             if placement is None:
                 continue
             room_number, slot_id = placement
-            session.add(Schedule(
-                semester_id=semester.id,
-                course_id=course_ids[c],
-                user_id=inst_ids[i],
-                room_id=room_ids[room_number],
-                time_slot_id=int(slot_id),
-                status="confirmed",
-            ))
+            cid = course_ids[c]
+            uid = inst_ids[i]
+            rid = room_ids[room_number]
+            sid = int(slot_id)
+            if (
+                cid not in db_course_ids
+                or uid not in db_user_ids
+                or rid not in db_room_ids
+            ):
+                continue
+            session.add(
+                Schedule(
+                    semester_id=semester.id,
+                    course_id=cid,
+                    user_id=uid,
+                    room_id=rid,
+                    time_slot_id=sid,
+                    status="confirmed",
+                )
+            )
+            occupied_room_slots.add((rid, sid))
+            occupied_inst_slots.add((uid, sid))
+            inst_load[uid] = inst_load.get(uid, 0) + 1
             scheduled_count += 1
+
+    scheduled_count += _schedule_extra_sqlite_courses(
+        session=session,
+        semester_id=semester.id,
+        json_course_ids=set(course_ids.values()),
+        json_course_names=set(course_ids.keys()),
+        occupied_room_slots=occupied_room_slots,
+        occupied_inst_slots=occupied_inst_slots,
+        inst_load=inst_load,
+    )
     session.commit()
 
     return {

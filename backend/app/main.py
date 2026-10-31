@@ -2,8 +2,10 @@ import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlmodel import Session
 from app.core.config import settings
-from app.core.database import init_db
+from app.core.database import engine, init_db
+from app.core.security import ensure_auth_accounts
 from app.core.seeder import seed_database
 from app.api.v1.routes import router as api_v1_router
 
@@ -18,7 +20,15 @@ async def lifespan(app: FastAPI):
         try:
             seed_database()
         except Exception as exc:  # e.g. stale local DB from an older schema
-            logger.warning("Auto-seed skipped: %s (delete backend/optisched.db to rebuild)", exc)
+            logger.warning(
+                "Auto-seed skipped: %s (delete backend/optisched.db to rebuild)",
+                exc,
+            )
+    try:
+        with Session(engine) as session:
+            ensure_auth_accounts(session)
+    except Exception as exc:
+        logger.warning("Auth bootstrap skipped: %s", exc)
     yield
 
 

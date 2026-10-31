@@ -104,3 +104,26 @@ class EditRequest(SQLModel, table=True):
     requested_changes: str
     status: str = "pending"  # pending, approved, rejected
     created_at: Optional[str] = None
+
+
+class AuthCredential(SQLModel, table=True):
+    __tablename__ = "auth_credentials"
+    id: Optional[int] = Field(default=None, primary_key=True)
+    email: str = Field(unique=True, index=True)
+    username: str = Field(unique=True, index=True)
+    full_name: str
+    role: str = "instructor"
+    department: str = "CS"
+    linked_user_id: Optional[int] = Field(default=None, foreign_key="users.id")
+    password_hash: str
+    is_active: bool = True
+
+
+class AuthSession(SQLModel, table=True):
+    __tablename__ = "auth_sessions"
+    id: Optional[int] = Field(default=None, primary_key=True)
+    token_jti: str = Field(unique=True, index=True)
+    credential_id: int = Field(foreign_key="auth_credentials.id")
+    expires_at: str
+    revoked: bool = False
+    created_at: str

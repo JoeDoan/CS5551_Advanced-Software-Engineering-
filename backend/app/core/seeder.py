@@ -2,11 +2,12 @@ import json
 import os
 from typing import Any, Dict, List, Optional, Tuple
 
-from sqlalchemy import delete, func
+from sqlalchemy import delete, func, update
 from sqlmodel import Session, select
 
 from app.core.database import engine, init_db
 from app.models.entities import (
+    AuthCredential,
     Building,
     Campus,
     Course,
@@ -85,6 +86,7 @@ def _count(session: Session, model) -> int:
 
 def _reset_tables(session: Session) -> None:
     """Delete children before parents so foreign keys never block the reset."""
+    session.execute(update(AuthCredential).values(linked_user_id=None))
     for model in (EditRequest, Schedule, InstructorPreference, Course, Room,
                   Building, Campus, TimeSlot, Semester, User):
         session.execute(delete(model))
@@ -223,6 +225,11 @@ def seed_database(
         _seed_semesters(session, data_dir)
         _seed_preferences(session, data_dir, slot_labels)
         _seed_schedules(session, data_dir)
+
+        if not _is_empty(session, AuthCredential):
+            from app.core.security import ensure_auth_accounts
+
+            ensure_auth_accounts(session)
 
         return {name: _count(session, model) for name, model in _MODELS_WITH_COUNTS}
     finally:

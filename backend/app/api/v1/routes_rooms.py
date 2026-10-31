@@ -1,10 +1,12 @@
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
+from sqlalchemy import delete
 from sqlmodel import Session, select
 from sqlalchemy.exc import IntegrityError
 
 from app.core.database import get_session
-from app.models.entities import Room, Building, Schedule
+from app.core.security import SessionPrincipal, require_coordinator
+from app.models.entities import Room, Building, EditRequest, Schedule
 from app.schemas.api_schemas import RoomCreate, RoomUpdate, RoomResponse
 
 router = APIRouter()
@@ -41,6 +43,7 @@ def list_rooms(
 def create_room(
     payload: RoomCreate,
     session: Session = Depends(get_session),
+    _principal: Optional[SessionPrincipal] = Depends(require_coordinator),
 ):
     """Add a classroom or lab with foreign key and unique constraint validation."""
     building = session.get(Building, payload.building_id)
@@ -106,6 +109,7 @@ def update_room(
     room_id: int,
     payload: RoomUpdate,
     session: Session = Depends(get_session),
+    _principal: Optional[SessionPrincipal] = Depends(require_coordinator),
 ):
     """Update room attributes."""
     room = session.get(Room, room_id)
@@ -165,15 +169,33 @@ def update_room(
 @router.delete("/{room_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_room(
     room_id: int,
+    cascade: bool = Query(
+        default=False,
+        description="Cascade delete dependent schedules and edit requests",
+    ),
     session: Session = Depends(get_session),
+    _principal: Optional[SessionPrincipal] = Depends(require_coordinator),
 ):
-    """Delete a room with active schedule protection."""
+    """Delete a room with active schedule protection or cascade cleanup."""
     room = session.get(Room, room_id)
     if not room:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Room not found",
         )
+
+    if cascade:
+        sched_ids = list(
+            session.exec(select(Schedule.id).where(Schedule.room_id == room_id)).all()
+        )
+        if sched_ids:
+            session.execute(
+                delete(EditRequest).where(EditRequest.schedule_id.in_(sched_ids))
+            )
+            session.execute(delete(Schedule).where(Schedule.room_id == room_id))
+        session.delete(room)
+        session.commit()
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
 
     # Delete guard: check if used in active schedule
     used = session.exec(select(Schedule.id).where(Schedule.room_id == room_id)).first()
@@ -186,3 +208,4 @@ def delete_room(
     session.delete(room)
     session.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
