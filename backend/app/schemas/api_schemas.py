@@ -30,10 +30,18 @@ DAY_ALIASES = {
 }
 
 
+class DatabaseHealth(BaseModel):
+    schema_ok: bool
+    issues: List[str] = Field(default_factory=list)
+    seed_error: Optional[str] = None
+    rebuilt_from: Optional[str] = None
+
+
 class HealthResponse(BaseModel):
     status: str = "healthy"
     version: str = "1.0.0"
     timestamp: str
+    database: Optional[DatabaseHealth] = None
 
 
 class CourseBase(BaseModel):

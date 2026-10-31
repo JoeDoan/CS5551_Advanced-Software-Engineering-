@@ -1,10 +1,11 @@
 from datetime import datetime, timezone
 from typing import List
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Request
 from sqlmodel import Session, select
 
 from app.core.database import get_session
 from app.schemas.api_schemas import (
+    DatabaseHealth,
     HealthResponse,
     ScheduleEventResponse,
     SemesterResponse,
@@ -73,12 +74,22 @@ def list_semesters(session: Session = Depends(get_session)):
 
 
 @router.get("/health", response_model=HealthResponse, tags=["System"])
-def health_check():
-    """System health check endpoint."""
+def health_check(request: Request):
+    """System health, including whether the database schema and seed are in good shape."""
+    report = getattr(request.app.state, "startup_report", None)
+    database = None
+    if report is not None:
+        database = DatabaseHealth(
+            schema_ok=not report.schema_issues,
+            issues=report.schema_issues,
+            seed_error=report.seed_error,
+            rebuilt_from=report.rebuilt_backup,
+        )
     return HealthResponse(
-        status="healthy",
+        status="healthy" if report is None or report.ok else "degraded",
         version="1.0.0",
         timestamp=datetime.now(timezone.utc).isoformat(),
+        database=database,
     )
 
 
