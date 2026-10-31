@@ -14,6 +14,7 @@ from app.api.v1 import (
     routes_analytics,
     routes_assignments,
     routes_auth,
+    routes_copilot,
     routes_courses,
     routes_edit_requests,
     routes_export,
@@ -59,6 +60,9 @@ router.include_router(
 )
 router.include_router(
     routes_scenarios.router, prefix="/scenarios", tags=["Scenarios"]
+)
+router.include_router(
+    routes_copilot.router, prefix="/copilot", tags=["Copilot"]
 )
 
 
