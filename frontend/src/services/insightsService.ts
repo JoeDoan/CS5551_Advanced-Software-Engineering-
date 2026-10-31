@@ -193,6 +193,50 @@ export const insightsService = {
   },
 }
 
+export interface CopilotStatus {
+  llm_enabled: boolean
+  model: string | null
+  note: string
+}
+
+export interface ParseResult {
+  prompt: string
+  parser_used: 'llm' | 'rules'
+  llm_status: string
+  spec: ScenarioSpec
+  warnings: string[]
+  understood: boolean
+  rules_agree: boolean | null
+}
+
+export interface AskResult {
+  parse: ParseResult | null
+  result: ScenarioResponse
+  explanation: string[]
+}
+
+export const copilotService = {
+  async getStatus(): Promise<CopilotStatus> {
+    const res = await apiClient.get<CopilotStatus>('/copilot/status')
+    return res.data
+  },
+
+  async parse(prompt: string, useLlm: boolean): Promise<ParseResult> {
+    // Claude can take several seconds; the 10s default timeout is too short.
+    const res = await apiClient.post<ParseResult>(
+      '/copilot/parse',
+      { prompt, use_llm: useLlm },
+      { timeout: 90_000 }
+    )
+    return res.data
+  },
+
+  async ask(spec: ScenarioSpec): Promise<AskResult> {
+    const res = await apiClient.post<AskResult>('/copilot/ask', { spec }, { timeout: SOLVE_TIMEOUT_MS })
+    return res.data
+  },
+}
+
 // Course names in the seed data already start with the course code.
 export const courseLabel = (code: string, name: string): string =>
   name.startsWith(code) ? name : `${code} ${name}`

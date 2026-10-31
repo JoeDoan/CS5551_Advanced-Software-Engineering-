@@ -3,14 +3,16 @@ import { useAuth } from '../context/AuthContext'
 import { BottleneckBoard } from '../components/insights/BottleneckBoard'
 import { ForecastPanel } from '../components/insights/ForecastPanel'
 import { WhatIfPanel } from '../components/insights/WhatIfPanel'
+import { AskOptiSched } from '../components/insights/AskOptiSched'
 import { AuthRole } from '../types/api'
 
-type Tab = 'forecast' | 'bottlenecks' | 'whatif'
+type Tab = 'forecast' | 'bottlenecks' | 'whatif' | 'ask'
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'forecast', label: 'Demand Forecast' },
   { id: 'bottlenecks', label: 'Bottlenecks' },
   { id: 'whatif', label: 'What-If Simulator' },
+  { id: 'ask', label: 'Ask OptiSched' },
 ]
 
 export const InsightsPage: React.FC = () => {
@@ -50,6 +52,7 @@ export const InsightsPage: React.FC = () => {
       {tab === 'forecast' && <ForecastPanel />}
       {tab === 'bottlenecks' && <BottleneckBoard />}
       {tab === 'whatif' && <WhatIfPanel role={role} userName={user?.full_name ?? ''} />}
+      {tab === 'ask' && <AskOptiSched role={role} />}
     </div>
   )
 }
