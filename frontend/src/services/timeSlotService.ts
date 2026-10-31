@@ -11,6 +11,16 @@ const MOCK_TIME_SLOTS: TimeSlot[] = [
   { id: 6, day_pattern: 'MW', start_time: '15:30', end_time: '16:45' },
 ]
 
+const FULL_MOCK_TIME_SLOTS: TimeSlot[] = [
+  ...MOCK_TIME_SLOTS,
+  { id: 7, day_pattern: 'TR', start_time: '08:00', end_time: '09:15' },
+  { id: 8, day_pattern: 'TR', start_time: '09:30', end_time: '10:45' },
+  { id: 9, day_pattern: 'TR', start_time: '11:00', end_time: '12:15' },
+  { id: 10, day_pattern: 'TR', start_time: '12:30', end_time: '13:45' },
+  { id: 11, day_pattern: 'TR', start_time: '14:00', end_time: '15:15' },
+  { id: 12, day_pattern: 'TR', start_time: '15:30', end_time: '16:45' },
+]
+
 export const toSlotKey = (slot: Pick<TimeSlot, 'start_time' | 'end_time'>): string =>
   `${slot.start_time}-${slot.end_time}`
 
@@ -33,6 +43,18 @@ export const timeSlotService = {
     } catch {
       console.warn('Backend unavailable, using fallback time slot catalog.')
       return MOCK_TIME_SLOTS
+    }
+  },
+
+  async getAllTimeSlots(): Promise<TimeSlot[]> {
+    try {
+      const response = await apiClient.get<TimeSlot[]>('/time-slots')
+      if (response.data && response.data.length > 0) {
+        return response.data
+      }
+      return FULL_MOCK_TIME_SLOTS
+    } catch {
+      return FULL_MOCK_TIME_SLOTS
     }
   },
 }

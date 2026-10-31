@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { Plus, Trash2, Search } from 'lucide-react'
+import { Plus, Trash2, Edit2, Search } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent, Button, Input, Select, Badge, Modal } from '../ui'
 import { Toast } from '../common/Toast'
 import { roomService } from '../../services/roomService'
 import { Room } from '../../types/api'
 
-export const RoomManager: React.FC = () => {
+export interface RoomManagerProps {
+  onRoomsChanged?: (rooms: Room[]) => void
+}
+
+export const RoomManager: React.FC<RoomManagerProps> = ({ onRoomsChanged }) => {
   const [rooms, setRooms] = useState<Room[]>([])
   const [search, setSearch] = useState('')
   const [typeFilter, setTypeFilter] = useState('ALL')
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [editingRoom, setEditingRoom] = useState<Room | null>(null)
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
 
   const [roomNumber, setRoomNumber] = useState('')
@@ -21,28 +26,79 @@ export const RoomManager: React.FC = () => {
     roomService.getRooms().then(setRooms)
   }, [])
 
-  const handleAddRoom = async () => {
+  const openAddModal = () => {
+    setEditingRoom(null)
+    setRoomNumber('')
+    setCapacity('40')
+    setRoomType('lecture')
+    setBuildingName('Flarsheim Hall')
+    setIsModalOpen(true)
+  }
+
+  const openEditModal = (room: Room) => {
+    setEditingRoom(room)
+    setRoomNumber(room.room_number)
+    setCapacity(String(room.capacity))
+    setRoomType(room.room_type)
+    setBuildingName(room.building_name || 'Flarsheim Hall')
+    setIsModalOpen(true)
+  }
+
+  const handleSaveRoom = async () => {
     if (!roomNumber.trim()) {
       setToast({ type: 'error', message: 'Room number is required.' })
       return
     }
-    const created = await roomService.createRoom({
+    const payload = {
       room_number: roomNumber.trim(),
       capacity: Number(capacity) || 35,
       room_type: roomType,
-      building_id: 2,
+      building_id: editingRoom?.building_id ?? 2,
       building_name: buildingName,
-    })
-    setRooms((prev) => [...prev, created])
-    setRoomNumber('')
-    setIsModalOpen(false)
-    setToast({ type: 'success', message: `Added room ${created.room_number}` })
+    }
+    try {
+      if (editingRoom) {
+        const updated = await roomService.updateRoom(editingRoom.id, payload)
+        setRooms((prev) => {
+          const next = prev.map((r) => (r.id === editingRoom.id ? updated : r))
+          onRoomsChanged?.(next)
+          return next
+        })
+        setToast({ type: 'success', message: `Updated room ${updated.room_number}` })
+      } else {
+        const created = await roomService.createRoom(payload)
+        setRooms((prev) => {
+          const next = [...prev, created]
+          onRoomsChanged?.(next)
+          return next
+        })
+        setToast({ type: 'success', message: `Added room ${created.room_number}` })
+      }
+      setRoomNumber('')
+      setIsModalOpen(false)
+    } catch (err) {
+      setToast({
+        type: 'error',
+        message: (err as Error).message || 'Failed to save room.',
+      })
+    }
   }
 
   const handleDeleteRoom = async (room: Room) => {
-    await roomService.deleteRoom(room.id)
-    setRooms((prev) => prev.filter((r) => r.id !== room.id))
-    setToast({ type: 'success', message: `Removed room ${room.room_number}` })
+    try {
+      await roomService.deleteRoom(room.id)
+      setRooms((prev) => {
+        const next = prev.filter((r) => r.id !== room.id)
+        onRoomsChanged?.(next)
+        return next
+      })
+      setToast({ type: 'success', message: `Removed room ${room.room_number}` })
+    } catch (err) {
+      setToast({
+        type: 'error',
+        message: (err as Error).message || `Failed to remove room ${room.room_number}.`,
+      })
+    }
   }
 
   const filtered = rooms.filter((r) => {
@@ -58,15 +114,20 @@ export const RoomManager: React.FC = () => {
   return (
     <Card>
       <CardHeader>
-        <div>
-          <CardTitle>Classroom & Lab Inventory</CardTitle>
-          <p className="text-xs text-slate-500 mt-0.5">Manage room capacities and facility types</p>
+        <div className="flex flex-wrap items-center gap-2.5">
+          <div>
+            <CardTitle>Classroom & Lab Inventory</CardTitle>
+            <p className="text-xs text-slate-500 mt-0.5">Manage room capacities and facility types</p>
+          </div>
+          <Badge variant="success" data-testid="room-count-badge">
+            {rooms.length} Facilities
+          </Badge>
         </div>
         <Button
           size="sm"
           variant="primary"
           leftIcon={<Plus className="w-4 h-4" />}
-          onClick={() => setIsModalOpen(true)}
+          onClick={openAddModal}
           data-testid="add-room-btn"
         >
           Add Room
@@ -121,7 +182,15 @@ export const RoomManager: React.FC = () => {
                       {room.room_type}
                     </Badge>
                   </td>
-                  <td className="py-2.5 px-3 text-right">
+                  <td className="py-2.5 px-3 text-right space-x-1">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => openEditModal(room)}
+                      data-testid={`edit-room-${room.id}`}
+                    >
+                      <Edit2 className="w-3.5 h-3.5" />
+                    </Button>
                     <Button
                       size="sm"
                       variant="ghost"
@@ -141,13 +210,13 @@ export const RoomManager: React.FC = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="Add Classroom or Lab"
+        title={editingRoom ? 'Edit Classroom or Lab' : 'Add Classroom or Lab'}
         footer={
           <>
             <Button variant="secondary" size="sm" onClick={() => setIsModalOpen(false)}>
               Cancel
             </Button>
-            <Button variant="primary" size="sm" onClick={handleAddRoom} data-testid="save-room-btn">
+            <Button variant="primary" size="sm" onClick={handleSaveRoom} data-testid="save-room-btn">
               Save Room
             </Button>
           </>

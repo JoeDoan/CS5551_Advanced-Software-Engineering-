@@ -1,4 +1,6 @@
 export * from './apiClient'
+export * from './authService'
+export * from './instructorService'
 export * from './scheduleService'
 export * from './courseService'
 export * from './roomService'

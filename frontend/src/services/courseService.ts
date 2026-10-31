@@ -1,4 +1,4 @@
-import { apiClient } from './apiClient'
+import { apiClient, hasHttpStatus } from './apiClient'
 import { Course, CourseFilterParams } from '../types/api'
 
 const MOCK_COURSES: Course[] = [
@@ -9,7 +9,8 @@ const MOCK_COURSES: Course[] = [
   { id: 5, course_code: 'CS 5551', course_name: 'Advanced Software Engineering', department: 'CS', credits: 3, expected_enrollment: 30, requires_lab: false },
   { id: 6, course_code: 'ECE 448', course_name: 'Embedded Systems', department: 'ECE', credits: 3, expected_enrollment: 30, requires_lab: true },
   { id: 7, course_code: 'MATH 110', course_name: 'College Algebra', department: 'MATH', credits: 3, expected_enrollment: 60, requires_lab: false },
-  { id: 8, course_code: 'BIOL 108', course_name: 'General Biology I', department: 'CHEM/BIO', credits: 4, expected_enrollment: 55, requires_lab: true },
+  { id: 8, course_code: 'BIOL 108', course_name: 'General Biology I', department: 'BIOL', credits: 4, expected_enrollment: 55, requires_lab: true },
+  { id: 9, course_code: 'CHEM 211', course_name: 'General Chemistry I', department: 'CHEM', credits: 4, expected_enrollment: 48, requires_lab: true },
 ]
 
 export const courseService = {
@@ -50,7 +51,10 @@ export const courseService = {
     try {
       const response = await apiClient.post<Course>('/courses', payload)
       return response.data
-    } catch {
+    } catch (err) {
+      if (hasHttpStatus(err)) {
+        throw err
+      }
       const nextId = MOCK_COURSES.length > 0 ? Math.max(...MOCK_COURSES.map((c) => c.id)) + 1 : 1
       const created: Course = { id: nextId, ...payload }
       MOCK_COURSES.push(created)
@@ -62,7 +66,10 @@ export const courseService = {
     try {
       const response = await apiClient.put<Course>(`/courses/${id}`, payload)
       return response.data
-    } catch {
+    } catch (err) {
+      if (hasHttpStatus(err)) {
+        throw err
+      }
       const idx = MOCK_COURSES.findIndex((c) => c.id === id)
       if (idx === -1) {
         throw new Error(`Course ${id} not found`)
@@ -74,9 +81,12 @@ export const courseService = {
 
   async deleteCourse(id: number): Promise<boolean> {
     try {
-      await apiClient.delete(`/courses/${id}`)
+      await apiClient.delete(`/courses/${id}`, { params: { cascade: true } })
       return true
-    } catch {
+    } catch (err) {
+      if (hasHttpStatus(err)) {
+        throw err
+      }
       const idx = MOCK_COURSES.findIndex((c) => c.id === id)
       if (idx !== -1) {
         MOCK_COURSES.splice(idx, 1)

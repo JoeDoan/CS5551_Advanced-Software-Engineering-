@@ -3,22 +3,30 @@ import { Clock, Check } from 'lucide-react'
 import { Alert, Card, CardHeader, CardTitle, CardContent, Button, Select } from '../components/ui'
 import { Toast } from '../components/common/Toast'
 import { preferenceService } from '../services/preferenceService'
+import { DEFAULT_INSTRUCTORS, instructorService } from '../services/instructorService'
 import { timeSlotService, toSlotKey } from '../services/timeSlotService'
-import { TimeSlot } from '../types/api'
+import { InstructorSummary, TimeSlot } from '../types/api'
+import { useAuth } from '../context/AuthContext'
+
+const toInstructorOptions = (list: InstructorSummary[]) =>
+  list.map((inst) => ({
+    value: String(inst.id),
+    label: `${inst.full_name} (${inst.department})`,
+  }))
 
 export const PreferencesPage: React.FC = () => {
-  const [selectedInstructor, setSelectedInstructor] = useState('1')
+  const { user, isStandaloneFallback } = useAuth()
+  const isLockedInstructor =
+    !isStandaloneFallback && user?.role === 'instructor' && user.linked_user_id !== null
+
+  const [instructorList, setInstructorList] = useState<InstructorSummary[]>(DEFAULT_INSTRUCTORS)
+  const [selectedInstructor, setSelectedInstructor] = useState<string>(() =>
+    isLockedInstructor && user?.linked_user_id ? String(user.linked_user_id) : '1'
+  )
   const [selectedDays, setSelectedDays] = useState<string[]>(['Monday (M)', 'Wednesday (W)'])
   const [selectedSlots, setSelectedSlots] = useState<string[]>([])
   const [toast, setToast] = useState<{ type: 'success' | 'error' | 'warning'; message: string } | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const instructors = [
-    { value: '1', label: 'Dr. Yugyung Lee (Computer Science)' },
-    { value: '2', label: 'Dr. Praveen Rao (Computer Science)' },
-    { value: '3', label: 'Dr. Ghulam Rasool (Electrical & Computer Eng)' },
-    { value: '4', label: 'Dr. Liana Sega (Mathematics)' },
-  ]
 
   const dayOptions = [
     'Monday (M)',
@@ -31,8 +39,38 @@ export const PreferencesPage: React.FC = () => {
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([])
 
   useEffect(() => {
-    timeSlotService.getTimeSlots().then(setTimeSlots)
+    let active = true
+    timeSlotService.getTimeSlots().then((slots) => {
+      if (active) setTimeSlots(slots)
+    })
+    instructorService.getInstructors().then((loaded) => {
+      if (active) setInstructorList(loaded)
+    })
+    return () => {
+      active = false
+    }
   }, [])
+
+  useEffect(() => {
+    if (isLockedInstructor && user?.linked_user_id) {
+      setSelectedInstructor(String(user.linked_user_id))
+    }
+  }, [isLockedInstructor, user?.linked_user_id])
+
+  const instructors = React.useMemo(() => {
+    const base = toInstructorOptions(instructorList)
+    if (
+      isLockedInstructor &&
+      user?.linked_user_id &&
+      !base.some((opt) => opt.value === String(user.linked_user_id))
+    ) {
+      base.unshift({
+        value: String(user.linked_user_id),
+        label: `${user.full_name} (${user.department})`,
+      })
+    }
+    return base
+  }, [instructorList, isLockedInstructor, user])
 
   const toggleDay = (day: string) => {
     setSelectedDays((prev) =>
@@ -115,6 +153,12 @@ export const PreferencesPage: React.FC = () => {
               label="Select Instructor"
               options={instructors}
               value={selectedInstructor}
+              disabled={isLockedInstructor}
+              helperText={
+                isLockedInstructor
+                  ? 'Locked to your authenticated faculty profile.'
+                  : undefined
+              }
               onChange={(e) => setSelectedInstructor(e.target.value)}
               data-testid="instructor-select"
             />

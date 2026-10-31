@@ -1,6 +1,19 @@
-import { apiClient } from './apiClient'
-import { ScheduleEvent, ScheduleFilterParams } from '../types/api'
+import { apiClient, hasHttpStatus } from './apiClient'
+import {
+  ScheduleCreatePayload,
+  ScheduleEvent,
+  ScheduleFilterParams,
+  ScheduleUpdatePayload,
+} from '../types/api'
 import mockScheduleData from '../mocks/scheduleMockData.json'
+import { courseService } from './courseService'
+import { roomService } from './roomService'
+import { instructorService } from './instructorService'
+import { timeSlotService } from './timeSlotService'
+
+const offlineSchedules: ScheduleEvent[] = (mockScheduleData as ScheduleEvent[]).map((item) => ({
+  ...item,
+}))
 
 export const scheduleService = {
   /**
@@ -55,8 +68,51 @@ export const scheduleService = {
       const response = await apiClient.get<ScheduleEvent>(`/schedules/${id}`)
       return response.data
     } catch {
-      const found = (mockScheduleData as ScheduleEvent[]).find((e) => e.id === id)
+      const found = offlineSchedules.find((e) => e.id === id)
       return found || null
+    }
+  },
+
+  async createSchedule(payload: ScheduleCreatePayload): Promise<ScheduleEvent> {
+    try {
+      const response = await apiClient.post<ScheduleEvent>('/schedules', payload)
+      return response.data
+    } catch (err) {
+      if (hasHttpStatus(err)) {
+        throw err
+      }
+      const [courses, rooms, instructors, slots] = await Promise.all([
+        courseService.getCourses(),
+        roomService.getRooms(),
+        instructorService.getInstructors(),
+        timeSlotService.getAllTimeSlots(),
+      ])
+      const course = courses.find((c) => c.id === payload.course_id)
+      const room = rooms.find((r) => r.id === payload.room_id)
+      const instructor = instructors.find((i) => i.id === payload.user_id)
+      const slot = slots.find((s) => s.id === payload.time_slot_id)
+      const nextId =
+        offlineSchedules.length > 0 ? Math.max(...offlineSchedules.map((e) => e.id)) + 1 : 1
+      const created: ScheduleEvent = {
+        id: nextId,
+        semester_id: payload.semester_id,
+        course_id: payload.course_id,
+        course_code: course?.course_code ?? `COURSE ${payload.course_id}`,
+        course_name: course?.course_name ?? 'Scheduled Section',
+        user_id: payload.user_id,
+        instructor_id: payload.user_id,
+        instructor_name: instructor?.full_name ?? `Instructor #${payload.user_id}`,
+        room_id: payload.room_id,
+        room_number: room?.room_number ?? `Room #${payload.room_id}`,
+        time_slot_id: payload.time_slot_id,
+        department: course?.department ?? 'CS',
+        day_pattern: slot?.day_pattern ?? 'MW',
+        start_time: slot?.start_time ?? '09:30',
+        end_time: slot?.end_time ?? '10:45',
+        status: payload.status ?? 'confirmed',
+      }
+      offlineSchedules.push(created)
+      return created
     }
   },
 
@@ -65,18 +121,66 @@ export const scheduleService = {
    */
   async updateSchedule(
     id: number,
-    data: Partial<ScheduleEvent>
+    data: Partial<ScheduleEvent> & ScheduleUpdatePayload
   ): Promise<ScheduleEvent> {
     try {
       const response = await apiClient.patch<ScheduleEvent>(`/schedules/${id}`, data)
       return response.data
-    } catch {
+    } catch (err) {
+      if (hasHttpStatus(err)) {
+        throw err
+      }
       console.warn(`Backend offline: simulating update for schedule event ${id}`)
-      const existing = (mockScheduleData as ScheduleEvent[]).find((e) => e.id === id)
-      if (!existing) {
+      const idx = offlineSchedules.findIndex((e) => e.id === id)
+      if (idx === -1) {
         throw new Error(`Schedule event with ID ${id} not found`)
       }
-      return { ...existing, ...data }
+      const existing = offlineSchedules[idx]
+      const updated: ScheduleEvent = { ...existing, ...data }
+
+      if (data.user_id !== undefined && !data.instructor_name) {
+        const instructors = await instructorService.getInstructors()
+        const inst = instructors.find((i) => i.id === data.user_id)
+        if (inst) {
+          updated.instructor_id = inst.id
+          updated.instructor_name = inst.full_name
+        }
+      }
+      if (data.room_id !== undefined && !data.room_number) {
+        const rooms = await roomService.getRooms()
+        const room = rooms.find((r) => r.id === data.room_id)
+        if (room) {
+          updated.room_number = room.room_number
+        }
+      }
+      if (data.time_slot_id !== undefined && !data.start_time) {
+        const slots = await timeSlotService.getAllTimeSlots()
+        const slot = slots.find((s) => s.id === data.time_slot_id)
+        if (slot) {
+          updated.day_pattern = slot.day_pattern
+          updated.start_time = slot.start_time
+          updated.end_time = slot.end_time
+        }
+      }
+
+      offlineSchedules[idx] = updated
+      return updated
+    }
+  },
+
+  async deleteSchedule(id: number): Promise<boolean> {
+    try {
+      await apiClient.delete(`/schedules/${id}`)
+      return true
+    } catch (err) {
+      if (hasHttpStatus(err)) {
+        throw err
+      }
+      const idx = offlineSchedules.findIndex((e) => e.id === id)
+      if (idx !== -1) {
+        offlineSchedules.splice(idx, 1)
+      }
+      return true
     }
   },
 
@@ -87,7 +191,7 @@ export const scheduleService = {
     semesterId: number,
     filters?: ScheduleFilterParams
   ): ScheduleEvent[] {
-    let result = (mockScheduleData as ScheduleEvent[]).filter(
+    let result = offlineSchedules.filter(
       (item) => item.semester_id === semesterId
     )
 

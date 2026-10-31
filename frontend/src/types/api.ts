@@ -36,15 +36,34 @@ export interface ScheduleEvent {
   course_id: number;
   course_code: string;
   course_name: string;
+  user_id?: number;
   instructor_id?: number;
   instructor_name: string;
   room_id?: number;
   room_number: string;
+  time_slot_id?: number;
   department?: string;
   day_pattern: string;
   start_time: string;
   end_time: string;
   status: string;
+}
+
+export interface ScheduleCreatePayload {
+  semester_id: number;
+  course_id: number;
+  user_id: number;
+  room_id: number;
+  time_slot_id: number;
+  status?: string;
+}
+
+export interface ScheduleUpdatePayload {
+  room_id?: number;
+  time_slot_id?: number;
+  user_id?: number;
+  status?: string;
+  room_number?: string;
 }
 
 export interface CalendarEventItem {
@@ -187,3 +206,48 @@ export interface ApiErrorResponse {
   detail?: string | Array<{ loc?: string[]; msg?: string; type?: string }>;
   status?: number;
 }
+
+export type AuthRole = 'coordinator' | 'instructor';
+
+export interface AuthUser {
+  id: number;
+  email: string;
+  username: string;
+  full_name: string;
+  role: AuthRole;
+  department: string;
+  linked_user_id: number | null;
+}
+
+export interface LoginRequest {
+  identifier: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  access_token: string;
+  token_type: 'bearer';
+  session_id: string;
+  expires_at: string;
+  user: AuthUser;
+}
+
+export interface SessionVerifyResponse {
+  session_id: string;
+  expires_at: string;
+  user: AuthUser;
+}
+
+export interface LogoutResponse {
+  status: 'logged_out';
+  revoked_session_id: string;
+}
+
+export interface InstructorSummary {
+  id: number;
+  full_name: string;
+  email: string;
+  department: string;
+  priority_score: number;
+}
+

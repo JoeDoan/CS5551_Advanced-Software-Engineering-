@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { Plus, Trash2, Edit2, Search } from 'lucide-react'
+import { Plus, Trash2, Edit2, Search, CalendarPlus } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent, Button, Input, Select, Badge, Modal } from '../ui'
 import { Toast } from '../common/Toast'
 import { courseService } from '../../services/courseService'
 import { Course } from '../../types/api'
 
-export const CourseManager: React.FC = () => {
+export interface CourseManagerProps {
+  onScheduleCourse?: (course: Course) => void
+  onCatalogChanged?: (courses: Course[]) => void
+}
+
+export const CourseManager: React.FC<CourseManagerProps> = ({
+  onScheduleCourse,
+  onCatalogChanged,
+}) => {
   const [courses, setCourses] = useState<Course[]>([])
   const [search, setSearch] = useState('')
   const [deptFilter, setDeptFilter] = useState('ALL')
@@ -59,22 +67,48 @@ export const CourseManager: React.FC = () => {
       expected_enrollment: Number(enrollment) || 30,
       requires_lab: requiresLab,
     }
-    if (editingCourse) {
-      const updated = await courseService.updateCourse(editingCourse.id, payload)
-      setCourses((prev) => prev.map((c) => (c.id === editingCourse.id ? updated : c)))
-      setToast({ type: 'success', message: `Updated ${updated.course_code}` })
-    } else {
-      const created = await courseService.createCourse(payload)
-      setCourses((prev) => [...prev, created])
-      setToast({ type: 'success', message: `Added ${created.course_code}` })
+    try {
+      if (editingCourse) {
+        const updated = await courseService.updateCourse(editingCourse.id, payload)
+        setCourses((prev) => {
+          const next = prev.map((c) => (c.id === editingCourse.id ? updated : c))
+          onCatalogChanged?.(next)
+          return next
+        })
+        setToast({ type: 'success', message: `Updated ${updated.course_code}` })
+      } else {
+        const created = await courseService.createCourse(payload)
+        setCourses((prev) => {
+          const next = [...prev, created]
+          onCatalogChanged?.(next)
+          return next
+        })
+        setToast({ type: 'success', message: `Added ${created.course_code}` })
+      }
+      setIsModalOpen(false)
+    } catch (err) {
+      setToast({
+        type: 'error',
+        message: (err as Error).message || 'Failed to save course.',
+      })
     }
-    setIsModalOpen(false)
   }
 
   const handleDeleteCourse = async (course: Course) => {
-    await courseService.deleteCourse(course.id)
-    setCourses((prev) => prev.filter((c) => c.id !== course.id))
-    setToast({ type: 'success', message: `Removed ${course.course_code}` })
+    try {
+      await courseService.deleteCourse(course.id)
+      setCourses((prev) => {
+        const next = prev.filter((c) => c.id !== course.id)
+        onCatalogChanged?.(next)
+        return next
+      })
+      setToast({ type: 'success', message: `Removed ${course.course_code}` })
+    } catch (err) {
+      setToast({
+        type: 'error',
+        message: (err as Error).message || `Failed to remove ${course.course_code}.`,
+      })
+    }
   }
 
   const filtered = courses.filter((c) => {
@@ -90,9 +124,14 @@ export const CourseManager: React.FC = () => {
   return (
     <Card>
       <CardHeader>
-        <div>
-          <CardTitle>Course Catalog Manager</CardTitle>
-          <p className="text-xs text-slate-500 mt-0.5">Add, edit, or remove academic courses</p>
+        <div className="flex flex-wrap items-center gap-2.5">
+          <div>
+            <CardTitle>Course Catalog Manager</CardTitle>
+            <p className="text-xs text-slate-500 mt-0.5">Add, edit, or remove academic courses</p>
+          </div>
+          <Badge variant="info" data-testid="course-count-badge">
+            {courses.length} Catalog Courses
+          </Badge>
         </div>
         <Button
           size="sm"
@@ -115,16 +154,17 @@ export const CourseManager: React.FC = () => {
               data-testid="course-search-input"
             />
           </div>
-          <div className="w-full sm:w-48">
+          <div className="w-full sm:w-56">
             <Select
               value={deptFilter}
               onChange={(e) => setDeptFilter(e.target.value)}
               options={[
                 { value: 'ALL', label: 'All Departments' },
-                { value: 'CS', label: 'Computer Science' },
-                { value: 'ECE', label: 'ECE' },
-                { value: 'MATH', label: 'Mathematics' },
-                { value: 'CHEM/BIO', label: 'Chem / Bio' },
+                { value: 'CS', label: 'CS (Computer Science)' },
+                { value: 'ECE', label: 'ECE (Electrical & Computer Eng)' },
+                { value: 'MATH', label: 'MATH (Mathematics)' },
+                { value: 'CHEM', label: 'CHEM (Chemistry)' },
+                { value: 'BIOL', label: 'BIOL (Biological Sciences)' },
               ]}
               data-testid="course-dept-filter"
             />
@@ -157,7 +197,18 @@ export const CourseManager: React.FC = () => {
                       {course.requires_lab ? 'Lab Required' : 'Lecture'}
                     </Badge>
                   </td>
-                  <td className="py-2.5 px-3 text-right space-x-1">
+                  <td className="py-2.5 px-3 text-right space-x-1 whitespace-nowrap">
+                    {onScheduleCourse && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        leftIcon={<CalendarPlus className="w-3.5 h-3.5" />}
+                        onClick={() => onScheduleCourse(course)}
+                        data-testid={`schedule-course-${course.id}`}
+                      >
+                        Schedule Section
+                      </Button>
+                    )}
                     <Button
                       size="sm"
                       variant="ghost"
@@ -220,8 +271,10 @@ export const CourseManager: React.FC = () => {
               { value: 'CS', label: 'CS' },
               { value: 'ECE', label: 'ECE' },
               { value: 'MATH', label: 'MATH' },
-              { value: 'CHEM/BIO', label: 'CHEM/BIO' },
+              { value: 'CHEM', label: 'CHEM' },
+              { value: 'BIOL', label: 'BIOL' },
             ]}
+            data-testid="modal-course-department"
           />
           <div className="grid grid-cols-2 gap-3">
             <Input

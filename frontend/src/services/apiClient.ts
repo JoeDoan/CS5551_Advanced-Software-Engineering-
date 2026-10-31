@@ -2,6 +2,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
 import { ApiErrorResponse } from '../types/api'
 
 export const AUTH_TOKEN_KEY = 'optisched_auth_token'
+export const UNAUTHORIZED_EVENT = 'optisched:unauthorized'
 
 export class ApiError extends Error {
   status?: number
@@ -15,6 +16,14 @@ export class ApiError extends Error {
     this.data = data
   }
 }
+
+export const hasHttpStatus = (err: unknown): err is ApiError & { status: number } =>
+  Boolean(
+    err &&
+      typeof err === 'object' &&
+      'status' in err &&
+      typeof (err as { status?: unknown }).status === 'number'
+  )
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || '/api/v1'
 
@@ -95,6 +104,11 @@ apiClient.interceptors.response.use(
       message = 'Request timed out.'
     } else if (!error.response) {
       message = 'Network error: could not reach backend server.'
+    }
+
+    const requestUrl = error.config?.url || ''
+    if (status === 401 && !requestUrl.includes('/auth/login') && typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent(UNAUTHORIZED_EVENT, { detail: { message } }))
     }
 
     const apiError = new ApiError(message, status, errorData)
