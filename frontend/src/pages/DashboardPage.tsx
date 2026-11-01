@@ -37,7 +37,7 @@ export const DashboardPage: React.FC = () => {
     { label: 'Total Faculty', value: facultyCount, sub: 'CS, ECE, Math, Biology, Chem', icon: Users, color: 'text-blue-600', bg: 'bg-blue-50' },
     { label: 'Active Courses', value: courseCount, sub: 'Undergrad & Graduate Courses', icon: CalendarDays, color: 'text-indigo-600', bg: 'bg-indigo-50' },
     { label: 'Classrooms & Labs', value: roomCount, sub: 'RH, FH, MN, SCB Buildings', icon: School, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-    { label: 'Semesters Covered', value: '6 Terms', sub: 'Fall 2023 to Spring 2026', icon: Sparkles, color: 'text-amber-600', bg: 'bg-amber-50' },
+    { label: 'Semesters Covered', value: '6 Terms', sub: 'Fall 2024 to Spring 2027', icon: Sparkles, color: 'text-amber-600', bg: 'bg-amber-50' },
   ]
 
   return (

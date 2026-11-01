@@ -108,7 +108,9 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
 
     const instructorSelect = screen.getByTestId('instructor-select') as HTMLSelectElement
     expect(instructorSelect).not.toBeDisabled()
-    expect(instructorSelect.value).toBe('1')
+    await waitFor(() => {
+      expect(instructorSelect.value).toBe('1')
+    })
 
     const slotBtn = await screen.findByTestId('slot-09:30-10:45')
     const roomChip = await screen.findByTestId('room-chip-RH 204')
@@ -148,7 +150,7 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
       expect(slotBtn).toHaveAttribute('aria-pressed', 'false')
       expect(roomChip).toHaveAttribute('aria-pressed', 'false')
       expect(
-        screen.getByText('No saved preferences recorded for this instructor in Fall 2025 yet.')
+        screen.getByText('No saved preferences recorded for this instructor in Fall 2026 yet.')
       ).toBeInTheDocument()
     })
   })
@@ -533,7 +535,7 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
     )
 
     const solverBtn = await screen.findByTestId('execute-solver-button')
-    expect(solverBtn).toHaveTextContent('Execute Solver (Fall 2025)')
+    expect(solverBtn).toHaveTextContent('Execute Solver (Fall 2026)')
 
     fireEvent.click(screen.getByTestId('notifications-bell-btn'))
     await waitFor(() => {
@@ -545,23 +547,23 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
       target: { value: '3' },
     })
     expect(screen.getByTestId('execute-solver-button')).toHaveTextContent(
-      'Execute Solver (Fall 2024)'
+      'Execute Solver (Fall 2025)'
     )
 
     const postSpy = vi
       .spyOn(apiClient, 'post')
-      .mockRejectedValueOnce(new ApiError('Solver infeasible for Fall 2024', 422))
+      .mockRejectedValueOnce(new ApiError('Solver infeasible for Fall 2025', 422))
 
     fireEvent.click(screen.getByTestId('execute-solver-button'))
 
     await waitFor(() => {
       expect(postSpy).toHaveBeenCalledWith('/solver/run', { semester_id: 3 })
       expect(screen.getByText('Solver Execution Error')).toBeInTheDocument()
-      expect(screen.getByText('Solver infeasible for Fall 2024')).toBeInTheDocument()
+      expect(screen.getByText('Solver infeasible for Fall 2025')).toBeInTheDocument()
     })
   })
 
-  it('locks logged-in Instructor to Current Term Fall 2025 on /schedule and /preferences and hides past semester and course selectors', async () => {
+  it('locks logged-in Instructor to Current Term Fall 2026 on /schedule and /preferences and hides past semester and course selectors', async () => {
     setAuthToken(DEMO_INSTRUCTOR_TOKEN)
 
     render(
@@ -574,7 +576,7 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
 
     await waitFor(() => {
       expect(screen.getByTestId('active-semester-badge')).toHaveTextContent(
-        'Current Term: Fall 2025'
+        'Current Term: Fall 2026'
       )
     })
     expect(screen.queryByTestId('semester-select')).not.toBeInTheDocument()
@@ -586,7 +588,7 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
       expect(screen.getByRole('heading', { name: /Instructor Preferences/i })).toBeInTheDocument()
     })
     expect(screen.getByTestId('active-semester-badge')).toHaveTextContent(
-      'Current Term: Fall 2025'
+      'Current Term: Fall 2026'
     )
     expect(screen.queryByTestId('preference-semester-select')).not.toBeInTheDocument()
     expect(screen.queryByTestId('preference-course-select')).not.toBeInTheDocument()

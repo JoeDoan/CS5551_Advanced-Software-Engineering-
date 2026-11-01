@@ -22,7 +22,7 @@ from sqlalchemy import func
 from sqlmodel import Session, select
 
 from app.core.seeder import get_default_data_dir
-from app.models.entities import Course, EnrollmentObservation
+from app.models.entities import Course, EnrollmentObservation, Semester
 from app.services.forecast_service import (
     CourseForecast,
     EnrollmentForecastResponse,
@@ -36,7 +36,7 @@ PREFERENCE_PROVENANCE = (
     "Causal 2-year modal per (instructor, course); "
     "unrecorded pairs left with no preference"
 )
-HELDOUT_SEMESTER_ID = 6
+HELDOUT_SEMESTER_ID = 4
 HELDOUT_FILENAME = "heldout_spring2026_ground_truth.json"
 
 _DAY_ABBR = {
@@ -174,6 +174,7 @@ def _solve_sizing_mode(
     base_profiles: Dict[str, Any],
     target_caps_by_name: Dict[str, int],
     course_code_by_name: Dict[str, str],
+    heldout_sem_id: int = HELDOUT_SEMESTER_ID,
 ) -> Tuple[str, int, Dict[str, _ScheduledSection]]:
     instructors = sorted(u["name"] for u in loader.get_instructors())
     courses = sorted(c["course_name"] for c in loader.courses)
@@ -219,7 +220,7 @@ def _solve_sizing_mode(
     sem_ic_pairs = {
         (inst_by_id[p["instructor_id"]], cname_by_id[p["course_id"]])
         for p in loader.instructor_preferences
-        if p.get("semester_id") == HELDOUT_SEMESTER_ID
+        if p.get("semester_id") == heldout_sem_id
         and p.get("instructor_id") in inst_by_id
         and p.get("course_id") in cname_by_id
     }
@@ -354,10 +355,11 @@ def _solve_sizing_mode(
 def _build_causal_decisions(
     forecast_resp: EnrollmentForecastResponse,
     data_dir: Path,
+    heldout_sem_id: int = HELDOUT_SEMESTER_ID,
 ) -> _CausalSizingDecisions:
     loader = DataLoader(data_dir=str(data_dir))
     base_profiles = load_profiles_from_data(
-        loader, semester_id=HELDOUT_SEMESTER_ID
+        loader, semester_id=heldout_sem_id
     )
 
     fc_by_id: Dict[int, CourseForecast] = {
@@ -397,19 +399,31 @@ def _build_causal_decisions(
         )
 
     _lt_status, _lt_conf, lt_sections = _solve_sizing_mode(
-        loader, base_profiles, last_term_caps, course_code_by_name
+        loader,
+        base_profiles,
+        last_term_caps,
+        course_code_by_name,
+        heldout_sem_id=heldout_sem_id,
     )
     _pf_status, _pf_conf, pf_sections = _solve_sizing_mode(
-        loader, base_profiles, point_forecast_caps, course_code_by_name
+        loader,
+        base_profiles,
+        point_forecast_caps,
+        course_code_by_name,
+        heldout_sem_id=heldout_sem_id,
     )
     c80_status, c80_conf, c80_sections = _solve_sizing_mode(
-        loader, base_profiles, conformal_80_caps, course_code_by_name
+        loader,
+        base_profiles,
+        conformal_80_caps,
+        course_code_by_name,
+        heldout_sem_id=heldout_sem_id,
     )
 
     pref_specs: Dict[str, Tuple[set[str], set[Any]]] = {}
     without_pref_count = 0
     for pref in loader.instructor_preferences:
-        if pref.get("semester_id") != HELDOUT_SEMESTER_ID:
+        if pref.get("semester_id") != heldout_sem_id:
             continue
         cid = pref.get("course_id")
         if cid is None or int(cid) not in course_code_by_id:
@@ -417,7 +431,7 @@ def _build_causal_decisions(
         resolved = loader.get_resolved_preference(
             pref["instructor_id"],
             course_id=int(cid),
-            semester_id=HELDOUT_SEMESTER_ID,
+            semester_id=heldout_sem_id,
         )
         ccode = course_code_by_id[int(cid)]
         if resolved["has_preferences"]:
@@ -637,7 +651,9 @@ def get_empirical_benchmark(session: Session) -> EmpiricalBenchmarkResponse:
         select(
             func.count(EnrollmentObservation.id),
             func.coalesce(func.sum(EnrollmentObservation.enrolled), 0),
-        ).where(EnrollmentObservation.semester_id != HELDOUT_SEMESTER_ID)
+        )
+        .join(Semester, EnrollmentObservation.semester_id == Semester.id)
+        .where(Semester.start_date < "2026-01-01")
     ).one()
     course_count = session.exec(select(func.count(Course.id))).one()
     cache_key = (
@@ -651,11 +667,14 @@ def get_empirical_benchmark(session: Session) -> EmpiricalBenchmarkResponse:
     if cached is not None:
         return cached
 
-    forecast_resp = get_enrollment_forecast(
-        session=session, semester_id=HELDOUT_SEMESTER_ID
-    )
-    decisions = _build_causal_decisions(forecast_resp, data_dir)
     heldout = json.loads(heldout_path.read_text(encoding="utf-8"))
+    heldout_sem_id = int(heldout.get("heldout_semester_id", HELDOUT_SEMESTER_ID))
+    forecast_resp = get_enrollment_forecast(
+        session=session, semester_id=heldout_sem_id, causal_holdout=True
+    )
+    decisions = _build_causal_decisions(
+        forecast_resp, data_dir, heldout_sem_id=heldout_sem_id
+    )
     result = _evaluate_against_heldout(forecast_resp, decisions, heldout)
     _BENCHMARK_CACHE[cache_key] = result
     return result

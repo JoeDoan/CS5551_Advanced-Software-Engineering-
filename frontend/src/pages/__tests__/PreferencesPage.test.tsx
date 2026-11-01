@@ -1,9 +1,10 @@
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { PreferencesPage } from '../PreferencesPage'
-import { AuthProvider } from '../../context/AuthContext'
+import AuthContext, { AuthContextValue, AuthProvider } from '../../context/AuthContext'
 import { clearAuthToken, setAuthToken } from '../../services/apiClient'
 import { DEMO_COORDINATOR_TOKEN } from '../../services/authService'
+import { DEFAULT_INSTRUCTORS, instructorService } from '../../services/instructorService'
 import { preferenceService } from '../../services/preferenceService'
 import { timeSlotService } from '../../services/timeSlotService'
 import { roomService } from '../../services/roomService'
@@ -48,13 +49,13 @@ describe('PreferencesPage Component', () => {
     ])
   })
 
-  it('locks to active Fall 2025 semester without semester or course preference selectors', () => {
+  it('locks to active Fall 2026 semester without semester or course preference selectors', () => {
     render(<PreferencesPage />)
 
     expect(screen.getByText('Instructor Preferences')).toBeInTheDocument()
     expect(screen.getByLabelText('Select Instructor')).toBeInTheDocument()
     expect(screen.getByTestId('active-semester-badge')).toHaveTextContent(
-      'Current Term: Fall 2025'
+      'Current Term: Fall 2026'
     )
     expect(screen.queryByTestId('preference-course-select')).not.toBeInTheDocument()
     expect(screen.queryByTestId('preference-semester-select')).not.toBeInTheDocument()
@@ -358,5 +359,58 @@ describe('PreferencesPage Component', () => {
     expect(selectedRoomBtn.className).toContain('bg-blue-50')
     expect(unselectedRoomBtn).toHaveAttribute('aria-pressed', 'false')
     expect(unselectedRoomBtn.className).toContain('bg-slate-50')
+  })
+
+  it('locks Select Instructor to authenticated Dr. Hyoeun Lee without flashing or displaying Dr. Yugyung Lee', async () => {
+    const getInstructorsSpy = vi
+      .spyOn(instructorService, 'getInstructors')
+      .mockResolvedValue(DEFAULT_INSTRUCTORS)
+    vi.spyOn(preferenceService, 'getPreferences').mockResolvedValue([])
+    vi.spyOn(courseAssignmentService, 'getAssignments').mockResolvedValue([])
+    vi.spyOn(scheduleService, 'getSchedules').mockResolvedValue([])
+
+    const user = {
+      id: 2,
+      username: 'leeh',
+      email: 'leeh@illinois.edu',
+      full_name: 'Dr. Hyoeun Lee',
+      role: 'instructor' as const,
+      department: 'STAT',
+      linked_user_id: 1,
+    }
+    const authValue: AuthContextValue = {
+      session: {
+        status: 'authenticated',
+        user,
+        sessionId: 'foia-instructor-session',
+        expiresAt: '2027-05-15T00:00:00Z',
+      },
+      user,
+      login: vi.fn(),
+      logout: vi.fn(),
+      clearAuthError: vi.fn(),
+      isStandaloneFallback: false,
+    }
+
+    render(
+      <AuthContext.Provider value={authValue}>
+        <PreferencesPage />
+      </AuthContext.Provider>
+    )
+
+    const instructorSelect = screen.getByTestId('instructor-select') as HTMLSelectElement
+    expect(instructorSelect).toBeDisabled()
+    expect(instructorSelect.value).toBe('1')
+    expect(instructorSelect).toHaveTextContent('Dr. Hyoeun Lee — STAT')
+    expect(screen.queryByText(/Yugyung Lee/i)).toBeNull()
+
+    await waitFor(() => {
+      expect(getInstructorsSpy).toHaveBeenCalled()
+    })
+
+    expect(instructorSelect).toBeDisabled()
+    expect(instructorSelect.value).toBe('1')
+    expect(instructorSelect).toHaveTextContent('Dr. Hyoeun Lee — STAT')
+    expect(screen.queryByText(/Yugyung Lee/i)).toBeNull()
   })
 })

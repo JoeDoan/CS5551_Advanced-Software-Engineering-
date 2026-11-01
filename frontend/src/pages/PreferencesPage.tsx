@@ -96,10 +96,13 @@ export const normalizeStoredDaysToLabels = (
   return DAY_CATALOG.filter((d) => matchedCodes.has(d.code)).map((d) => d.label)
 }
 
+const formatInstructorLabel = (fullName: string, department?: string | null): string =>
+  department ? `${fullName} — ${department}` : fullName
+
 const toInstructorOptions = (list: InstructorSummary[]) =>
   list.map((inst) => ({
     value: String(inst.id),
-    label: `${inst.full_name} (${inst.department})`,
+    label: formatInstructorLabel(inst.full_name, inst.department),
   }))
 
 export const formatCourseHabit = (pref: InstructorPreference | undefined): string | null => {
@@ -126,7 +129,23 @@ export const PreferencesPage: React.FC = () => {
     !isStandaloneFallback && user?.role === 'instructor' && user.linked_user_id !== null
   const isReadOnlyCoordinator = !isStandaloneFallback && user?.role === 'coordinator'
 
-  const [instructorList, setInstructorList] = useState<InstructorSummary[]>(DEFAULT_INSTRUCTORS)
+  const [instructorList, setInstructorList] = useState<InstructorSummary[]>(() => {
+    if (isLockedInstructor && user?.linked_user_id) {
+      return [
+        {
+          id: user.linked_user_id,
+          full_name: user.full_name,
+          email: user.email,
+          department: user.department,
+          priority_score: 5,
+        },
+      ]
+    }
+    if (isStandaloneFallback) {
+      return DEFAULT_INSTRUCTORS
+    }
+    return []
+  })
   const [selectedInstructor, setSelectedInstructor] = useState<string>(() =>
     isLockedInstructor && user?.linked_user_id ? String(user.linked_user_id) : '1'
   )
@@ -158,15 +177,20 @@ export const PreferencesPage: React.FC = () => {
     roomService.getRooms().then((catalogRooms) => {
       if (active) setRooms(catalogRooms)
     })
-    if (isStandaloneFallback || !isLockedInstructor) {
-      instructorService.getInstructors().then((loaded) => {
-        if (active) setInstructorList(loaded)
-      })
-    }
+    instructorService.getInstructors().then((loaded) => {
+      if (active && Array.isArray(loaded) && loaded.length > 0) {
+        setInstructorList(loaded)
+        if (!isLockedInstructor) {
+          setSelectedInstructor((prev) =>
+            loaded.some((inst) => String(inst.id) === prev) ? prev : String(loaded[0].id)
+          )
+        }
+      }
+    })
     return () => {
       active = false
     }
-  }, [isStandaloneFallback, isLockedInstructor])
+  }, [isLockedInstructor])
 
   useEffect(() => {
     if (isLockedInstructor && user?.linked_user_id) {
@@ -284,18 +308,15 @@ export const PreferencesPage: React.FC = () => {
   }, [savedPreferences, isReadOnlyCoordinator])
 
   const instructors = useMemo(() => {
-    const base = toInstructorOptions(instructorList)
-    if (
-      isLockedInstructor &&
-      user?.linked_user_id &&
-      !base.some((opt) => opt.value === String(user.linked_user_id))
-    ) {
-      base.unshift({
-        value: String(user.linked_user_id),
-        label: `${user.full_name} (${user.department})`,
-      })
+    if (isLockedInstructor && user?.linked_user_id) {
+      return [
+        {
+          value: String(user.linked_user_id),
+          label: formatInstructorLabel(user.full_name, user.department),
+        },
+      ]
     }
-    return base
+    return toInstructorOptions(instructorList)
   }, [instructorList, isLockedInstructor, user])
 
   const toggleDay = (day: string) => {

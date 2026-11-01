@@ -17,8 +17,9 @@
     "instructor_id": 1,
     "course_id": 2,
     "preferred_days": [
-      "Tuesday",
-      "Thursday"
+      "Monday",
+      "Wednesday",
+      "Friday"
     ],
     "preferred_slot_id": 4,
     "preferred_slots": [
@@ -35,12 +36,13 @@
     "instructor_id": 2,
     "course_id": 3,
     "preferred_days": [
-      "Tuesday",
-      "Thursday"
+      "Monday",
+      "Wednesday",
+      "Friday"
     ],
-    "preferred_slot_id": 5,
+    "preferred_slot_id": 2,
     "preferred_slots": [
-      5
+      2
     ],
     "preferred_room_id": null,
     "preferred_layout": "lecture",
@@ -65,11 +67,17 @@
     "id": 5,
     "instructor_id": 3,
     "course_id": 5,
-    "preferred_days": [],
-    "preferred_slot_id": null,
-    "preferred_slots": [],
+    "preferred_days": [
+      "Monday",
+      "Wednesday",
+      "Friday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
     "preferred_room_id": null,
-    "preferred_layout": null,
+    "preferred_layout": "lecture",
     "semester_id": 1,
     "exams_count": 2,
     "has_final": true
@@ -98,12 +106,12 @@
     "instructor_id": 4,
     "course_id": 7,
     "preferred_days": [
-      "Tuesday",
-      "Thursday"
+      "Monday",
+      "Wednesday"
     ],
-    "preferred_slot_id": 3,
+    "preferred_slot_id": 1,
     "preferred_slots": [
-      3
+      1
     ],
     "preferred_room_id": 3,
     "preferred_layout": "lecture",
@@ -115,11 +123,16 @@
     "id": 8,
     "instructor_id": 4,
     "course_id": 8,
-    "preferred_days": [],
-    "preferred_slot_id": null,
-    "preferred_slots": [],
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 5,
+    "preferred_slots": [
+      5
+    ],
     "preferred_room_id": null,
-    "preferred_layout": null,
+    "preferred_layout": "lecture",
     "semester_id": 1,
     "exams_count": 2,
     "has_final": true
@@ -132,11 +145,11 @@
       "Monday",
       "Wednesday"
     ],
-    "preferred_slot_id": 3,
+    "preferred_slot_id": 6,
     "preferred_slots": [
-      3
+      6
     ],
-    "preferred_room_id": 8,
+    "preferred_room_id": 7,
     "preferred_layout": "lecture",
     "semester_id": 1,
     "exams_count": 2,
@@ -159,16 +172,11 @@
     "id": 11,
     "instructor_id": 6,
     "course_id": 11,
-    "preferred_days": [
-      "Tuesday",
-      "Thursday"
-    ],
-    "preferred_slot_id": 4,
-    "preferred_slots": [
-      4
-    ],
+    "preferred_days": [],
+    "preferred_slot_id": null,
+    "preferred_slots": [],
     "preferred_room_id": null,
-    "preferred_layout": "lecture",
+    "preferred_layout": null,
     "semester_id": 1,
     "exams_count": 2,
     "has_final": true
@@ -211,7 +219,7 @@
     "preferred_slots": [
       3
     ],
-    "preferred_room_id": null,
+    "preferred_room_id": 6,
     "preferred_layout": "lecture",
     "semester_id": 1,
     "exams_count": 2,
@@ -248,7 +256,7 @@
     "preferred_slots": [
       4
     ],
-    "preferred_room_id": 8,
+    "preferred_room_id": 5,
     "preferred_layout": "lecture",
     "semester_id": 1,
     "exams_count": 2,
@@ -259,11 +267,11 @@
     "instructor_id": 9,
     "course_id": 17,
     "preferred_days": [
-      "Tuesday"
+      "Wednesday"
     ],
-    "preferred_slot_id": 1,
+    "preferred_slot_id": 4,
     "preferred_slots": [
-      1
+      4
     ],
     "preferred_room_id": 14,
     "preferred_layout": "lab",
@@ -299,9 +307,9 @@
       "Wednesday",
       "Friday"
     ],
-    "preferred_slot_id": 6,
+    "preferred_slot_id": 2,
     "preferred_slots": [
-      6
+      2
     ],
     "preferred_room_id": null,
     "preferred_layout": "lecture",
@@ -367,16 +375,11 @@
     "id": 23,
     "instructor_id": 12,
     "course_id": 23,
-    "preferred_days": [
-      "Monday",
-      "Wednesday"
-    ],
-    "preferred_slot_id": 2,
-    "preferred_slots": [
-      2
-    ],
+    "preferred_days": [],
+    "preferred_slot_id": null,
+    "preferred_slots": [],
     "preferred_room_id": null,
-    "preferred_layout": "lecture",
+    "preferred_layout": null,
     "semester_id": 1,
     "exams_count": 2,
     "has_final": true
@@ -385,11 +388,17 @@
     "id": 24,
     "instructor_id": 12,
     "course_id": 24,
-    "preferred_days": [],
-    "preferred_slot_id": null,
-    "preferred_slots": [],
+    "preferred_days": [
+      "Monday",
+      "Wednesday",
+      "Friday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
     "preferred_room_id": null,
-    "preferred_layout": null,
+    "preferred_layout": "lecture",
     "semester_id": 1,
     "exams_count": 2,
     "has_final": true
@@ -462,11 +471,17 @@
     "id": 29,
     "instructor_id": 15,
     "course_id": 29,
-    "preferred_days": [],
-    "preferred_slot_id": null,
-    "preferred_slots": [],
+    "preferred_days": [
+      "Monday",
+      "Wednesday",
+      "Friday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
     "preferred_room_id": null,
-    "preferred_layout": null,
+    "preferred_layout": "lecture",
     "semester_id": 1,
     "exams_count": 2,
     "has_final": true
@@ -492,11 +507,17 @@
     "id": 31,
     "instructor_id": 16,
     "course_id": 31,
-    "preferred_days": [],
-    "preferred_slot_id": null,
-    "preferred_slots": [],
+    "preferred_days": [
+      "Monday",
+      "Wednesday",
+      "Friday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
     "preferred_room_id": null,
-    "preferred_layout": null,
+    "preferred_layout": "lecture",
     "semester_id": 1,
     "exams_count": 2,
     "has_final": true
@@ -530,7 +551,7 @@
     "preferred_slots": [
       2
     ],
-    "preferred_room_id": null,
+    "preferred_room_id": 9,
     "preferred_layout": "lecture",
     "semester_id": 1,
     "exams_count": 2,
@@ -540,16 +561,11 @@
     "id": 34,
     "instructor_id": 17,
     "course_id": 34,
-    "preferred_days": [
-      "Monday",
-      "Wednesday"
-    ],
-    "preferred_slot_id": 3,
-    "preferred_slots": [
-      3
-    ],
-    "preferred_room_id": 9,
-    "preferred_layout": "lecture",
+    "preferred_days": [],
+    "preferred_slot_id": null,
+    "preferred_slots": [],
+    "preferred_room_id": null,
+    "preferred_layout": null,
     "semester_id": 1,
     "exams_count": 2,
     "has_final": true
@@ -597,15 +613,11 @@
     "id": 38,
     "instructor_id": 19,
     "course_id": 38,
-    "preferred_days": [
-      "Monday"
-    ],
-    "preferred_slot_id": 3,
-    "preferred_slots": [
-      3
-    ],
+    "preferred_days": [],
+    "preferred_slot_id": null,
+    "preferred_slots": [],
     "preferred_room_id": null,
-    "preferred_layout": "lab",
+    "preferred_layout": null,
     "semester_id": 1,
     "exams_count": 2,
     "has_final": true
@@ -662,9 +674,9 @@
       "Tuesday",
       "Thursday"
     ],
-    "preferred_slot_id": 4,
+    "preferred_slot_id": 5,
     "preferred_slots": [
-      4
+      5
     ],
     "preferred_room_id": null,
     "preferred_layout": "lecture",
@@ -707,11 +719,17 @@
     "id": 45,
     "instructor_id": 3,
     "course_id": 5,
-    "preferred_days": [],
-    "preferred_slot_id": null,
-    "preferred_slots": [],
+    "preferred_days": [
+      "Monday",
+      "Wednesday",
+      "Friday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
     "preferred_room_id": null,
-    "preferred_layout": null,
+    "preferred_layout": "lecture",
     "semester_id": 2,
     "exams_count": 2,
     "has_final": true
@@ -739,16 +757,11 @@
     "id": 47,
     "instructor_id": 4,
     "course_id": 7,
-    "preferred_days": [
-      "Monday",
-      "Wednesday"
-    ],
-    "preferred_slot_id": 1,
-    "preferred_slots": [
-      1
-    ],
-    "preferred_room_id": 3,
-    "preferred_layout": "lecture",
+    "preferred_days": [],
+    "preferred_slot_id": null,
+    "preferred_slots": [],
+    "preferred_room_id": null,
+    "preferred_layout": null,
     "semester_id": 2,
     "exams_count": 2,
     "has_final": true
@@ -890,7 +903,7 @@
     "preferred_slots": [
       4
     ],
-    "preferred_room_id": 8,
+    "preferred_room_id": 5,
     "preferred_layout": "lecture",
     "semester_id": 2,
     "exams_count": 2,
@@ -922,9 +935,9 @@
       "Wednesday",
       "Friday"
     ],
-    "preferred_slot_id": 3,
+    "preferred_slot_id": 2,
     "preferred_slots": [
-      3
+      2
     ],
     "preferred_room_id": 11,
     "preferred_layout": "lecture",
@@ -980,7 +993,7 @@
     "preferred_slots": [
       2
     ],
-    "preferred_room_id": 11,
+    "preferred_room_id": 5,
     "preferred_layout": "lecture",
     "semester_id": 2,
     "exams_count": 2,
@@ -1027,9 +1040,9 @@
       "Wednesday",
       "Friday"
     ],
-    "preferred_slot_id": 2,
+    "preferred_slot_id": 3,
     "preferred_slots": [
-      2
+      3
     ],
     "preferred_room_id": null,
     "preferred_layout": "lecture",
@@ -1105,11 +1118,17 @@
     "id": 69,
     "instructor_id": 15,
     "course_id": 29,
-    "preferred_days": [],
-    "preferred_slot_id": null,
-    "preferred_slots": [],
+    "preferred_days": [
+      "Monday",
+      "Wednesday",
+      "Friday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
     "preferred_room_id": null,
-    "preferred_layout": null,
+    "preferred_layout": "lecture",
     "semester_id": 2,
     "exams_count": 2,
     "has_final": true
@@ -1119,11 +1138,11 @@
     "instructor_id": 15,
     "course_id": 30,
     "preferred_days": [
-      "Tuesday"
+      "Thursday"
     ],
-    "preferred_slot_id": 1,
+    "preferred_slot_id": 4,
     "preferred_slots": [
-      1
+      4
     ],
     "preferred_room_id": null,
     "preferred_layout": "lab",
@@ -1135,11 +1154,17 @@
     "id": 71,
     "instructor_id": 16,
     "course_id": 31,
-    "preferred_days": [],
-    "preferred_slot_id": null,
-    "preferred_slots": [],
+    "preferred_days": [
+      "Monday",
+      "Wednesday",
+      "Friday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
     "preferred_room_id": null,
-    "preferred_layout": null,
+    "preferred_layout": "lecture",
     "semester_id": 2,
     "exams_count": 2,
     "has_final": true
@@ -1209,11 +1234,17 @@
     "id": 76,
     "instructor_id": 18,
     "course_id": 36,
-    "preferred_days": [],
-    "preferred_slot_id": null,
-    "preferred_slots": [],
+    "preferred_days": [
+      "Monday",
+      "Wednesday",
+      "Friday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
     "preferred_room_id": null,
-    "preferred_layout": null,
+    "preferred_layout": "lecture",
     "semester_id": 2,
     "exams_count": 2,
     "has_final": true
@@ -1235,15 +1266,11 @@
     "id": 78,
     "instructor_id": 19,
     "course_id": 38,
-    "preferred_days": [
-      "Tuesday"
-    ],
-    "preferred_slot_id": 3,
-    "preferred_slots": [
-      3
-    ],
+    "preferred_days": [],
+    "preferred_slot_id": null,
+    "preferred_slots": [],
     "preferred_room_id": null,
-    "preferred_layout": "lab",
+    "preferred_layout": null,
     "semester_id": 2,
     "exams_count": 2,
     "has_final": true
@@ -1385,16 +1412,11 @@
     "id": 87,
     "instructor_id": 4,
     "course_id": 7,
-    "preferred_days": [
-      "Monday",
-      "Wednesday"
-    ],
-    "preferred_slot_id": 1,
-    "preferred_slots": [
-      1
-    ],
-    "preferred_room_id": 3,
-    "preferred_layout": "lecture",
+    "preferred_days": [],
+    "preferred_slot_id": null,
+    "preferred_slots": [],
+    "preferred_room_id": null,
+    "preferred_layout": null,
     "semester_id": 3,
     "exams_count": 2,
     "has_final": true
@@ -1407,9 +1429,9 @@
       "Tuesday",
       "Thursday"
     ],
-    "preferred_slot_id": 5,
+    "preferred_slot_id": 4,
     "preferred_slots": [
-      5
+      4
     ],
     "preferred_room_id": null,
     "preferred_layout": "lecture",
@@ -1547,11 +1569,11 @@
     "instructor_id": 9,
     "course_id": 17,
     "preferred_days": [
-      "Wednesday"
+      "Monday"
     ],
-    "preferred_slot_id": 4,
+    "preferred_slot_id": 6,
     "preferred_slots": [
-      4
+      6
     ],
     "preferred_room_id": 14,
     "preferred_layout": "lab",
@@ -1626,7 +1648,7 @@
     "preferred_slots": [
       2
     ],
-    "preferred_room_id": 11,
+    "preferred_room_id": 5,
     "preferred_layout": "lecture",
     "semester_id": 3,
     "exams_count": 2,
@@ -1645,7 +1667,7 @@
     "preferred_slots": [
       5
     ],
-    "preferred_room_id": 10,
+    "preferred_room_id": null,
     "preferred_layout": "lecture",
     "semester_id": 3,
     "exams_count": 2,
@@ -1655,11 +1677,16 @@
     "id": 103,
     "instructor_id": 12,
     "course_id": 23,
-    "preferred_days": [],
-    "preferred_slot_id": null,
-    "preferred_slots": [],
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
     "preferred_room_id": null,
-    "preferred_layout": null,
+    "preferred_layout": "lecture",
     "semester_id": 3,
     "exams_count": 2,
     "has_final": true
@@ -1771,11 +1798,11 @@
     "instructor_id": 15,
     "course_id": 30,
     "preferred_days": [
-      "Tuesday"
+      "Thursday"
     ],
-    "preferred_slot_id": 1,
+    "preferred_slot_id": 4,
     "preferred_slots": [
-      1
+      4
     ],
     "preferred_room_id": null,
     "preferred_layout": "lab",
@@ -1806,15 +1833,11 @@
     "id": 112,
     "instructor_id": 16,
     "course_id": 32,
-    "preferred_days": [
-      "Tuesday"
-    ],
-    "preferred_slot_id": 2,
-    "preferred_slots": [
-      2
-    ],
+    "preferred_days": [],
+    "preferred_slot_id": null,
+    "preferred_slots": [],
     "preferred_room_id": null,
-    "preferred_layout": "lecture",
+    "preferred_layout": null,
     "semester_id": 3,
     "exams_count": 2,
     "has_final": true
@@ -1831,7 +1854,7 @@
     "preferred_slots": [
       2
     ],
-    "preferred_room_id": 2,
+    "preferred_room_id": 9,
     "preferred_layout": "lecture",
     "semester_id": 3,
     "exams_count": 2,
@@ -1867,11 +1890,17 @@
     "id": 116,
     "instructor_id": 18,
     "course_id": 36,
-    "preferred_days": [],
-    "preferred_slot_id": null,
-    "preferred_slots": [],
+    "preferred_days": [
+      "Monday",
+      "Wednesday",
+      "Friday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
     "preferred_room_id": null,
-    "preferred_layout": null,
+    "preferred_layout": "lecture",
     "semester_id": 3,
     "exams_count": 2,
     "has_final": true
@@ -1969,12 +1998,13 @@
     "instructor_id": 2,
     "course_id": 3,
     "preferred_days": [
-      "Tuesday",
-      "Thursday"
+      "Monday",
+      "Wednesday",
+      "Friday"
     ],
-    "preferred_slot_id": 5,
+    "preferred_slot_id": 2,
     "preferred_slots": [
-      5
+      2
     ],
     "preferred_room_id": null,
     "preferred_layout": "lecture",
@@ -2023,9 +2053,9 @@
       "Wednesday",
       "Friday"
     ],
-    "preferred_slot_id": 2,
+    "preferred_slot_id": 6,
     "preferred_slots": [
-      2
+      6
     ],
     "preferred_room_id": null,
     "preferred_layout": "lecture",
@@ -2146,7 +2176,7 @@
     "preferred_slots": [
       3
     ],
-    "preferred_room_id": 6,
+    "preferred_room_id": 3,
     "preferred_layout": "lecture",
     "semester_id": 4,
     "exams_count": 2,
@@ -2194,11 +2224,11 @@
     "instructor_id": 9,
     "course_id": 17,
     "preferred_days": [
-      "Wednesday"
+      "Monday"
     ],
-    "preferred_slot_id": 4,
+    "preferred_slot_id": 6,
     "preferred_slots": [
-      4
+      6
     ],
     "preferred_room_id": 14,
     "preferred_layout": "lab",
@@ -2234,9 +2264,9 @@
       "Wednesday",
       "Friday"
     ],
-    "preferred_slot_id": 2,
+    "preferred_slot_id": 4,
     "preferred_slots": [
-      2
+      4
     ],
     "preferred_room_id": null,
     "preferred_layout": "lecture",
@@ -2273,7 +2303,7 @@
     "preferred_slots": [
       2
     ],
-    "preferred_room_id": 5,
+    "preferred_room_id": 11,
     "preferred_layout": "lecture",
     "semester_id": 4,
     "exams_count": 2,
@@ -2292,7 +2322,7 @@
     "preferred_slots": [
       5
     ],
-    "preferred_room_id": 10,
+    "preferred_room_id": null,
     "preferred_layout": "lecture",
     "semester_id": 4,
     "exams_count": 2,
@@ -2302,11 +2332,16 @@
     "id": 143,
     "instructor_id": 12,
     "course_id": 23,
-    "preferred_days": [],
-    "preferred_slot_id": null,
-    "preferred_slots": [],
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
     "preferred_room_id": null,
-    "preferred_layout": null,
+    "preferred_layout": "lecture",
     "semester_id": 4,
     "exams_count": 2,
     "has_final": true
@@ -2418,7 +2453,7 @@
     "instructor_id": 15,
     "course_id": 30,
     "preferred_days": [
-      "Thursday"
+      "Wednesday"
     ],
     "preferred_slot_id": 4,
     "preferred_slots": [
@@ -2453,15 +2488,11 @@
     "id": 152,
     "instructor_id": 16,
     "course_id": 32,
-    "preferred_days": [
-      "Tuesday"
-    ],
-    "preferred_slot_id": 2,
-    "preferred_slots": [
-      2
-    ],
+    "preferred_days": [],
+    "preferred_slot_id": null,
+    "preferred_slots": [],
     "preferred_room_id": null,
-    "preferred_layout": "lecture",
+    "preferred_layout": null,
     "semester_id": 4,
     "exams_count": 2,
     "has_final": true
@@ -2501,11 +2532,17 @@
     "id": 155,
     "instructor_id": 18,
     "course_id": 35,
-    "preferred_days": [],
-    "preferred_slot_id": null,
-    "preferred_slots": [],
-    "preferred_room_id": null,
-    "preferred_layout": null,
+    "preferred_days": [
+      "Monday",
+      "Wednesday",
+      "Friday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lecture",
     "semester_id": 4,
     "exams_count": 2,
     "has_final": true
@@ -2572,16 +2609,11 @@
     "id": 160,
     "instructor_id": 20,
     "course_id": 40,
-    "preferred_days": [
-      "Tuesday",
-      "Thursday"
-    ],
-    "preferred_slot_id": 6,
-    "preferred_slots": [
-      6
-    ],
+    "preferred_days": [],
+    "preferred_slot_id": null,
+    "preferred_slots": [],
     "preferred_room_id": null,
-    "preferred_layout": "lecture",
+    "preferred_layout": null,
     "semester_id": 4,
     "exams_count": 2,
     "has_final": true
@@ -2590,11 +2622,16 @@
     "id": 161,
     "instructor_id": 1,
     "course_id": 1,
-    "preferred_days": [],
-    "preferred_slot_id": null,
-    "preferred_slots": [],
-    "preferred_room_id": null,
-    "preferred_layout": null,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
     "semester_id": 5,
     "exams_count": 2,
     "has_final": true
@@ -2604,13 +2641,12 @@
     "instructor_id": 1,
     "course_id": 2,
     "preferred_days": [
-      "Monday",
-      "Wednesday",
-      "Friday"
+      "Tuesday",
+      "Thursday"
     ],
-    "preferred_slot_id": 4,
+    "preferred_slot_id": 5,
     "preferred_slots": [
-      4
+      5
     ],
     "preferred_room_id": null,
     "preferred_layout": "lecture",
@@ -2654,17 +2690,11 @@
     "id": 165,
     "instructor_id": 3,
     "course_id": 5,
-    "preferred_days": [
-      "Monday",
-      "Wednesday",
-      "Friday"
-    ],
-    "preferred_slot_id": 3,
-    "preferred_slots": [
-      3
-    ],
+    "preferred_days": [],
+    "preferred_slot_id": null,
+    "preferred_slots": [],
     "preferred_room_id": null,
-    "preferred_layout": "lecture",
+    "preferred_layout": null,
     "semester_id": 5,
     "exams_count": 2,
     "has_final": true
@@ -2731,7 +2761,7 @@
     "preferred_slots": [
       6
     ],
-    "preferred_room_id": 7,
+    "preferred_room_id": 3,
     "preferred_layout": "lecture",
     "semester_id": 5,
     "exams_count": 2,
@@ -2801,7 +2831,7 @@
     "preferred_slots": [
       3
     ],
-    "preferred_room_id": 6,
+    "preferred_room_id": 3,
     "preferred_layout": "lecture",
     "semester_id": 5,
     "exams_count": 2,
@@ -2834,11 +2864,11 @@
       "Tuesday",
       "Thursday"
     ],
-    "preferred_slot_id": 4,
+    "preferred_slot_id": 5,
     "preferred_slots": [
-      4
+      5
     ],
-    "preferred_room_id": 5,
+    "preferred_room_id": 10,
     "preferred_layout": "lecture",
     "semester_id": 5,
     "exams_count": 2,
@@ -2889,9 +2919,9 @@
       "Wednesday",
       "Friday"
     ],
-    "preferred_slot_id": 2,
+    "preferred_slot_id": 4,
     "preferred_slots": [
-      2
+      4
     ],
     "preferred_room_id": null,
     "preferred_layout": "lecture",
@@ -2924,9 +2954,9 @@
       "Monday",
       "Wednesday"
     ],
-    "preferred_slot_id": 2,
+    "preferred_slot_id": 6,
     "preferred_slots": [
-      2
+      6
     ],
     "preferred_room_id": 5,
     "preferred_layout": "lecture",
@@ -2947,7 +2977,7 @@
     "preferred_slots": [
       5
     ],
-    "preferred_room_id": null,
+    "preferred_room_id": 10,
     "preferred_layout": "lecture",
     "semester_id": 5,
     "exams_count": 2,
@@ -3058,17 +3088,11 @@
     "id": 189,
     "instructor_id": 15,
     "course_id": 29,
-    "preferred_days": [
-      "Monday",
-      "Wednesday",
-      "Friday"
-    ],
-    "preferred_slot_id": 2,
-    "preferred_slots": [
-      2
-    ],
+    "preferred_days": [],
+    "preferred_slot_id": null,
+    "preferred_slots": [],
     "preferred_room_id": null,
-    "preferred_layout": "lecture",
+    "preferred_layout": null,
     "semester_id": 5,
     "exams_count": 2,
     "has_final": true
@@ -3078,7 +3102,7 @@
     "instructor_id": 15,
     "course_id": 30,
     "preferred_days": [
-      "Thursday"
+      "Wednesday"
     ],
     "preferred_slot_id": 4,
     "preferred_slots": [
@@ -3130,9 +3154,9 @@
       "Monday",
       "Wednesday"
     ],
-    "preferred_slot_id": 2,
+    "preferred_slot_id": 4,
     "preferred_slots": [
-      2
+      4
     ],
     "preferred_room_id": 2,
     "preferred_layout": "lecture",
@@ -3144,11 +3168,16 @@
     "id": 194,
     "instructor_id": 17,
     "course_id": 34,
-    "preferred_days": [],
-    "preferred_slot_id": null,
-    "preferred_slots": [],
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
     "preferred_room_id": null,
-    "preferred_layout": null,
+    "preferred_layout": "lecture",
     "semester_id": 5,
     "exams_count": 2,
     "has_final": true
@@ -3157,11 +3186,17 @@
     "id": 195,
     "instructor_id": 18,
     "course_id": 35,
-    "preferred_days": [],
-    "preferred_slot_id": null,
-    "preferred_slots": [],
-    "preferred_room_id": null,
-    "preferred_layout": null,
+    "preferred_days": [
+      "Monday",
+      "Wednesday",
+      "Friday"
+    ],
+    "preferred_slot_id": 2,
+    "preferred_slots": [
+      2
+    ],
+    "preferred_room_id": 9,
+    "preferred_layout": "lecture",
     "semester_id": 5,
     "exams_count": 2,
     "has_final": true
@@ -3228,16 +3263,11 @@
     "id": 200,
     "instructor_id": 20,
     "course_id": 40,
-    "preferred_days": [
-      "Tuesday",
-      "Thursday"
-    ],
-    "preferred_slot_id": 6,
-    "preferred_slots": [
-      6
-    ],
+    "preferred_days": [],
+    "preferred_slot_id": null,
+    "preferred_slots": [],
     "preferred_room_id": null,
-    "preferred_layout": "lecture",
+    "preferred_layout": null,
     "semester_id": 5,
     "exams_count": 2,
     "has_final": true
@@ -3246,11 +3276,16 @@
     "id": 201,
     "instructor_id": 1,
     "course_id": 1,
-    "preferred_days": [],
-    "preferred_slot_id": null,
-    "preferred_slots": [],
-    "preferred_room_id": null,
-    "preferred_layout": null,
+    "preferred_days": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "preferred_slot_id": 3,
+    "preferred_slots": [
+      3
+    ],
+    "preferred_room_id": 6,
+    "preferred_layout": "lecture",
     "semester_id": 6,
     "exams_count": 2,
     "has_final": true
@@ -3309,17 +3344,11 @@
     "id": 205,
     "instructor_id": 3,
     "course_id": 5,
-    "preferred_days": [
-      "Monday",
-      "Wednesday",
-      "Friday"
-    ],
-    "preferred_slot_id": 3,
-    "preferred_slots": [
-      3
-    ],
+    "preferred_days": [],
+    "preferred_slot_id": null,
+    "preferred_slots": [],
     "preferred_room_id": null,
-    "preferred_layout": "lecture",
+    "preferred_layout": null,
     "semester_id": 6,
     "exams_count": 2,
     "has_final": true
@@ -3386,7 +3415,7 @@
     "preferred_slots": [
       6
     ],
-    "preferred_room_id": 7,
+    "preferred_room_id": 3,
     "preferred_layout": "lecture",
     "semester_id": 6,
     "exams_count": 2,
@@ -3489,11 +3518,11 @@
       "Tuesday",
       "Thursday"
     ],
-    "preferred_slot_id": 4,
+    "preferred_slot_id": 5,
     "preferred_slots": [
-      4
+      5
     ],
-    "preferred_room_id": 5,
+    "preferred_room_id": 10,
     "preferred_layout": "lecture",
     "semester_id": 6,
     "exams_count": 2,
@@ -3579,11 +3608,11 @@
       "Monday",
       "Wednesday"
     ],
-    "preferred_slot_id": 2,
+    "preferred_slot_id": 6,
     "preferred_slots": [
-      2
+      6
     ],
-    "preferred_room_id": 11,
+    "preferred_room_id": 5,
     "preferred_layout": "lecture",
     "semester_id": 6,
     "exams_count": 2,
@@ -3602,7 +3631,7 @@
     "preferred_slots": [
       5
     ],
-    "preferred_room_id": null,
+    "preferred_room_id": 10,
     "preferred_layout": "lecture",
     "semester_id": 6,
     "exams_count": 2,
@@ -3713,17 +3742,11 @@
     "id": 229,
     "instructor_id": 15,
     "course_id": 29,
-    "preferred_days": [
-      "Monday",
-      "Wednesday",
-      "Friday"
-    ],
-    "preferred_slot_id": 2,
-    "preferred_slots": [
-      2
-    ],
+    "preferred_days": [],
+    "preferred_slot_id": null,
+    "preferred_slots": [],
     "preferred_room_id": null,
-    "preferred_layout": "lecture",
+    "preferred_layout": null,
     "semester_id": 6,
     "exams_count": 2,
     "has_final": true
@@ -3785,9 +3808,9 @@
       "Monday",
       "Wednesday"
     ],
-    "preferred_slot_id": 2,
+    "preferred_slot_id": 4,
     "preferred_slots": [
-      2
+      4
     ],
     "preferred_room_id": 2,
     "preferred_layout": "lecture",
@@ -3799,11 +3822,16 @@
     "id": 234,
     "instructor_id": 17,
     "course_id": 34,
-    "preferred_days": [],
-    "preferred_slot_id": null,
-    "preferred_slots": [],
+    "preferred_days": [
+      "Monday",
+      "Wednesday"
+    ],
+    "preferred_slot_id": 4,
+    "preferred_slots": [
+      4
+    ],
     "preferred_room_id": null,
-    "preferred_layout": null,
+    "preferred_layout": "lecture",
     "semester_id": 6,
     "exams_count": 2,
     "has_final": true

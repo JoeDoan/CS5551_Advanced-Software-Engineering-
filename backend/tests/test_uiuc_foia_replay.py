@@ -11,7 +11,7 @@ from app.services import copilot_service
 EXPECTED_LAB_CODES = {"CS 461", "ECE 206", "ECE 311", "CHEM 315", "BIOE 202"}
 
 
-def test_uiuc_foia_19_term_chronological_enrollment_forecast(
+def test_uiuc_foia_20_term_chronological_enrollment_forecast(
     monkeypatch: pytest.MonkeyPatch,
     session: Session,
     client: TestClient,
@@ -27,29 +27,42 @@ def test_uiuc_foia_19_term_chronological_enrollment_forecast(
     assert meta["is_synthetic"] is False
     assert meta["note"] is None
     assert meta["data_source"] == "uiuc_foia_registrar"
-    assert meta["target_semester_id"] == 6
-    assert meta["target_semester_name"] == "Spring 2026"
+    assert meta["target_semester_id"] == 5
+    assert meta["target_semester_name"] == "Fall 2026"
     assert meta["observed_semester_ids"] == [
-        *range(101, 115),
+        *range(101, 117),
         1,
         2,
         3,
         4,
-        5,
     ]
-    assert len(meta["observed_semester_ids"]) == 19
+    assert len(meta["observed_semester_ids"]) == 20
     assert meta["observed_semester_ids"][0] == 101
-    assert meta["observed_semester_ids"][-1] == 5
-    assert len(meta["backtest_origins"]) == 15
-    assert meta["interval_calibration_n"] == 600
+    assert meta["observed_semester_ids"][-1] == 4
+    assert len(meta["backtest_origins"]) == 16
+    assert meta["interval_calibration_n"] == 640
 
     courses = body["courses"]
     assert len(courses) == 40
     for course in courses:
-        assert len(course["history"]) == 19
+        assert len(course["history"]) == 20
         assert course["history"][0]["semester_name"] == "Fall 2016"
-        assert course["history"][-1]["semester_name"] == "Fall 2025"
-        assert all(pt["semester_id"] != 6 for pt in course["history"])
+        assert course["history"][-1]["semester_name"] == "Spring 2026"
+        assert all(pt["semester_id"] not in (5, 6) for pt in course["history"])
+
+    resp_sem6 = client.get(
+        "/api/v1/forecast/enrollment", params={"semester_id": 6}
+    )
+    assert resp_sem6.status_code == 200
+    meta_sem6 = resp_sem6.json()["meta"]
+    assert meta_sem6["target_semester_id"] == 6
+    assert meta_sem6["target_semester_name"] == "Spring 2027"
+    assert len(meta_sem6["observed_semester_ids"]) == 20
+
+    resp_sem4 = client.get(
+        "/api/v1/forecast/enrollment", params={"semester_id": 4}
+    )
+    assert resp_sem4.status_code == 422
 
 
 def test_empirical_benchmark_returns_404_on_umkc_profile(
@@ -84,7 +97,7 @@ def test_empirical_benchmark_two_stage_non_circular_evaluation_and_cache(
     assert data["dataset_source"] == (
         "UIUC FOIA Registrar & Course Explorer 2016-2026"
     )
-    assert data["heldout_semester_id"] == 6
+    assert data["heldout_semester_id"] == 4
     assert data["heldout_semester_name"] == "Spring 2026"
     assert data["observed_semesters_count"] == 19
     assert data["evaluated_courses_count"] == 40
@@ -148,7 +161,7 @@ def test_empirical_benchmark_two_stage_non_circular_evaluation_and_cache(
             assert row["optisched_room"] in lab_rooms
 
 
-def test_copilot_parses_bioe_growth_lee_buyout_and_spring_2026_without_warnings(
+def test_copilot_parses_bioe_growth_lee_buyout_and_spring_2027_without_warnings(
     monkeypatch: pytest.MonkeyPatch,
     session: Session,
 ):
@@ -157,11 +170,11 @@ def test_copilot_parses_bioe_growth_lee_buyout_and_spring_2026_without_warnings(
 
     vocab = copilot_service.load_vocabulary(session)
     assert "BIOE" in vocab.departments
-    assert vocab.target_semester == "Spring 2026"
+    assert vocab.target_semester == "Spring 2027"
 
     parsed = copilot_service.parse_prompt(
         "What if BIOE enrollment grows 20% and Dr. Lee takes a 1-course buyout "
-        "in Spring 2026?",
+        "in Spring 2027?",
         vocab,
         use_llm=False,
     )
@@ -180,4 +193,4 @@ def test_copilot_parses_bioe_growth_lee_buyout_and_spring_2026_without_warnings(
     assert [
         (g.department, g.pct) for g in off_term.spec.enrollment_growth
     ] == [("BIOE", 15.0)]
-    assert any("Only Spring 2026 is simulated" in w for w in off_term.warnings)
+    assert any("Only Spring 2027 is simulated" in w for w in off_term.warnings)

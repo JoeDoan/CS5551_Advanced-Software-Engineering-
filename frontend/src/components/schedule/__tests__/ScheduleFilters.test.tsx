@@ -278,4 +278,74 @@ describe('ScheduleTable, ScheduleRoomMatrix & SchedulePage Views', () => {
       'Showing 2 of 2 sections'
     )
   })
+
+  it('colors STAT, PHYS, and BIOE chips distinctly and ranks MR rows ahead of single-day rows in ScheduleRoomMatrix', () => {
+    const uiucEvents: ScheduleEvent[] = [
+      {
+        id: 11,
+        semester_id: 5,
+        course_id: 101,
+        course_code: 'PHYS 211',
+        course_name: 'University Physics: Mechanics',
+        user_id: 3,
+        instructor_id: 3,
+        instructor_name: 'Dr. Mats Selen',
+        room_number: 'LL 141',
+        department: 'PHYS',
+        day_pattern: 'M',
+        start_time: '09:00',
+        end_time: '09:50',
+        status: 'confirmed',
+      },
+      {
+        id: 12,
+        semester_id: 5,
+        course_id: 102,
+        course_code: 'STAT 400',
+        course_name: 'Statistics and Probability I',
+        user_id: 1,
+        instructor_id: 1,
+        instructor_name: 'Dr. Hyoeun Lee',
+        room_number: 'DCL 1320',
+        department: 'STAT',
+        day_pattern: 'MR',
+        start_time: '11:00',
+        end_time: '12:15',
+        status: 'confirmed',
+      },
+      {
+        id: 13,
+        semester_id: 5,
+        course_id: 103,
+        course_code: 'BIOE 205',
+        course_name: 'Signals & Systems in Bioengrg',
+        user_id: 4,
+        instructor_id: 4,
+        instructor_name: 'Dr. Brad Sutton',
+        room_number: 'CIF 3031',
+        department: 'BIOE',
+        day_pattern: 'MF',
+        start_time: '10:00',
+        end_time: '11:15',
+        status: 'confirmed',
+      },
+    ]
+
+    render(<ScheduleRoomMatrix events={uiucEvents} onSelectEvent={vi.fn()} />)
+
+    expect(screen.getByTestId('matrix-event-chip-12')).toHaveStyle({
+      backgroundColor: '#7c3aed',
+    })
+    expect(screen.getByTestId('matrix-event-chip-11')).toHaveStyle({
+      backgroundColor: '#059669',
+    })
+    expect(screen.getByTestId('matrix-event-chip-13')).toHaveStyle({
+      backgroundColor: '#0d9488',
+    })
+
+    const bodyRows = screen.getAllByRole('row').slice(1)
+    expect(bodyRows[0]).toHaveTextContent('MF')
+    expect(bodyRows[1]).toHaveTextContent('MR')
+    expect(bodyRows[2]).toHaveTextContent('M')
+  })
 })

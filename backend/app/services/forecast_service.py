@@ -20,7 +20,7 @@ validates the pipeline, not real-world accuracy. Responses say so explicitly.
 
 import math
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple
 
 import numpy as np
@@ -152,11 +152,12 @@ class Panel:
     target_sem_id: int
     Y: np.ndarray               # (n_courses, n_obs) enrolled
     W: np.ndarray               # (n_courses, n_obs) waitlist
-    fall: np.ndarray            # (n_obs + 1,) True where the term is a Fall term
+    fall: np.ndarray            # (n_obs + H,) True where the term is a Fall term
     dept_onehot: np.ndarray     # (n_courses, n_depts)
     level: np.ndarray           # (n_courses,) course level (hundreds digit)
     skipped: List[int]
     sources: List[str]
+    future_sem_ids: List[int] = field(default_factory=list)
 
 
 def _course_level(course_code: str) -> float:
@@ -167,7 +168,11 @@ def _course_level(course_code: str) -> float:
     return float(number // 1000 if number >= 1000 else number // 100) or 1.0
 
 
-def build_panel(session: Session, target_semester_id: Optional[int] = None) -> Panel:
+def build_panel(
+    session: Session,
+    target_semester_id: Optional[int] = None,
+    causal_holdout: bool = False,
+) -> Panel:
     obs = session.exec(select(EnrollmentObservation)).all()
     if not obs:
         raise HTTPException(
@@ -175,6 +180,19 @@ def build_panel(session: Session, target_semester_id: Optional[int] = None) -> P
             detail="No enrollment history loaded. Seed the database first.",
         )
     semesters = {s.id: s for s in session.exec(select(Semester)).all()}
+    if causal_holdout and target_semester_id is not None:
+        if target_semester_id not in semesters:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Semester {target_semester_id} does not exist.",
+            )
+        target_start_date = semesters[target_semester_id].start_date
+        obs = [
+            o
+            for o in obs
+            if o.semester_id in semesters
+            and semesters[o.semester_id].start_date < target_start_date
+        ]
     sem_ids = sorted(
         {o.semester_id for o in obs},
         key=lambda sid: (semesters[sid].start_date if sid in semesters else "", sid),
@@ -197,20 +215,31 @@ def build_panel(session: Session, target_semester_id: Optional[int] = None) -> P
         ),
         key=lambda s: (s.start_date, s.id),
     )
-    target = future_semesters[0].id if future_semesters else sem_ids[-1] + 1
-    if target_semester_id is not None and target_semester_id != target:
-        raise HTTPException(
-            status_code=422,
-            detail=(
-                f"Only the next unobserved semester ({target}) can be forecast; "
-                f"semesters {sem_ids[0]}-{sem_ids[-1]} are already observed."
-            ),
-        )
+    future_ids = [s.id for s in future_semesters if s.id is not None]
+    if target_semester_id is None:
+        target = future_ids[0] if future_ids else sem_ids[-1] + 1
+    else:
+        if target_semester_id not in future_ids:
+            default_next = future_ids[0] if future_ids else sem_ids[-1] + 1
+            raise HTTPException(
+                status_code=422,
+                detail=(
+                    f"Only unobserved future semesters "
+                    f"({future_ids or [default_next]}) can be forecast; "
+                    f"semesters {sem_ids[0]}-{sem_ids[-1]} are already observed."
+                ),
+            )
+        target = target_semester_id
     if target not in semesters:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Semester {target} does not exist.",
         )
+    future_sem_ids = (
+        future_ids[: future_ids.index(target) + 1]
+        if target in future_ids
+        else [target]
+    )
 
     by_course: Dict[int, Dict[int, EnrollmentObservation]] = {}
     for o in obs:
@@ -231,13 +260,24 @@ def build_panel(session: Session, target_semester_id: Optional[int] = None) -> P
             detail="No course has a complete enrollment history.",
         )
 
-    Y = np.array([[by_course[c.id][s].enrolled for s in sem_ids] for c in kept], dtype=float)
-    W = np.array([[by_course[c.id][s].waitlist for s in sem_ids] for c in kept], dtype=float)
+    Y = np.array(
+        [[by_course[c.id][s].enrolled for s in sem_ids] for c in kept],
+        dtype=float,
+    )
+    W = np.array(
+        [[by_course[c.id][s].waitlist for s in sem_ids] for c in kept],
+        dtype=float,
+    )
     Y = np.maximum(Y, 1.0)
     depts = sorted({c.department for c in kept})
-    onehot = np.array([[1.0 if c.department == d else 0.0 for d in depts] for c in kept])
+    onehot = np.array(
+        [[1.0 if c.department == d else 0.0 for d in depts] for c in kept]
+    )
     fall = np.array(
-        [semesters[s].name.strip().lower().startswith("fall") for s in sem_ids + [target]]
+        [
+            semesters[s].name.strip().lower().startswith("fall")
+            for s in sem_ids + future_sem_ids
+        ]
     )
     sources = sorted({o.source for o in obs})
     return Panel(
@@ -252,6 +292,7 @@ def build_panel(session: Session, target_semester_id: Optional[int] = None) -> P
         level=np.array([_course_level(c.course_code) for c in kept]),
         skipped=skipped,
         sources=sources,
+        future_sem_ids=future_sem_ids,
     )
 
 
@@ -364,8 +405,12 @@ def _conformal_q(abs_rel: np.ndarray, alpha: float) -> float:
     return float(np.sort(abs_rel)[k - 1])
 
 
-def run_pipeline(session: Session, target_semester_id: Optional[int] = None) -> Pipeline:
-    p = build_panel(session, target_semester_id)
+def run_pipeline(
+    session: Session,
+    target_semester_id: Optional[int] = None,
+    causal_holdout: bool = False,
+) -> Pipeline:
+    p = build_panel(session, target_semester_id, causal_holdout=causal_holdout)
     n_obs = p.Y.shape[1]
     origins = (
         list(range(4, n_obs))
@@ -402,7 +447,38 @@ def run_pipeline(session: Session, target_semester_id: Optional[int] = None) -> 
         q = _conformal_q(cal, 0.2)
         coverage = round(float(np.mean(np.abs(rel_by_origin[origins[-1]]) <= q)), 3)
 
-    forecasts = {name: fn(p, n_obs) for name, fn in MODEL_FUNCS.items()}
+    horizon = len(p.future_sem_ids)
+    if horizon <= 1:
+        forecasts = {name: fn(p, n_obs) for name, fn in MODEL_FUNCS.items()}
+    else:
+        forecasts = {}
+        zeros_col = np.zeros((p.Y.shape[0], 1), dtype=float)
+        for name, fn in MODEL_FUNCS.items():
+            y_cur = p.Y
+            w_cur = p.W
+            step_pred = np.zeros(p.Y.shape[0], dtype=float)
+            for step in range(horizon):
+                t_idx = n_obs + step
+                step_panel = Panel(
+                    courses=p.courses,
+                    sem_ids=p.sem_ids,
+                    sem_names=p.sem_names,
+                    target_sem_id=p.future_sem_ids[step],
+                    Y=y_cur,
+                    W=w_cur,
+                    fall=p.fall[: t_idx + 1],
+                    dept_onehot=p.dept_onehot,
+                    level=p.level,
+                    skipped=p.skipped,
+                    sources=p.sources,
+                    future_sem_ids=[p.future_sem_ids[step]],
+                )
+                step_pred = fn(step_panel, t_idx)
+                if step + 1 < horizon:
+                    y_cur = np.hstack([y_cur, np.maximum(step_pred, 1.0)[:, None]])
+                    w_cur = np.hstack([w_cur, zeros_col])
+            forecasts[name] = step_pred
+
     return Pipeline(
         panel=p,
         origins=origins,
@@ -437,9 +513,11 @@ def _interval(yhat: float, q: float) -> Tuple[float, float]:
 
 
 def get_enrollment_forecast(
-    session: Session, semester_id: Optional[int] = None
+    session: Session,
+    semester_id: Optional[int] = None,
+    causal_holdout: bool = False,
 ) -> EnrollmentForecastResponse:
-    pl = run_pipeline(session, semester_id)
+    pl = run_pipeline(session, semester_id, causal_holdout=causal_holdout)
     p = pl.panel
     abs_rel = np.abs(pl.rel_residuals)
     q80 = _conformal_q(abs_rel, 0.2)
@@ -481,7 +559,9 @@ def get_enrollment_forecast(
 # --------------------------------------------------------------------------
 # Bottlenecks
 # --------------------------------------------------------------------------
-def _risk_tier(forecast: float, max_cap: int, headroom_pct: float, p_over: float) -> str:
+def _risk_tier(
+    forecast: float, max_cap: int, headroom_pct: float, p_over: float
+) -> str:
     if forecast >= max_cap or p_over >= 0.5:
         return "critical"
     if p_over >= 0.2 or headroom_pct < 10:
@@ -491,7 +571,9 @@ def _risk_tier(forecast: float, max_cap: int, headroom_pct: float, p_over: float
     return "ok"
 
 
-def _remedy(tier: str, forecast: float, hi95: float, max_cap: int, room: str) -> Optional[Remedy]:
+def _remedy(
+    tier: str, forecast: float, hi95: float, max_cap: int, room: str
+) -> Optional[Remedy]:
     if tier == "ok":
         return None
     if hi95 > max_cap:
@@ -500,7 +582,8 @@ def _remedy(tier: str, forecast: float, hi95: float, max_cap: int, room: str) ->
             action="split_section",
             detail=(
                 f"Upper forecast {hi95:.0f} exceeds the largest compatible room "
-                f"({room}, {max_cap} seats). Split into 2 sections of about {each} seats."
+                f"({room}, {max_cap} seats). "
+                f"Split into 2 sections of about {each} seats."
             ),
         )
     return Remedy(
@@ -563,7 +646,13 @@ def get_bottlenecks(
             )
         )
 
-    items.sort(key=lambda x: (RISK_ORDER[x.risk_tier], -x.overflow_probability, x.capacity_cliff_pct))
+    items.sort(
+        key=lambda x: (
+            RISK_ORDER[x.risk_tier],
+            -x.overflow_probability,
+            x.capacity_cliff_pct,
+        )
+    )
     tiers = {t: 0 for t in RISK_ORDER}
     for it in items:
         tiers[it.risk_tier] += 1

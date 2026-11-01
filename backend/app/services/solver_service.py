@@ -116,6 +116,60 @@ def _map_preferred_slots(raw_slots: Any, loader: DataLoader) -> List[int]:
     return mapped
 
 
+def _augment_loader_time_slots_from_preferences(
+    session: Session,
+    semester_id: int,
+    loader: DataLoader,
+) -> Set[int]:
+    prefs = session.exec(
+        select(InstructorPreference)
+        .where(InstructorPreference.semester_id == semester_id)
+        .order_by(InstructorPreference.id)
+    ).all()
+    if not prefs:
+        return set()
+
+    existing_ranges: Set[Tuple[str, str]] = {
+        (str(ts["start_time"]).strip(), str(ts["end_time"]).strip())
+        for ts in loader.time_slots
+    }
+    valid_db_ranges: Set[Tuple[str, str]] = {
+        (str(ts.start_time).strip(), str(ts.end_time).strip())
+        for ts in session.exec(select(TimeSlot).order_by(TimeSlot.id)).all()
+    }
+    next_slot_id = (
+        max((int(ts["slot_id"]) for ts in loader.time_slots), default=0) + 1
+    )
+    extra_slot_ids: Set[int] = set()
+
+    for pref in prefs:
+        if not isinstance(pref.preferred_slots, list):
+            continue
+        for item in pref.preferred_slots:
+            match = _TIME_RANGE_RE.search(str(item).strip())
+            if not match:
+                continue
+            start_s, end_s = match.group(1), match.group(2)
+            if _to_minutes(end_s) <= _to_minutes(start_s):
+                continue
+            if valid_db_ranges and (start_s, end_s) not in valid_db_ranges:
+                continue
+            if (start_s, end_s) in existing_ranges:
+                continue
+            loader.time_slots.append(
+                {
+                    "slot_id": next_slot_id,
+                    "start_time": start_s,
+                    "end_time": end_s,
+                }
+            )
+            existing_ranges.add((start_s, end_s))
+            extra_slot_ids.add(next_slot_id)
+            next_slot_id += 1
+
+    return extra_slot_ids
+
+
 def _overlay_sqlite_preferences(
     session: Session,
     semester_id: int,
@@ -460,14 +514,29 @@ def run_solver_for_semester(
         )
 
     loader = DataLoader()
+    extra_slot_ids = _augment_loader_time_slots_from_preferences(
+        session=session,
+        semester_id=semester.id,
+        loader=loader,
+    )
     profiles = load_profiles_from_data(loader, semester_id=semester.semester_id)
     base_valid_ic = set(loader.get_valid_ic_pairs())
-    valid_ic_pairs = set(base_valid_ic)
+    inst_by_id = {u["user_id"]: u["name"] for u in loader.get_instructors()}
+    cname_by_id = {c["course_id"]: c["course_name"] for c in loader.courses}
+    sem_base_ic = {
+        (inst_by_id[p["instructor_id"]], cname_by_id[p["course_id"]])
+        for p in loader.instructor_preferences
+        if p.get("semester_id") == semester.semester_id
+        and p.get("course_id") is not None
+        and p.get("instructor_id") in inst_by_id
+        and p.get("course_id") in cname_by_id
+    }
+    overlay_ic_pairs: Set[Tuple[str, str]] = set()
     _overlay_sqlite_preferences(
         session=session,
         semester_id=semester.id,
         profiles=profiles,
-        valid_ic_pairs=valid_ic_pairs,
+        valid_ic_pairs=overlay_ic_pairs,
         loader=loader,
     )
     slots = loader.get_slots_dict()
@@ -488,9 +557,23 @@ def run_solver_for_semester(
         loader=loader,
         instructors=instructors,
         courses=courses,
-        valid_ic_pairs=valid_ic_pairs,
+        valid_ic_pairs=overlay_ic_pairs,
         valid_rc_pairs=valid_rc_pairs,
     )
+    all_valid_ic = base_valid_ic | overlay_ic_pairs
+    sem_valid_ic = sem_base_ic | overlay_ic_pairs
+    sem_covers_courses = set(courses).issubset({c_name for _, c_name in sem_valid_ic})
+    sem_covers_instructors = all(
+        sum(1 for i_name, _ in sem_valid_ic if i_name == inst_name)
+        >= max(min_courses_per_instructor, pinned_by_inst.get(inst_name, 0))
+        for inst_name in instructors
+    )
+    primary_ic_pairs = (
+        sem_valid_ic
+        if (sem_base_ic and sem_covers_courses and sem_covers_instructors)
+        else all_valid_ic
+    )
+
     max_pinned_per_inst = max(pinned_by_inst.values(), default=0)
     effective_max_courses = max(max_courses_per_instructor, max_pinned_per_inst)
     total_min_load = sum(
@@ -500,6 +583,22 @@ def run_solver_for_semester(
     target_total_sections = sum(
         max(1, pinned_by_course.get(c_name, 0)) for c_name in courses
     )
+
+    slot_intervals = {
+        int(ts["slot_id"]): (
+            _to_minutes(str(ts["start_time"]).strip()),
+            _to_minutes(str(ts["end_time"]).strip()),
+        )
+        for ts in loader.time_slots
+    }
+    sorted_sids = sorted(slot_intervals)
+    overlapping_slot_pairs = [
+        (s1, s2)
+        for idx, s1 in enumerate(sorted_sids)
+        for s2 in sorted_sids[idx + 1 :]
+        if slot_intervals[s1][0] < slot_intervals[s2][1]
+        and slot_intervals[s2][0] < slot_intervals[s1][1]
+    ]
 
     def _build_and_solve(
         ic_pairs: Set[Tuple[str, str]],
@@ -511,6 +610,20 @@ def run_solver_for_semester(
         Any,
         Any,
     ]:
+        y_bonus: Dict[Tuple[str, int, str, str], int] = {}
+        if extra_slot_ids:
+            for inst_name, c_name in ic_pairs:
+                prof = profiles.get(inst_name, {})
+                c_p = prof.get("course_preferences", {}).get(c_name) or prof.get(
+                    "preferences", {}
+                )
+                pref_slot_set = set(c_p.get("slots", []))
+                for sid in extra_slot_ids:
+                    if sid not in pref_slot_set:
+                        for r_num in class_room:
+                            if (r_num, c_name) in valid_rc_pairs:
+                                y_bonus[(r_num, sid, inst_name, c_name)] = -10
+
         built_model, built_x, built_y, built_z, _ = build_schedule_model(
             profiles,
             DATE,
@@ -525,7 +638,31 @@ def run_solver_for_semester(
             valid_rc_pairs=valid_rc_pairs,
             min_courses_per_instructor=min_courses_per_instructor,
             max_courses_per_instructor=effective_max_courses,
+            y_bonus=y_bonus or None,
         )
+        for s1, s2 in overlapping_slot_pairs:
+            for day_name in DATE:
+                for inst_name in instructors:
+                    vars_i = [
+                        built_x[day_name, r_num, sid, inst_name, c_name]
+                        for sid in (s1, s2)
+                        for r_num in class_room
+                        for c_name in courses
+                        if (day_name, r_num, sid, inst_name, c_name) in built_x
+                    ]
+                    if len(vars_i) > 1:
+                        built_model.AddAtMostOne(vars_i)
+                for r_num in class_room:
+                    vars_r = [
+                        built_x[day_name, r_num, sid, inst_name, c_name]
+                        for sid in (s1, s2)
+                        for inst_name in instructors
+                        for c_name in courses
+                        if (day_name, r_num, sid, inst_name, c_name) in built_x
+                    ]
+                    if len(vars_r) > 1:
+                        built_model.AddAtMostOne(vars_r)
+
         for inst_name, course_name in pinned_ic_pairs:
             if (inst_name, course_name) in built_z:
                 built_model.Add(built_z[inst_name, course_name] == 1)
@@ -566,11 +703,18 @@ def run_solver_for_semester(
         return cp_solver, st, built_x, built_y, built_z
 
     solver, solve_status, X, Y, Z = _build_and_solve(
-        valid_ic_pairs, SOLVER_TIME_LIMIT_SECONDS
+        primary_ic_pairs, SOLVER_TIME_LIMIT_SECONDS
     )
+    if (
+        solve_status not in (cp_model.OPTIMAL, cp_model.FEASIBLE)
+        and primary_ic_pairs != all_valid_ic
+    ):
+        solver, solve_status, X, Y, Z = _build_and_solve(
+            all_valid_ic, FALLBACK_TIME_LIMIT_SECONDS
+        )
     if solve_status not in (cp_model.OPTIMAL, cp_model.FEASIBLE) and pinned_ic_pairs:
         expanded_ic = _expand_subject_cluster_pairs(
-            base_valid_ic | valid_ic_pairs, pinned_ic_pairs, courses
+            all_valid_ic, pinned_ic_pairs, courses
         )
         solver, solve_status, X, Y, Z = _build_and_solve(
             expanded_ic, FALLBACK_TIME_LIMIT_SECONDS

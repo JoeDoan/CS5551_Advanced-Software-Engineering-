@@ -1,7 +1,7 @@
 import { Room } from '../types/api'
 
 export const CURRENT_SEMESTER_ID = 5
-export const CURRENT_SEMESTER_NAME = 'Fall 2025'
+export const CURRENT_SEMESTER_NAME = 'Fall 2026'
 
 export interface AcademicSemesterOption {
   id: number
@@ -10,12 +10,12 @@ export interface AcademicSemesterOption {
 }
 
 export const ACADEMIC_SEMESTERS: readonly AcademicSemesterOption[] = [
-  { id: 1, name: 'Fall 2023', isActive: false },
-  { id: 2, name: 'Spring 2024', isActive: false },
-  { id: 3, name: 'Fall 2024', isActive: false },
-  { id: 4, name: 'Spring 2025', isActive: false },
-  { id: 5, name: 'Fall 2025', isActive: true },
-  { id: 6, name: 'Spring 2026', isActive: false },
+  { id: 1, name: 'Fall 2024', isActive: false },
+  { id: 2, name: 'Spring 2025', isActive: false },
+  { id: 3, name: 'Fall 2025', isActive: false },
+  { id: 4, name: 'Spring 2026', isActive: false },
+  { id: 5, name: 'Fall 2026', isActive: true },
+  { id: 6, name: 'Spring 2027', isActive: false },
 ]
 
 export const STANDARD_DEPARTMENTS = [

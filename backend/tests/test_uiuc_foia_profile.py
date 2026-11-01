@@ -91,8 +91,8 @@ def test_uiuc_foia_zero_gpa_columns_and_offline_determinism(tmp_path: Path):
     assert summary["courses"] == 40
     assert summary["users"] == 20
     assert summary["rooms"] == 16
-    assert summary["semesters"] == 20
-    assert summary["enrollment_history"] == 760
+    assert summary["semesters"] == 22
+    assert summary["enrollment_history"] == 800
 
     rebuilt_jsons = sorted(Path(p).name for p in glob.glob(str(tmp_path / "*.json")))
     committed_jsons = sorted(p.name for p in json_files)
@@ -114,8 +114,8 @@ def test_uiuc_foia_seeding_counts_faculty_and_demo_accounts(
     assert summary["courses"] == 40
     assert summary["users"] == 20
     assert summary["rooms"] == 16
-    assert summary["semesters"] == 20
-    assert summary["enrollment_observations"] == 760
+    assert summary["semesters"] == 22
+    assert summary["enrollment_observations"] == 800
 
     courses = session.exec(select(Course)).all()
     assert len(courses) == 40
@@ -135,17 +135,17 @@ def test_uiuc_foia_seeding_counts_faculty_and_demo_accounts(
     assert sum(1 for r in rooms if r.room_type == "lab") == 4
 
     semesters = session.exec(select(Semester)).all()
-    expected_sem_ids = {1, 2, 3, 4, 5, 6} | set(range(101, 115))
+    expected_sem_ids = {1, 2, 3, 4, 5, 6} | set(range(101, 117))
     assert {s.semester_id for s in semesters} == expected_sem_ids
     active_sems = [s for s in semesters if s.is_active]
     assert len(active_sems) == 1
     assert active_sems[0].semester_id == 5
-    assert active_sems[0].name == "Fall 2025"
+    assert active_sems[0].name == "Fall 2026"
 
     observations = session.exec(select(EnrollmentObservation)).all()
-    assert len(observations) == 760
+    assert len(observations) == 800
     assert {obs.source for obs in observations} == {"uiuc_foia_registrar"}
-    assert all(obs.semester_id != 6 for obs in observations)
+    assert all(obs.semester_id not in (5, 6) for obs in observations)
 
     demo_resp = client.get("/api/v1/auth/demo-accounts")
     assert demo_resp.status_code == 200
@@ -164,18 +164,18 @@ def test_uiuc_foia_causal_two_year_preferences_and_empty_subset(
     seed_database(session=session)
 
     loader = DataLoader()
-    sem6_raw = [
-        p for p in loader.instructor_preferences if p.get("semester_id") == 6
+    sem4_raw = [
+        p for p in loader.instructor_preferences if p.get("semester_id") == 4
     ]
-    assert len(sem6_raw) == 40
+    assert len(sem4_raw) == 40
 
     with_pref = []
     without_pref = []
-    for pref in sem6_raw:
+    for pref in sem4_raw:
         resolved = loader.get_resolved_preference(
             pref["instructor_id"],
             course_id=pref["course_id"],
-            semester_id=6,
+            semester_id=4,
         )
         if resolved["has_preferences"]:
             with_pref.append(pref)
@@ -186,27 +186,27 @@ def test_uiuc_foia_causal_two_year_preferences_and_empty_subset(
     assert len(without_pref) > 0
     assert len(with_pref) + len(without_pref) == 40
 
-    lee_stat400 = loader.get_resolved_preference(1, course_id=1, semester_id=6)
+    lee_stat400 = loader.get_resolved_preference(1, course_id=1, semester_id=4)
     assert lee_stat400["has_preferences"] is False
     assert lee_stat400["days"] == set()
     assert lee_stat400["slots"] == set()
     assert lee_stat400["raw"]["preferred_days"] == []
     assert lee_stat400["raw"]["preferred_slots"] == []
 
-    lee_stat429 = loader.get_resolved_preference(1, course_id=2, semester_id=6)
+    lee_stat429 = loader.get_resolved_preference(1, course_id=2, semester_id=4)
     assert lee_stat429["has_preferences"] is True
     assert len(lee_stat429["days"]) > 0
     assert len(lee_stat429["slots"]) > 0
 
-    db_sem6_prefs = session.exec(
-        select(InstructorPreference).where(InstructorPreference.semester_id == 6)
+    db_sem4_prefs = session.exec(
+        select(InstructorPreference).where(InstructorPreference.semester_id == 4)
     ).all()
-    assert len(db_sem6_prefs) == 40
-    assert sum(1 for p in db_sem6_prefs if p.preferred_days and p.preferred_slots) == (
+    assert len(db_sem4_prefs) == 40
+    assert sum(1 for p in db_sem4_prefs if p.preferred_days and p.preferred_slots) == (
         len(with_pref)
     )
     assert sum(
-        1 for p in db_sem6_prefs if not p.preferred_days and not p.preferred_slots
+        1 for p in db_sem4_prefs if not p.preferred_days and not p.preferred_slots
     ) == len(without_pref)
 
     heldout_path = os.path.join(
@@ -214,6 +214,8 @@ def test_uiuc_foia_causal_two_year_preferences_and_empty_subset(
     )
     with open(heldout_path, "r", encoding="utf-8") as handle:
         heldout = json.load(handle)
+    assert heldout["heldout_semester_id"] == 4
+    assert heldout["heldout_semester_name"] == "Spring 2026"
     assert len(heldout["courses"]) == 40
     assert sum(1 for c in heldout["courses"] if c["has_2yr_preference"]) == len(
         with_pref
@@ -267,3 +269,77 @@ def test_uiuc_foia_cpsat_solver_runs_cleanly_on_sem5_and_sem6(
                 assert ik not in inst_occupied
                 room_occupied.add(rk)
                 inst_occupied.add(ik)
+
+
+def test_uiuc_foia_hyoeun_lee_evening_preferences_reschedule_courses(
+    monkeypatch: pytest.MonkeyPatch,
+    session: Session,
+    client: TestClient,
+):
+    monkeypatch.setenv("DATA_PROFILE", "uiuc_foia")
+    seed_database(session=session)
+
+    pref_resp = client.post(
+        "/api/v1/preferences",
+        json={
+            "user_id": 1,
+            "semester_id": 5,
+            "course_id": None,
+            "preferred_days": ["M", "R"],
+            "preferred_slots": ["17:30-18:45", "19:00-20:15"],
+            "preferred_rooms": [],
+        },
+    )
+    assert pref_resp.status_code in (200, 201)
+
+    solver_resp = client.post("/api/v1/solver/run", json={"semester_id": 5})
+    assert solver_resp.status_code == 200
+    assert solver_resp.json()["status"] in ("OPTIMAL", "FEASIBLE")
+
+    sched_resp = client.get("/api/v1/schedules", params={"semester_id": 5})
+    assert sched_resp.status_code == 200
+    all_sections = sched_resp.json()
+    assert len(all_sections) == 40
+
+    lee_sections = [s for s in all_sections if s["user_id"] == 1]
+    assert len(lee_sections) == 2
+    assert {s["instructor_name"] for s in lee_sections} == {"Dr. Hyoeun Lee"}
+    assert {s["course_code"] for s in lee_sections} == {"STAT 400", "STAT 429"}
+    assert {s["day_pattern"] for s in lee_sections} == {"MR"}
+    assert {(s["start_time"], s["end_time"]) for s in lee_sections} == {
+        ("17:30", "18:45"),
+        ("19:00", "20:15"),
+    }
+
+    non_requesting_evening = [
+        s
+        for s in all_sections
+        if s["user_id"] != 1
+        and (s["start_time"], s["end_time"])
+        in {("17:30", "18:45"), ("19:00", "20:15")}
+    ]
+    assert non_requesting_evening == []
+
+
+def test_uiuc_foia_whatif_simulation_with_forecast_on_spring_2027(
+    monkeypatch: pytest.MonkeyPatch,
+    session: Session,
+    client: TestClient,
+):
+    monkeypatch.setenv("DATA_PROFILE", "uiuc_foia")
+    seed_database(session=session)
+
+    resp = client.post(
+        "/api/v1/scenarios/simulate",
+        json={
+            "semester_id": 6,
+            "use_forecast": True,
+            "time_limit_seconds": 8,
+        },
+    )
+    assert resp.status_code == 200, resp.text
+    data = resp.json()
+    assert data["semester_name"] == "Spring 2027"
+    assert data["baseline"]["status"] in ("OPTIMAL", "FEASIBLE")
+    assert data["scenario"]["status"] in ("OPTIMAL", "FEASIBLE")
+    assert data["scenario"]["scheduled_courses"] == 40

@@ -22,12 +22,13 @@ const DAY_PATTERN_RANK: Record<string, number> = {
   MW: 2,
   WF: 3,
   MF: 4,
-  M: 5,
-  W: 6,
-  F: 7,
-  TR: 8,
-  T: 9,
-  R: 10,
+  MR: 5,
+  M: 6,
+  W: 7,
+  F: 8,
+  TR: 9,
+  T: 10,
+  R: 11,
 }
 
 const formatLastName = (fullName: string): string => {

@@ -11,9 +11,12 @@ const DAY_MAP: Record<string, number> = {
 export const DEPARTMENT_COLORS: Record<string, { bg: string; border: string }> = {
   CS: { bg: '#2563eb', border: '#1d4ed8' },        // Blue
   MATH: { bg: '#7c3aed', border: '#6d28d9' },      // Purple
+  STAT: { bg: '#7c3aed', border: '#6d28d9' },
   ECE: { bg: '#059669', border: '#047857' },       // Emerald
+  PHYS: { bg: '#059669', border: '#047857' },
   CHEM: { bg: '#d97706', border: '#b45309' },      // Amber
   BIOL: { bg: '#0d9488', border: '#0f766e' },      // Teal
+  BIOE: { bg: '#0d9488', border: '#0f766e' },
   'CHEM/BIO': { bg: '#d97706', border: '#b45309' },// Amber
   DEFAULT: { bg: '#004b87', border: '#003866' },   // UMKC Blue
 }

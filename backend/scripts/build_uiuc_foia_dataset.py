@@ -124,12 +124,12 @@ ONLINE_OR_INDEPENDENT_TYPES = frozenset(
 )
 
 CAUSAL_2YR_LOOKBACK: Dict[int, Tuple[str, str, str, str]] = {
-    1: ("2021-fa", "2022-sp", "2022-fa", "2023-sp"),
-    2: ("2022-sp", "2022-fa", "2023-sp", "2023-fa"),
-    3: ("2022-fa", "2023-sp", "2023-fa", "2024-sp"),
-    4: ("2023-sp", "2023-fa", "2024-sp", "2024-fa"),
-    5: ("2023-fa", "2024-sp", "2024-fa", "2025-sp"),
-    6: ("2024-sp", "2024-fa", "2025-sp", "2025-fa"),
+    1: ("2022-fa", "2023-sp", "2023-fa", "2024-sp"),
+    2: ("2023-sp", "2023-fa", "2024-sp", "2024-fa"),
+    3: ("2023-fa", "2024-sp", "2024-fa", "2025-sp"),
+    4: ("2024-sp", "2024-fa", "2025-sp", "2025-fa"),
+    5: ("2024-fa", "2025-sp", "2025-fa", "2026-sp"),
+    6: ("2024-fa", "2025-sp", "2025-fa", "2026-sp"),
 }
 
 TIME_SLOTS: Tuple[Dict[str, Any], ...] = (
@@ -358,12 +358,14 @@ CHRONOLOGICAL_SEMESTERS: Tuple[SemesterSpec, ...] = (
     SemesterSpec(112, "2022-sp", "Spring 2022", "2022-01-18", "2022-05-13", False),
     SemesterSpec(113, "2022-fa", "Fall 2022", "2022-08-22", "2022-12-16", False),
     SemesterSpec(114, "2023-sp", "Spring 2023", "2023-01-17", "2023-05-12", False),
-    SemesterSpec(1, "2023-fa", "Fall 2023", "2023-08-21", "2023-12-15", False),
-    SemesterSpec(2, "2024-sp", "Spring 2024", "2024-01-16", "2024-05-10", False),
-    SemesterSpec(3, "2024-fa", "Fall 2024", "2024-08-26", "2024-12-20", False),
-    SemesterSpec(4, "2025-sp", "Spring 2025", "2025-01-21", "2025-05-16", False),
-    SemesterSpec(5, "2025-fa", "Fall 2025", "2025-08-25", "2025-12-19", True),
-    SemesterSpec(6, "2026-sp", "Spring 2026", "2026-01-20", "2026-05-15", False),
+    SemesterSpec(115, "2023-fa", "Fall 2023", "2023-08-21", "2023-12-15", False),
+    SemesterSpec(116, "2024-sp", "Spring 2024", "2024-01-16", "2024-05-10", False),
+    SemesterSpec(1, "2024-fa", "Fall 2024", "2024-08-26", "2024-12-20", False),
+    SemesterSpec(2, "2025-sp", "Spring 2025", "2025-01-21", "2025-05-16", False),
+    SemesterSpec(3, "2025-fa", "Fall 2025", "2025-08-25", "2025-12-19", False),
+    SemesterSpec(4, "2026-sp", "Spring 2026", "2026-01-20", "2026-05-15", False),
+    SemesterSpec(5, "2026-fa", "Fall 2026", "2026-08-24", "2026-12-18", True),
+    SemesterSpec(6, "2027-sp", "Spring 2027", "2027-01-19", "2027-05-14", False),
 )
 
 
@@ -681,6 +683,7 @@ def _build_preferences(
     assignments: Sequence[Tuple[int, Tuple[str, str], Dict[str, Any]]],
     catalog_rows: Sequence[Dict[str, Any]],
     rooms: Sequence[Dict[str, Any]],
+    series_by_course_id: Dict[int, Dict[str, int]],
 ) -> List[Dict[str, Any]]:
     room_lookup: Dict[Tuple[str, str], Dict[str, Any]] = {}
     for rm in rooms:
@@ -691,7 +694,7 @@ def _build_preferences(
         defaultdict(list)
     )
     for row in catalog_rows:
-        if row["year_term"] == "2026-sp" or row["ikey"] is None:
+        if row["ikey"] is None:
             continue
         if row["type_code"] in ONLINE_OR_INDEPENDENT_TYPES:
             continue
@@ -754,6 +757,7 @@ def _build_preferences(
                 key=lambda k: (pattern_counts[k], pattern_latest[k], -k[1], k[0]),
             )
 
+            causal_cap = series_by_course_id[int(course["course_id"])][window[-1]]
             room_counts: Counter = Counter()
             room_latest: Dict[int, int] = {}
             for r in hits:
@@ -763,7 +767,7 @@ def _build_preferences(
                 cand_room = room_lookup.get((bcode, normalize_room_token(r["room"])))
                 if cand_room is None:
                     continue
-                if cand_room["capacity"] < course["expected_enrollment"]:
+                if cand_room["capacity"] < causal_cap:
                     continue
                 if (
                     course["required_layout"] == "lab"
@@ -897,12 +901,12 @@ def _build_heldout_ground_truth(
             if util < 0.5:
                 over_50_empty += 1
 
-    pref_sem6 = {
+    pref_sem4 = {
         (p["instructor_id"], p["course_id"]): bool(
             p["preferred_days"] or p["preferred_slots"] or p["preferred_room_id"]
         )
         for p in preferences
-        if p["semester_id"] == 6
+        if p["semester_id"] == 4
     }
 
     cat_26sp_by_course: Dict[Tuple[str, str], List[Dict[str, Any]]] = defaultdict(list)
@@ -953,7 +957,7 @@ def _build_heldout_ground_truth(
                 "department": subj,
                 "instructor_id": instructor_id,
                 "instructor_name": users_by_id[instructor_id]["name"],
-                "has_2yr_preference": pref_sem6[(instructor_id, cid)],
+                "has_2yr_preference": pref_sem4[(instructor_id, cid)],
                 "fall_2025_enrolled": series["2025-fa"],
                 "spring_2025_enrolled": series["2025-sp"],
                 "actual_spring_2026_enrolled": series["2026-sp"],
@@ -971,7 +975,7 @@ def _build_heldout_ground_truth(
 
     return {
         "heldout_term": "2026-sp",
-        "heldout_semester_id": 6,
+        "heldout_semester_id": 4,
         "heldout_semester_name": "Spring 2026",
         "campus_wide_2026sp_audit": {
             "evaluated_sections": len(eval_utils),
@@ -1197,7 +1201,7 @@ def build_dataset(output_dir: str = DEFAULT_OUTPUT_DIR) -> Dict[str, Any]:
                 "course_name": _resolve_clean_title(
                     spec.department, num, foia_rows, catalog_rows
                 ),
-                "expected_enrollment": series["2025-fa"],
+                "expected_enrollment": series["2026-sp"],
                 "required_layout": "lab" if key in LAB_COURSES else "lecture",
                 "credits": credits,
             }
@@ -1218,8 +1222,9 @@ def build_dataset(output_dir: str = DEFAULT_OUTPUT_DIR) -> Dict[str, Any]:
         for s in semesters_sorted
     ]
 
+    completed_foia_terms = set(TERMS_20)
     observed_semesters = [
-        s for s in CHRONOLOGICAL_SEMESTERS if s.semester_id != 6
+        s for s in CHRONOLOGICAL_SEMESTERS if s.year_term in completed_foia_terms
     ]
     enrollment_history: List[Dict[str, Any]] = []
     for c_obj in courses:
@@ -1236,7 +1241,9 @@ def build_dataset(output_dir: str = DEFAULT_OUTPUT_DIR) -> Dict[str, Any]:
                 }
             )
 
-    preferences = _build_preferences(assignments, catalog_rows, rooms)
+    preferences = _build_preferences(
+        assignments, catalog_rows, rooms, series_by_course_id
+    )
     heldout = _build_heldout_ground_truth(
         assignments,
         users_by_id,
@@ -1278,10 +1285,10 @@ def build_dataset(output_dir: str = DEFAULT_OUTPUT_DIR) -> Dict[str, Any]:
         "semesters": len(semesters),
         "enrollment_history": len(enrollment_history),
         "preferences": len(preferences),
-        "sem6_with_2yr_pref": sum(
+        "sem4_with_2yr_pref": sum(
             1 for c in heldout["courses"] if c["has_2yr_preference"]
         ),
-        "sem6_without_2yr_pref": sum(
+        "sem4_without_2yr_pref": sum(
             1 for c in heldout["courses"] if not c["has_2yr_preference"]
         ),
     }

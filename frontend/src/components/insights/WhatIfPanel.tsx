@@ -91,7 +91,7 @@ export const WhatIfPanel: React.FC<WhatIfPanelProps> = ({ role, userName }) => {
           <div>
             <CardTitle>What-If Simulator</CardTitle>
             <p className="text-xs text-slate-500 mt-0.5">
-              Re-solves Spring 2026 with CP-SAT as a dry run. Nothing is saved.
+              Re-solves Spring 2027 with CP-SAT as a dry run. Nothing is saved.
             </p>
           </div>
         </div>

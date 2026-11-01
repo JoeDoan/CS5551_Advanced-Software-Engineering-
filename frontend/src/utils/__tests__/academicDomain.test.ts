@@ -21,18 +21,18 @@ describe('academicDomain & courseAssignmentService', () => {
     resetMockCourseAssignments()
   })
 
-  it('identifies active semester as Fall 2025 (id 5) across the 6-semester registry and includes BIOE', () => {
+  it('identifies active semester as Fall 2026 (id 5) across the 6-semester registry and includes BIOE', () => {
     expect(CURRENT_SEMESTER_ID).toBe(5)
-    expect(CURRENT_SEMESTER_NAME).toBe('Fall 2025')
+    expect(CURRENT_SEMESTER_NAME).toBe('Fall 2026')
     const active = ACADEMIC_SEMESTERS.filter((s) => s.isActive)
-    expect(active).toEqual([{ id: 5, name: 'Fall 2025', isActive: true }])
+    expect(active).toEqual([{ id: 5, name: 'Fall 2026', isActive: true }])
     expect(ACADEMIC_SEMESTERS.map((s) => s.name)).toEqual([
-      'Fall 2023',
-      'Spring 2024',
       'Fall 2024',
       'Spring 2025',
       'Fall 2025',
       'Spring 2026',
+      'Fall 2026',
+      'Spring 2027',
     ])
     expect(STANDARD_DEPARTMENTS).toContain('BIOE')
   })

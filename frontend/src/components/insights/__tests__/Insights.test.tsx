@@ -511,13 +511,13 @@ describe('WhatIfPanel', () => {
     expect(screen.queryByTestId('metrics-table')).not.toBeInTheDocument()
   })
 
-  it('sends growth and capacity levers for coordinators including BIOE in Spring 2026 dry run', async () => {
+  it('sends growth and capacity levers for coordinators including BIOE in Spring 2027 dry run', async () => {
     vi.spyOn(insightsService, 'getInstructorNames').mockResolvedValue([])
     const simulate = vi.spyOn(insightsService, 'simulate').mockResolvedValue(scenarioResponse())
     render(<WhatIfPanel role="coordinator" userName="Coordinator" />)
 
     expect(screen.getByTestId('whatif-panel')).toHaveTextContent(
-      /Re-solves Spring 2026 with CP-SAT as a dry run/i
+      /Re-solves Spring 2027 with CP-SAT as a dry run/i
     )
     fireEvent.click(screen.getByTestId('use-forecast'))
     fireEvent.click(screen.getByTestId('add-growth'))
