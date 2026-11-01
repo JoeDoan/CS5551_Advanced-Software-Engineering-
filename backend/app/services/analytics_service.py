@@ -177,7 +177,8 @@ def compute_fairness_metrics(
 
     prefs_by_user: Dict[int, InstructorPreference] = {}
     for pf in prefs:
-        prefs_by_user[pf.user_id] = pf
+        if pf.course_id is None or pf.user_id not in prefs_by_user:
+            prefs_by_user[pf.user_id] = pf
 
     items: List[InstructorFairnessItem] = []
     dept_groups: Dict[str, List[InstructorFairnessItem]] = defaultdict(list)

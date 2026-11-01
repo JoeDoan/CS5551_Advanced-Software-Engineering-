@@ -30,7 +30,7 @@ export const AppRoutes: React.FC = () => {
         <Route
           path="preferences"
           element={
-            <ProtectedRoute allowedRoles={['instructor']}>
+            <ProtectedRoute allowedRoles={['instructor', 'coordinator']}>
               <PreferencesPage />
             </ProtectedRoute>
           }

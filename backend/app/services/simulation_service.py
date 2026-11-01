@@ -6,7 +6,11 @@ from ortools.sat.python import cp_model
 from sqlalchemy import delete
 from sqlmodel import Session, select
 
-from app.core.seeder import seed_database
+from app.core.seeder import (
+    days_to_day_pattern,
+    resolve_or_create_time_slot,
+    seed_database,
+)
 from app.models.entities import (
     Course,
     EditRequest,
@@ -364,6 +368,13 @@ def run_multi_semester_simulation(
                 )
             )
         session.execute(delete(Schedule).where(Schedule.semester_id == sem.id))
+        slot_times_by_id = {
+            int(ts["slot_id"]): (
+                str(ts["start_time"]).strip(),
+                str(ts["end_time"]).strip(),
+            )
+            for ts in loader.time_slots
+        }
         scheduled_count = 0
         for c in courses:
             for i in instructors:
@@ -381,13 +392,24 @@ def run_multi_semester_simulation(
                 if placement is None:
                     continue
                 room_number, slot_id = placement
+                chosen_days = [
+                    d
+                    for d in DATE
+                    if (d, room_number, slot_id, i, c) in X
+                    and solver.Value(X[d, room_number, slot_id, i, c]) == 1
+                ]
+                day_pattern = days_to_day_pattern(chosen_days, default="TR")
+                start_time, end_time = slot_times_by_id[int(slot_id)]
+                resolved_slot = resolve_or_create_time_slot(
+                    session, start_time, end_time, day_pattern
+                )
                 session.add(
                     Schedule(
                         semester_id=sem.id,
                         course_id=course_ids[c],
                         user_id=inst_ids[i],
                         room_id=room_ids[room_number],
-                        time_slot_id=int(slot_id),
+                        time_slot_id=resolved_slot.id,
                         status="confirmed",
                     )
                 )

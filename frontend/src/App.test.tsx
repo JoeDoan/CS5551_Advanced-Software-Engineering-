@@ -32,7 +32,7 @@ describe('App Route Navigation Shell & Security Gate', () => {
     expect(screen.getByText('Master Schedule')).toBeInTheDocument()
     expect(screen.getByText('Courses & Sections')).toBeInTheDocument()
     expect(screen.getByText('User Accounts')).toBeInTheDocument()
-    expect(screen.queryByText('Instructor Prefs')).not.toBeInTheDocument()
+    expect(screen.getByText('Instructor Prefs')).toBeInTheDocument()
     expect(screen.getByText('Administration')).toBeInTheDocument()
     expect(screen.getByText(/CS 5551 Project/i)).toBeInTheDocument()
   })

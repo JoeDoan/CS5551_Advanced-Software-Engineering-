@@ -16,6 +16,7 @@ import {
   resetMockAccounts,
 } from '../../services/authService'
 import { resetMockCourseAssignments } from '../../services/courseAssignmentService'
+import { preferenceService } from '../../services/preferenceService'
 
 describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Account CRUD', () => {
   beforeEach(() => {
@@ -26,7 +27,7 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
     window.history.pushState({}, '', '/')
   })
 
-  it('signs in as Coordinator, unlocks Courses & Sections, User Accounts, and Administration, and signs out cleanly', async () => {
+  it('signs in as Coordinator, unlocks Courses & Sections, User Accounts, Instructor Prefs, and Administration, and signs out cleanly', async () => {
     render(<App />)
 
     await waitFor(() => {
@@ -44,8 +45,8 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
     expect(screen.getByTestId('navbar-role-badge')).toHaveTextContent('COORDINATOR')
     expect(screen.getByText('Courses & Sections')).toBeInTheDocument()
     expect(screen.getByText('User Accounts')).toBeInTheDocument()
+    expect(screen.getByText('Instructor Prefs')).toBeInTheDocument()
     expect(screen.getByText('Administration')).toBeInTheDocument()
-    expect(screen.queryByText('Instructor Prefs')).not.toBeInTheDocument()
 
     fireEvent.click(screen.getByText('Administration'))
     await waitFor(() => {
@@ -63,8 +64,26 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
     expect(getAuthToken()).toBeNull()
   })
 
-  it('blocks Course Coordinators from accessing /preferences with Faculty Instructor Role Required 403 guard', async () => {
+  it('allows Course Coordinators to inspect /preferences in strict read-only mode across faculty profiles without mutation controls', async () => {
     setAuthToken(DEMO_COORDINATOR_TOKEN)
+    const getPrefsSpy = vi
+      .spyOn(preferenceService, 'getPreferences')
+      .mockImplementation(async (filters) => {
+        if (filters?.user_id === 1) {
+          return [
+            {
+              id: 77,
+              user_id: 1,
+              semester_id: 5,
+              course_id: null,
+              preferred_days: ['T', 'R'],
+              preferred_slots: ['09:30-10:45'],
+              preferred_rooms: ['RH 204'],
+            },
+          ]
+        }
+        return []
+      })
 
     render(
       <MemoryRouter initialEntries={['/preferences']}>
@@ -75,11 +94,62 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
     )
 
     await waitFor(() => {
-      expect(screen.getByTestId('role-guard-403')).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: /Instructor Preferences/i })).toBeInTheDocument()
+      expect(screen.getByTestId('coordinator-readonly-banner')).toBeInTheDocument()
     })
-    expect(screen.getByText(/Faculty Instructor Role Required/i)).toBeInTheDocument()
-    expect(screen.queryByText('Instructor Prefs')).not.toBeInTheDocument()
-    expect(screen.getByTestId('return-to-schedule-btn')).toHaveTextContent('Return to Dashboard')
+
+    expect(screen.queryByTestId('role-guard-403')).not.toBeInTheDocument()
+    expect(screen.getByText('Instructor Prefs')).toBeInTheDocument()
+    expect(screen.getByText('Read-Only View')).toBeInTheDocument()
+    expect(screen.getByTestId('coordinator-readonly-banner')).toHaveTextContent(
+      /View-Only Mode: Course Coordinators can inspect faculty availability profiles\./i
+    )
+
+    const instructorSelect = screen.getByTestId('instructor-select') as HTMLSelectElement
+    expect(instructorSelect).not.toBeDisabled()
+    expect(instructorSelect.value).toBe('1')
+
+    const slotBtn = await screen.findByTestId('slot-09:30-10:45')
+    const roomChip = await screen.findByTestId('room-chip-RH 204')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('day-btn-Tuesday (T)')).toHaveAttribute('aria-pressed', 'true')
+      expect(screen.getByTestId('day-btn-Thursday (R)')).toHaveAttribute('aria-pressed', 'true')
+      expect(screen.getByTestId('day-btn-Monday (M)')).toHaveAttribute('aria-pressed', 'false')
+      expect(slotBtn).toHaveAttribute('aria-pressed', 'true')
+      expect(slotBtn.className).toContain('bg-blue-50')
+      expect(roomChip).toHaveAttribute('aria-pressed', 'true')
+      expect(roomChip.className).toContain('bg-blue-50')
+    })
+
+    expect(screen.getByTestId('day-btn-Tuesday (T)')).toBeDisabled()
+    expect(screen.getByTestId('day-btn-Monday (M)')).toBeDisabled()
+    expect(slotBtn).toBeDisabled()
+    expect(roomChip).toBeDisabled()
+
+    expect(screen.queryByTestId('preset-days-mwf')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('preset-days-tr')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('preset-days-all')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('save-preferences-button')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('reset-preferences-button')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('edit-pref-77')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('delete-pref-77')).not.toBeInTheDocument()
+
+    fireEvent.change(instructorSelect, { target: { value: '2' } })
+
+    await waitFor(() => {
+      expect(getPrefsSpy).toHaveBeenCalledWith({
+        user_id: 2,
+        semester_id: 5,
+        general_only: true,
+      })
+      expect(screen.getByTestId('day-btn-Tuesday (T)')).toHaveAttribute('aria-pressed', 'false')
+      expect(slotBtn).toHaveAttribute('aria-pressed', 'false')
+      expect(roomChip).toHaveAttribute('aria-pressed', 'false')
+      expect(
+        screen.getByText('No saved preferences recorded for this instructor in Fall 2026 yet.')
+      ).toBeInTheDocument()
+    })
   })
 
   it('enforces Faculty Instructor RBAC across Sidebar, Edit Requests, Preferences, and /admin + /courses + /users guards', async () => {

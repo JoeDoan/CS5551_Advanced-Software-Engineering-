@@ -70,3 +70,59 @@ def test_users_and_semesters_directory_endpoints(client: TestClient):
     semesters = client.get("/api/v1/semesters")
     assert semesters.status_code == 200
     assert [s["semester_id"] for s in semesters.json()] == [1, 2, 3, 4, 5, 6]
+
+
+def test_seeded_and_solved_schedules_preserve_mw_and_tr_day_patterns(
+    client: TestClient,
+):
+    """Seeded and CP-SAT solved schedules include both MW and TR meeting patterns."""
+    client.post("/api/v1/admin/seed")
+
+    seeded_events = client.get("/api/v1/schedules?semester_id=1").json()
+    seeded_patterns = {e["day_pattern"] for e in seeded_events}
+    assert "MW" in seeded_patterns
+    assert "TR" in seeded_patterns
+
+    solve_resp = client.post("/api/v1/solver/run", json={"semester_id": 1})
+    assert solve_resp.status_code == 200
+
+    solved_events = client.get("/api/v1/schedules?semester_id=1").json()
+    solved_patterns = {e["day_pattern"] for e in solved_events}
+    assert "MW" in solved_patterns
+    assert "TR" in solved_patterns
+
+
+def test_general_semester_preference_overrides_legacy_seeded_course_preferences(
+    client: TestClient,
+):
+    """General preference (course_id=None) overrides legacy per-course preferences."""
+    client.post("/api/v1/admin/seed")
+
+    pref_resp = client.post(
+        "/api/v1/preferences",
+        json={
+            "user_id": 1,
+            "semester_id": 5,
+            "course_id": None,
+            "preferred_days": ["M", "F"],
+            "preferred_slots": ["09:30-10:45", "14:00-15:15"],
+        },
+    )
+    assert pref_resp.status_code in (200, 201)
+
+    solve_resp = client.post("/api/v1/solver/run", json={"semester_id": 5})
+    assert solve_resp.status_code == 200
+
+    events = client.get("/api/v1/schedules?semester_id=5").json()
+    lee_events = [e for e in events if e["user_id"] == 1]
+    assert len(lee_events) >= 1
+    assert all(e["day_pattern"] == "MF" for e in lee_events)
+    assert {
+        f"{e['start_time']}-{e['end_time']}" for e in lee_events
+    } <= {"09:30-10:45", "14:00-15:15"}
+
+    fairness = client.get("/api/v1/analytics/fairness?semester_id=5").json()
+    lee_fairness = next(
+        item for item in fairness["instructors"] if item["user_id"] == 1
+    )
+    assert lee_fairness["preferred_day_matches"] == len(lee_events)

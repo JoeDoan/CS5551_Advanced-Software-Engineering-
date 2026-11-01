@@ -9,6 +9,7 @@ import {
   UserCheck,
   CalendarDays,
   GraduationCap,
+  Eye,
 } from 'lucide-react'
 import {
   Badge,
@@ -105,6 +106,7 @@ export const PreferencesPage: React.FC = () => {
   const { user, isStandaloneFallback } = useAuth()
   const isLockedInstructor =
     !isStandaloneFallback && user?.role === 'instructor' && user.linked_user_id !== null
+  const isReadOnlyCoordinator = !isStandaloneFallback && user?.role === 'coordinator'
 
   const [instructorList, setInstructorList] = useState<InstructorSummary[]>(DEFAULT_INSTRUCTORS)
   const [selectedInstructor, setSelectedInstructor] = useState<string>(() =>
@@ -116,7 +118,9 @@ export const PreferencesPage: React.FC = () => {
   const [savedPreferences, setSavedPreferences] = useState<InstructorPreference[]>([])
   const [assignedCourses, setAssignedCourses] = useState<AssignedCourseDisplay[]>([])
 
-  const [selectedDays, setSelectedDays] = useState<string[]>(['Monday (M)', 'Wednesday (W)'])
+  const [selectedDays, setSelectedDays] = useState<string[]>(() =>
+    isReadOnlyCoordinator ? [] : ['Monday (M)', 'Wednesday (W)']
+  )
   const [selectedSlots, setSelectedSlots] = useState<string[]>([])
   const [selectedRooms, setSelectedRooms] = useState<string[]>([])
   const [toast, setToast] = useState<{
@@ -238,11 +242,11 @@ export const PreferencesPage: React.FC = () => {
         setSelectedRooms(Array.isArray(match.preferred_rooms) ? [...match.preferred_rooms] : [])
       }
     } else if (!hasUserEditedRef.current) {
-      setSelectedDays(['Monday (M)', 'Wednesday (W)'])
+      setSelectedDays(isReadOnlyCoordinator ? [] : ['Monday (M)', 'Wednesday (W)'])
       setSelectedSlots([])
       setSelectedRooms([])
     }
-  }, [savedPreferences])
+  }, [savedPreferences, isReadOnlyCoordinator])
 
   const instructors = useMemo(() => {
     const base = toInstructorOptions(instructorList)
@@ -260,6 +264,7 @@ export const PreferencesPage: React.FC = () => {
   }, [instructorList, isLockedInstructor, user])
 
   const toggleDay = (day: string) => {
+    if (isReadOnlyCoordinator) return
     hasUserEditedRef.current = true
     setSelectedDays((prev) =>
       prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
@@ -267,11 +272,13 @@ export const PreferencesPage: React.FC = () => {
   }
 
   const applyDayPreset = (days: string[]) => {
+    if (isReadOnlyCoordinator) return
     hasUserEditedRef.current = true
     setSelectedDays(days)
   }
 
   const toggleSlot = (slot: string) => {
+    if (isReadOnlyCoordinator) return
     hasUserEditedRef.current = true
     setSelectedSlots((prev) =>
       prev.includes(slot) ? prev.filter((s) => s !== slot) : [...prev, slot]
@@ -279,6 +286,7 @@ export const PreferencesPage: React.FC = () => {
   }
 
   const toggleRoom = (roomNumber: string) => {
+    if (isReadOnlyCoordinator) return
     hasUserEditedRef.current = true
     setSelectedRooms((prev) =>
       prev.includes(roomNumber)
@@ -288,6 +296,7 @@ export const PreferencesPage: React.FC = () => {
   }
 
   const handleLoadSaved = (pref: InstructorPreference) => {
+    if (isReadOnlyCoordinator) return
     hasUserEditedRef.current = false
     setSelectedDays(normalizeStoredDaysToLabels(pref.preferred_days))
     setSelectedSlots(Array.isArray(pref.preferred_slots) ? [...pref.preferred_slots] : [])
@@ -296,6 +305,7 @@ export const PreferencesPage: React.FC = () => {
   }
 
   const handleDeleteSaved = async (pref: InstructorPreference) => {
+    if (isReadOnlyCoordinator) return
     if (pref.id == null) return
     try {
       await preferenceService.deletePreference(pref.id)
@@ -317,6 +327,7 @@ export const PreferencesPage: React.FC = () => {
   }
 
   const handleSavePreferences = async () => {
+    if (isReadOnlyCoordinator) return
     if (selectedDays.length === 0 || selectedSlots.length === 0) {
       setToast({
         type: 'error',
@@ -381,6 +392,7 @@ export const PreferencesPage: React.FC = () => {
   }
 
   const handleReset = () => {
+    if (isReadOnlyCoordinator) return
     hasUserEditedRef.current = true
     setSelectedDays([])
     setSelectedSlots([])
@@ -394,12 +406,15 @@ export const PreferencesPage: React.FC = () => {
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Instructor Preferences</h1>
           <p className="text-sm text-slate-500 mt-1">
-            Configure your {CURRENT_SEMESTER_NAME} teaching availability and preferred classrooms for
-            the CP-SAT schedule optimizer.
+            {isReadOnlyCoordinator
+              ? `Inspect ${CURRENT_SEMESTER_NAME} faculty teaching availability and preferred classrooms for the CP-SAT schedule optimizer.`
+              : `Configure your ${CURRENT_SEMESTER_NAME} teaching availability and preferred classrooms for the CP-SAT schedule optimizer.`}
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
+          {isReadOnlyCoordinator && <Badge variant="neutral">Read-Only View</Badge>}
+
           <div
             data-testid="active-semester-badge"
             className="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-800"
@@ -418,6 +433,20 @@ export const PreferencesPage: React.FC = () => {
         </div>
       </div>
 
+      {isReadOnlyCoordinator && (
+        <div
+          data-testid="coordinator-readonly-banner"
+          className="flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-100 border border-slate-200 text-xs text-slate-700"
+        >
+          <Eye className="w-4 h-4 text-slate-600 shrink-0" />
+          <span>
+            <span className="font-semibold text-slate-900">View-Only Mode:</span> Course
+            Coordinators can inspect faculty availability profiles. Only instructors can modify
+            their own teaching preferences.
+          </span>
+        </div>
+      )}
+
       <Card data-testid="coordinator-assigned-courses">
         <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 py-3.5">
           <div className="flex items-center space-x-2.5">
@@ -429,7 +458,9 @@ export const PreferencesPage: React.FC = () => {
                 Coordinator-Assigned Courses ({CURRENT_SEMESTER_NAME})
               </CardTitle>
               <p className="text-xs text-slate-500 mt-0.5">
-                Read-only teaching load assigned by your Course Coordinator
+                {isReadOnlyCoordinator
+                  ? 'Teaching load assigned to the selected instructor'
+                  : 'Read-only teaching load assigned by your Course Coordinator'}
               </p>
             </div>
           </div>
@@ -467,7 +498,9 @@ export const PreferencesPage: React.FC = () => {
           <div>
             <CardTitle>Teaching Availability & Classroom Preferences</CardTitle>
             <p className="text-xs text-slate-500 mt-0.5">
-              General availability applies across all courses assigned to you in {CURRENT_SEMESTER_NAME}.
+              {isReadOnlyCoordinator
+                ? `General availability across all courses assigned to this instructor in ${CURRENT_SEMESTER_NAME}.`
+                : `General availability applies across all courses assigned to you in ${CURRENT_SEMESTER_NAME}.`}
             </p>
           </div>
           <Badge variant="info">General Availability</Badge>
@@ -483,7 +516,9 @@ export const PreferencesPage: React.FC = () => {
               helperText={
                 isLockedInstructor
                   ? 'Locked to your authenticated faculty profile.'
-                  : undefined
+                  : isReadOnlyCoordinator
+                    ? 'Switch faculty profiles to inspect their saved availability.'
+                    : undefined
               }
               onChange={(e) => {
                 hasUserEditedRef.current = false
@@ -496,37 +531,39 @@ export const PreferencesPage: React.FC = () => {
           <div>
             <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
               <label className="block text-xs font-semibold text-slate-700">
-                Preferred Days <span className="text-red-500">*</span>
+                Preferred Days {!isReadOnlyCoordinator && <span className="text-red-500">*</span>}
               </label>
-              <div className="flex items-center space-x-1.5 text-xs">
-                <span className="text-slate-400 font-medium">Quick patterns:</span>
-                <button
-                  type="button"
-                  onClick={() =>
-                    applyDayPreset(['Monday (M)', 'Wednesday (W)', 'Friday (F)'])
-                  }
-                  data-testid="preset-days-mwf"
-                  className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600 font-medium transition-colors"
-                >
-                  MWF
-                </button>
-                <button
-                  type="button"
-                  onClick={() => applyDayPreset(['Tuesday (T)', 'Thursday (R)'])}
-                  data-testid="preset-days-tr"
-                  className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600 font-medium transition-colors"
-                >
-                  TR
-                </button>
-                <button
-                  type="button"
-                  onClick={() => applyDayPreset([...DAY_OPTIONS])}
-                  data-testid="preset-days-all"
-                  className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600 font-medium transition-colors"
-                >
-                  All Weekdays
-                </button>
-              </div>
+              {!isReadOnlyCoordinator && (
+                <div className="flex items-center space-x-1.5 text-xs">
+                  <span className="text-slate-400 font-medium">Quick patterns:</span>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      applyDayPreset(['Monday (M)', 'Wednesday (W)', 'Friday (F)'])
+                    }
+                    data-testid="preset-days-mwf"
+                    className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600 font-medium transition-colors"
+                  >
+                    MWF
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => applyDayPreset(['Tuesday (T)', 'Thursday (R)'])}
+                    data-testid="preset-days-tr"
+                    className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600 font-medium transition-colors"
+                  >
+                    TR
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => applyDayPreset([...DAY_OPTIONS])}
+                    data-testid="preset-days-all"
+                    className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600 font-medium transition-colors"
+                  >
+                    All Weekdays
+                  </button>
+                </div>
+              )}
             </div>
 
             <div className="flex flex-wrap gap-2">
@@ -538,6 +575,14 @@ export const PreferencesPage: React.FC = () => {
                     type="button"
                     variant={isSelected ? 'primary' : 'outline'}
                     size="sm"
+                    disabled={isReadOnlyCoordinator}
+                    className={
+                      isReadOnlyCoordinator
+                        ? isSelected
+                          ? 'disabled:!opacity-100 disabled:!cursor-default hover:bg-umkc-blue-700'
+                          : 'disabled:!opacity-100 disabled:!cursor-default hover:bg-white'
+                        : undefined
+                    }
                     onClick={() => toggleDay(day)}
                     aria-pressed={isSelected}
                     data-testid={`day-btn-${day}`}
@@ -551,7 +596,8 @@ export const PreferencesPage: React.FC = () => {
 
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-2">
-              Preferred Time Slots <span className="text-red-500">*</span>
+              Preferred Time Slots{' '}
+              {!isReadOnlyCoordinator && <span className="text-red-500">*</span>}
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
               {timeSlots.map((timeSlot) => {
@@ -561,13 +607,18 @@ export const PreferencesPage: React.FC = () => {
                   <button
                     key={slot}
                     type="button"
+                    disabled={isReadOnlyCoordinator}
                     data-testid={`slot-${slot}`}
                     aria-pressed={isSelected}
                     onClick={() => toggleSlot(slot)}
-                    className={`p-2.5 rounded-xl border text-xs flex items-center justify-between gap-1.5 transition-all cursor-pointer text-left focus:outline-none ${
+                    className={`p-2.5 rounded-xl border text-xs flex items-center justify-between gap-1.5 transition-all ${
+                      isReadOnlyCoordinator ? 'cursor-default' : 'cursor-pointer'
+                    } text-left focus:outline-none ${
                       isSelected
                         ? 'bg-blue-50 border-blue-600 text-blue-700 font-semibold ring-2 ring-blue-500/20'
-                        : 'border-slate-200 text-slate-600 bg-slate-50 hover:bg-slate-100/80 hover:border-slate-300'
+                        : isReadOnlyCoordinator
+                          ? 'border-slate-200 text-slate-600 bg-slate-50'
+                          : 'border-slate-200 text-slate-600 bg-slate-50 hover:bg-slate-100/80 hover:border-slate-300'
                     }`}
                   >
                     <span className="flex items-center space-x-2 min-w-0">
@@ -605,13 +656,18 @@ export const PreferencesPage: React.FC = () => {
                   <button
                     key={room.id}
                     type="button"
+                    disabled={isReadOnlyCoordinator}
                     data-testid={`room-chip-${room.room_number}`}
                     aria-pressed={isSelected}
                     onClick={() => toggleRoom(room.room_number)}
-                    className={`px-3 py-2.5 rounded-xl border text-xs flex items-center justify-between gap-2 transition-all cursor-pointer text-left focus:outline-none ${
+                    className={`px-3 py-2.5 rounded-xl border text-xs flex items-center justify-between gap-2 transition-all ${
+                      isReadOnlyCoordinator ? 'cursor-default' : 'cursor-pointer'
+                    } text-left focus:outline-none ${
                       isSelected
                         ? 'bg-blue-50 border-blue-600 text-blue-800 font-semibold ring-2 ring-blue-500/20'
-                        : 'border-slate-200 text-slate-700 bg-slate-50 hover:bg-slate-100/80 hover:border-slate-300'
+                        : isReadOnlyCoordinator
+                          ? 'border-slate-200 text-slate-700 bg-slate-50'
+                          : 'border-slate-200 text-slate-700 bg-slate-50 hover:bg-slate-100/80 hover:border-slate-300'
                     }`}
                   >
                     <span className="flex items-center space-x-2 min-w-0">
@@ -645,26 +701,28 @@ export const PreferencesPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="pt-2 flex items-center space-x-3">
-            <Button
-              variant="primary"
-              onClick={handleSavePreferences}
-              isLoading={isSubmitting}
-              leftIcon={<Check className="w-4 h-4" />}
-              data-testid="save-preferences-button"
-            >
-              Save Preferences
-            </Button>
-            <Button
-              variant="secondary"
-              type="button"
-              onClick={handleReset}
-              disabled={isSubmitting}
-              data-testid="reset-preferences-button"
-            >
-              Reset
-            </Button>
-          </div>
+          {!isReadOnlyCoordinator && (
+            <div className="pt-2 flex items-center space-x-3">
+              <Button
+                variant="primary"
+                onClick={handleSavePreferences}
+                isLoading={isSubmitting}
+                leftIcon={<Check className="w-4 h-4" />}
+                data-testid="save-preferences-button"
+              >
+                Save Preferences
+              </Button>
+              <Button
+                variant="secondary"
+                type="button"
+                onClick={handleReset}
+                disabled={isSubmitting}
+                data-testid="reset-preferences-button"
+              >
+                Reset
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -687,8 +745,9 @@ export const PreferencesPage: React.FC = () => {
         <CardContent>
           {savedPreferences.length === 0 ? (
             <p className="text-xs text-slate-500 py-3">
-              No saved preferences recorded for {CURRENT_SEMESTER_NAME} yet. Select days and time
-              slots above to save your availability.
+              {isReadOnlyCoordinator
+                ? `No saved preferences recorded for this instructor in ${CURRENT_SEMESTER_NAME} yet.`
+                : `No saved preferences recorded for ${CURRENT_SEMESTER_NAME} yet. Select days and time slots above to save your availability.`}
             </p>
           ) : (
             <div className="space-y-3">
@@ -735,30 +794,32 @@ export const PreferencesPage: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center space-x-2 shrink-0">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        leftIcon={<Edit3 className="w-3.5 h-3.5" />}
-                        onClick={() => handleLoadSaved(pref)}
-                        data-testid={`edit-pref-${pref.id}`}
-                      >
-                        Load & Edit
-                      </Button>
-                      {pref.id != null && (
+                    {!isReadOnlyCoordinator && (
+                      <div className="flex items-center space-x-2 shrink-0">
                         <Button
                           type="button"
-                          variant="danger"
+                          variant="outline"
                           size="sm"
-                          leftIcon={<Trash2 className="w-3.5 h-3.5" />}
-                          onClick={() => handleDeleteSaved(pref)}
-                          data-testid={`delete-pref-${pref.id}`}
+                          leftIcon={<Edit3 className="w-3.5 h-3.5" />}
+                          onClick={() => handleLoadSaved(pref)}
+                          data-testid={`edit-pref-${pref.id}`}
                         >
-                          Delete
+                          Load & Edit
                         </Button>
-                      )}
-                    </div>
+                        {pref.id != null && (
+                          <Button
+                            type="button"
+                            variant="danger"
+                            size="sm"
+                            leftIcon={<Trash2 className="w-3.5 h-3.5" />}
+                            onClick={() => handleDeleteSaved(pref)}
+                            data-testid={`delete-pref-${pref.id}`}
+                          >
+                            Delete
+                          </Button>
+                        )}
+                      </div>
+                    )}
                   </div>
                 )
               })}

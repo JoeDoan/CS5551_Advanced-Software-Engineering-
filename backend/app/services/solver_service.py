@@ -6,7 +6,11 @@ from ortools.sat.python import cp_model
 from sqlalchemy import delete
 from sqlmodel import Session, select
 
-from app.core.seeder import seed_database
+from app.core.seeder import (
+    days_to_day_pattern,
+    resolve_or_create_time_slot,
+    seed_database,
+)
 from app.models.entities import (
     Course,
     EditRequest,
@@ -140,7 +144,10 @@ def _overlay_sqlite_preferences(
         if c.id is not None
     }
 
-    for pref in prefs:
+    ordered_prefs = [p for p in prefs if p.course_id is not None] + [
+        p for p in prefs if p.course_id is None
+    ]
+    for pref in ordered_prefs:
         inst_name = user_name_by_id.get(pref.user_id)
         if not inst_name or inst_name not in profiles:
             continue
@@ -158,18 +165,18 @@ def _overlay_sqlite_preferences(
                 "preferences",
                 {"days": [], "slots": [], "classrooms": [], "layout": None},
             )
-            if days:
-                general_prefs["days"] = days
-            if slots:
-                general_prefs["slots"] = slots
-            if rooms:
-                general_prefs["classrooms"] = rooms
+            general_prefs["days"] = days
+            general_prefs["slots"] = slots
+            general_prefs["classrooms"] = rooms
+            profiles[inst_name]["course_preferences"] = {}
         else:
             course_name = db_course_by_id.get(
                 pref.course_id
             ) or loader_course_by_id.get(pref.course_id)
             if course_name and course_name in loader_course_names:
-                course_prefs = profiles[inst_name].setdefault("course_preferences", {})
+                course_prefs = profiles[inst_name].setdefault(
+                    "course_preferences", {}
+                )
                 existing = course_prefs.get(course_name, {})
                 course_prefs[course_name] = {
                     "days": days,
@@ -287,6 +294,36 @@ def _expand_subject_cluster_pairs(
     return expanded
 
 
+def _has_slot_conflict(
+    entity_id: Optional[int],
+    candidate: TimeSlot,
+    occupied: Set[Tuple[int, int]],
+    slots_by_id: Dict[int, TimeSlot],
+) -> bool:
+    if entity_id is None or candidate.id is None:
+        return True
+    if (entity_id, candidate.id) in occupied:
+        return True
+    cand_days = set(days_to_day_pattern([candidate.day_pattern]))
+    cand_start = _to_minutes(candidate.start_time)
+    cand_end = _to_minutes(candidate.end_time)
+    for occ_entity_id, occ_slot_id in occupied:
+        if occ_entity_id != entity_id:
+            continue
+        occ = slots_by_id.get(occ_slot_id)
+        if occ is None:
+            continue
+        occ_days = set(days_to_day_pattern([occ.day_pattern]))
+        if not (cand_days & occ_days):
+            continue
+        if (
+            cand_start < _to_minutes(occ.end_time)
+            and _to_minutes(occ.start_time) < cand_end
+        ):
+            return True
+    return False
+
+
 def _schedule_extra_sqlite_courses(
     session: Session,
     semester_id: int,
@@ -315,6 +352,7 @@ def _schedule_extra_sqlite_courses(
     if not all_rooms or not all_slots or not all_instructors:
         return 0
 
+    slots_by_id = {s.id: s for s in all_slots if s.id is not None}
     added = 0
     for extra in extra_courses:
         eligible_rooms = [
@@ -349,13 +387,17 @@ def _schedule_extra_sqlite_courses(
             if placed:
                 break
             for room in eligible_rooms:
-                if (room.id, slot.id) in occupied_room_slots:
+                if _has_slot_conflict(
+                    room.id, slot, occupied_room_slots, slots_by_id
+                ):
                     continue
                 chosen_inst = next(
                     (
                         inst
                         for inst in ranked_instructors
-                        if (inst.id, slot.id) not in occupied_inst_slots
+                        if not _has_slot_conflict(
+                            inst.id, slot, occupied_inst_slots, slots_by_id
+                        )
                     ),
                     None,
                 )
@@ -583,6 +625,13 @@ def run_solver_for_semester(
         )
     session.execute(delete(Schedule).where(Schedule.semester_id == semester.id))
 
+    slot_times_by_id = {
+        int(ts["slot_id"]): (
+            str(ts["start_time"]).strip(),
+            str(ts["end_time"]).strip(),
+        )
+        for ts in loader.time_slots
+    }
     occupied_room_slots: Set[Tuple[int, int]] = set()
     occupied_inst_slots: Set[Tuple[int, int]] = set()
     inst_load: Dict[int, int] = {}
@@ -612,20 +661,32 @@ def run_solver_for_semester(
                 cid not in db_course_ids
                 or uid not in db_user_ids
                 or rid not in db_room_ids
+                or sid not in slot_times_by_id
             ):
                 continue
+            chosen_days = [
+                d
+                for d in DATE
+                if (d, room_number, slot_id, i, c) in X
+                and solver.Value(X[d, room_number, slot_id, i, c]) == 1
+            ]
+            day_pattern = days_to_day_pattern(chosen_days, default="TR")
+            start_time, end_time = slot_times_by_id[sid]
+            resolved_slot = resolve_or_create_time_slot(
+                session, start_time, end_time, day_pattern
+            )
             session.add(
                 Schedule(
                     semester_id=semester.id,
                     course_id=cid,
                     user_id=uid,
                     room_id=rid,
-                    time_slot_id=sid,
+                    time_slot_id=resolved_slot.id,
                     status="confirmed",
                 )
             )
-            occupied_room_slots.add((rid, sid))
-            occupied_inst_slots.add((uid, sid))
+            occupied_room_slots.add((rid, resolved_slot.id))
+            occupied_inst_slots.add((uid, resolved_slot.id))
             inst_load[uid] = inst_load.get(uid, 0) + 1
             scheduled_count += 1
 

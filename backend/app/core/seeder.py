@@ -1,6 +1,7 @@
 import json
 import os
-from typing import Any, Dict, List, Optional, Tuple
+import re
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 from sqlalchemy import delete, func, update
 from sqlmodel import Session, select
@@ -26,19 +27,41 @@ _CORE_DIR = os.path.dirname(os.path.abspath(__file__))
 _BACKEND_DIR = os.path.dirname(os.path.dirname(_CORE_DIR))
 DEFAULT_DATA_DIR = os.path.join(_BACKEND_DIR, "data", "umkc")
 
+_CANONICAL_DAY_ORDER = ("M", "T", "W", "R", "F")
+
 DAY_NAME_TO_CODE = {
     "MONDAY": "M",
+    "MON": "M",
+    "M": "M",
     "TUESDAY": "T",
+    "TUE": "T",
+    "TUES": "T",
+    "T": "T",
     "WEDNESDAY": "W",
+    "WED": "W",
+    "W": "W",
     "THURSDAY": "R",
+    "THU": "R",
+    "THUR": "R",
+    "THURS": "R",
+    "TH": "R",
+    "R": "R",
     "FRIDAY": "F",
+    "FRI": "F",
+    "F": "F",
 }
 
 # Extra catalog blocks (Fix 4b). The six solver slots from time_slots.json are
-# Tue/Thu 75-minute blocks; these add MWF 50-minute, graduate evening and lab
-# blocks. Times are placeholders until the registrar's grid is confirmed.
+# Tue/Thu 75-minute blocks; these add MW 75-minute, MWF 50-minute, graduate
+# evening and lab blocks.
 EXTRA_TIME_SLOTS: List[Tuple[str, str, str, str, Optional[str]]] = [
     # (day_pattern, start, end, pattern_type, level)
+    ("MW", "08:00", "09:15", "MW_75", None),
+    ("MW", "09:30", "10:45", "MW_75", None),
+    ("MW", "11:00", "12:15", "MW_75", None),
+    ("MW", "12:30", "13:45", "MW_75", None),
+    ("MW", "14:00", "15:15", "MW_75", None),
+    ("MW", "15:30", "16:45", "MW_75", None),
     ("MWF", "08:00", "08:50", "MWF_50", "undergraduate"),
     ("MWF", "09:00", "09:50", "MWF_50", "undergraduate"),
     ("MWF", "10:00", "10:50", "MWF_50", "undergraduate"),
@@ -48,6 +71,56 @@ EXTRA_TIME_SLOTS: List[Tuple[str, str, str, str, Optional[str]]] = [
     ("TR", "19:00", "20:15", "EVENING_GRAD", "graduate"),
     ("MW", "14:00", "15:50", "LAB_BLOCK", None),
 ]
+
+
+def days_to_day_pattern(days: Iterable[str], default: str = "TR") -> str:
+    raw_items = [days] if isinstance(days, str) else list(days or [])
+    matched = set()
+    for item in raw_items:
+        for token in re.split(r"[/,\s]+", str(item).strip()):
+            if not token:
+                continue
+            upper = token.upper()
+            if upper in DAY_NAME_TO_CODE:
+                matched.add(DAY_NAME_TO_CODE[upper])
+            elif all(ch in _CANONICAL_DAY_ORDER for ch in upper):
+                matched.update(upper)
+    if not matched:
+        return default
+    return "".join(ch for ch in _CANONICAL_DAY_ORDER if ch in matched)
+
+
+def resolve_or_create_time_slot(
+    session: Session,
+    start_time: str,
+    end_time: str,
+    day_pattern: str,
+) -> TimeSlot:
+    pattern = days_to_day_pattern([day_pattern], default="TR")
+    existing = session.exec(
+        select(TimeSlot)
+        .where(
+            TimeSlot.day_pattern == pattern,
+            TimeSlot.start_time == start_time,
+            TimeSlot.end_time == end_time,
+        )
+        .order_by(TimeSlot.id)
+    ).first()
+    if existing is not None:
+        return existing
+
+    created = TimeSlot(
+        day_pattern=pattern,
+        start_time=start_time,
+        end_time=end_time,
+        slot_label=f"{pattern} {start_time}-{end_time}",
+        pattern_type=f"{pattern}_75",
+        level=None,
+    )
+    session.add(created)
+    session.flush()
+    return created
+
 
 _MODELS_WITH_COUNTS = (
     ("campuses", Campus),
@@ -203,12 +276,34 @@ def _seed_preferences(session: Session, data_dir: str, slot_labels: Dict[int, st
 def _seed_schedules(session: Session, data_dir: str) -> None:
     if not _is_empty(session, Schedule):
         return
+    slot_times = {
+        int(s["slot_id"]): (
+            str(s["start_time"]).strip(),
+            str(s["end_time"]).strip(),
+        )
+        for s in _load_json(data_dir, "time_slots.json")
+    }
     for sem_idx in range(1, 7):
         for row in _load_json(data_dir, f"schedules_sem{sem_idx}.json"):
-            session.add(Schedule(semester_id=row.get("semester_id", sem_idx),
-                                 course_id=row["course_id"], user_id=row["instructor_id"],
-                                 room_id=row["room_id"], time_slot_id=row["slot_id"],
-                                 status=row.get("status", "confirmed")))
+            raw_slot_id = int(row["slot_id"])
+            day_pattern = days_to_day_pattern([row.get("days", "TR")])
+            if raw_slot_id in slot_times:
+                start_time, end_time = slot_times[raw_slot_id]
+                resolved_slot_id = resolve_or_create_time_slot(
+                    session, start_time, end_time, day_pattern
+                ).id
+            else:
+                resolved_slot_id = raw_slot_id
+            session.add(
+                Schedule(
+                    semester_id=row.get("semester_id", sem_idx),
+                    course_id=row["course_id"],
+                    user_id=row["instructor_id"],
+                    room_id=row["room_id"],
+                    time_slot_id=resolved_slot_id,
+                    status=row.get("status", "confirmed"),
+                )
+            )
     session.commit()
 
 

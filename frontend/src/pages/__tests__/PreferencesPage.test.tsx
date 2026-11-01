@@ -1,6 +1,9 @@
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { PreferencesPage } from '../PreferencesPage'
+import { AuthProvider } from '../../context/AuthContext'
+import { clearAuthToken, setAuthToken } from '../../services/apiClient'
+import { DEMO_COORDINATOR_TOKEN } from '../../services/authService'
 import { preferenceService } from '../../services/preferenceService'
 import { timeSlotService } from '../../services/timeSlotService'
 import { roomService } from '../../services/roomService'
@@ -13,6 +16,7 @@ import { scheduleService } from '../../services/scheduleService'
 describe('PreferencesPage Component', () => {
   beforeEach(() => {
     vi.restoreAllMocks()
+    clearAuthToken()
     resetMockCourseAssignments()
     vi.spyOn(timeSlotService, 'getTimeSlots').mockResolvedValue([
       { id: 1, day_pattern: 'MW', start_time: '08:00', end_time: '09:15' },
@@ -266,5 +270,61 @@ describe('PreferencesPage Component', () => {
       expect(deleteSpy).toHaveBeenCalledWith(205)
       expect(screen.queryByTestId('delete-pref-205')).not.toBeInTheDocument()
     })
+  })
+
+  it('prevents Course Coordinators from mutating displayed day, slot, or room selections when clicked', async () => {
+    setAuthToken(DEMO_COORDINATOR_TOKEN)
+    vi.spyOn(preferenceService, 'getPreferences').mockResolvedValue([
+      {
+        id: 88,
+        user_id: 1,
+        semester_id: 5,
+        course_id: null,
+        preferred_days: ['T', 'R'],
+        preferred_slots: ['11:00-12:15'],
+        preferred_rooms: ['RH 204'],
+      },
+    ])
+
+    render(
+      <AuthProvider>
+        <PreferencesPage />
+      </AuthProvider>
+    )
+
+    await screen.findByTestId('coordinator-readonly-banner')
+    const selectedDayBtn = screen.getByTestId('day-btn-Tuesday (T)')
+    const unselectedDayBtn = screen.getByTestId('day-btn-Friday (F)')
+    const selectedSlotBtn = await screen.findByTestId('slot-11:00-12:15')
+    const unselectedSlotBtn = await screen.findByTestId('slot-08:00-09:15')
+    const selectedRoomBtn = await screen.findByTestId('room-chip-RH 204')
+    const unselectedRoomBtn = await screen.findByTestId('room-chip-FH 464')
+
+    await waitFor(() => {
+      expect(selectedDayBtn).toHaveAttribute('aria-pressed', 'true')
+      expect(unselectedDayBtn).toHaveAttribute('aria-pressed', 'false')
+      expect(selectedSlotBtn).toHaveAttribute('aria-pressed', 'true')
+      expect(unselectedSlotBtn).toHaveAttribute('aria-pressed', 'false')
+      expect(selectedRoomBtn).toHaveAttribute('aria-pressed', 'true')
+      expect(unselectedRoomBtn).toHaveAttribute('aria-pressed', 'false')
+    })
+
+    fireEvent.click(selectedDayBtn)
+    fireEvent.click(unselectedDayBtn)
+    fireEvent.click(selectedSlotBtn)
+    fireEvent.click(unselectedSlotBtn)
+    fireEvent.click(selectedRoomBtn)
+    fireEvent.click(unselectedRoomBtn)
+
+    expect(selectedDayBtn).toHaveAttribute('aria-pressed', 'true')
+    expect(unselectedDayBtn).toHaveAttribute('aria-pressed', 'false')
+    expect(selectedSlotBtn).toHaveAttribute('aria-pressed', 'true')
+    expect(selectedSlotBtn.className).toContain('bg-blue-50')
+    expect(unselectedSlotBtn).toHaveAttribute('aria-pressed', 'false')
+    expect(unselectedSlotBtn.className).toContain('bg-slate-50')
+    expect(selectedRoomBtn).toHaveAttribute('aria-pressed', 'true')
+    expect(selectedRoomBtn.className).toContain('bg-blue-50')
+    expect(unselectedRoomBtn).toHaveAttribute('aria-pressed', 'false')
+    expect(unselectedRoomBtn.className).toContain('bg-slate-50')
   })
 })

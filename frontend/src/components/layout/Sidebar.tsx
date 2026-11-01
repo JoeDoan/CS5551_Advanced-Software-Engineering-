@@ -26,7 +26,12 @@ const navItems: NavItem[] = [
   { to: '/insights', label: 'Insights', icon: LineChart },
   { to: '/courses', label: 'Courses & Sections', icon: Layers, roles: ['coordinator'] },
   { to: '/users', label: 'User Accounts', icon: Users, roles: ['coordinator'] },
-  { to: '/preferences', label: 'Instructor Prefs', icon: Sliders, roles: ['instructor'] },
+  {
+    to: '/preferences',
+    label: 'Instructor Prefs',
+    icon: Sliders,
+    roles: ['instructor', 'coordinator'],
+  },
   { to: '/admin', label: 'Administration', icon: ShieldCheck, roles: ['coordinator'] },
 ]
 
