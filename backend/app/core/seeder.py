@@ -235,9 +235,15 @@ def _seed_users_and_courses(session: Session, data_dir: str) -> None:
         session.commit()
 
 
-def _seed_time_slots(session: Session, raw_slots: List[Dict[str, Any]]) -> None:
+def _seed_time_slots(
+    session: Session, raw_slots: List[Dict[str, Any]], data_dir: str = ""
+) -> None:
     if not _is_empty(session, TimeSlot):
         return
+    is_uiuc_foia = (
+        bool(data_dir)
+        and os.path.basename(os.path.normpath(data_dir)) == "uiuc_foia"
+    )
     for s in raw_slots:
         label = f"{s['start_time']}-{s['end_time']}"
         session.add(TimeSlot(id=s["slot_id"], day_pattern=s.get("day_pattern", "TR"),
@@ -245,9 +251,10 @@ def _seed_time_slots(session: Session, raw_slots: List[Dict[str, Any]]) -> None:
                              slot_label=label, pattern_type="TR_75", level=None))
     next_id = max([s["slot_id"] for s in raw_slots], default=0) + 1
     for offset, (days, start, end, ptype, level) in enumerate(EXTRA_TIME_SLOTS):
+        effective_level = None if is_uiuc_foia else level
         session.add(TimeSlot(id=next_id + offset, day_pattern=days, start_time=start,
                              end_time=end, slot_label=f"{days} {start}-{end}",
-                             pattern_type=ptype, level=level))
+                             pattern_type=ptype, level=effective_level))
     session.commit()
 
 
@@ -262,19 +269,29 @@ def _seed_semesters(session: Session, data_dir: str) -> None:
     session.commit()
 
 
-def _seed_preferences(session: Session, data_dir: str, slot_labels: Dict[int, str]) -> None:
+def _seed_preferences(
+    session: Session, data_dir: str, slot_labels: Dict[int, str]
+) -> None:
     if not _is_empty(session, InstructorPreference):
         return
-    room_map = {r["room_id"]: r["room_number"] for r in _load_json(data_dir, "rooms.json")}
+    room_map = {
+        r["room_id"]: r["room_number"] for r in _load_json(data_dir, "rooms.json")
+    }
     for p in _load_json(data_dir, "instructor_preferences.json"):
-        days = [DAY_NAME_TO_CODE.get(str(d).upper(), str(d)) for d in p.get("preferred_days", [])]
-        slots = [slot_labels.get(s, str(s)) if isinstance(s, int) else str(s)
-                 for s in p.get("preferred_slots", [])]
-        rooms = [room_map[p["preferred_room_id"]]] if p.get("preferred_room_id") in room_map else []
+        days = [
+            DAY_NAME_TO_CODE.get(str(d).upper(), str(d))
+            for d in p.get("preferred_days", [])
+        ]
+        slots = [
+            slot_labels.get(s, str(s)) if isinstance(s, int) else str(s)
+            for s in p.get("preferred_slots", [])
+        ]
+        pref_rid = p.get("preferred_room_id")
+        rooms = [room_map[pref_rid]] if pref_rid in room_map else []
         session.add(InstructorPreference(
             id=p["id"], user_id=p["instructor_id"], semester_id=p.get("semester_id", 1),
             course_id=p.get("course_id"), preferred_days=days, preferred_slots=slots,
-            preferred_rooms=rooms, preference_rank=1))
+            preferred_rooms=rooms, preference_rank=2))
     session.commit()
 
 
@@ -350,11 +367,13 @@ def seed_database(
             _reset_tables(session)
 
         raw_slots = _load_json(data_dir, "time_slots.json")
-        slot_labels = {s["slot_id"]: f"{s['start_time']}-{s['end_time']}" for s in raw_slots}
+        slot_labels = {
+            s["slot_id"]: f"{s['start_time']}-{s['end_time']}" for s in raw_slots
+        }
 
         _seed_campuses_buildings_rooms(session, data_dir)
         _seed_users_and_courses(session, data_dir)
-        _seed_time_slots(session, raw_slots)
+        _seed_time_slots(session, raw_slots, data_dir)
         _seed_semesters(session, data_dir)
         _seed_preferences(session, data_dir, slot_labels)
         _seed_schedules(session, data_dir)

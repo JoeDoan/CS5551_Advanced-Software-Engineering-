@@ -170,6 +170,19 @@ def _augment_loader_time_slots_from_preferences(
     return extra_slot_ids
 
 
+def _extract_pref_fields(
+    pref: InstructorPreference, loader: DataLoader
+) -> Tuple[List[str], List[int], List[str]]:
+    days = _expand_preferred_days(pref.preferred_days)
+    slots = _map_preferred_slots(pref.preferred_slots, loader)
+    rooms = (
+        [str(r).strip() for r in pref.preferred_rooms if str(r).strip()]
+        if isinstance(pref.preferred_rooms, list)
+        else []
+    )
+    return days, slots, rooms
+
+
 def _overlay_sqlite_preferences(
     session: Session,
     semester_id: int,
@@ -177,19 +190,25 @@ def _overlay_sqlite_preferences(
     valid_ic_pairs: Set[Tuple[str, str]],
     loader: DataLoader,
 ) -> None:
+    user_name_by_id = {
+        u.id: u.full_name
+        for u in session.exec(
+            select(User).where(User.role == "instructor")
+        ).all()
+        if u.id is not None
+    }
+    if not user_name_by_id:
+        return
+
     prefs = session.exec(
         select(InstructorPreference)
         .where(InstructorPreference.semester_id == semester_id)
         .order_by(InstructorPreference.id)
     ).all()
-    if not prefs:
-        return
+    prefs_by_uid: Dict[int, List[InstructorPreference]] = {}
+    for pref in prefs:
+        prefs_by_uid.setdefault(pref.user_id, []).append(pref)
 
-    user_name_by_id = {
-        u.id: u.full_name
-        for u in session.exec(select(User)).all()
-        if u.id is not None
-    }
     loader_course_names = {c["course_name"] for c in loader.courses}
     loader_course_by_id = {c["course_id"]: c["course_name"] for c in loader.courses}
     db_course_by_id = {
@@ -197,48 +216,62 @@ def _overlay_sqlite_preferences(
         for c in session.exec(select(Course)).all()
         if c.id is not None
     }
+    is_full_seeded_roster = len(user_name_by_id) >= len(profiles)
 
-    ordered_prefs = [p for p in prefs if p.course_id is not None] + [
-        p for p in prefs if p.course_id is None
-    ]
-    for pref in ordered_prefs:
-        inst_name = user_name_by_id.get(pref.user_id)
-        if not inst_name or inst_name not in profiles:
+    for uid, inst_name in user_name_by_id.items():
+        if inst_name not in profiles:
+            continue
+        user_prefs = prefs_by_uid.get(uid, [])
+        if not user_prefs:
+            if is_full_seeded_roster:
+                profiles[inst_name]["preferences"] = {
+                    "days": [],
+                    "slots": [],
+                    "classrooms": [],
+                    "layout": None,
+                }
+                profiles[inst_name]["course_preferences"] = {}
             continue
 
-        days = _expand_preferred_days(pref.preferred_days)
-        slots = _map_preferred_slots(pref.preferred_slots, loader)
-        rooms = (
-            [str(r).strip() for r in pref.preferred_rooms if str(r).strip()]
-            if isinstance(pref.preferred_rooms, list)
-            else []
-        )
+        profiles[inst_name]["preferences"] = {
+            "days": [],
+            "slots": [],
+            "classrooms": [],
+            "layout": None,
+        }
+        profiles[inst_name]["course_preferences"] = {}
 
-        if pref.course_id is None:
-            general_prefs = profiles[inst_name].setdefault(
-                "preferences",
-                {"days": [], "slots": [], "classrooms": [], "layout": None},
-            )
-            general_prefs["days"] = days
-            general_prefs["slots"] = slots
-            general_prefs["classrooms"] = rooms
-            profiles[inst_name]["course_preferences"] = {}
-        else:
+        general_rows = [p for p in user_prefs if p.course_id is None]
+        has_general = len(general_rows) > 0
+        for g_pref in general_rows:
+            days, slots, rooms = _extract_pref_fields(g_pref, loader)
+            profiles[inst_name]["preferences"] = {
+                "days": days,
+                "slots": slots,
+                "classrooms": rooms,
+                "layout": None,
+            }
+
+        for c_pref in [p for p in user_prefs if p.course_id is not None]:
             course_name = db_course_by_id.get(
-                pref.course_id
-            ) or loader_course_by_id.get(pref.course_id)
-            if course_name and course_name in loader_course_names:
-                course_prefs = profiles[inst_name].setdefault(
-                    "course_preferences", {}
-                )
-                existing = course_prefs.get(course_name, {})
-                course_prefs[course_name] = {
+                c_pref.course_id
+            ) or loader_course_by_id.get(c_pref.course_id)
+            if not course_name or course_name not in loader_course_names:
+                continue
+            valid_ic_pairs.add((inst_name, course_name))
+            rank = (
+                c_pref.preference_rank
+                if c_pref.preference_rank is not None
+                else 1
+            )
+            if rank <= 1 or not has_general:
+                days, slots, rooms = _extract_pref_fields(c_pref, loader)
+                profiles[inst_name]["course_preferences"][course_name] = {
                     "days": days,
                     "slots": slots,
                     "classrooms": rooms,
-                    "layout": existing.get("layout"),
+                    "layout": None,
                 }
-                valid_ic_pairs.add((inst_name, course_name))
 
 
 def _resolve_pinned_assignments(

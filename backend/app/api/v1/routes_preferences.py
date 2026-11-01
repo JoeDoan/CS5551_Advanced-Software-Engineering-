@@ -6,7 +6,15 @@ from sqlmodel import Session, select
 
 from app.core.database import get_session
 from app.core.security import SessionPrincipal, require_auth
-from app.models.entities import InstructorPreference, User, Semester, Course, TimeSlot
+from app.models.entities import (
+    Course,
+    InstructorCourseAssignment,
+    InstructorPreference,
+    Schedule,
+    Semester,
+    TimeSlot,
+    User,
+)
 from app.schemas.api_schemas import PreferenceCreate, PreferenceResponse
 
 router = APIRouter()
@@ -49,13 +57,43 @@ def _authorize_preference_write(
         )
 
 
+def _is_course_assigned_to_instructor(
+    session: Session,
+    semester_id: int,
+    user_id: int,
+    course_id: int,
+) -> bool:
+    has_assignment = (
+        session.exec(
+            select(InstructorCourseAssignment.id).where(
+                InstructorCourseAssignment.semester_id == semester_id,
+                InstructorCourseAssignment.user_id == user_id,
+                InstructorCourseAssignment.course_id == course_id,
+            )
+        ).first()
+        is not None
+    )
+    if has_assignment:
+        return True
+    return (
+        session.exec(
+            select(Schedule.id).where(
+                Schedule.semester_id == semester_id,
+                Schedule.user_id == user_id,
+                Schedule.course_id == course_id,
+            )
+        ).first()
+        is not None
+    )
+
+
 def resolve_slots(
     session: Session,
     ids: List[int],
     strings: List[str],
     course: Optional[Course] = None,
 ) -> List[str]:
-    """Resolve slot ids/labels against the catalog and return canonical 'HH:MM-HH:MM' labels."""
+    """Resolve slot ids/labels against catalog and return 'HH:MM-HH:MM' labels."""
     catalog = session.exec(select(TimeSlot)).all()
     if not catalog:
         # Catalog not yet seeded: pass raw values through.
@@ -77,9 +115,10 @@ def resolve_slots(
         slots.append(by_id[i])
     for s in strings:
         if s not in by_label:
+            valid_labels = sorted({_label(c) for c in catalog})
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail=f"Unknown slot {s}. Valid: {sorted({_label(c) for c in catalog})}",
+                detail=f"Unknown slot {s}. Valid: {valid_labels}",
             )
         slots.append(by_label[s])
 
@@ -123,18 +162,6 @@ def submit_preference(
 ):
     """Submit instructor availability and course preferences with idempotent upsert."""
     _authorize_preference_write(principal, payload.user_id)
-    if (
-        principal is not None
-        and principal.role == "instructor"
-        and payload.course_id is not None
-    ):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=(
-                "Course assignments are managed by Course Coordinators. "
-                "Instructors can only submit general semester availability."
-            ),
-        )
 
     # 1. Validate User
     user = session.get(User, payload.user_id)
@@ -171,6 +198,22 @@ def submit_preference(
                 detail="Course not found",
             )
 
+    if (
+        principal is not None
+        and principal.role == "instructor"
+        and payload.course_id is not None
+        and not _is_course_assigned_to_instructor(
+            session, sem.id, payload.user_id, payload.course_id
+        )
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=(
+                "Course assignments are managed by Course Coordinators. "
+                "Instructors can only submit preferences for courses assigned to them."
+            ),
+        )
+
     # 4. Upsert check (AC 5.3: resubmission replaces existing record)
     course_match = (
         InstructorPreference.course_id == payload.course_id
@@ -202,6 +245,7 @@ def submit_preference(
     )
     pref.preferred_slots = resolved_slots
     pref.preferred_rooms = payload.preferred_rooms
+    pref.preference_rank = 1
 
     session.add(pref)
     session.commit()

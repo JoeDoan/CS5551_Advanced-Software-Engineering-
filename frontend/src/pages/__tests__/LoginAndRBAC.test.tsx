@@ -563,7 +563,7 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
     })
   })
 
-  it('locks logged-in Instructor to Current Term Fall 2026 on /schedule and /preferences and hides past semester and course selectors', async () => {
+  it('locks logged-in Instructor to Current Term Fall 2026 on /schedule and /preferences, hides past semester selectors, and defaults course preference scope to general', async () => {
     setAuthToken(DEMO_INSTRUCTOR_TOKEN)
 
     render(
@@ -591,7 +591,9 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
       'Current Term: Fall 2026'
     )
     expect(screen.queryByTestId('preference-semester-select')).not.toBeInTheDocument()
-    expect(screen.queryByTestId('preference-course-select')).not.toBeInTheDocument()
+    const courseSelect = screen.getByTestId('preference-course-select') as HTMLSelectElement
+    expect(courseSelect).toBeInTheDocument()
+    expect(courseSelect.value).toBe('general')
     expect(screen.getByTestId('coordinator-assigned-courses')).toBeInTheDocument()
   })
 

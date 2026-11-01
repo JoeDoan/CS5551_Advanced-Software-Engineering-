@@ -44,7 +44,11 @@ def test_solver_run_infeasible_returns_422(client: TestClient):
 
     response = client.post(
         "/api/v1/solver/run",
-        json={"semester_id": 1, "min_courses_per_instructor": 3, "max_courses_per_instructor": 1},
+        json={
+            "semester_id": 1,
+            "min_courses_per_instructor": 3,
+            "max_courses_per_instructor": 1,
+        },
     )
     assert response.status_code == 422
     assert "feasible" in response.json()["detail"].lower()
@@ -126,3 +130,59 @@ def test_general_semester_preference_overrides_legacy_seeded_course_preferences(
         item for item in fairness["instructors"] if item["user_id"] == 1
     )
     assert lee_fairness["preferred_day_matches"] == len(lee_events)
+
+
+def test_three_tier_preference_precedence_and_deletion(client: TestClient):
+    """Tier 1 course override beats Tier 2 general; deletion restores Tier 2."""
+    client.post("/api/v1/admin/seed")
+    client.put(
+        "/api/v1/course-assignments",
+        json={"semester_id": 5, "user_id": 1, "course_ids": [1, 16]},
+    )
+
+    gen_resp = client.post(
+        "/api/v1/preferences",
+        json={
+            "user_id": 1,
+            "semester_id": 5,
+            "course_id": None,
+            "preferred_days": ["M", "W"],
+            "preferred_slots": ["11:00-12:15"],
+        },
+    )
+    assert gen_resp.status_code in (200, 201)
+
+    c16_resp = client.post(
+        "/api/v1/preferences",
+        json={
+            "user_id": 1,
+            "semester_id": 5,
+            "course_id": 16,
+            "preferred_days": ["T", "R"],
+            "preferred_slots": ["19:00-20:15"],
+        },
+    )
+    assert c16_resp.status_code in (200, 201)
+    c16_pref_id = c16_resp.json()["id"]
+    assert c16_resp.json()["preference_rank"] == 1
+
+    assert client.post("/api/v1/solver/run", json={"semester_id": 5}).status_code == 200
+    events = client.get("/api/v1/schedules?semester_id=5").json()
+    lee_by_cid = {e["course_id"]: e for e in events if e["user_id"] == 1}
+    assert lee_by_cid[1]["day_pattern"] == "MW"
+    assert (
+        f"{lee_by_cid[1]['start_time']}-{lee_by_cid[1]['end_time']}" == "11:00-12:15"
+    )
+    assert lee_by_cid[16]["day_pattern"] == "TR"
+    assert (
+        f"{lee_by_cid[16]['start_time']}-{lee_by_cid[16]['end_time']}" == "19:00-20:15"
+    )
+
+    assert client.delete(f"/api/v1/preferences/{c16_pref_id}").status_code == 204
+    assert client.post("/api/v1/solver/run", json={"semester_id": 5}).status_code == 200
+    after_del = {
+        e["course_id"]: e
+        for e in client.get("/api/v1/schedules?semester_id=5").json()
+        if e["user_id"] == 1
+    }
+    assert after_del[16]["day_pattern"] == "MW"

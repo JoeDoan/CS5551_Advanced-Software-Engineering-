@@ -123,6 +123,11 @@ export const formatCourseHabit = (pref: InstructorPreference | undefined): strin
   return parts.join(' ')
 }
 
+const isNonEmptyPreference = (pref: InstructorPreference): boolean =>
+  (pref.preferred_days?.length ?? 0) > 0 ||
+  (pref.preferred_slots?.length ?? 0) > 0 ||
+  (pref.preferred_rooms?.length ?? 0) > 0
+
 export const PreferencesPage: React.FC = () => {
   const { user, isStandaloneFallback } = useAuth()
   const isLockedInstructor =
@@ -149,12 +154,15 @@ export const PreferencesPage: React.FC = () => {
   const [selectedInstructor, setSelectedInstructor] = useState<string>(() =>
     isLockedInstructor && user?.linked_user_id ? String(user.linked_user_id) : '1'
   )
+  const [selectedCourseScope, setSelectedCourseScope] = useState<string>('general')
 
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([])
   const [rooms, setRooms] = useState<Room[]>([])
   const [savedPreferences, setSavedPreferences] = useState<InstructorPreference[]>([])
   const [coursePreferences, setCoursePreferences] = useState<InstructorPreference[]>([])
   const [assignedCourses, setAssignedCourses] = useState<AssignedCourseDisplay[]>([])
+  const [assignedCoursesLoaded, setAssignedCoursesLoaded] = useState(false)
+  const [coursePreferencesLoaded, setCoursePreferencesLoaded] = useState(false)
 
   const [selectedDays, setSelectedDays] = useState<string[]>(() =>
     isReadOnlyCoordinator ? [] : ['Monday (M)', 'Wednesday (W)']
@@ -168,6 +176,15 @@ export const PreferencesPage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const hasUserEditedRef = useRef<boolean>(false)
+  const prevInstructorRef = useRef<string>(selectedInstructor)
+
+  useEffect(() => {
+    if (prevInstructorRef.current !== selectedInstructor) {
+      prevInstructorRef.current = selectedInstructor
+      hasUserEditedRef.current = false
+      setSelectedCourseScope('general')
+    }
+  }, [selectedInstructor])
 
   useEffect(() => {
     let active = true
@@ -194,10 +211,14 @@ export const PreferencesPage: React.FC = () => {
 
   useEffect(() => {
     if (isLockedInstructor && user?.linked_user_id) {
-      hasUserEditedRef.current = false
-      setSelectedInstructor(String(user.linked_user_id))
+      const targetId = String(user.linked_user_id)
+      if (selectedInstructor !== targetId) {
+        hasUserEditedRef.current = false
+        setSelectedCourseScope('general')
+        setSelectedInstructor(targetId)
+      }
     }
-  }, [isLockedInstructor, user?.linked_user_id])
+  }, [isLockedInstructor, user?.linked_user_id, selectedInstructor])
 
   const activeInstructorName = useMemo(() => {
     if (isLockedInstructor && user?.full_name) return user.full_name
@@ -208,6 +229,8 @@ export const PreferencesPage: React.FC = () => {
     let active = true
     const userId = Number(selectedInstructor)
     if (!userId) return
+
+    setCoursePreferencesLoaded(false)
 
     preferenceService
       .getPreferences({
@@ -237,10 +260,26 @@ export const PreferencesPage: React.FC = () => {
           (p) => p.course_id != null
         )
         setCoursePreferences(perCourse)
+        setCoursePreferencesLoaded(true)
       })
       .catch(() => {
-        if (active) setCoursePreferences([])
+        if (active) {
+          setCoursePreferences([])
+          setCoursePreferencesLoaded(true)
+        }
       })
+
+    return () => {
+      active = false
+    }
+  }, [selectedInstructor])
+
+  useEffect(() => {
+    let active = true
+    const userId = Number(selectedInstructor)
+    if (!userId) return
+
+    setAssignedCoursesLoaded(false)
 
     Promise.all([
       courseAssignmentService
@@ -284,6 +323,7 @@ export const PreferencesPage: React.FC = () => {
         a.course_code.localeCompare(b.course_code)
       )
       setAssignedCourses(merged)
+      setAssignedCoursesLoaded(true)
     })
 
     return () => {
@@ -291,21 +331,60 @@ export const PreferencesPage: React.FC = () => {
     }
   }, [selectedInstructor, activeInstructorName])
 
-  useEffect(() => {
-    const match = savedPreferences.find((p) => p.course_id == null)
+  const activeCourse = useMemo<AssignedCourseDisplay | null>(() => {
+    if (selectedCourseScope === 'general') return null
+    return assignedCourses.find((c) => String(c.course_id) === selectedCourseScope) ?? null
+  }, [selectedCourseScope, assignedCourses])
 
-    if (match) {
-      if (!hasUserEditedRef.current) {
+  useEffect(() => {
+    if (
+      selectedCourseScope !== 'general' &&
+      assignedCoursesLoaded &&
+      coursePreferencesLoaded &&
+      !assignedCourses.some((c) => String(c.course_id) === selectedCourseScope) &&
+      !coursePreferences.some((p) => String(p.course_id) === selectedCourseScope)
+    ) {
+      hasUserEditedRef.current = false
+      setSelectedCourseScope('general')
+    }
+  }, [
+    selectedCourseScope,
+    assignedCoursesLoaded,
+    coursePreferencesLoaded,
+    assignedCourses,
+    coursePreferences,
+  ])
+
+  useEffect(() => {
+    if (hasUserEditedRef.current) return
+
+    if (selectedCourseScope === 'general') {
+      const match = savedPreferences.find((p) => p.course_id == null)
+      if (match) {
         setSelectedDays(normalizeStoredDaysToLabels(match.preferred_days))
         setSelectedSlots(Array.isArray(match.preferred_slots) ? [...match.preferred_slots] : [])
         setSelectedRooms(Array.isArray(match.preferred_rooms) ? [...match.preferred_rooms] : [])
+      } else {
+        setSelectedDays(isReadOnlyCoordinator ? [] : ['Monday (M)', 'Wednesday (W)'])
+        setSelectedSlots([])
+        setSelectedRooms([])
       }
-    } else if (!hasUserEditedRef.current) {
+      return
+    }
+
+    const match = coursePreferences.find(
+      (p) => String(p.course_id) === selectedCourseScope && isNonEmptyPreference(p)
+    )
+    if (match) {
+      setSelectedDays(normalizeStoredDaysToLabels(match.preferred_days))
+      setSelectedSlots(Array.isArray(match.preferred_slots) ? [...match.preferred_slots] : [])
+      setSelectedRooms(Array.isArray(match.preferred_rooms) ? [...match.preferred_rooms] : [])
+    } else {
       setSelectedDays(isReadOnlyCoordinator ? [] : ['Monday (M)', 'Wednesday (W)'])
       setSelectedSlots([])
       setSelectedRooms([])
     }
-  }, [savedPreferences, isReadOnlyCoordinator])
+  }, [selectedCourseScope, savedPreferences, coursePreferences, isReadOnlyCoordinator])
 
   const instructors = useMemo(() => {
     if (isLockedInstructor && user?.linked_user_id) {
@@ -318,6 +397,27 @@ export const PreferencesPage: React.FC = () => {
     }
     return toInstructorOptions(instructorList)
   }, [instructorList, isLockedInstructor, user])
+
+  const courseScopeOptions = useMemo(
+    () => [
+      { value: 'general', label: 'All Assigned Courses (General Availability)' },
+      ...assignedCourses.map((c) => ({
+        value: String(c.course_id),
+        label: `${c.course_code} — ${c.course_name}`,
+      })),
+    ],
+    [assignedCourses]
+  )
+
+  const visibleTimeSlots = useMemo(() => {
+    if (activeCourse == null) return timeSlots
+    return timeSlots.filter((ts) => !ts.level || ts.level === activeCourse.course_level)
+  }, [timeSlots, activeCourse])
+
+  const displayedSavedPreferences = useMemo(() => {
+    const nonEmptyCoursePrefs = coursePreferences.filter(isNonEmptyPreference)
+    return [...savedPreferences, ...nonEmptyCoursePrefs]
+  }, [savedPreferences, coursePreferences])
 
   const toggleDay = (day: string) => {
     if (isReadOnlyCoordinator) return
@@ -351,9 +451,15 @@ export const PreferencesPage: React.FC = () => {
     )
   }
 
+  const handleSelectCourseScope = (scope: string) => {
+    hasUserEditedRef.current = false
+    setSelectedCourseScope(scope)
+  }
+
   const handleLoadSaved = (pref: InstructorPreference) => {
     if (isReadOnlyCoordinator) return
-    hasUserEditedRef.current = false
+    hasUserEditedRef.current = true
+    setSelectedCourseScope(pref.course_id != null ? String(pref.course_id) : 'general')
     setSelectedDays(normalizeStoredDaysToLabels(pref.preferred_days))
     setSelectedSlots(Array.isArray(pref.preferred_slots) ? [...pref.preferred_slots] : [])
     setSelectedRooms(Array.isArray(pref.preferred_rooms) ? [...pref.preferred_rooms] : [])
@@ -367,6 +473,7 @@ export const PreferencesPage: React.FC = () => {
       await preferenceService.deletePreference(pref.id)
       hasUserEditedRef.current = false
       setSavedPreferences((prev) => prev.filter((item) => item.id !== pref.id))
+      setCoursePreferences((prev) => prev.filter((item) => item.id !== pref.id))
       setToast({
         type: 'success',
         message: 'Saved preference deleted.',
@@ -397,39 +504,74 @@ export const PreferencesPage: React.FC = () => {
       const mappedDays = DAY_CATALOG.filter((d) => selectedDays.includes(d.label)).map(
         (d) => d.code
       )
+      const targetCourseId =
+        selectedCourseScope === 'general' ? null : Number(selectedCourseScope)
 
       const saved = await preferenceService.submitPreference({
         user_id: Number(selectedInstructor),
         semester_id: CURRENT_SEMESTER_ID,
-        course_id: null,
+        course_id: targetCourseId,
         preferred_days: mappedDays,
         preferred_slots: selectedSlots,
         preferred_rooms: selectedRooms,
       })
 
       hasUserEditedRef.current = false
-      setSavedPreferences((prev) => {
-        const normalizedSaved: InstructorPreference = {
-          ...saved,
-          semester_id: CURRENT_SEMESTER_ID,
-          course_id: null,
-          preferred_days: saved.preferred_days ?? mappedDays,
-          preferred_slots: saved.preferred_slots ?? selectedSlots,
-          preferred_rooms: saved.preferred_rooms ?? selectedRooms,
-        }
-        const idx = prev.findIndex((item) => item.course_id == null)
-        if (idx !== -1) {
-          const next = [...prev]
-          next[idx] = { ...prev[idx], ...normalizedSaved }
-          return next
-        }
-        return [...prev, normalizedSaved]
-      })
 
-      setToast({
-        type: 'success',
-        message: 'Instructor preferences saved successfully!',
-      })
+      if (targetCourseId === null) {
+        setSavedPreferences((prev) => {
+          const normalizedSaved: InstructorPreference = {
+            ...saved,
+            semester_id: CURRENT_SEMESTER_ID,
+            course_id: null,
+            preferred_days: saved.preferred_days ?? mappedDays,
+            preferred_slots: saved.preferred_slots ?? selectedSlots,
+            preferred_rooms: saved.preferred_rooms ?? selectedRooms,
+          }
+          const idx = prev.findIndex((item) => item.course_id == null)
+          if (idx !== -1) {
+            const next = [...prev]
+            next[idx] = { ...prev[idx], ...normalizedSaved }
+            return next
+          }
+          return [...prev, normalizedSaved]
+        })
+
+        setToast({
+          type: 'success',
+          message: 'Instructor preferences saved successfully!',
+        })
+      } else {
+        const fallbackCode = activeCourse?.course_code ?? null
+        const fallbackName = activeCourse?.course_name ?? null
+        setCoursePreferences((prev) => {
+          const idx = prev.findIndex((item) => item.course_id === targetCourseId)
+          const existing = idx !== -1 ? prev[idx] : undefined
+          const normalizedSaved: InstructorPreference = {
+            ...existing,
+            ...saved,
+            semester_id: CURRENT_SEMESTER_ID,
+            course_id: targetCourseId,
+            course_code: saved.course_code ?? existing?.course_code ?? fallbackCode,
+            course_name: saved.course_name ?? existing?.course_name ?? fallbackName,
+            preference_rank: saved.preference_rank ?? 1,
+            preferred_days: saved.preferred_days ?? mappedDays,
+            preferred_slots: saved.preferred_slots ?? selectedSlots,
+            preferred_rooms: saved.preferred_rooms ?? selectedRooms,
+          }
+          if (idx !== -1) {
+            const next = [...prev]
+            next[idx] = normalizedSaved
+            return next
+          }
+          return [...prev, normalizedSaved]
+        })
+
+        setToast({
+          type: 'success',
+          message: `Course preferences saved for ${activeCourse?.course_code ?? 'course'}!`,
+        })
+      }
     } catch (err) {
       const errMsg =
         err instanceof Error &&
@@ -515,8 +657,8 @@ export const PreferencesPage: React.FC = () => {
               </CardTitle>
               <p className="text-xs text-slate-500 mt-0.5">
                 {isReadOnlyCoordinator
-                  ? 'Teaching load assigned to the selected instructor'
-                  : 'Read-only teaching load assigned by your Course Coordinator'}
+                  ? 'Teaching load assigned to the selected instructor. Click a course to inspect its preferences.'
+                  : 'Teaching load assigned by your Course Coordinator. Click a course to configure course-specific preferences.'}
               </p>
             </div>
           </div>
@@ -532,6 +674,19 @@ export const PreferencesPage: React.FC = () => {
             </p>
           ) : (
             <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                data-testid="select-course-scope-general"
+                aria-pressed={selectedCourseScope === 'general'}
+                onClick={() => handleSelectCourseScope('general')}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer focus:outline-none ${
+                  selectedCourseScope === 'general'
+                    ? 'border-blue-600 bg-blue-50 text-blue-800 ring-2 ring-blue-500/20'
+                    : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300'
+                }`}
+              >
+                All Courses (General)
+              </button>
               {assignedCourses.map((course) => {
                 const normalizedCode = course.course_code.trim().toUpperCase()
                 const matchedPref = coursePreferences.find(
@@ -541,17 +696,33 @@ export const PreferencesPage: React.FC = () => {
                       p.course_code?.trim().toUpperCase() === normalizedCode)
                 )
                 const habitSummary = formatCourseHabit(matchedPref)
+                const isCourseActive = selectedCourseScope === String(course.course_id)
                 return (
-                  <div
+                  <button
                     key={`${course.course_id}-${course.course_code}`}
-                    className="inline-flex flex-wrap items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-xs"
+                    type="button"
+                    data-testid={`select-course-scope-${course.course_id}`}
+                    aria-pressed={isCourseActive}
+                    onClick={() => handleSelectCourseScope(String(course.course_id))}
+                    className={`inline-flex flex-wrap items-center gap-2 px-3 py-1.5 rounded-xl border text-xs text-left transition-all cursor-pointer focus:outline-none ${
+                      isCourseActive
+                        ? 'border-blue-600 bg-blue-50 ring-2 ring-blue-500/20'
+                        : 'border-slate-200 bg-slate-50 hover:bg-slate-100/80 hover:border-slate-300'
+                    }`}
                   >
                     <span className="font-bold text-slate-900">{course.course_code}</span>
                     <span className="text-slate-600">{course.course_name}</span>
                     <Badge variant={course.course_level === 'graduate' ? 'gold' : 'info'}>
                       {formatCourseLevel(course.course_level)}
                     </Badge>
-                    {habitSummary ? (
+                    {habitSummary && matchedPref?.preference_rank === 1 ? (
+                      <Badge
+                        variant="info"
+                        data-testid={`course-habit-badge-${course.course_id}`}
+                      >
+                        Custom pref: {habitSummary}
+                      </Badge>
+                    ) : habitSummary ? (
                       <Badge
                         variant="success"
                         data-testid={`course-habit-badge-${course.course_id}`}
@@ -566,7 +737,7 @@ export const PreferencesPage: React.FC = () => {
                         No preference submitted
                       </Badge>
                     )}
-                  </div>
+                  </button>
                 )
               })}
             </div>
@@ -583,12 +754,20 @@ export const PreferencesPage: React.FC = () => {
           <div>
             <CardTitle>Teaching Availability & Classroom Preferences</CardTitle>
             <p className="text-xs text-slate-500 mt-0.5">
-              {isReadOnlyCoordinator
-                ? `General availability across all courses assigned to this instructor in ${CURRENT_SEMESTER_NAME}.`
-                : `General availability applies across all courses assigned to you in ${CURRENT_SEMESTER_NAME}.`}
+              {activeCourse
+                ? isReadOnlyCoordinator
+                  ? `Course-specific preferences for ${activeCourse.course_code} (${activeCourse.course_name}) in ${CURRENT_SEMESTER_NAME}.`
+                  : `Course-specific preferences for ${activeCourse.course_code} (${activeCourse.course_name}) in ${CURRENT_SEMESTER_NAME}, overriding general availability.`
+                : isReadOnlyCoordinator
+                  ? `General availability across all courses assigned to this instructor in ${CURRENT_SEMESTER_NAME}.`
+                  : `General availability applies across all courses assigned to you in ${CURRENT_SEMESTER_NAME}.`}
             </p>
           </div>
-          <Badge variant="info">General Availability</Badge>
+          {activeCourse ? (
+            <Badge variant="gold">{activeCourse.course_code} Preference</Badge>
+          ) : (
+            <Badge variant="info">General Availability</Badge>
+          )}
         </CardHeader>
 
         <CardContent className="space-y-6">
@@ -607,9 +786,25 @@ export const PreferencesPage: React.FC = () => {
               }
               onChange={(e) => {
                 hasUserEditedRef.current = false
+                setSelectedCourseScope('general')
                 setSelectedInstructor(e.target.value)
               }}
               data-testid="instructor-select"
+            />
+            <Select
+              label="Apply Preferences To"
+              options={courseScopeOptions}
+              value={selectedCourseScope}
+              helperText={
+                activeCourse
+                  ? 'Overrides general availability for this specific course.'
+                  : 'Default availability across assigned courses without a custom override.'
+              }
+              onChange={(e) => {
+                hasUserEditedRef.current = false
+                setSelectedCourseScope(e.target.value)
+              }}
+              data-testid="preference-course-select"
             />
           </div>
 
@@ -685,7 +880,7 @@ export const PreferencesPage: React.FC = () => {
               {!isReadOnlyCoordinator && <span className="text-red-500">*</span>}
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
-              {timeSlots.map((timeSlot) => {
+              {visibleTimeSlots.map((timeSlot) => {
                 const slot = toSlotKey(timeSlot)
                 const isSelected = selectedSlots.includes(slot)
                 return (
@@ -820,15 +1015,15 @@ export const PreferencesPage: React.FC = () => {
             <div>
               <CardTitle>Saved Availability Profile ({CURRENT_SEMESTER_NAME})</CardTitle>
               <p className="text-xs text-slate-500 mt-0.5">
-                {CURRENT_SEMESTER_NAME} ({savedPreferences.length} saved profile
-                {savedPreferences.length === 1 ? '' : 's'})
+                {CURRENT_SEMESTER_NAME} ({displayedSavedPreferences.length} saved profile
+                {displayedSavedPreferences.length === 1 ? '' : 's'})
               </p>
             </div>
           </div>
         </CardHeader>
 
         <CardContent>
-          {savedPreferences.length === 0 ? (
+          {displayedSavedPreferences.length === 0 ? (
             <p className="text-xs text-slate-500 py-3">
               {isReadOnlyCoordinator
                 ? `No saved preferences recorded for this instructor in ${CURRENT_SEMESTER_NAME} yet.`
@@ -836,20 +1031,37 @@ export const PreferencesPage: React.FC = () => {
             </p>
           ) : (
             <div className="space-y-3">
-              {savedPreferences.map((pref) => {
+              {displayedSavedPreferences.map((pref) => {
                 const dayBadges = normalizeStoredDaysToLabels(pref.preferred_days).map((label) => {
                   const m = label.match(/\(([MTWRF])\)/)
                   return m ? m[1] : label
                 })
+                const courseCode =
+                  pref.course_id != null
+                    ? pref.course_code ||
+                      assignedCourses.find((c) => c.course_id === pref.course_id)?.course_code ||
+                      `Course #${pref.course_id}`
+                    : null
 
                 return (
                   <div
-                    key={pref.id ?? `${pref.user_id}-${pref.semester_id}-gen`}
+                    key={
+                      pref.id ??
+                      `${pref.user_id}-${pref.semester_id}-${pref.course_id ?? 'gen'}`
+                    }
                     className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3.5 rounded-xl border border-blue-300 bg-blue-50/40 transition-colors"
                   >
                     <div className="space-y-1.5">
                       <div className="flex flex-wrap items-center gap-2">
-                        <Badge variant="info">General Availability</Badge>
+                        {pref.course_id == null ? (
+                          <Badge variant="info">General Availability</Badge>
+                        ) : (
+                          <Badge variant={pref.preference_rank === 1 ? 'gold' : 'neutral'}>
+                            {pref.preference_rank === 1
+                              ? `${courseCode} · Course Preference`
+                              : `${courseCode} · 2-yr Habit Default`}
+                          </Badge>
+                        )}
                         <Badge variant="success">Active Term</Badge>
                       </div>
 

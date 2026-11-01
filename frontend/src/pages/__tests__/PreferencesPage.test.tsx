@@ -49,15 +49,18 @@ describe('PreferencesPage Component', () => {
     ])
   })
 
-  it('locks to active Fall 2026 semester without semester or course preference selectors', () => {
+  it('locks to active Fall 2026 semester without semester selector and defaults course scope selector to general', () => {
     render(<PreferencesPage />)
 
     expect(screen.getByText('Instructor Preferences')).toBeInTheDocument()
     expect(screen.getByLabelText('Select Instructor')).toBeInTheDocument()
+    expect(screen.getByLabelText('Apply Preferences To')).toBeInTheDocument()
     expect(screen.getByTestId('active-semester-badge')).toHaveTextContent(
       'Current Term: Fall 2026'
     )
-    expect(screen.queryByTestId('preference-course-select')).not.toBeInTheDocument()
+    const courseSelect = screen.getByTestId('preference-course-select') as HTMLSelectElement
+    expect(courseSelect).toBeInTheDocument()
+    expect(courseSelect.value).toBe('general')
     expect(screen.queryByTestId('preference-semester-select')).not.toBeInTheDocument()
     expect(screen.getByText('Preferred Days')).toBeInTheDocument()
     expect(screen.getByText('Preferred Time Slots')).toBeInTheDocument()
@@ -412,5 +415,322 @@ describe('PreferencesPage Component', () => {
     expect(instructorSelect.value).toBe('1')
     expect(instructorSelect).toHaveTextContent('Dr. Hyoeun Lee — STAT')
     expect(screen.queryByText(/Yugyung Lee/i)).toBeNull()
+  })
+
+  it('selects an assigned course via pill or dropdown, hydrates 2-year habit, filters incompatible slots, saves per-course override, and updates habit badge', async () => {
+    vi.spyOn(courseAssignmentService, 'getAssignments').mockResolvedValue([
+      {
+        id: 1,
+        semester_id: 5,
+        user_id: 1,
+        instructor_name: 'Dr. Hyoeun Lee',
+        instructor_department: 'BIOE',
+        course_id: 3,
+        course_code: 'BIOE 205',
+        course_name: 'Signals & Systems in Bioengrg',
+        department: 'BIOE',
+        course_level: 'undergraduate',
+      },
+      {
+        id: 2,
+        semester_id: 5,
+        user_id: 1,
+        instructor_name: 'Dr. Hyoeun Lee',
+        instructor_department: 'BIOE',
+        course_id: 5,
+        course_code: 'BIOE 504',
+        course_name: 'Analytical Methods in Bioeng',
+        department: 'BIOE',
+        course_level: 'graduate',
+      },
+    ])
+    vi.spyOn(scheduleService, 'getSchedules').mockResolvedValue([])
+    vi.spyOn(preferenceService, 'getPreferences').mockImplementation(async (filters) => {
+      if (filters?.general_only) {
+        return [
+          {
+            id: 50,
+            user_id: 1,
+            semester_id: 5,
+            course_id: null,
+            preferred_days: ['F'],
+            preferred_slots: ['08:00-09:15'],
+            preferred_rooms: [],
+            preference_rank: 1,
+          },
+        ]
+      }
+      return [
+        {
+          id: 50,
+          user_id: 1,
+          semester_id: 5,
+          course_id: null,
+          preferred_days: ['F'],
+          preferred_slots: ['08:00-09:15'],
+          preferred_rooms: [],
+          preference_rank: 1,
+        },
+        {
+          id: 10,
+          user_id: 1,
+          semester_id: 5,
+          course_id: 3,
+          course_code: 'BIOE 205',
+          course_name: 'Signals & Systems in Bioengrg',
+          preferred_days: ['Tuesday', 'Thursday'],
+          preferred_slots: ['11:00-12:15'],
+          preferred_rooms: [],
+          preference_rank: 2,
+        },
+      ]
+    })
+    const submitSpy = vi.spyOn(preferenceService, 'submitPreference').mockResolvedValueOnce({
+      id: 10,
+      user_id: 1,
+      semester_id: 5,
+      course_id: 3,
+      course_code: 'BIOE 205',
+      course_name: 'Signals & Systems in Bioengrg',
+      preferred_days: ['M', 'W'],
+      preferred_slots: ['09:30-10:45'],
+      preferred_rooms: ['RH 204'],
+      preference_rank: 1,
+    })
+
+    render(<PreferencesPage />)
+
+    const assignedCard = screen.getByTestId('coordinator-assigned-courses')
+    await waitFor(() => {
+      expect(within(assignedCard).getByTestId('select-course-scope-3')).toBeInTheDocument()
+      expect(within(assignedCard).getByTestId('course-habit-badge-3')).toHaveTextContent(
+        '2-yr habit: TR 11:00-12:15'
+      )
+      expect(screen.getByTestId('day-btn-Friday (F)')).toHaveAttribute('aria-pressed', 'true')
+    })
+
+    fireEvent.click(within(assignedCard).getByTestId('select-course-scope-3'))
+
+    const courseSelect = screen.getByTestId('preference-course-select') as HTMLSelectElement
+    await waitFor(() => {
+      expect(courseSelect.value).toBe('3')
+      expect(screen.getByText('BIOE 205 Preference')).toBeInTheDocument()
+      expect(screen.getByTestId('day-btn-Tuesday (T)')).toHaveAttribute('aria-pressed', 'true')
+      expect(screen.getByTestId('day-btn-Thursday (R)')).toHaveAttribute('aria-pressed', 'true')
+      expect(screen.getByTestId('day-btn-Friday (F)')).toHaveAttribute('aria-pressed', 'false')
+      expect(screen.getByTestId('slot-11:00-12:15')).toHaveAttribute('aria-pressed', 'true')
+    })
+
+    expect(screen.queryByTestId('slot-17:30-18:45')).not.toBeInTheDocument()
+
+    fireEvent.change(courseSelect, { target: { value: '5' } })
+    await waitFor(() => {
+      expect(screen.getByText('BIOE 504 Preference')).toBeInTheDocument()
+      expect(screen.getByTestId('slot-17:30-18:45')).toBeInTheDocument()
+    })
+
+    fireEvent.change(courseSelect, { target: { value: '3' } })
+    await waitFor(() => {
+      expect(screen.getByTestId('slot-11:00-12:15')).toHaveAttribute('aria-pressed', 'true')
+    })
+
+    fireEvent.click(screen.getByTestId('day-btn-Tuesday (T)'))
+    fireEvent.click(screen.getByTestId('day-btn-Thursday (R)'))
+    fireEvent.click(screen.getByTestId('day-btn-Monday (M)'))
+    fireEvent.click(screen.getByTestId('day-btn-Wednesday (W)'))
+    fireEvent.click(screen.getByTestId('slot-11:00-12:15'))
+    fireEvent.click(screen.getByTestId('slot-09:30-10:45'))
+    fireEvent.click(screen.getByTestId('room-chip-RH 204'))
+
+    fireEvent.click(screen.getByTestId('save-preferences-button'))
+
+    await waitFor(() => {
+      expect(submitSpy).toHaveBeenCalledWith({
+        user_id: 1,
+        semester_id: 5,
+        course_id: 3,
+        preferred_days: ['M', 'W'],
+        preferred_slots: ['09:30-10:45'],
+        preferred_rooms: ['RH 204'],
+      })
+      expect(screen.getByText('Course preferences saved for BIOE 205!')).toBeInTheDocument()
+      expect(within(assignedCard).getByTestId('course-habit-badge-3')).toHaveTextContent(
+        'Custom pref: MW 09:30-10:45'
+      )
+    })
+
+    const savedList = screen.getByTestId('saved-preferences-list')
+    expect(within(savedList).getByText('General Availability')).toBeInTheDocument()
+    expect(within(savedList).getByText('BIOE 205 · Course Preference')).toBeInTheDocument()
+
+    fireEvent.click(within(assignedCard).getByTestId('select-course-scope-general'))
+    await waitFor(() => {
+      expect(courseSelect.value).toBe('general')
+      expect(screen.getByTestId('day-btn-Friday (F)')).toHaveAttribute('aria-pressed', 'true')
+    })
+  })
+
+  it('supports Load & Edit and Delete on per-course saved preferences', async () => {
+    vi.spyOn(courseAssignmentService, 'getAssignments').mockResolvedValue([
+      {
+        id: 1,
+        semester_id: 5,
+        user_id: 1,
+        instructor_name: 'Dr. Hyoeun Lee',
+        instructor_department: 'STAT',
+        course_id: 400,
+        course_code: 'STAT 400',
+        course_name: 'Statistics and Probability I',
+        department: 'STAT',
+        course_level: 'undergraduate',
+      },
+    ])
+    vi.spyOn(scheduleService, 'getSchedules').mockResolvedValue([])
+    vi.spyOn(preferenceService, 'getPreferences').mockImplementation(async (filters) => {
+      if (filters?.general_only) return []
+      return [
+        {
+          id: 301,
+          user_id: 1,
+          semester_id: 5,
+          course_id: 400,
+          course_code: 'STAT 400',
+          course_name: 'Statistics and Probability I',
+          preferred_days: ['M', 'W'],
+          preferred_slots: ['09:30-10:45'],
+          preferred_rooms: ['FH 464'],
+          preference_rank: 1,
+        },
+      ]
+    })
+    const deleteSpy = vi.spyOn(preferenceService, 'deletePreference').mockResolvedValue()
+
+    render(<PreferencesPage />)
+
+    const savedList = screen.getByTestId('saved-preferences-list')
+    const assignedCard = screen.getByTestId('coordinator-assigned-courses')
+    await waitFor(() => {
+      expect(within(savedList).getByText('STAT 400 · Course Preference')).toBeInTheDocument()
+      expect(within(assignedCard).getByTestId('course-habit-badge-400')).toHaveTextContent(
+        'Custom pref: MW 09:30-10:45'
+      )
+    })
+
+    const courseSelect = screen.getByTestId('preference-course-select') as HTMLSelectElement
+    expect(courseSelect.value).toBe('general')
+    expect(screen.getByTestId('room-chip-FH 464')).toHaveAttribute('aria-pressed', 'false')
+
+    fireEvent.click(screen.getByTestId('edit-pref-301'))
+
+    await waitFor(() => {
+      expect(courseSelect.value).toBe('400')
+      expect(screen.getByText('STAT 400 Preference')).toBeInTheDocument()
+      expect(screen.getByTestId('day-btn-Monday (M)')).toHaveAttribute('aria-pressed', 'true')
+      expect(screen.getByTestId('day-btn-Wednesday (W)')).toHaveAttribute('aria-pressed', 'true')
+      expect(screen.getByTestId('slot-09:30-10:45')).toHaveAttribute('aria-pressed', 'true')
+      expect(screen.getByTestId('room-chip-FH 464')).toHaveAttribute('aria-pressed', 'true')
+    })
+
+    fireEvent.click(screen.getByTestId('delete-pref-301'))
+
+    await waitFor(() => {
+      expect(deleteSpy).toHaveBeenCalledWith(301)
+      expect(screen.queryByTestId('delete-pref-301')).not.toBeInTheDocument()
+      expect(within(assignedCard).getByTestId('course-habit-badge-400')).toHaveTextContent(
+        'No preference submitted'
+      )
+    })
+  })
+
+  it('allows Course Coordinators to inspect per-course preferences in read-only mode', async () => {
+    setAuthToken(DEMO_COORDINATOR_TOKEN)
+    vi.spyOn(courseAssignmentService, 'getAssignments').mockResolvedValue([
+      {
+        id: 1,
+        semester_id: 5,
+        user_id: 1,
+        instructor_name: 'Dr. Hyoeun Lee',
+        instructor_department: 'STAT',
+        course_id: 400,
+        course_code: 'STAT 400',
+        course_name: 'Statistics and Probability I',
+        department: 'STAT',
+        course_level: 'undergraduate',
+      },
+    ])
+    vi.spyOn(scheduleService, 'getSchedules').mockResolvedValue([])
+    vi.spyOn(preferenceService, 'getPreferences').mockImplementation(async (filters) => {
+      if (filters?.general_only) {
+        return [
+          {
+            id: 88,
+            user_id: 1,
+            semester_id: 5,
+            course_id: null,
+            preferred_days: ['F'],
+            preferred_slots: ['08:00-09:15'],
+            preferred_rooms: [],
+            preference_rank: 1,
+          },
+        ]
+      }
+      return [
+        {
+          id: 88,
+          user_id: 1,
+          semester_id: 5,
+          course_id: null,
+          preferred_days: ['F'],
+          preferred_slots: ['08:00-09:15'],
+          preferred_rooms: [],
+          preference_rank: 1,
+        },
+        {
+          id: 89,
+          user_id: 1,
+          semester_id: 5,
+          course_id: 400,
+          course_code: 'STAT 400',
+          course_name: 'Statistics and Probability I',
+          preferred_days: ['T', 'R'],
+          preferred_slots: ['11:00-12:15'],
+          preferred_rooms: ['RH 204'],
+          preference_rank: 1,
+        },
+      ]
+    })
+
+    render(
+      <AuthProvider>
+        <PreferencesPage />
+      </AuthProvider>
+    )
+
+    await screen.findByTestId('coordinator-readonly-banner')
+    const savedList = screen.getByTestId('saved-preferences-list')
+    await waitFor(() => {
+      expect(within(savedList).getByText('General Availability')).toBeInTheDocument()
+      expect(within(savedList).getByText('STAT 400 · Course Preference')).toBeInTheDocument()
+      expect(screen.getByTestId('day-btn-Friday (F)')).toHaveAttribute('aria-pressed', 'true')
+    })
+
+    expect(screen.queryByTestId('edit-pref-89')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('delete-pref-89')).not.toBeInTheDocument()
+
+    fireEvent.click(screen.getByTestId('select-course-scope-400'))
+
+    await waitFor(() => {
+      expect(screen.getByText('STAT 400 Preference')).toBeInTheDocument()
+      expect(screen.getByTestId('day-btn-Tuesday (T)')).toHaveAttribute('aria-pressed', 'true')
+      expect(screen.getByTestId('day-btn-Thursday (R)')).toHaveAttribute('aria-pressed', 'true')
+      expect(screen.getByTestId('day-btn-Friday (F)')).toHaveAttribute('aria-pressed', 'false')
+      expect(screen.getByTestId('slot-11:00-12:15')).toHaveAttribute('aria-pressed', 'true')
+      expect(screen.getByTestId('room-chip-RH 204')).toHaveAttribute('aria-pressed', 'true')
+    })
+
+    expect(screen.getByTestId('day-btn-Tuesday (T)')).toBeDisabled()
+    expect(screen.getByTestId('slot-11:00-12:15')).toBeDisabled()
+    expect(screen.getByTestId('room-chip-RH 204')).toBeDisabled()
+    expect(screen.queryByTestId('save-preferences-button')).not.toBeInTheDocument()
   })
 })

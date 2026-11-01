@@ -150,6 +150,24 @@ def _ensure_semester_exists(session: Session, semester_id: int) -> Semester:
     return sem
 
 
+def _resolve_effective_preference(
+    user_prefs: List[InstructorPreference],
+    course_id: int,
+) -> Optional[InstructorPreference]:
+    for pf in user_prefs:
+        rank = pf.preference_rank if pf.preference_rank is not None else 1
+        if pf.course_id == course_id and rank <= 1:
+            return pf
+    for pf in user_prefs:
+        if pf.course_id is None:
+            return pf
+    for pf in user_prefs:
+        rank = pf.preference_rank if pf.preference_rank is not None else 1
+        if pf.course_id == course_id and rank >= 2:
+            return pf
+    return None
+
+
 def compute_fairness_metrics(
     session: Session, semester_id: int = 1
 ) -> FairnessReportResponse:
@@ -163,9 +181,9 @@ def compute_fairness_metrics(
         select(Schedule).where(Schedule.semester_id == sem.id)
     ).all()
     prefs = session.exec(
-        select(InstructorPreference).where(
-            InstructorPreference.semester_id == sem.id
-        )
+        select(InstructorPreference)
+        .where(InstructorPreference.semester_id == sem.id)
+        .order_by(InstructorPreference.id)
     ).all()
     rooms_by_id = {r.id: r for r in session.exec(select(Room)).all()}
     slots_by_id = {s.id: s for s in session.exec(select(TimeSlot)).all()}
@@ -175,19 +193,16 @@ def compute_fairness_metrics(
     for sc in schedules:
         scheds_by_user[sc.user_id].append(sc)
 
-    prefs_by_user: Dict[int, InstructorPreference] = {}
+    prefs_by_user: Dict[int, List[InstructorPreference]] = defaultdict(list)
     for pf in prefs:
-        if pf.course_id is None or pf.user_id not in prefs_by_user:
-            prefs_by_user[pf.user_id] = pf
+        prefs_by_user[pf.user_id].append(pf)
 
     items: List[InstructorFairnessItem] = []
     dept_groups: Dict[str, List[InstructorFairnessItem]] = defaultdict(list)
 
     for inst in instructors:
         assigned = scheds_by_user.get(inst.id, [])
-        pref = prefs_by_user.get(inst.id)
-        pref_days = set(pref.preferred_days or []) if pref else set()
-        pref_rooms = set(pref.preferred_rooms or []) if pref else set()
+        user_prefs = prefs_by_user.get(inst.id, [])
 
         resolved_dept = inst.department
         if assigned:
@@ -201,6 +216,13 @@ def compute_fairness_metrics(
         hits = 0
 
         for sc in assigned:
+            eff_pref = _resolve_effective_preference(user_prefs, sc.course_id)
+            pref_days = (
+                set(eff_pref.preferred_days or []) if eff_pref else set()
+            )
+            pref_rooms = (
+                set(eff_pref.preferred_rooms or []) if eff_pref else set()
+            )
             slot = slots_by_id.get(sc.time_slot_id)
             room = rooms_by_id.get(sc.room_id)
             if pref_days:

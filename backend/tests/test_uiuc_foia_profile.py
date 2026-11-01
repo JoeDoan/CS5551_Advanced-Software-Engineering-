@@ -343,3 +343,138 @@ def test_uiuc_foia_whatif_simulation_with_forecast_on_spring_2027(
     assert data["baseline"]["status"] in ("OPTIMAL", "FEASIBLE")
     assert data["scenario"]["status"] in ("OPTIMAL", "FEASIBLE")
     assert data["scenario"]["scheduled_courses"] == 40
+
+
+def test_uiuc_foia_per_course_preferences_schedule_distinct_slots_for_each_course(
+    monkeypatch: pytest.MonkeyPatch,
+    session: Session,
+    client: TestClient,
+):
+    monkeypatch.setenv("DATA_PROFILE", "uiuc_foia")
+    monkeypatch.setenv("REQUIRE_AUTH", "true")
+    seed_database(session=session)
+
+    lee_login = client.post(
+        "/api/v1/auth/login",
+        json={"identifier": "leeh@illinois.edu", "password": "faculty123"},
+    )
+    assert lee_login.status_code == 200, lee_login.text
+    lee_headers = {"Authorization": f"Bearer {lee_login.json()['access_token']}"}
+    lee_uid = lee_login.json()["user"]["linked_user_id"]
+    assert lee_uid == 1
+
+    unassigned_cs = session.exec(
+        select(Course).where(Course.department == "CS").order_by(Course.id)
+    ).first()
+    assert unassigned_cs is not None
+
+    unassigned_resp = client.post(
+        "/api/v1/preferences",
+        headers=lee_headers,
+        json={
+            "user_id": lee_uid,
+            "semester_id": 5,
+            "course_id": unassigned_cs.id,
+            "preferred_days": ["M", "W"],
+            "preferred_slots": ["09:30-10:45"],
+            "preferred_rooms": [],
+        },
+    )
+    assert unassigned_resp.status_code == 403
+    assert "Course Coordinators" in unassigned_resp.json()["detail"]
+
+    general_resp = client.post(
+        "/api/v1/preferences",
+        headers=lee_headers,
+        json={
+            "user_id": lee_uid,
+            "semester_id": 5,
+            "course_id": None,
+            "preferred_days": ["M", "W"],
+            "preferred_slots": ["11:00-12:15"],
+            "preferred_rooms": [],
+        },
+    )
+    assert general_resp.status_code in (200, 201), general_resp.text
+    assert general_resp.json()["preference_rank"] == 1
+
+    stat400_resp = client.post(
+        "/api/v1/preferences",
+        headers=lee_headers,
+        json={
+            "user_id": lee_uid,
+            "semester_id": 5,
+            "course_id": 1,
+            "preferred_days": ["M", "W"],
+            "preferred_slots": ["09:30-10:45"],
+            "preferred_rooms": [],
+        },
+    )
+    assert stat400_resp.status_code in (200, 201), stat400_resp.text
+    assert stat400_resp.json()["preference_rank"] == 1
+
+    stat429_resp = client.post(
+        "/api/v1/preferences",
+        headers=lee_headers,
+        json={
+            "user_id": lee_uid,
+            "semester_id": 5,
+            "course_id": 2,
+            "preferred_days": ["M", "R"],
+            "preferred_slots": ["19:00-20:15"],
+            "preferred_rooms": [],
+        },
+    )
+    assert stat429_resp.status_code in (200, 201), stat429_resp.text
+    assert stat429_resp.json()["preference_rank"] == 1
+
+    coord_login = client.post(
+        "/api/v1/auth/login",
+        json={"identifier": "coordinator", "password": "coordinator123"},
+    )
+    assert coord_login.status_code == 200, coord_login.text
+    coord_headers = {
+        "Authorization": f"Bearer {coord_login.json()['access_token']}"
+    }
+
+    solve_resp = client.post(
+        "/api/v1/solver/run",
+        headers=coord_headers,
+        json={"semester_id": 5},
+    )
+    assert solve_resp.status_code == 200, solve_resp.text
+    assert solve_resp.json()["status"] in ("OPTIMAL", "FEASIBLE")
+
+    all_sections = client.get(
+        "/api/v1/schedules", params={"semester_id": 5}
+    ).json()
+    assert len(all_sections) == 40
+    lee_by_code = {
+        s["course_code"]: s for s in all_sections if s["user_id"] == lee_uid
+    }
+    assert set(lee_by_code.keys()) == {"STAT 400", "STAT 429"}
+    assert lee_by_code["STAT 400"]["day_pattern"] == "MW"
+    assert (
+        lee_by_code["STAT 400"]["start_time"],
+        lee_by_code["STAT 400"]["end_time"],
+    ) == ("09:30", "10:45")
+    assert lee_by_code["STAT 429"]["day_pattern"] == "MR"
+    assert (
+        lee_by_code["STAT 429"]["start_time"],
+        lee_by_code["STAT 429"]["end_time"],
+    ) == ("19:00", "20:15")
+
+    audit = client.get(
+        "/api/v1/analytics/conflicts", params={"semester_id": 5}
+    ).json()
+    assert audit["is_conflict_free"] is True
+    assert audit["hard_violation_count"] == 0
+
+    fairness = client.get(
+        "/api/v1/analytics/fairness", params={"semester_id": 5}
+    ).json()
+    lee_fairness = next(
+        item for item in fairness["instructors"] if item["user_id"] == lee_uid
+    )
+    assert lee_fairness["preferred_day_matches"] == 2
+    assert lee_fairness["satisfaction_rate"] == 100.0

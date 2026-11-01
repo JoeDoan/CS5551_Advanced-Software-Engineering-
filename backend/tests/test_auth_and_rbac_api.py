@@ -407,7 +407,7 @@ def test_schedule_section_validation_404_422_and_expired_token_401(
 def test_admin_create_instructor_links_user_and_enables_login(
     client, session, monkeypatch
 ):
-    """Instructor creation links a User row, surfaces in /instructors, and enables login."""
+    """Instructor creation links a User row, surfaces in /instructors, and logs in."""
     monkeypatch.setenv("REQUIRE_AUTH", "true")
     seed_database(session=session)
 
@@ -496,7 +496,7 @@ def test_admin_create_instructor_links_user_and_enables_login(
 def test_admin_create_coordinator_ordering_filters_and_duplicate_conflict(
     client, session, monkeypatch
 ):
-    """Coordinator creation enforces 409 on duplicate email and sorts coordinators first."""
+    """Coordinator creation enforces 409 on duplicate email and sorts coordinators."""
     monkeypatch.setenv("REQUIRE_AUTH", "true")
     seed_database(session=session)
 
@@ -554,7 +554,7 @@ def test_admin_create_coordinator_ordering_filters_and_duplicate_conflict(
 def test_deactivating_account_immediately_revokes_active_jwt_and_blocks_login(
     client, session, monkeypatch
 ):
-    """PATCH is_active=False revokes active sessions so /auth/me and /auth/login return 401."""
+    """PATCH is_active=False revokes active sessions so /auth/me and /login get 401."""
     monkeypatch.setenv("REQUIRE_AUTH", "true")
     seed_database(session=session)
 
@@ -591,7 +591,7 @@ def test_deactivating_account_immediately_revokes_active_jwt_and_blocks_login(
 def test_self_lockout_self_delete_cascade_delete_and_instructor_rbac(
     client, session, monkeypatch
 ):
-    """Coordinator self-lockout/delete returns 400 and instructors receive 403 on /auth/accounts."""
+    """Coordinator self-lockout returns 400; instructors get 403 on /auth/accounts."""
     monkeypatch.setenv("REQUIRE_AUTH", "true")
     seed_database(session=session)
 
@@ -666,10 +666,10 @@ def test_self_lockout_self_delete_cascade_delete_and_instructor_rbac(
     )
 
 
-def test_coordinator_blocked_from_preference_writes_and_instructor_persists_course_and_rooms(
+def test_coordinator_blocked_from_pref_writes_and_instructor_persists_course_prefs(
     client, session, monkeypatch
 ):
-    """Instructor submits general prefs only; coordinator pins course assignments."""
+    """Instructor submits general or assigned-course prefs; coordinator pins courses."""
     monkeypatch.setenv("REQUIRE_AUTH", "true")
     seed_database(session=session)
 
@@ -756,6 +756,24 @@ def test_coordinator_blocked_from_preference_writes_and_instructor_persists_cour
         assigned_rows = assigned.json()
         assert {r["course_id"] for r in assigned_rows} == {5, 16}
 
+    assigned_course_pref = client.post(
+        "/api/v1/preferences",
+        headers=faculty_headers,
+        json={
+            "user_id": own_uid,
+            "semester_id": 5,
+            "course_id": 16,
+            "preferred_days": ["TR"],
+            "preferred_slots": ["19:00-20:15"],
+            "preferred_rooms": [chosen_room],
+        },
+    )
+    assert assigned_course_pref.status_code in (200, 201), assigned_course_pref.text
+    assigned_course_body = assigned_course_pref.json()
+    assert assigned_course_body["course_id"] == 16
+    assert assigned_course_body["preference_rank"] == 1
+    assigned_course_pref_id = assigned_course_body["id"]
+
     sem5_cs = client.get(
         f"/api/v1/course-assignments?semester_id=5&user_id={own_uid}&department=cs",
         headers=faculty_headers,
@@ -799,6 +817,12 @@ def test_coordinator_blocked_from_preference_writes_and_instructor_persists_cour
         assert by_course[5]["user_id"] == own_uid
         assert by_course[16]["user_id"] == own_uid
 
+    deleted_course_pref = client.delete(
+        f"/api/v1/preferences/{assigned_course_pref_id}",
+        headers=faculty_headers,
+    )
+    assert deleted_course_pref.status_code == 204
+
     deleted = client.delete(
         f"/api/v1/preferences/{general_pref_id}",
         headers=faculty_headers,
@@ -806,10 +830,10 @@ def test_coordinator_blocked_from_preference_writes_and_instructor_persists_cour
     assert deleted.status_code == 204
 
 
-def test_instructor_edit_request_autobinds_blocks_spoofing_and_returns_enriched_fields(
+def test_instructor_edit_request_autobinds_blocks_spoofing_and_enriches_fields(
     client, session, monkeypatch
 ):
-    """Instructor edit request auto-binds requester_id, blocks spoofing, and enriches labels."""
+    """Instructor edit request auto-binds requester_id, blocks spoofing, enriches."""
     monkeypatch.setenv("REQUIRE_AUTH", "true")
     seed_database(session=session)
 
@@ -852,12 +876,14 @@ def test_instructor_edit_request_autobinds_blocks_spoofing_and_returns_enriched_
     assert body["course_code"] == target_sched["course_code"]
     assert body["course_name"] == target_sched["course_name"]
     assert body["current_room_number"] == target_sched["room_number"]
-    assert (
-        body["current_time_slot"]
-        == f"{target_sched['day_pattern']} {target_sched['start_time']}-{target_sched['end_time']}"
+    expected_curr_slot = (
+        f"{target_sched['day_pattern']} "
+        f"{target_sched['start_time']}-{target_sched['end_time']}"
     )
+    assert body["current_time_slot"] == expected_curr_slot
     assert body["proposed_room_number"] == prop_room["room_number"]
-    assert (
-        body["proposed_time_slot"]
-        == f"{prop_slot['day_pattern']} {prop_slot['start_time']}-{prop_slot['end_time']}"
+    expected_prop_slot = (
+        f"{prop_slot['day_pattern']} "
+        f"{prop_slot['start_time']}-{prop_slot['end_time']}"
     )
+    assert body["proposed_time_slot"] == expected_prop_slot
