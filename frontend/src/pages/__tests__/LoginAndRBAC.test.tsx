@@ -13,6 +13,7 @@ import {
 import {
   DEMO_COORDINATOR_TOKEN,
   DEMO_INSTRUCTOR_TOKEN,
+  authService,
   resetMockAccounts,
 } from '../../services/authService'
 import { resetMockCourseAssignments } from '../../services/courseAssignmentService'
@@ -147,7 +148,7 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
       expect(slotBtn).toHaveAttribute('aria-pressed', 'false')
       expect(roomChip).toHaveAttribute('aria-pressed', 'false')
       expect(
-        screen.getByText('No saved preferences recorded for this instructor in Fall 2026 yet.')
+        screen.getByText('No saved preferences recorded for this instructor in Fall 2025 yet.')
       ).toBeInTheDocument()
     })
   })
@@ -532,7 +533,7 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
     )
 
     const solverBtn = await screen.findByTestId('execute-solver-button')
-    expect(solverBtn).toHaveTextContent('Execute Solver (Fall 2026)')
+    expect(solverBtn).toHaveTextContent('Execute Solver (Fall 2025)')
 
     fireEvent.click(screen.getByTestId('notifications-bell-btn'))
     await waitFor(() => {
@@ -544,23 +545,23 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
       target: { value: '3' },
     })
     expect(screen.getByTestId('execute-solver-button')).toHaveTextContent(
-      'Execute Solver (Fall 2025)'
+      'Execute Solver (Fall 2024)'
     )
 
     const postSpy = vi
       .spyOn(apiClient, 'post')
-      .mockRejectedValueOnce(new ApiError('Solver infeasible for Fall 2025', 422))
+      .mockRejectedValueOnce(new ApiError('Solver infeasible for Fall 2024', 422))
 
     fireEvent.click(screen.getByTestId('execute-solver-button'))
 
     await waitFor(() => {
       expect(postSpy).toHaveBeenCalledWith('/solver/run', { semester_id: 3 })
       expect(screen.getByText('Solver Execution Error')).toBeInTheDocument()
-      expect(screen.getByText('Solver infeasible for Fall 2025')).toBeInTheDocument()
+      expect(screen.getByText('Solver infeasible for Fall 2024')).toBeInTheDocument()
     })
   })
 
-  it('locks logged-in Instructor to Current Term Fall 2026 on /schedule and /preferences and hides past semester and course selectors', async () => {
+  it('locks logged-in Instructor to Current Term Fall 2025 on /schedule and /preferences and hides past semester and course selectors', async () => {
     setAuthToken(DEMO_INSTRUCTOR_TOKEN)
 
     render(
@@ -573,7 +574,7 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
 
     await waitFor(() => {
       expect(screen.getByTestId('active-semester-badge')).toHaveTextContent(
-        'Current Term: Fall 2026'
+        'Current Term: Fall 2025'
       )
     })
     expect(screen.queryByTestId('semester-select')).not.toBeInTheDocument()
@@ -585,7 +586,7 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
       expect(screen.getByRole('heading', { name: /Instructor Preferences/i })).toBeInTheDocument()
     })
     expect(screen.getByTestId('active-semester-badge')).toHaveTextContent(
-      'Current Term: Fall 2026'
+      'Current Term: Fall 2025'
     )
     expect(screen.queryByTestId('preference-semester-select')).not.toBeInTheDocument()
     expect(screen.queryByTestId('preference-course-select')).not.toBeInTheDocument()
@@ -668,6 +669,64 @@ describe('Login, Session Security Gate, RBAC & Coordinator Catalog/Section/Accou
       const roomSelect = screen.getByTestId('modal-section-room')
       expect(roomSelect).toHaveTextContent('RH 204 — Royall Hall')
       expect(roomSelect).toHaveTextContent('FH 464 — Flarsheim Hall')
+    })
+  })
+
+  it('hydrates 1-click Faculty Instructor demo login dynamically from /auth/demo-accounts on UIUC FOIA profile', async () => {
+    vi.spyOn(authService, 'getDemoAccounts').mockResolvedValue([
+      {
+        email: 'coordinator@umkc.edu',
+        username: 'coordinator',
+        full_name: 'Course Coordinator',
+        role: 'coordinator',
+        department: 'CS',
+        password: 'coordinator123',
+        linked_user_id: null,
+      },
+      {
+        email: 'leeh@illinois.edu',
+        username: 'leeh',
+        full_name: 'Dr. Hyoeun Lee',
+        role: 'instructor',
+        department: 'BIOE',
+        password: 'faculty123',
+        linked_user_id: 1,
+      },
+    ])
+    const loginSpy = vi.spyOn(authService, 'login').mockResolvedValue({
+      access_token: 'foia-instructor-jwt',
+      token_type: 'bearer',
+      session_id: 'foia-session-1',
+      expires_at: new Date(Date.now() + 3600_000).toISOString(),
+      user: {
+        id: 101,
+        email: 'leeh@illinois.edu',
+        username: 'leeh',
+        full_name: 'Dr. Hyoeun Lee',
+        role: 'instructor',
+        department: 'BIOE',
+        linked_user_id: 1,
+      },
+    })
+
+    render(<App />)
+
+    const demoFacultyBtn = await screen.findByTestId('demo-login-instructor')
+    await waitFor(() => {
+      expect(demoFacultyBtn).toHaveTextContent('leeh@illinois.edu (Dr. Hyoeun Lee)')
+    })
+
+    fireEvent.click(demoFacultyBtn)
+
+    await waitFor(() => {
+      expect(loginSpy).toHaveBeenCalledWith({
+        identifier: 'leeh@illinois.edu',
+        password: 'faculty123',
+      })
+      expect(
+        screen.getByRole('heading', { name: /Faculty Instructor Dashboard/i })
+      ).toBeInTheDocument()
+      expect(screen.getByText('Dr. Hyoeun Lee')).toBeInTheDocument()
     })
   })
 })

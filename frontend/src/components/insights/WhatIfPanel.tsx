@@ -13,7 +13,7 @@ import {
 import { AuthRole } from '../../types/api'
 import { ScenarioResultView } from './ScenarioResultView'
 
-export const DEPARTMENTS = ['CS', 'MATH', 'ECE', 'PHYS', 'BIOL', 'CHEM', 'STAT']
+export const DEPARTMENTS = ['CS', 'MATH', 'ECE', 'PHYS', 'BIOL', 'CHEM', 'STAT', 'BIOE']
 
 const STRATEGY_HELP: Record<CoverageStrategy, string> = {
   none: 'No replacement. With zero slack in instructor capacity this is provably infeasible.',
@@ -91,7 +91,7 @@ export const WhatIfPanel: React.FC<WhatIfPanelProps> = ({ role, userName }) => {
           <div>
             <CardTitle>What-If Simulator</CardTitle>
             <p className="text-xs text-slate-500 mt-0.5">
-              Re-solves Spring 2027 with CP-SAT as a dry run. Nothing is saved.
+              Re-solves Spring 2026 with CP-SAT as a dry run. Nothing is saved.
             </p>
           </div>
         </div>

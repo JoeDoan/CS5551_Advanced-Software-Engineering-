@@ -277,7 +277,7 @@ export const SchedulePage: React.FC = () => {
           <h1 className="text-2xl font-bold text-slate-900">Master Schedule Matrix</h1>
           <p className="text-sm text-slate-500 mt-1">
             {isInstructorSession
-              ? 'Inspect your Fall 2026 teaching timetable and department room assignments.'
+              ? `Inspect your ${CURRENT_SEMESTER_NAME} teaching timetable and department room assignments.`
               : 'Browse and inspect optimized timetables across all 6 simulated academic semesters.'}
           </p>
         </div>

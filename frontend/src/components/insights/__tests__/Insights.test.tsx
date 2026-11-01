@@ -196,6 +196,236 @@ describe('ForecastPanel', () => {
     expect(await screen.findByTestId('forecast-error')).toHaveTextContent('Authentication required')
     expect(screen.queryByTestId('forecast-panel')).not.toBeInTheDocument()
   })
+
+  it('renders UIUC FOIA real-data badge and thins X-axis labels across 19 observed semesters while keeping all data circles', async () => {
+    const terms19 = [
+      'Fall 2016',
+      'Spring 2017',
+      'Fall 2017',
+      'Spring 2018',
+      'Fall 2018',
+      'Spring 2019',
+      'Fall 2019',
+      'Spring 2020',
+      'Fall 2020',
+      'Spring 2021',
+      'Fall 2021',
+      'Spring 2022',
+      'Fall 2022',
+      'Spring 2023',
+      'Fall 2023',
+      'Spring 2024',
+      'Fall 2024',
+      'Spring 2025',
+      'Fall 2025',
+    ]
+    const foiaForecast: EnrollmentForecast = {
+      meta: {
+        target_semester_id: 6,
+        target_semester_name: 'Spring 2026',
+        observed_semester_ids: terms19.map((_, i) => (i < 14 ? 101 + i : i - 13)),
+        backtest_origins: Array.from({ length: 15 }, (_, i) => i + 4),
+        champion_model: 'pooled_ridge',
+        interval_calibration_n: 600,
+        held_out_coverage_80: 0.81,
+        data_source: 'uiuc_foia_registrar',
+        is_synthetic: false,
+        methodology: 'Rolling-origin walk-forward backtest over 19 FOIA terms.',
+        note: null,
+      },
+      model_metrics: forecast.model_metrics,
+      skipped_course_ids: [],
+      courses: [
+        {
+          course_id: 1,
+          course_code: 'STAT 400',
+          course_name: 'STAT 400 Statistics and Probability I',
+          department: 'STAT',
+          history: terms19.map((name, i) => ({
+            semester_id: i < 14 ? 101 + i : i - 13,
+            semester_name: name,
+            enrolled: 165 + (i % 2 === 0 ? 25 : 0),
+            waitlist: 0,
+          })),
+          forecasts: { seasonal_naive: 168, damped_trend: 174, pooled_ridge: 170.5 },
+          forecast: 170.5,
+          interval_80: [150, 191],
+          interval_95: [138, 203],
+        },
+      ],
+    }
+    vi.spyOn(insightsService, 'getForecast').mockResolvedValue(foiaForecast)
+    vi.spyOn(insightsService, 'getEmpiricalBenchmark').mockResolvedValue(null)
+
+    render(<ForecastPanel />)
+
+    expect(await screen.findByTestId('forecast-panel')).toBeInTheDocument()
+    expect(screen.getByTestId('real-data-badge')).toHaveTextContent(
+      'UIUC FOIA Registrar (2016–2025)'
+    )
+    expect(screen.queryByTestId('synthetic-badge')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('empirical-benchmark-card')).not.toBeInTheDocument()
+
+    const chart = screen.getByTestId('forecast-chart')
+    expect(chart.querySelectorAll('circle')).toHaveLength(20)
+    const xAxisLabels = Array.from(chart.querySelectorAll('text')).filter(
+      (node) => node.getAttribute('text-anchor') === 'middle'
+    )
+    expect(xAxisLabels.length).toBeLessThanOrEqual(8)
+    expect(xAxisLabels[0]).toHaveTextContent("Fall '16")
+    expect(xAxisLabels[xAxisLabels.length - 1]).toHaveTextContent("Spring '26")
+  })
+
+  it('renders the 2-stage Spring 2026 Held-Out Empirical Benchmark card and updates selected course comparison on course switch', async () => {
+    const foiaForecast: EnrollmentForecast = {
+      meta: {
+        ...meta,
+        target_semester_name: 'Spring 2026',
+        observed_semester_ids: Array.from({ length: 19 }, (_, i) => i + 1),
+        champion_model: 'pooled_ridge',
+        interval_calibration_n: 600,
+        is_synthetic: false,
+        data_source: 'uiuc_foia',
+        note: null,
+      },
+      model_metrics: forecast.model_metrics,
+      skipped_course_ids: [],
+      courses: [
+        {
+          course_id: 10,
+          course_code: 'STAT 400',
+          course_name: 'STAT 400 Statistics and Probability I',
+          department: 'STAT',
+          history: history(170),
+          forecasts: { seasonal_naive: 168, damped_trend: 174, pooled_ridge: 170.5 },
+          forecast: 170.5,
+          interval_80: [150, 191],
+          interval_95: [138, 203],
+        },
+        {
+          course_id: 11,
+          course_code: 'BIOE 205',
+          course_name: 'BIOE 205 Signals & Systems in Bioengrg',
+          department: 'BIOE',
+          history: history(75),
+          forecasts: { seasonal_naive: 78, damped_trend: 80, pooled_ridge: 79.2 },
+          forecast: 79.2,
+          interval_80: [68, 90],
+          interval_95: [61, 97],
+        },
+      ],
+    }
+
+    vi.spyOn(insightsService, 'getForecast').mockResolvedValue(foiaForecast)
+    vi.spyOn(insightsService, 'getEmpiricalBenchmark').mockResolvedValue({
+      dataset_source: 'UIUC FOIA Registrar & Course Explorer 2016-2026',
+      heldout_semester_id: 6,
+      heldout_semester_name: 'Spring 2026',
+      observed_semesters_count: 19,
+      evaluated_courses_count: 40,
+      courses_with_2yr_habit_pref: 25,
+      courses_without_pref: 15,
+      preference_provenance:
+        'Causal 2-year modal per (instructor, course); unrecorded pairs left with no preference',
+      forecast_benchmark: {
+        champion_model: 'pooled_ridge',
+        last_term_copy_naive_mae: 35.4,
+        last_term_copy_naive_smape_pct: 24.1,
+        champion_mae: 18.2,
+        champion_smape_pct: 14.3,
+        mae_reduction_vs_last_term_pct: 48.6,
+        empirical_coverage_80: 0.825,
+        empirical_coverage_95: 0.95,
+      },
+      schedule_benchmark: {
+        solver_status: 'OPTIMAL',
+        hard_conflicts: 0,
+        overflow_courses_last_term_sizing: 11,
+        overflow_courses_point_forecast_sizing: 8,
+        overflow_courses_conformal_80_sizing: 3,
+        uiuc_actual_seat_utilization_pct: 64.5,
+        optisched_seat_utilization_pct: 78.4,
+        uiuc_empty_seat_waste_pct: 36.6,
+        optisched_empty_seat_waste_pct: 21.6,
+        uiuc_midday_concentration_pct: 47.9,
+        optisched_midday_concentration_pct: 35.0,
+        habit_continuity_on_pref_courses_pct: 88.0,
+      },
+      course_comparisons: [
+        {
+          course_code: 'STAT 400',
+          course_name: 'STAT 400 Statistics and Probability I',
+          department: 'STAT',
+          has_2yr_preference: false,
+          fall_2025_enrolled: 192,
+          predicted_enrollment: 170.5,
+          actual_enrollment: 171,
+          abs_error: 0.5,
+          interval_80: [150.0, 191.0],
+          within_80: true,
+          optisched_room: 'DCL 1320',
+          optisched_room_capacity: 255,
+          optisched_slot: 'MW 09:30-10:45',
+          uiuc_actual_room: 'Digital Computer Laboratory 1320',
+          uiuc_actual_room_capacity: 255,
+          uiuc_actual_slot: 'TR 11:00 AM-12:20 PM',
+        },
+        {
+          course_code: 'BIOE 205',
+          course_name: 'BIOE 205 Signals & Systems in Bioengrg',
+          department: 'BIOE',
+          has_2yr_preference: true,
+          fall_2025_enrolled: 84,
+          predicted_enrollment: 79.2,
+          actual_enrollment: 81,
+          abs_error: 1.8,
+          interval_80: [68.0, 90.0],
+          within_80: true,
+          optisched_room: 'CIF 3031',
+          optisched_room_capacity: 96,
+          optisched_slot: 'TR 11:00-12:15',
+          uiuc_actual_room: 'Campus Instructional Facility 3031',
+          uiuc_actual_room_capacity: 96,
+          uiuc_actual_slot: 'TR 11:00 AM-12:20 PM',
+        },
+      ],
+    })
+
+    render(<ForecastPanel />)
+
+    const card = await screen.findByTestId('empirical-benchmark-card')
+    expect(card).toHaveTextContent('Spring 2026 Held-Out Empirical Benchmark')
+    expect(card).toHaveTextContent('19 observed FOIA terms')
+    expect(card).toHaveTextContent('25 courses with 2-yr causal habit preference')
+    expect(card).toHaveTextContent('15 courses with no preference')
+
+    const stage1 = screen.getByTestId('benchmark-stage1')
+    expect(stage1).toHaveTextContent('pooled_ridge')
+    expect(stage1).toHaveTextContent('18.2')
+    expect(stage1).toHaveTextContent('35.4')
+    expect(stage1).toHaveTextContent('48.6% reduction')
+    expect(stage1).toHaveTextContent('82.5%')
+    expect(stage1).toHaveTextContent('95%')
+
+    const stage2 = screen.getByTestId('benchmark-stage2')
+    expect(stage2).toHaveTextContent('0 Hard Conflicts')
+    expect(stage2).toHaveTextContent('3 / 8 / 11')
+    expect(stage2).toHaveTextContent('78.4% vs 64.5%')
+    expect(stage2).toHaveTextContent('21.6% vs 36.6%')
+    expect(stage2).toHaveTextContent('35% vs 47.9%')
+    expect(stage2).toHaveTextContent('88%')
+
+    const selected = screen.getByTestId('benchmark-selected-course')
+    expect(selected).toHaveTextContent('STAT 400')
+    expect(selected).toHaveTextContent('No 2-yr preference')
+    expect(selected).toHaveTextContent('DCL 1320')
+    expect(selected).toHaveTextContent('Digital Computer Laboratory 1320')
+
+    fireEvent.change(screen.getByTestId('forecast-course-select'), { target: { value: '11' } })
+    expect(screen.getByTestId('benchmark-selected-course')).toHaveTextContent('BIOE 205')
+    expect(screen.getByTestId('benchmark-selected-course')).toHaveTextContent('2-yr habit preference')
+    expect(screen.getByTestId('benchmark-selected-course')).toHaveTextContent('CIF 3031')
+  })
 })
 
 describe('BottleneckBoard', () => {
@@ -281,21 +511,28 @@ describe('WhatIfPanel', () => {
     expect(screen.queryByTestId('metrics-table')).not.toBeInTheDocument()
   })
 
-  it('sends growth and capacity levers for coordinators', async () => {
+  it('sends growth and capacity levers for coordinators including BIOE in Spring 2026 dry run', async () => {
     vi.spyOn(insightsService, 'getInstructorNames').mockResolvedValue([])
     const simulate = vi.spyOn(insightsService, 'simulate').mockResolvedValue(scenarioResponse())
     render(<WhatIfPanel role="coordinator" userName="Coordinator" />)
 
+    expect(screen.getByTestId('whatif-panel')).toHaveTextContent(
+      /Re-solves Spring 2026 with CP-SAT as a dry run/i
+    )
     fireEvent.click(screen.getByTestId('use-forecast'))
     fireEvent.click(screen.getByTestId('add-growth'))
-    expect(screen.getAllByTestId('growth-row')).toHaveLength(1)
+    const rows = screen.getAllByTestId('growth-row')
+    expect(rows).toHaveLength(1)
+    fireEvent.change(within(rows[0]).getByLabelText('Department'), {
+      target: { value: 'BIOE' },
+    })
     fireEvent.change(screen.getByTestId('capacity-scale'), { target: { value: '0.9' } })
     fireEvent.click(screen.getByTestId('run-scenario'))
 
     await screen.findByTestId('whatif-result')
     const spec = simulate.mock.calls[0][0]
     expect(spec.use_forecast).toBe(true)
-    expect(spec.enrollment_growth).toEqual([{ department: 'CS', pct: 10 }])
+    expect(spec.enrollment_growth).toEqual([{ department: 'BIOE', pct: 10 }])
     expect(spec.room_capacity_scale).toBe(0.9)
     expect(spec.buyouts).toEqual([])
     expect(spec.change_policy).toBe('minimal')

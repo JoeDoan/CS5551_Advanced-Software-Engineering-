@@ -22,7 +22,7 @@ from typing import Dict, List, Literal, Optional, Tuple
 from pydantic import BaseModel, Field
 from sqlmodel import Session, select
 
-from app.models.entities import Course, Room, User
+from app.models.entities import Course, Room, Semester, User
 from app.services.scenario_service import (
     BuyoutSpec,
     EnrollmentGrowth,
@@ -46,6 +46,7 @@ DEPT_ALIASES = {
     "electrical": "ECE", "ece": "ECE",
     "physics": "PHYS", "phys": "PHYS",
     "biology": "BIOL", "biol": "BIOL", "bio": "BIOL",
+    "bioengineering": "BIOE", "biomedical engineering": "BIOE", "bioe": "BIOE",
     "chemistry": "CHEM", "chem": "CHEM",
     "statistics": "STAT", "stats": "STAT", "stat": "STAT",
 }
@@ -156,6 +157,7 @@ class Vocabulary:
     instructors: List[str]
     departments: List[str]
     rooms: List[str]
+    target_semester: str = "Spring 2027"
 
 
 def load_vocabulary(session: Session) -> Vocabulary:
@@ -164,7 +166,16 @@ def load_vocabulary(session: Session) -> Vocabulary:
     )
     departments = sorted({c.department.upper() for c in session.exec(select(Course)).all()})
     rooms = sorted(r.room_number for r in session.exec(select(Room)).all())
-    return Vocabulary(instructors=instructors, departments=departments, rooms=rooms)
+    sem = session.exec(
+        select(Semester).where((Semester.id == 6) | (Semester.semester_id == 6))
+    ).first()
+    target_semester = sem.name if sem is not None else "Spring 2027"
+    return Vocabulary(
+        instructors=instructors,
+        departments=departments,
+        rooms=rooms,
+        target_semester=target_semester,
+    )
 
 
 def _clean(text: str) -> str:
@@ -348,9 +359,13 @@ def parse_with_rules(
             spec.blocked_room_slots.append(RoomSlotBlock(room_number=room, slot_id=int(slot.group(1))))
         else:
             warnings.append(f"To reserve {room} I need a slot number from 1 to 6.")
+    target_tokens = tuple(vocab.target_semester.lower().split())
     for m in SEMESTER_RE.finditer(text):
-        if (m.group(1).lower(), m.group(2)) != ("spring", "2027"):
-            warnings.append("Only Spring 2027 is simulated; ignoring the semester you named.")
+        if (m.group(1).lower(), m.group(2)) != target_tokens:
+            warnings.append(
+                f"Only {vocab.target_semester} is simulated; "
+                "ignoring the semester you named."
+            )
             break
     for m in FRACTION_WORD_RE.finditer(text):
         warnings.append(
@@ -447,7 +462,8 @@ def _system_prompt(vocab: Vocabulary, self_name: Optional[str]) -> str:
         "- blocked_room_slots: rooms reserved or blocked at a numbered slot.\n"
         "- unsupported: true if the request is not a scheduling what-if, in which case leave "
         "every other field empty/null/false.\n"
-        "Only Spring 2027 is simulated. Output nothing that is not in the request."
+        f"Only {vocab.target_semester} is simulated. "
+        "Output nothing that is not in the request."
     )
 
 

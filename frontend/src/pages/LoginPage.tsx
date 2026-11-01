@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { Calendar, Lock, Mail, ShieldCheck, UserCheck, ArrowRight } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
+import { authService } from '../services/authService'
 import { Alert, Badge, Button, Card, CardContent, Input } from '../components/ui'
 
 export const LoginPage: React.FC = () => {
@@ -12,6 +13,47 @@ export const LoginPage: React.FC = () => {
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [demoCoordinator, setDemoCoordinator] = useState({
+    email: 'coordinator@umkc.edu',
+    password: 'coordinator123',
+    full_name: 'Course Coordinator',
+  })
+  const [demoInstructor, setDemoInstructor] = useState({
+    email: 'leeyu@umkc.edu',
+    password: 'faculty123',
+    full_name: 'Dr. Yugyung Lee',
+  })
+
+  useEffect(() => {
+    if (session.status !== 'unauthenticated') return
+    if (typeof authService.getDemoAccounts !== 'function') return
+    let active = true
+    authService
+      .getDemoAccounts()
+      .then((accounts) => {
+        if (!active || !Array.isArray(accounts)) return
+        const coord = accounts.find((a) => a.role === 'coordinator')
+        const faculty = accounts.find((a) => a.role === 'instructor')
+        if (coord) {
+          setDemoCoordinator({
+            email: coord.email,
+            password: coord.password,
+            full_name: coord.full_name,
+          })
+        }
+        if (faculty) {
+          setDemoInstructor({
+            email: faculty.email,
+            password: faculty.password,
+            full_name: faculty.full_name,
+          })
+        }
+      })
+      .catch(() => {})
+    return () => {
+      active = false
+    }
+  }, [session.status])
 
   if (session.status === 'checking') {
     return (
@@ -110,7 +152,7 @@ export const LoginPage: React.FC = () => {
             <form onSubmit={handleFormSubmit} className="space-y-4">
               <Input
                 label="Email or Username"
-                placeholder="coordinator@umkc.edu"
+                placeholder={demoCoordinator.email}
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
                 leftIcon={<Mail className="w-4 h-4" />}
@@ -151,7 +193,7 @@ export const LoginPage: React.FC = () => {
                 <button
                   type="button"
                   disabled={submitting}
-                  onClick={() => handleQuickDemo('coordinator@umkc.edu', 'coordinator123')}
+                  onClick={() => handleQuickDemo(demoCoordinator.email, demoCoordinator.password)}
                   data-testid="demo-login-coordinator"
                   className="w-full text-left p-3 rounded-xl border border-blue-200 bg-blue-50/70 hover:bg-blue-100/80 transition-colors flex items-start space-x-3"
                 >
@@ -163,8 +205,8 @@ export const LoginPage: React.FC = () => {
                       Sign in as Course Coordinator
                     </div>
                     <div className="text-[11px] text-slate-600 mt-0.5">
-                      coordinator@umkc.edu · Full Course, Room & Section CRUD, Solver execution, Edit
-                      Request approvals
+                      {demoCoordinator.email} · Full Course, Room & Section CRUD, Solver execution,
+                      Edit Request approvals
                     </div>
                   </div>
                 </button>
@@ -172,7 +214,7 @@ export const LoginPage: React.FC = () => {
                 <button
                   type="button"
                   disabled={submitting}
-                  onClick={() => handleQuickDemo('leeyu@umkc.edu', 'faculty123')}
+                  onClick={() => handleQuickDemo(demoInstructor.email, demoInstructor.password)}
                   data-testid="demo-login-instructor"
                   className="w-full text-left p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 transition-colors flex items-start space-x-3"
                 >
@@ -184,8 +226,8 @@ export const LoginPage: React.FC = () => {
                       Sign in as Faculty Instructor
                     </div>
                     <div className="text-[11px] text-slate-600 mt-0.5">
-                      leeyu@umkc.edu (Dr. Yugyung Lee) · View Master Schedule, submit own Preferences
-                      & schedule Edit Requests
+                      {demoInstructor.email} ({demoInstructor.full_name}) · View Master Schedule,
+                      submit own Preferences & schedule Edit Requests
                     </div>
                   </div>
                 </button>

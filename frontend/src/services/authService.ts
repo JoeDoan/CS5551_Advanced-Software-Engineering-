@@ -14,6 +14,16 @@ import {
 export const DEMO_COORDINATOR_TOKEN = 'demo-coordinator-token'
 export const DEMO_INSTRUCTOR_TOKEN = 'demo-instructor-token'
 
+export interface DemoAccountItem {
+  email: string
+  username: string
+  full_name: string
+  role: 'coordinator' | 'instructor'
+  department: string
+  password: string
+  linked_user_id: number | null
+}
+
 export const DEMO_COORDINATOR_USER: AuthUser = {
   id: 100,
   email: 'coordinator@umkc.edu',
@@ -154,6 +164,15 @@ export const authService = {
       return response.data
     } catch {
       return { status: 'logged_out', revoked_session_id: 'local-session' }
+    }
+  },
+
+  async getDemoAccounts(): Promise<DemoAccountItem[] | null> {
+    try {
+      const response = await apiClient.get<DemoAccountItem[]>('/auth/demo-accounts')
+      return Array.isArray(response.data) ? response.data : null
+    } catch {
+      return null
     }
   },
 

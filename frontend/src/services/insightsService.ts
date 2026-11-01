@@ -166,6 +166,65 @@ export const DEFAULT_SCENARIO: ScenarioSpec = {
   time_limit_seconds: 20,
 }
 
+export interface ForecastBenchmarkSummary {
+  champion_model: string
+  last_term_copy_naive_mae: number
+  last_term_copy_naive_smape_pct: number
+  champion_mae: number
+  champion_smape_pct: number
+  mae_reduction_vs_last_term_pct: number
+  empirical_coverage_80: number
+  empirical_coverage_95: number
+}
+
+export interface ScheduleBenchmarkSummary {
+  solver_status: string
+  hard_conflicts: number
+  overflow_courses_last_term_sizing: number
+  overflow_courses_point_forecast_sizing: number
+  overflow_courses_conformal_80_sizing: number
+  uiuc_actual_seat_utilization_pct: number
+  optisched_seat_utilization_pct: number
+  uiuc_empty_seat_waste_pct: number
+  optisched_empty_seat_waste_pct: number
+  uiuc_midday_concentration_pct: number
+  optisched_midday_concentration_pct: number
+  habit_continuity_on_pref_courses_pct: number
+}
+
+export interface CourseBenchmarkComparison {
+  course_code: string
+  course_name: string
+  department: string
+  has_2yr_preference: boolean
+  fall_2025_enrolled: number
+  predicted_enrollment: number
+  actual_enrollment: number
+  abs_error: number
+  interval_80: [number, number]
+  within_80: boolean
+  optisched_room: string
+  optisched_room_capacity: number
+  optisched_slot: string
+  uiuc_actual_room: string
+  uiuc_actual_room_capacity: number
+  uiuc_actual_slot: string
+}
+
+export interface EmpiricalBenchmark {
+  dataset_source: string
+  heldout_semester_id: number
+  heldout_semester_name: string
+  observed_semesters_count: number
+  evaluated_courses_count: number
+  courses_with_2yr_habit_pref: number
+  courses_without_pref: number
+  preference_provenance: string
+  forecast_benchmark: ForecastBenchmarkSummary
+  schedule_benchmark: ScheduleBenchmarkSummary
+  course_comparisons: CourseBenchmarkComparison[]
+}
+
 // A cold baseline can take up to a minute to solve; do not use the 10s default.
 const SOLVE_TIMEOUT_MS = 180_000
 
@@ -173,6 +232,15 @@ export const insightsService = {
   async getForecast(): Promise<EnrollmentForecast> {
     const res = await apiClient.get<EnrollmentForecast>('/forecast/enrollment')
     return res.data
+  },
+
+  async getEmpiricalBenchmark(): Promise<EmpiricalBenchmark | null> {
+    try {
+      const res = await apiClient.get<EmpiricalBenchmark>('/forecast/empirical-benchmark')
+      return res.data
+    } catch {
+      return null
+    }
   },
 
   async getBottlenecks(): Promise<BottleneckReport> {

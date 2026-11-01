@@ -3,6 +3,7 @@ import {
   ACADEMIC_SEMESTERS,
   CURRENT_SEMESTER_ID,
   CURRENT_SEMESTER_NAME,
+  STANDARD_DEPARTMENTS,
   formatCourseLevel,
   formatRoomWithBuilding,
   getCourseLevel,
@@ -20,12 +21,20 @@ describe('academicDomain & courseAssignmentService', () => {
     resetMockCourseAssignments()
   })
 
-  it('identifies active semester as Fall 2026 (id 5) across the 6-semester registry', () => {
+  it('identifies active semester as Fall 2025 (id 5) across the 6-semester registry and includes BIOE', () => {
     expect(CURRENT_SEMESTER_ID).toBe(5)
-    expect(CURRENT_SEMESTER_NAME).toBe('Fall 2026')
+    expect(CURRENT_SEMESTER_NAME).toBe('Fall 2025')
     const active = ACADEMIC_SEMESTERS.filter((s) => s.isActive)
-    expect(active).toEqual([{ id: 5, name: 'Fall 2026', isActive: true }])
-    expect(ACADEMIC_SEMESTERS).toHaveLength(6)
+    expect(active).toEqual([{ id: 5, name: 'Fall 2025', isActive: true }])
+    expect(ACADEMIC_SEMESTERS.map((s) => s.name)).toEqual([
+      'Fall 2023',
+      'Spring 2024',
+      'Fall 2024',
+      'Spring 2025',
+      'Fall 2025',
+      'Spring 2026',
+    ])
+    expect(STANDARD_DEPARTMENTS).toContain('BIOE')
   })
 
   it('classifies undergraduate and graduate course codes for 3-digit and 4-digit numbering', () => {
@@ -39,7 +48,7 @@ describe('academicDomain & courseAssignmentService', () => {
     expect(formatCourseLevel('graduate')).toBe('Graduate')
   })
 
-  it('resolves building names from explicit fields, building codes, or room number prefixes', () => {
+  it('resolves UMKC and UIUC building names from explicit fields, building codes, or room number prefixes', () => {
     expect(
       resolveBuildingName({
         room_number: 'FH 206',
@@ -59,6 +68,30 @@ describe('academicDomain & courseAssignmentService', () => {
         room_number: 'RH 204',
       })
     ).toBe('RH 204 — Royall Hall')
+
+    expect(
+      formatRoomWithBuilding({
+        room_number: 'SC 1404',
+      })
+    ).toBe('SC 1404 — Siebel Center for Computer Science')
+
+    expect(
+      resolveBuildingName({
+        room_number: 'ECEB 1002',
+      })
+    ).toBe('Electrical & Computer Engineering Building')
+
+    expect(
+      resolveBuildingName({
+        room_number: 'DCL 1320',
+      })
+    ).toBe('Digital Computer Laboratory')
+
+    expect(
+      resolveBuildingName({
+        room_number: 'CIF 3031',
+      })
+    ).toBe('Campus Instructional Facility')
 
     expect(
       formatRoomWithBuilding({

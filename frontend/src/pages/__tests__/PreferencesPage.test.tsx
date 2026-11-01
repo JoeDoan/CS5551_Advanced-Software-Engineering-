@@ -48,13 +48,13 @@ describe('PreferencesPage Component', () => {
     ])
   })
 
-  it('locks to active Fall 2026 semester without semester or course preference selectors', () => {
+  it('locks to active Fall 2025 semester without semester or course preference selectors', () => {
     render(<PreferencesPage />)
 
     expect(screen.getByText('Instructor Preferences')).toBeInTheDocument()
     expect(screen.getByLabelText('Select Instructor')).toBeInTheDocument()
     expect(screen.getByTestId('active-semester-badge')).toHaveTextContent(
-      'Current Term: Fall 2026'
+      'Current Term: Fall 2025'
     )
     expect(screen.queryByTestId('preference-course-select')).not.toBeInTheDocument()
     expect(screen.queryByTestId('preference-semester-select')).not.toBeInTheDocument()
@@ -85,44 +85,76 @@ describe('PreferencesPage Component', () => {
     expect(fhChip).toHaveTextContent('Flarsheim Hall')
   })
 
-  it('renders read-only Coordinator-assigned courses with Undergraduate and Graduate badges', async () => {
+  it('renders read-only Coordinator-assigned courses with Undergraduate, Graduate, and 2-year habit status badges', async () => {
     vi.spyOn(courseAssignmentService, 'getAssignments').mockResolvedValue([
       {
         id: 1,
         semester_id: 5,
         user_id: 1,
-        instructor_name: 'Dr. Yugyung Lee',
-        instructor_department: 'CS',
+        instructor_name: 'Dr. Hyoeun Lee',
+        instructor_department: 'BIOE',
         course_id: 3,
-        course_code: 'CS 303',
-        course_name: 'Data Structures',
-        department: 'CS',
+        course_code: 'BIOE 205',
+        course_name: 'Signals & Systems in Bioengrg',
+        department: 'BIOE',
         course_level: 'undergraduate',
       },
       {
         id: 2,
         semester_id: 5,
         user_id: 1,
-        instructor_name: 'Dr. Yugyung Lee',
-        instructor_department: 'CS',
+        instructor_name: 'Dr. Hyoeun Lee',
+        instructor_department: 'BIOE',
         course_id: 5,
-        course_code: 'CS 5551',
-        course_name: 'Advanced Software Engineering',
-        department: 'CS',
+        course_code: 'BIOE 504',
+        course_name: 'Analytical Methods in Bioeng',
+        department: 'BIOE',
         course_level: 'graduate',
       },
     ])
     vi.spyOn(scheduleService, 'getSchedules').mockResolvedValue([])
+    vi.spyOn(preferenceService, 'getPreferences').mockImplementation(async (filters) => {
+      if (filters?.general_only) return []
+      return [
+        {
+          id: 10,
+          user_id: 1,
+          semester_id: 5,
+          course_id: 3,
+          preferred_days: ['Tuesday', 'Thursday'],
+          preferred_slots: ['11:00-12:15'],
+          preferred_rooms: [],
+        },
+        {
+          id: 11,
+          user_id: 1,
+          semester_id: 5,
+          course_id: 5,
+          preferred_days: [],
+          preferred_slots: [],
+          preferred_rooms: [],
+        },
+      ]
+    })
 
     render(<PreferencesPage />)
 
     const assignedCard = screen.getByTestId('coordinator-assigned-courses')
     await waitFor(() => {
-      expect(within(assignedCard).getByText('CS 303')).toBeInTheDocument()
+      expect(within(assignedCard).getByText('BIOE 205')).toBeInTheDocument()
       expect(within(assignedCard).getByText('Undergraduate')).toBeInTheDocument()
-      expect(within(assignedCard).getByText('CS 5551')).toBeInTheDocument()
+      expect(within(assignedCard).getByTestId('course-habit-badge-3')).toHaveTextContent(
+        '2-yr habit: TR 11:00-12:15'
+      )
+      expect(within(assignedCard).getByText('BIOE 504')).toBeInTheDocument()
       expect(within(assignedCard).getByText('Graduate')).toBeInTheDocument()
+      expect(within(assignedCard).getByTestId('course-habit-badge-5')).toHaveTextContent(
+        'No preference submitted'
+      )
     })
+    expect(within(assignedCard).getByTestId('habit-provenance-note')).toHaveTextContent(
+      /causal 2-year modal teaching window/i
+    )
   })
 
   it('toggles day and time slot selection buttons', async () => {

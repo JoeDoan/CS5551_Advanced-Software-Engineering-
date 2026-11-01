@@ -102,6 +102,24 @@ const toInstructorOptions = (list: InstructorSummary[]) =>
     label: `${inst.full_name} (${inst.department})`,
   }))
 
+export const formatCourseHabit = (pref: InstructorPreference | undefined): string | null => {
+  if (!pref) return null
+  const dayCodes = normalizeStoredDaysToLabels(pref.preferred_days).map((label) => {
+    const m = label.match(/\(([MTWRF])\)/)
+    return m ? m[1] : label
+  })
+  const slots = Array.isArray(pref.preferred_slots)
+    ? pref.preferred_slots.map((s) => String(s).trim()).filter(Boolean)
+    : []
+  if (dayCodes.length === 0 && slots.length === 0) {
+    return null
+  }
+  const parts: string[] = []
+  if (dayCodes.length > 0) parts.push(dayCodes.join(''))
+  if (slots.length > 0) parts.push(slots.join(', '))
+  return parts.join(' ')
+}
+
 export const PreferencesPage: React.FC = () => {
   const { user, isStandaloneFallback } = useAuth()
   const isLockedInstructor =
@@ -116,6 +134,7 @@ export const PreferencesPage: React.FC = () => {
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([])
   const [rooms, setRooms] = useState<Room[]>([])
   const [savedPreferences, setSavedPreferences] = useState<InstructorPreference[]>([])
+  const [coursePreferences, setCoursePreferences] = useState<InstructorPreference[]>([])
   const [assignedCourses, setAssignedCourses] = useState<AssignedCourseDisplay[]>([])
 
   const [selectedDays, setSelectedDays] = useState<string[]>(() =>
@@ -181,6 +200,22 @@ export const PreferencesPage: React.FC = () => {
       })
       .catch(() => {
         if (active) setSavedPreferences([])
+      })
+
+    preferenceService
+      .getPreferences({
+        user_id: userId,
+        semester_id: CURRENT_SEMESTER_ID,
+      })
+      .then((list) => {
+        if (!active) return
+        const perCourse = (Array.isArray(list) ? list : []).filter(
+          (p) => p.course_id != null
+        )
+        setCoursePreferences(perCourse)
+      })
+      .catch(() => {
+        if (active) setCoursePreferences([])
       })
 
     Promise.all([
@@ -468,7 +503,7 @@ export const PreferencesPage: React.FC = () => {
             {assignedCourses.length} Assigned {assignedCourses.length === 1 ? 'Course' : 'Courses'}
           </Badge>
         </CardHeader>
-        <CardContent className="pt-0 pb-4">
+        <CardContent className="pt-0 pb-4 space-y-2.5">
           {assignedCourses.length === 0 ? (
             <p className="text-xs text-slate-500">
               Course teaching assignments for {CURRENT_SEMESTER_NAME} are managed by your Course
@@ -476,20 +511,49 @@ export const PreferencesPage: React.FC = () => {
             </p>
           ) : (
             <div className="flex flex-wrap gap-2">
-              {assignedCourses.map((course) => (
-                <div
-                  key={`${course.course_id}-${course.course_code}`}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-xs"
-                >
-                  <span className="font-bold text-slate-900">{course.course_code}</span>
-                  <span className="text-slate-600">{course.course_name}</span>
-                  <Badge variant={course.course_level === 'graduate' ? 'gold' : 'info'}>
-                    {formatCourseLevel(course.course_level)}
-                  </Badge>
-                </div>
-              ))}
+              {assignedCourses.map((course) => {
+                const normalizedCode = course.course_code.trim().toUpperCase()
+                const matchedPref = coursePreferences.find(
+                  (p) =>
+                    p.course_id === course.course_id ||
+                    (Boolean(p.course_code) &&
+                      p.course_code?.trim().toUpperCase() === normalizedCode)
+                )
+                const habitSummary = formatCourseHabit(matchedPref)
+                return (
+                  <div
+                    key={`${course.course_id}-${course.course_code}`}
+                    className="inline-flex flex-wrap items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-xs"
+                  >
+                    <span className="font-bold text-slate-900">{course.course_code}</span>
+                    <span className="text-slate-600">{course.course_name}</span>
+                    <Badge variant={course.course_level === 'graduate' ? 'gold' : 'info'}>
+                      {formatCourseLevel(course.course_level)}
+                    </Badge>
+                    {habitSummary ? (
+                      <Badge
+                        variant="success"
+                        data-testid={`course-habit-badge-${course.course_id}`}
+                      >
+                        2-yr habit: {habitSummary}
+                      </Badge>
+                    ) : (
+                      <Badge
+                        variant="neutral"
+                        data-testid={`course-habit-badge-${course.course_id}`}
+                      >
+                        No preference submitted
+                      </Badge>
+                    )}
+                  </div>
+                )
+              })}
             </div>
           )}
+          <p className="text-[11px] text-slate-500" data-testid="habit-provenance-note">
+            Per-course habits derive from the causal 2-year modal teaching window (4 preceding
+            Fall/Spring terms); unrecorded instructor-course pairs remain without preference.
+          </p>
         </CardContent>
       </Card>
 

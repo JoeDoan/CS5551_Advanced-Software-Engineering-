@@ -174,13 +174,30 @@ def build_panel(session: Session, target_semester_id: Optional[int] = None) -> P
             status_code=status.HTTP_404_NOT_FOUND,
             detail="No enrollment history loaded. Seed the database first.",
         )
-    sem_ids = sorted({o.semester_id for o in obs})
+    semesters = {s.id: s for s in session.exec(select(Semester)).all()}
+    sem_ids = sorted(
+        {o.semester_id for o in obs},
+        key=lambda sid: (semesters[sid].start_date if sid in semesters else "", sid),
+    )
     if len(sem_ids) < MIN_OBSERVED_SEMESTERS:
         raise HTTPException(
             status_code=422,
             detail=f"Need at least {MIN_OBSERVED_SEMESTERS} observed semesters.",
         )
-    target = sem_ids[-1] + 1
+    last_sem = semesters.get(sem_ids[-1])
+    last_start_date = last_sem.start_date if last_sem is not None else ""
+    observed_set = set(sem_ids)
+    future_semesters = sorted(
+        (
+            s
+            for s in semesters.values()
+            if s.id is not None
+            and s.id not in observed_set
+            and s.start_date > last_start_date
+        ),
+        key=lambda s: (s.start_date, s.id),
+    )
+    target = future_semesters[0].id if future_semesters else sem_ids[-1] + 1
     if target_semester_id is not None and target_semester_id != target:
         raise HTTPException(
             status_code=422,
@@ -189,7 +206,6 @@ def build_panel(session: Session, target_semester_id: Optional[int] = None) -> P
                 f"semesters {sem_ids[0]}-{sem_ids[-1]} are already observed."
             ),
         )
-    semesters = {s.id: s for s in session.exec(select(Semester)).all()}
     if target not in semesters:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -351,7 +367,11 @@ def _conformal_q(abs_rel: np.ndarray, alpha: float) -> float:
 def run_pipeline(session: Session, target_semester_id: Optional[int] = None) -> Pipeline:
     p = build_panel(session, target_semester_id)
     n_obs = p.Y.shape[1]
-    origins = list(range(max(3, n_obs - 2), n_obs))
+    origins = (
+        list(range(4, n_obs))
+        if n_obs > 6
+        else list(range(max(3, n_obs - 2), n_obs))
+    )
 
     preds: Dict[str, Dict[int, np.ndarray]] = {m: {} for m in MODEL_NAMES}
     for T in origins:
