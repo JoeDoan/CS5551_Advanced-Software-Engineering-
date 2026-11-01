@@ -1,0 +1,282 @@
+[
+  {
+    "course_id": 1,
+    "course_name": "STAT 400 Statistics and Probability I",
+    "expected_enrollment": 192,
+    "required_layout": "lecture",
+    "credits": 4
+  },
+  {
+    "course_id": 2,
+    "course_name": "STAT 429 Time Series Analysis",
+    "expected_enrollment": 53,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 3,
+    "course_name": "STAT 410 Statistics and Probability II",
+    "expected_enrollment": 72,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 4,
+    "course_name": "STAT 420 Methods of Applied Statistics",
+    "expected_enrollment": 82,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 5,
+    "course_name": "STAT 385 Statistics Programming Methods",
+    "expected_enrollment": 89,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 6,
+    "course_name": "STAT 440 Statistical Data Management",
+    "expected_enrollment": 54,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 7,
+    "course_name": "CS 233 Computer Architecture",
+    "expected_enrollment": 178,
+    "required_layout": "lecture",
+    "credits": 4
+  },
+  {
+    "course_id": 8,
+    "course_name": "CS 433 Computer System Organization",
+    "expected_enrollment": 32,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 9,
+    "course_name": "CS 210 Ethical & Professional Issues",
+    "expected_enrollment": 22,
+    "required_layout": "lecture",
+    "credits": 2
+  },
+  {
+    "course_id": 10,
+    "course_name": "CS 461 Computer Security I",
+    "expected_enrollment": 57,
+    "required_layout": "lab",
+    "credits": 4
+  },
+  {
+    "course_id": 11,
+    "course_name": "CS 425 Distributed Systems",
+    "expected_enrollment": 240,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 12,
+    "course_name": "CS 438 Communication Networks",
+    "expected_enrollment": 127,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 13,
+    "course_name": "CS 357 Numerical Methods I",
+    "expected_enrollment": 225,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 14,
+    "course_name": "CS 450 Numerical Analysis",
+    "expected_enrollment": 140,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 15,
+    "course_name": "ECE 120 Introduction to Computing",
+    "expected_enrollment": 136,
+    "required_layout": "lecture",
+    "credits": 4
+  },
+  {
+    "course_id": 16,
+    "course_name": "ECE 220 Computer Systems & Programming",
+    "expected_enrollment": 54,
+    "required_layout": "lecture",
+    "credits": 4
+  },
+  {
+    "course_id": 17,
+    "course_name": "ECE 206 Electrical and Electronic Circuits Lab",
+    "expected_enrollment": 32,
+    "required_layout": "lab",
+    "credits": 1
+  },
+  {
+    "course_id": 18,
+    "course_name": "ECE 342 Electronic Circuits",
+    "expected_enrollment": 56,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 19,
+    "course_name": "ECE 310 Digital Signal Processing",
+    "expected_enrollment": 89,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 20,
+    "course_name": "ECE 311 Digital Signal Processing Lab",
+    "expected_enrollment": 36,
+    "required_layout": "lab",
+    "credits": 1
+  },
+  {
+    "course_id": 21,
+    "course_name": "ECE 110 Introduction to Electronics",
+    "expected_enrollment": 101,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 22,
+    "course_name": "ECE 330 Power Ckts & Electromechanics",
+    "expected_enrollment": 80,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 23,
+    "course_name": "MATH 112 Algebra",
+    "expected_enrollment": 164,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 24,
+    "course_name": "MATH 115 Preparation for Calculus",
+    "expected_enrollment": 193,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 25,
+    "course_name": "MATH 441 Differential Equations",
+    "expected_enrollment": 35,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 26,
+    "course_name": "MATH 442 Intro Partial Diff Equations",
+    "expected_enrollment": 38,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 27,
+    "course_name": "MATH 444 Elementary Real Analysis",
+    "expected_enrollment": 25,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 28,
+    "course_name": "MATH 446 Applied Complex Variables",
+    "expected_enrollment": 36,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 29,
+    "course_name": "CHEM 312 Inorganic Chemistry",
+    "expected_enrollment": 70,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 30,
+    "course_name": "CHEM 315 Instrumental Chem Systems Lab",
+    "expected_enrollment": 95,
+    "required_layout": "lab",
+    "credits": 2
+  },
+  {
+    "course_id": 31,
+    "course_name": "CHEM 236 Fundamental Organic Chem I",
+    "expected_enrollment": 147,
+    "required_layout": "lecture",
+    "credits": 4
+  },
+  {
+    "course_id": 32,
+    "course_name": "CHEM 237 Structure and Synthesis",
+    "expected_enrollment": 72,
+    "required_layout": "lecture",
+    "credits": 2
+  },
+  {
+    "course_id": 33,
+    "course_name": "PHYS 101 College Physics: Mech & Heat",
+    "expected_enrollment": 217,
+    "required_layout": "lecture",
+    "credits": 5
+  },
+  {
+    "course_id": 34,
+    "course_name": "PHYS 102 College Physics: E&M & Modern",
+    "expected_enrollment": 142,
+    "required_layout": "lecture",
+    "credits": 5
+  },
+  {
+    "course_id": 35,
+    "course_name": "PHYS 435 Electromagnetic Fields I",
+    "expected_enrollment": 81,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 36,
+    "course_name": "PHYS 436 Electromagnetic Fields II",
+    "expected_enrollment": 32,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 37,
+    "course_name": "BIOE 120 Introduction to Bioengineering",
+    "expected_enrollment": 47,
+    "required_layout": "lecture",
+    "credits": 1
+  },
+  {
+    "course_id": 38,
+    "course_name": "BIOE 202 Cell & Tissue Engineering Lab",
+    "expected_enrollment": 44,
+    "required_layout": "lab",
+    "credits": 2
+  },
+  {
+    "course_id": 39,
+    "course_name": "BIOE 414 Biomedical Instrumentation",
+    "expected_enrollment": 55,
+    "required_layout": "lecture",
+    "credits": 3
+  },
+  {
+    "course_id": 40,
+    "course_name": "BIOE 498 Regulatory & Safety Issues",
+    "expected_enrollment": 44,
+    "required_layout": "lecture",
+    "credits": 1
+  }
+]

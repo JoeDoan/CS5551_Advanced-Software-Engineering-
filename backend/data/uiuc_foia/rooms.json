@@ -1,0 +1,130 @@
+[
+  {
+    "room_id": 1,
+    "room_number": "NL 100",
+    "building_id": 5,
+    "campus_id": 2,
+    "capacity": 322,
+    "layout_type": "lecture"
+  },
+  {
+    "room_id": 2,
+    "room_number": "LL 141",
+    "building_id": 4,
+    "campus_id": 1,
+    "capacity": 278,
+    "layout_type": "lecture"
+  },
+  {
+    "room_id": 3,
+    "room_number": "CIF 35",
+    "building_id": 3,
+    "campus_id": 1,
+    "capacity": 265,
+    "layout_type": "lecture"
+  },
+  {
+    "room_id": 4,
+    "room_number": "MSEB 100",
+    "building_id": 7,
+    "campus_id": 1,
+    "capacity": 239,
+    "layout_type": "lecture"
+  },
+  {
+    "room_id": 5,
+    "room_number": "ECEB 1002",
+    "building_id": 2,
+    "campus_id": 1,
+    "capacity": 228,
+    "layout_type": "lecture"
+  },
+  {
+    "room_id": 6,
+    "room_number": "DCL 1320",
+    "building_id": 6,
+    "campus_id": 1,
+    "capacity": 205,
+    "layout_type": "lecture"
+  },
+  {
+    "room_id": 7,
+    "room_number": "SC 1404",
+    "building_id": 1,
+    "campus_id": 1,
+    "capacity": 185,
+    "layout_type": "lecture"
+  },
+  {
+    "room_id": 8,
+    "room_number": "CIF 3031",
+    "building_id": 3,
+    "campus_id": 1,
+    "capacity": 172,
+    "layout_type": "lecture"
+  },
+  {
+    "room_id": 9,
+    "room_number": "LL 151",
+    "building_id": 4,
+    "campus_id": 1,
+    "capacity": 166,
+    "layout_type": "lecture"
+  },
+  {
+    "room_id": 10,
+    "room_number": "ECEB 2017",
+    "building_id": 2,
+    "campus_id": 1,
+    "capacity": 136,
+    "layout_type": "lecture"
+  },
+  {
+    "room_id": 11,
+    "room_number": "ECEB 1013",
+    "building_id": 2,
+    "campus_id": 1,
+    "capacity": 102,
+    "layout_type": "lecture"
+  },
+  {
+    "room_id": 12,
+    "room_number": "SC 216",
+    "building_id": 1,
+    "campus_id": 1,
+    "capacity": 68,
+    "layout_type": "lecture"
+  },
+  {
+    "room_id": 13,
+    "room_number": "CIF 4031",
+    "building_id": 3,
+    "campus_id": 1,
+    "capacity": 160,
+    "layout_type": "lab"
+  },
+  {
+    "room_id": 14,
+    "room_number": "ECEB 4074",
+    "building_id": 2,
+    "campus_id": 1,
+    "capacity": 135,
+    "layout_type": "lab"
+  },
+  {
+    "room_id": 15,
+    "room_number": "LL 64",
+    "building_id": 4,
+    "campus_id": 1,
+    "capacity": 112,
+    "layout_type": "lab"
+  },
+  {
+    "room_id": 16,
+    "room_number": "NL 204",
+    "building_id": 5,
+    "campus_id": 2,
+    "capacity": 96,
+    "layout_type": "lab"
+  }
+]

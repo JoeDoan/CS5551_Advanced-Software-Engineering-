@@ -204,6 +204,18 @@ def list_demo_accounts(
             func.lower(AuthCredential.email) == DEMO_FACULTY_EMAIL
         )
     ).first()
+    if faculty is None:
+        faculty = session.exec(
+            select(AuthCredential)
+            .where(AuthCredential.linked_user_id == 1)
+            .order_by(AuthCredential.id)
+        ).first()
+    if faculty is None:
+        faculty = session.exec(
+            select(AuthCredential)
+            .where(func.lower(AuthCredential.role) == "instructor")
+            .order_by(AuthCredential.id)
+        ).first()
 
     accounts: List[DemoAccountResponse] = []
     if coord is not None:

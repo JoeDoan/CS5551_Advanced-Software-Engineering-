@@ -1,0 +1,44 @@
+[
+  {
+    "building_id": 1,
+    "campus_id": 1,
+    "name": "Siebel Center for Comp Sci",
+    "code": "SC"
+  },
+  {
+    "building_id": 2,
+    "campus_id": 1,
+    "name": "Electrical & Computer Eng Bldg",
+    "code": "ECEB"
+  },
+  {
+    "building_id": 3,
+    "campus_id": 1,
+    "name": "Campus Instructional Facility",
+    "code": "CIF"
+  },
+  {
+    "building_id": 4,
+    "campus_id": 1,
+    "name": "Loomis Laboratory",
+    "code": "LL"
+  },
+  {
+    "building_id": 5,
+    "campus_id": 2,
+    "name": "Noyes Laboratory",
+    "code": "NL"
+  },
+  {
+    "building_id": 6,
+    "campus_id": 1,
+    "name": "Digital Computer Laboratory",
+    "code": "DCL"
+  },
+  {
+    "building_id": 7,
+    "campus_id": 1,
+    "name": "Materials Science & Eng Bld",
+    "code": "MSEB"
+  }
+]

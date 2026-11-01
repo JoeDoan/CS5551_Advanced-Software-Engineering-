@@ -1,0 +1,202 @@
+[
+  {
+    "user_id": 1,
+    "name": "Dr. Hyoeun Lee",
+    "email": "leeh@illinois.edu",
+    "department": "STAT",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 115000,
+    "priority_points": 115000
+  },
+  {
+    "user_id": 2,
+    "name": "Dr. Alexey Stepanov",
+    "email": "stepanov@illinois.edu",
+    "department": "STAT",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 112000,
+    "priority_points": 112000
+  },
+  {
+    "user_id": 3,
+    "name": "Dr. Christopher Kinson",
+    "email": "kinson2@illinois.edu",
+    "department": "STAT",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 105000,
+    "priority_points": 105000
+  },
+  {
+    "user_id": 4,
+    "name": "Dr. Saugata Ghose",
+    "email": "ghose@illinois.edu",
+    "department": "CS",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 108000,
+    "priority_points": 108000
+  },
+  {
+    "user_id": 5,
+    "name": "Dr. Ryan Cunningham",
+    "email": "rcunning@illinois.edu",
+    "department": "CS",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 106000,
+    "priority_points": 106000
+  },
+  {
+    "user_id": 6,
+    "name": "Dr. Nikita Borisov",
+    "email": "nikita@illinois.edu",
+    "department": "CS",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 114000,
+    "priority_points": 114000
+  },
+  {
+    "user_id": 7,
+    "name": "Dr. Andreas Kloeckner",
+    "email": "andreask@illinois.edu",
+    "department": "CS",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 110000,
+    "priority_points": 110000
+  },
+  {
+    "user_id": 8,
+    "name": "Dr. Ujjal Bhowmik",
+    "email": "ubhowmik@illinois.edu",
+    "department": "ECE",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 108000,
+    "priority_points": 108000
+  },
+  {
+    "user_id": 9,
+    "name": "Dr. Chandrasekhar Radhakrishnan",
+    "email": "cradhak@illinois.edu",
+    "department": "ECE",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 112000,
+    "priority_points": 112000
+  },
+  {
+    "user_id": 10,
+    "name": "Dr. Minh Do",
+    "email": "minhdo@illinois.edu",
+    "department": "ECE",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 116000,
+    "priority_points": 116000
+  },
+  {
+    "user_id": 11,
+    "name": "Dr. Jonathon Schuh",
+    "email": "schuh4@illinois.edu",
+    "department": "ECE",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 104000,
+    "priority_points": 104000
+  },
+  {
+    "user_id": 12,
+    "name": "Dr. Laura Placzek",
+    "email": "lplaczek@illinois.edu",
+    "department": "MATH",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 105000,
+    "priority_points": 105000
+  },
+  {
+    "user_id": 13,
+    "name": "Dr. Nikolaos Tzirakis",
+    "email": "tzirakis@illinois.edu",
+    "department": "MATH",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 110000,
+    "priority_points": 110000
+  },
+  {
+    "user_id": 14,
+    "name": "Dr. Igor Nikolaev",
+    "email": "nikolaev@illinois.edu",
+    "department": "MATH",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 112000,
+    "priority_points": 112000
+  },
+  {
+    "user_id": 15,
+    "name": "Dr. Andrew Gewirth",
+    "email": "agewirth@illinois.edu",
+    "department": "CHEM",
+    "role": "instructor",
+    "campus_id": 2,
+    "base_priority": 118000,
+    "priority_points": 118000
+  },
+  {
+    "user_id": 16,
+    "name": "Dr. Martin Burke",
+    "email": "mdburke@illinois.edu",
+    "department": "CHEM",
+    "role": "instructor",
+    "campus_id": 2,
+    "base_priority": 116000,
+    "priority_points": 116000
+  },
+  {
+    "user_id": 17,
+    "name": "Dr. Katherine Ansell",
+    "email": "ansellk@illinois.edu",
+    "department": "PHYS",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 106000,
+    "priority_points": 106000
+  },
+  {
+    "user_id": 18,
+    "name": "Dr. Angela Kou",
+    "email": "akou@illinois.edu",
+    "department": "PHYS",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 104000,
+    "priority_points": 104000
+  },
+  {
+    "user_id": 19,
+    "name": "Dr. Karin Jensen",
+    "email": "kjensen@illinois.edu",
+    "department": "BIOE",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 108000,
+    "priority_points": 108000
+  },
+  {
+    "user_id": 20,
+    "name": "Dr. Wawrzyniec Dobrucki",
+    "email": "dobrucki@illinois.edu",
+    "department": "BIOE",
+    "role": "instructor",
+    "campus_id": 1,
+    "base_priority": 110000,
+    "priority_points": 110000
+  }
+]

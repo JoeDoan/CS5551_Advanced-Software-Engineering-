@@ -2,6 +2,7 @@ import os
 
 os.environ.setdefault("AUTO_SEED", "false")
 os.environ.setdefault("REQUIRE_AUTH", "false")
+os.environ.setdefault("DATA_PROFILE", "umkc")
 
 
 import pytest

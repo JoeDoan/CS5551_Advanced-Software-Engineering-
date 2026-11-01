@@ -14,10 +14,14 @@ _BACKEND_DIR = os.path.dirname(_APP_DIR)
 DATA_DIR = os.path.join(_BACKEND_DIR, "data", "umkc")
 
 
+def get_default_data_dir() -> str:
+    return os.path.join(_BACKEND_DIR, "data", os.getenv("DATA_PROFILE", "uiuc_foia"))
+
+
 class DataLoader:
     def __init__(self, data_dir: Optional[str] = None):
         if data_dir is None:
-            data_dir = DATA_DIR
+            data_dir = get_default_data_dir()
         if not os.path.isabs(data_dir):
             candidate_backend = os.path.join(_BACKEND_DIR, data_dir)
             candidate_cwd = os.path.join(os.getcwd(), data_dir)

@@ -1,0 +1,12 @@
+[
+  {
+    "campus_id": 1,
+    "name": "UIUC Grainger Engineering Quad",
+    "address": "1308 W Main St, Urbana, IL 61801"
+  },
+  {
+    "campus_id": 2,
+    "name": "UIUC Main Quad",
+    "address": "601 E John St, Champaign, IL 61820"
+  }
+]

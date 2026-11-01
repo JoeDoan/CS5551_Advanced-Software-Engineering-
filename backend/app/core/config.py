@@ -6,7 +6,7 @@ class Settings:
     PROJECT_NAME: str = "UMKC Scheduler API"
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./optisched.db")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./optisched_foia.db")
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
     AUTO_SEED: bool = os.getenv("AUTO_SEED", "true").lower() in ("1", "true", "yes")
     JWT_SECRET_KEY: str = os.getenv(
@@ -15,6 +15,14 @@ class Settings:
     ACCESS_TOKEN_EXPIRE_MINUTES: int = int(
         os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "480")
     )
+
+    @property
+    def data_profile(self) -> str:
+        return os.getenv("DATA_PROFILE", "uiuc_foia")
+
+    @property
+    def DATA_PROFILE(self) -> str:
+        return self.data_profile
 
     @property
     def require_auth(self) -> bool:

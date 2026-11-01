@@ -1,0 +1,269 @@
+import csv
+import glob
+import hashlib
+import json
+import os
+from pathlib import Path
+import shutil
+from typing import Any
+
+from fastapi.testclient import TestClient
+import pytest
+from sqlmodel import Session, select
+
+from app.core.config import settings
+from app.core.seeder import seed_database
+from app.models.entities import (
+    Course,
+    EnrollmentObservation,
+    InstructorPreference,
+    Room,
+    Schedule,
+    Semester,
+    TimeSlot,
+    User,
+)
+from app.services import solver_service
+from app.solver.data_loader import DataLoader
+from scripts.build_uiuc_foia_dataset import DEFAULT_OUTPUT_DIR, build_dataset
+
+FORBIDDEN_GRADE_KEYS = frozenset(
+    {
+        "a+",
+        "a",
+        "a-",
+        "b+",
+        "b",
+        "b-",
+        "c+",
+        "c",
+        "c-",
+        "d+",
+        "d",
+        "d-",
+        "f",
+        "w",
+        "gpa",
+    }
+)
+
+EXPECTED_STEM_DEPTS = {"CS", "ECE", "MATH", "STAT", "CHEM", "PHYS", "BIOE"}
+EXPECTED_LAB_CODES = {"CS 461", "ECE 206", "ECE 311", "CHEM 315", "BIOE 202"}
+
+
+def _collect_json_keys(node: Any, out: set[str]) -> None:
+    if isinstance(node, dict):
+        for key, value in node.items():
+            out.add(str(key).strip().lower())
+            _collect_json_keys(value, out)
+    elif isinstance(node, list):
+        for item in node:
+            _collect_json_keys(item, out)
+
+
+def _sha256_bytes(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def test_uiuc_foia_zero_gpa_columns_and_offline_determinism(tmp_path: Path):
+    uiuc_dir = Path(DEFAULT_OUTPUT_DIR)
+    raw_dir = uiuc_dir / "raw"
+    csv_files = sorted(raw_dir.glob("*.csv"))
+    assert len(csv_files) == 2
+
+    for csv_path in csv_files:
+        with csv_path.open("r", encoding="utf-8", newline="") as handle:
+            reader = csv.reader(handle)
+            headers = next(reader)
+        lowered = {h.strip().lower() for h in headers}
+        assert lowered.isdisjoint(FORBIDDEN_GRADE_KEYS)
+
+    json_files = sorted(uiuc_dir.glob("*.json"))
+    assert len(json_files) == 18
+    for json_path in json_files:
+        payload = json.loads(json_path.read_text(encoding="utf-8"))
+        keys: set[str] = set()
+        _collect_json_keys(payload, keys)
+        assert keys.isdisjoint(FORBIDDEN_GRADE_KEYS)
+
+    shutil.copytree(raw_dir, tmp_path / "raw")
+    summary = build_dataset(output_dir=str(tmp_path))
+    assert summary["courses"] == 40
+    assert summary["users"] == 20
+    assert summary["rooms"] == 16
+    assert summary["semesters"] == 20
+    assert summary["enrollment_history"] == 760
+
+    rebuilt_jsons = sorted(Path(p).name for p in glob.glob(str(tmp_path / "*.json")))
+    committed_jsons = sorted(p.name for p in json_files)
+    assert rebuilt_jsons == committed_jsons
+    for filename in committed_jsons:
+        assert _sha256_bytes(tmp_path / filename) == _sha256_bytes(uiuc_dir / filename)
+
+
+def test_uiuc_foia_seeding_counts_faculty_and_demo_accounts(
+    monkeypatch: pytest.MonkeyPatch,
+    session: Session,
+    client: TestClient,
+):
+    monkeypatch.setenv("DATA_PROFILE", "uiuc_foia")
+    assert settings.data_profile == "uiuc_foia"
+    assert settings.DATA_PROFILE == "uiuc_foia"
+
+    summary = seed_database(session=session)
+    assert summary["courses"] == 40
+    assert summary["users"] == 20
+    assert summary["rooms"] == 16
+    assert summary["semesters"] == 20
+    assert summary["enrollment_observations"] == 760
+
+    courses = session.exec(select(Course)).all()
+    assert len(courses) == 40
+    assert {c.department for c in courses} == EXPECTED_STEM_DEPTS
+
+    users = session.exec(select(User).order_by(User.id)).all()
+    assert len(users) == 20
+    assert all(u.email.endswith("@illinois.edu") for u in users)
+    assert users[0].id == 1
+    assert users[0].full_name == "Dr. Hyoeun Lee"
+    assert users[0].email == "leeh@illinois.edu"
+    assert users[0].department == "STAT"
+
+    rooms = session.exec(select(Room)).all()
+    assert len(rooms) == 16
+    assert sum(1 for r in rooms if r.room_type == "lecture") == 12
+    assert sum(1 for r in rooms if r.room_type == "lab") == 4
+
+    semesters = session.exec(select(Semester)).all()
+    expected_sem_ids = {1, 2, 3, 4, 5, 6} | set(range(101, 115))
+    assert {s.semester_id for s in semesters} == expected_sem_ids
+    active_sems = [s for s in semesters if s.is_active]
+    assert len(active_sems) == 1
+    assert active_sems[0].semester_id == 5
+    assert active_sems[0].name == "Fall 2025"
+
+    observations = session.exec(select(EnrollmentObservation)).all()
+    assert len(observations) == 760
+    assert {obs.source for obs in observations} == {"uiuc_foia_registrar"}
+    assert all(obs.semester_id != 6 for obs in observations)
+
+    demo_resp = client.get("/api/v1/auth/demo-accounts")
+    assert demo_resp.status_code == 200
+    demo_accounts = demo_resp.json()
+    faculty_demo = next(a for a in demo_accounts if a["role"] == "instructor")
+    assert faculty_demo["full_name"] == "Dr. Hyoeun Lee"
+    assert faculty_demo["email"] == "leeh@illinois.edu"
+    assert faculty_demo["linked_user_id"] == 1
+
+
+def test_uiuc_foia_causal_two_year_preferences_and_empty_subset(
+    monkeypatch: pytest.MonkeyPatch,
+    session: Session,
+):
+    monkeypatch.setenv("DATA_PROFILE", "uiuc_foia")
+    seed_database(session=session)
+
+    loader = DataLoader()
+    sem6_raw = [
+        p for p in loader.instructor_preferences if p.get("semester_id") == 6
+    ]
+    assert len(sem6_raw) == 40
+
+    with_pref = []
+    without_pref = []
+    for pref in sem6_raw:
+        resolved = loader.get_resolved_preference(
+            pref["instructor_id"],
+            course_id=pref["course_id"],
+            semester_id=6,
+        )
+        if resolved["has_preferences"]:
+            with_pref.append(pref)
+        else:
+            without_pref.append(pref)
+
+    assert len(with_pref) > 0
+    assert len(without_pref) > 0
+    assert len(with_pref) + len(without_pref) == 40
+
+    lee_stat400 = loader.get_resolved_preference(1, course_id=1, semester_id=6)
+    assert lee_stat400["has_preferences"] is False
+    assert lee_stat400["days"] == set()
+    assert lee_stat400["slots"] == set()
+    assert lee_stat400["raw"]["preferred_days"] == []
+    assert lee_stat400["raw"]["preferred_slots"] == []
+
+    lee_stat429 = loader.get_resolved_preference(1, course_id=2, semester_id=6)
+    assert lee_stat429["has_preferences"] is True
+    assert len(lee_stat429["days"]) > 0
+    assert len(lee_stat429["slots"]) > 0
+
+    db_sem6_prefs = session.exec(
+        select(InstructorPreference).where(InstructorPreference.semester_id == 6)
+    ).all()
+    assert len(db_sem6_prefs) == 40
+    assert sum(1 for p in db_sem6_prefs if p.preferred_days and p.preferred_slots) == (
+        len(with_pref)
+    )
+    assert sum(
+        1 for p in db_sem6_prefs if not p.preferred_days and not p.preferred_slots
+    ) == len(without_pref)
+
+    heldout_path = os.path.join(
+        DEFAULT_OUTPUT_DIR, "heldout_spring2026_ground_truth.json"
+    )
+    with open(heldout_path, "r", encoding="utf-8") as handle:
+        heldout = json.load(handle)
+    assert len(heldout["courses"]) == 40
+    assert sum(1 for c in heldout["courses"] if c["has_2yr_preference"]) == len(
+        with_pref
+    )
+    assert sum(1 for c in heldout["courses"] if not c["has_2yr_preference"]) == len(
+        without_pref
+    )
+
+
+def test_uiuc_foia_cpsat_solver_runs_cleanly_on_sem5_and_sem6(
+    monkeypatch: pytest.MonkeyPatch,
+    session: Session,
+):
+    monkeypatch.setenv("DATA_PROFILE", "uiuc_foia")
+    seed_database(session=session)
+
+    rooms_by_id = {r.id: r for r in session.exec(select(Room)).all()}
+    courses_by_id = {c.id: c for c in session.exec(select(Course)).all()}
+
+    for target_sem_id in (5, 6):
+        result = solver_service.run_solver_for_semester(
+            session=session, semester_id=target_sem_id
+        )
+        assert result["status"] in ("OPTIMAL", "FEASIBLE")
+        assert result["scheduled_count"] == 40
+
+        slots_by_id = {s.id: s for s in session.exec(select(TimeSlot)).all()}
+        rows = session.exec(
+            select(Schedule).where(Schedule.semester_id == target_sem_id)
+        ).all()
+        assert len(rows) == 40
+        assert len({row.course_id for row in rows}) == 40
+
+        room_occupied: set[tuple[int, str, str, str]] = set()
+        inst_occupied: set[tuple[int, str, str, str]] = set()
+
+        for row in rows:
+            room = rooms_by_id[row.room_id]
+            course = courses_by_id[row.course_id]
+            slot = slots_by_id[row.time_slot_id]
+
+            assert room.capacity >= course.expected_enrollment
+            if course.course_code in EXPECTED_LAB_CODES:
+                assert room.room_type == "lab"
+
+            assert len(slot.day_pattern) >= 2
+            for day_ch in slot.day_pattern:
+                rk = (row.room_id, day_ch, slot.start_time, slot.end_time)
+                ik = (row.user_id, day_ch, slot.start_time, slot.end_time)
+                assert rk not in room_occupied
+                assert ik not in inst_occupied
+                room_occupied.add(rk)
+                inst_occupied.add(ik)

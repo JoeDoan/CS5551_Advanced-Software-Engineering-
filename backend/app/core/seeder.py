@@ -27,6 +27,11 @@ _CORE_DIR = os.path.dirname(os.path.abspath(__file__))
 _BACKEND_DIR = os.path.dirname(os.path.dirname(_CORE_DIR))
 DEFAULT_DATA_DIR = os.path.join(_BACKEND_DIR, "data", "umkc")
 
+
+def get_default_data_dir() -> str:
+    return os.path.join(_BACKEND_DIR, "data", os.getenv("DATA_PROFILE", "uiuc_foia"))
+
+
 _CANONICAL_DAY_ORDER = ("M", "T", "W", "R", "F")
 
 DAY_NAME_TO_CODE = {
@@ -325,7 +330,7 @@ def _seed_enrollment_history(session: Session, data_dir: str) -> None:
 
 def seed_database(
     session: Optional[Session] = None,
-    data_dir: str = DEFAULT_DATA_DIR,
+    data_dir: Optional[str] = None,
     force_reset: bool = False,
 ) -> Dict[str, int]:
     """
@@ -333,6 +338,8 @@ def seed_database(
     Idempotent (AC 1.2): a table that already has rows is left untouched, so
     calling this repeatedly never duplicates records unless force_reset=True.
     """
+    if data_dir is None:
+        data_dir = get_default_data_dir()
     owns_session = session is None
     if owns_session:
         init_db()
