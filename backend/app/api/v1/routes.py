@@ -15,6 +15,7 @@ from app.api.v1 import (
     routes_analytics,
     routes_assignments,
     routes_auth,
+    routes_commercialization,
     routes_copilot,
     routes_courses,
     routes_edit_requests,
@@ -64,6 +65,11 @@ router.include_router(
 )
 router.include_router(
     routes_copilot.router, prefix="/copilot", tags=["Copilot"]
+)
+router.include_router(
+    routes_commercialization.router,
+    prefix="/commercialization",
+    tags=["Faculty Commercialization"],
 )
 
 

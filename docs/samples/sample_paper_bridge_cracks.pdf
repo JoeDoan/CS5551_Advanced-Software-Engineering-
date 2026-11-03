@@ -1,0 +1,32 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 2694 >>
+stream
+BT /F1 9 Tf 40 760 Td 11 TL (Low-cost Passive Acoustic Sensing of Bridge Cracks) Tj T* (Jane Q. Researcher, Alan B. Colleague) Tj T* (Department of Civil and Mechanical Engineering, Example State University) Tj T* (Abstract: We propose a passive acoustic method that locates hairline cracks in steel bridges) Tj T* (using inexpensive microphones. The method needs no traffic closure and no trained inspector on) Tj T* (site. In field trials on two bridges it matched the accuracy of ultrasonic scanning while) Tj T* (running continuously for six months.) Tj T* (Keywords: acoustic sensing; structural health monitoring; steel bridges; crack detection) Tj T* (1. Introduction) Tj T* (The main challenge in bridge inspection is that ultrasonic scanning is slow and usually) Tj T* (requires lane closures. Existing methods also give only a snapshot in time, so cracks that grow) Tj T* (between inspections go unnoticed. Unlike existing methods, our approach runs continuously and) Tj T* (unattended, and it costs a fraction of scanning.) Tj T* (2. Method) Tj T* (We attach low-cost microphones to girders and record the sound of passing traffic. A signal) Tj T* (processing pipeline separates traffic noise from the faint acoustic signature of a crack) Tj T* (opening and closing under load. We propose a new calibration procedure that learns each) Tj T* (bridge's baseline in two days. The pipeline runs on a small embedded board and sends a daily) Tj T* (summary over a cellular link.) Tj T* (3. Results) Tj T* (In trials on two steel bridges we located 41 of 44 known cracks to within 30 centimeters. False) Tj T* (alarms were rare. Early results were presented at the Midwest Sensing Workshop on June 12, 2026) Tj T* (and posted on a project website.) Tj T* (4. Limitations) Tj T* (A limitation is that the method does not work on concrete decks without further calibration.) Tj T* (Performance also drops in heavy rain, and we have not tested it on bridges with complex cable) Tj T* (structures.) Tj T* (Acknowledgments) Tj T* (This work was supported by the National Science Foundation under grant number 2012345 and by a) Tj T* (seed grant from the university. We thank the state transportation department for access to the) Tj T* (test bridges.) Tj T* (References) Tj T* ([1] Smith, P. Ultrasonic inspection of welded joints. Journal of Testing 12, 2019.) Tj T* ([2] Lee, K. Acoustic emission monitoring of steel bridges. Structures 8, 2021.) Tj T* ([3] Garcia, M. Low-cost sensor networks for civil infrastructure. Sensors and Systems 5, 2022.) Tj T* (This is a synthetic sample paper written only to test software. It is not a real publication.) Tj T* (All names are fictional.) Tj T* ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000002987 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+3057
+%%EOF

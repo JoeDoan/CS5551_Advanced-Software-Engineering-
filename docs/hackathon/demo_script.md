@@ -1,6 +1,6 @@
 # Hack-a-thon Demo Script: "Predict, Simulate, Solve, Explain"
 
-**Event:** Nov 8, 2026 | **Presenter:** Tony Nguyen | **Target length:** 4:30 (cut list at the bottom if you get less)
+**Event:** Nov 8, 2026 | **Presenter:** Tony Nguyen | **Target length:** about 5:50 with the Commercialization part, 4:30 without it (cut list at the bottom if you get less)
 **Language level:** short sentences, easy to say out loud. Every number below was checked in the running app.
 
 **One-line pitch:** "OptiSched predicts next term's demand, finds the rooms that will break, and lets you ask what-if questions in plain English. A language model reads the question. A mathematical solver makes every scheduling decision."
@@ -30,7 +30,9 @@
 5. **Browser tabs (log in before the demo, all one-click):**
    - Tab 1: `http://localhost:5173/insights` signed in as **Course Coordinator**
    - Tab 2: a private window signed in as **Faculty Instructor** (Dr. Yugyung Lee), open on Insights
+   - Tab 3: `http://localhost:5173/commercialization` signed in as **Course Coordinator**. Have `docs/samples/sample_paper_bridge_cracks.pdf` ready to drag in. Leave **Use Claude** unticked.
 6. **Dry run once.** On Tab 1: What-If Simulator, tick the buyout box, pick Dr. Yugyung Lee, Run. Then Ask OptiSched, one prompt. This also warms the browser.
+   Then on Tab 3: drop the sample PDF once, answer "Yes" to the course-release question, and press **Simulate course buyout impact** (the first solve took about 20 s in testing; the baseline is cached after). Reload the page afterwards so the demo starts clean.
 7. **Do not restart the backend after step 6.** The baseline is cached in memory. A restart costs you 20 to 40 seconds of waiting on stage.
 8. Plug in the laptop. Turn off notifications. Zoom the browser to 110%.
 
@@ -155,7 +157,48 @@
 
 ---
 
-## Part 6: Privacy for Faculty (4:00 - 4:20)
+## Part 6: Faculty Commercialization Advisor (4:00 - 5:15)
+**On screen:** Tab 3, **Commercialization**, step 1.
+
+> "One more problem. Faculty write great papers, but turning one into a startup means a long invention form and a maze of conflict-of-interest rules.
+> So we added an advisor. Same rule: the model may *propose*, but code and quoted policy decide."
+
+**Drag in the sample PDF. Click Draft disclosure.**
+
+> "This is a made-up paper, labelled as such. In a second we get a draft of the real UMKC invention form.
+> Every proposed answer shows the exact sentence it came from. If a value cannot be found in the paper, it is dropped.
+> Eight proposed, five to confirm, thirteen left blank. The blanks are things only the author knows. We do not guess."
+
+**Point at the yellow flags:**
+
+> "It spotted a public talk on June 12. UMKC's guidance says that can start a patent clock. We show the date and say *confirm it*.
+> It also saw federal funding, which adds a reporting duty."
+
+**Click step 2. Answer Yes to students and course release.**
+
+> "Now five short questions, then a checklist. Every rule on this list is a *quote* from the University of Missouri or UMKC policy, with its source and version. Nothing is paraphrased."
+
+**Click Simulate course buyout impact.**
+
+> "And this connects to what we just built. A course release changes the schedule. The same solver checks it: one course moves to an adjunct, and it is proven optimal."
+
+**Back to step 2 policy box. Type:** `Who owns an invention I make using university resources?` Click **Search policies**.
+
+> "Ask a policy question and you get the passage, not an opinion. Ask something off topic, like pizza, and it refuses."
+
+**Click step 3, then Run prior-art and grant lookup. Remove the "bridge" pill first.**
+
+> "Step 3 suggests markets as *hypotheses to test*. The lookup sends only the broad terms on screen, which you can edit. Today it shows saved results, and says so. It is related work, never a verdict on novelty."
+
+**Click step 4, Download package.**
+
+> "Last, one zip: the draft form, the cited checklist, a market note, and a one-page summary. There is no portal to submit to, so it opens an email to the technology office."
+
+**Numbers:** sample paper: 8 proposed, 5 to confirm, 13 blank; public event 2026-06-12, filing window to about 2027-06-12; buyout: 1 course moves (ECE 380 to an adjunct), proven optimal; policy corpus 425 quoted passages from 7 sources; lookup 23 saved results retrieved 2026-11-02.
+
+---
+
+## Part 7: Privacy for Faculty (5:15 - 5:30)
 **On screen:** switch to **Tab 2** (Faculty, Dr. Yugyung Lee). Insights, What-If Simulator.
 
 > "Faculty see a smaller tool. They can only simulate *their own* buyout.
@@ -164,11 +207,12 @@
 
 ---
 
-## Part 7: Close and Honesty (4:20 - 4:45)
+## Part 8: Close and Honesty (5:30 - 5:50)
 **On screen:** the **Limitations slide** (`limitations_slide.pptx`).
 
 > "Here is what this is not.
 > The enrollment data is synthetic. The dataset is small. We never save what-if runs.
+> The commercialization draft is only tested on a made-up paper, and its wording needs review by the technology office before real use.
 > To make it real, we need registrar data and a real validation.
 >
 > What we *do* have: a forecast with honest uncertainty, a solver that enforces every hard constraint and tells you when a result is provably optimal, and a language model that is not allowed to decide.
@@ -185,14 +229,19 @@
 | First click is slow | You skipped the warm-up. Say nothing, run the solver while you explain the arithmetic. |
 | Page shows a red error | Check `http://localhost:8000/api/v1/health`. `degraded` means the database is out of date: restart with `REBUILD_STALE_DB=true`. |
 | Login fails | Use the one-click demo buttons, not typed passwords. |
+| Commercialization upload fails or hangs | Use "Or paste text instead" with the paper text. Same draft. |
+| Lookup is slow or empty | It is saved results by default. If live mode was switched on and fails, it falls back and says so. |
+| Buyout solve is slow on Tab 3 | You skipped the dry run. Read the policy citations while it solves. |
 | Backend died | Restart (step 1). Skip to Part 5, it still works in rule-based mode. |
 | No internet | Claude is skipped automatically. Say so, and show the rule-based result. |
 
 ## Cut List (if you have less time)
 
-- 3:30: drop Part 6 (faculty) and the "re-optimize" sentence.
+- 4:30: drop Part 6 (commercialization) entirely.
+- 3:30: also drop Part 7 (faculty privacy) and the "re-optimize" sentence.
 - 3:00: also drop the Claude "a fifth" moment and the bottleneck seat table.
 - 2:00: Parts 1, 3, 5 only (problem, bottlenecks, one copilot run), then the limitations slide.
+- Shorter commercialization (about 0:45): upload, point at one evidence quote and the yellow flags, show the cited checklist, download the zip. Skip policy box and lookup.
 
 ---
 
@@ -212,7 +261,15 @@
 
 **Is faculty data private?** Faculty can only simulate their own buyout, and other instructors are shown as "Colleague".
 
-**What did you not build?** The faculty commercialization advisor from the original plan, and real registrar integration.
+**What did you not build?** Real registrar integration, a reviewer screen for the technology office, and patent search.
+
+**Does the advisor decide if something is patentable or allowed?** No. It never gives a novelty or patentability verdict and never says a conflict is permitted. It shows quoted policy and tells the author what to ask the office.
+
+**Where does the paper go?** It is read in memory and not saved. By default the text stays on our server. Only if you tick the Claude box is it sent to Anthropic's API, and the page says so. Zero data retention would be an account agreement, which we have not set up.
+
+**Why not search patents?** We found no patent source we could verify without a key, so we do not claim one. Papers come from OpenAlex and grants from NIH RePORTER, as saved results by default and live only if switched on.
+
+**Can it submit to the technology office?** There is no online portal. It builds a zip and opens an email.
 
 ---
 
@@ -231,6 +288,7 @@
 | Buyout, re-optimize | about 9 to 10 courses move |
 | CS +20% and Rao adjunct | 8 courses move, satisfaction 97.0% to 90.5% |
 | Copilot eval | 30 prompts, 30/30 rules, 30/30 Claude |
-| Tests | backend 150, frontend 132, all passing |
+| Commercialization | policy corpus 425 passages, 26 form fields (9 extract, 7 extract and verify, 10 human only), 9 industries |
+| Tests | re-run both suites before the event; the counts above were from before the commercialization work |
 
 Numbers can shift slightly if the seed data or solver version changes. Re-run the dry run (step 6) before the event.
