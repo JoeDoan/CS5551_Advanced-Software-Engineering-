@@ -1,0 +1,147 @@
+{
+  "note": "Curated starting points, not market research. NAICS 2022 codes from census.gov/naics. Pain points are hypotheses to test in customer-discovery interviews. SBIR/STTR entries name the participating agencies; check sbir.gov for currently open topics.",
+  "naics_source": "https://www.census.gov/naics/",
+  "sbir_topics_url": "https://www.sbir.gov/topics",
+  "industries": [
+    {
+      "id": "infrastructure-monitoring",
+      "name": "Infrastructure inspection and monitoring",
+      "keywords": ["bridge", "infrastructure", "crack", "structural", "inspection", "corrosion", "pavement", "concrete", "steel", "civil", "sensor network", "monitoring"],
+      "naics": [
+        {"code": "237310", "title": "Highway, Street, and Bridge Construction"},
+        {"code": "541330", "title": "Engineering Services"},
+        {"code": "334519", "title": "Other Measuring and Controlling Device Manufacturing"}
+      ],
+      "pain_points": [
+        "Manual inspection is slow, costly and often needs lane or facility closures.",
+        "Owners must show condition data to regulators but have few continuous measurements."
+      ],
+      "buyer_types": ["State and municipal transportation departments", "Engineering consultancies", "Infrastructure asset owners"],
+      "sbir_agencies": ["NSF", "DOT", "DOE"]
+    },
+    {
+      "id": "industrial-sensing",
+      "name": "Industrial sensing and process control",
+      "keywords": ["sensor", "sensing", "acoustic", "ultrasonic", "vibration", "measurement", "instrumentation", "signal", "detection", "calibration", "internet of things", "iot"],
+      "naics": [
+        {"code": "334513", "title": "Instruments and Related Products Manufacturing for Measuring, Displaying, and Controlling Industrial Process Variables"},
+        {"code": "334519", "title": "Other Measuring and Controlling Device Manufacturing"}
+      ],
+      "pain_points": [
+        "Plants need cheaper sensors that can be deployed at scale without downtime.",
+        "Raw sensor data is hard to turn into maintenance decisions."
+      ],
+      "buyer_types": ["Instrument makers", "Plant operators", "Maintenance service firms"],
+      "sbir_agencies": ["NSF", "DOE", "DoD", "NASA"]
+    },
+    {
+      "id": "software-ai",
+      "name": "Software and applied machine learning",
+      "keywords": ["machine learning", "neural", "deep learning", "algorithm", "classification", "prediction", "forecast", "optimization", "scheduling", "software", "data mining", "language model", "analytics"],
+      "naics": [
+        {"code": "541511", "title": "Custom Computer Programming Services"},
+        {"code": "541512", "title": "Computer Systems Design Services"},
+        {"code": "518210", "title": "Data Processing, Hosting, and Related Services"}
+      ],
+      "pain_points": [
+        "Teams have data but lack models they can validate and trust.",
+        "Planning and scheduling is still done by hand in spreadsheets."
+      ],
+      "buyer_types": ["Enterprise software vendors", "Systems integrators", "Operations teams in large organizations"],
+      "sbir_agencies": ["NSF", "DoD", "DOE", "NIH"]
+    },
+    {
+      "id": "cybersecurity",
+      "name": "Cybersecurity and trusted systems",
+      "keywords": ["security", "cyber", "encryption", "privacy", "attack", "malware", "authentication", "intrusion", "blockchain", "trust", "adversarial"],
+      "naics": [
+        {"code": "541512", "title": "Computer Systems Design Services"},
+        {"code": "541519", "title": "Other Computer Related Services"},
+        {"code": "561621", "title": "Security Systems Services (except Locksmiths)"}
+      ],
+      "pain_points": [
+        "Defenders face more alerts than they can triage.",
+        "Compliance requirements outpace in-house expertise."
+      ],
+      "buyer_types": ["Managed security providers", "Government agencies", "Regulated enterprises"],
+      "sbir_agencies": ["DoD", "DHS", "NSF"]
+    },
+    {
+      "id": "biomedical-devices",
+      "name": "Medical devices and diagnostics",
+      "keywords": ["diagnostic", "medical", "clinical", "patient", "biosensor", "implant", "imaging", "wearable", "surgical", "point of care", "disease", "therapy"],
+      "naics": [
+        {"code": "339112", "title": "Surgical and Medical Instrument Manufacturing"},
+        {"code": "621511", "title": "Medical Laboratories"},
+        {"code": "541715", "title": "Research and Development in the Physical, Engineering, and Life Sciences (except Nanotechnology and Biotechnology)"}
+      ],
+      "pain_points": [
+        "Diagnosis often needs a lab visit and days of waiting.",
+        "Devices must show clinical evidence before hospitals will buy."
+      ],
+      "buyer_types": ["Device manufacturers", "Hospital systems", "Diagnostic laboratories"],
+      "sbir_agencies": ["NIH", "NSF", "DoD"]
+    },
+    {
+      "id": "biotech-pharma",
+      "name": "Biotechnology and drug discovery",
+      "keywords": ["drug", "pharmaceutical", "molecule", "compound", "protein", "gene", "genomic", "cell", "assay", "antibody", "vaccine", "biomarker", "peptide"],
+      "naics": [
+        {"code": "325412", "title": "Pharmaceutical Preparation Manufacturing"},
+        {"code": "541714", "title": "Research and Development in Biotechnology (except Nanobiotechnology)"}
+      ],
+      "pain_points": [
+        "Early discovery is expensive and most candidates fail.",
+        "Companies license in assets to refill thin pipelines."
+      ],
+      "buyer_types": ["Pharmaceutical and biotech companies", "Contract research organizations"],
+      "sbir_agencies": ["NIH", "NSF", "DoD"]
+    },
+    {
+      "id": "energy-storage",
+      "name": "Energy generation and storage",
+      "keywords": ["battery", "solar", "photovoltaic", "energy storage", "grid", "fuel cell", "electrode", "renewable", "power electronics", "lithium", "hydrogen"],
+      "naics": [
+        {"code": "335910", "title": "Battery Manufacturing"},
+        {"code": "221114", "title": "Solar Electric Power Generation"},
+        {"code": "541715", "title": "Research and Development in the Physical, Engineering, and Life Sciences (except Nanotechnology and Biotechnology)"}
+      ],
+      "pain_points": [
+        "Storage cost and lifetime limit adoption of renewables.",
+        "Grid operators need better forecasting and control."
+      ],
+      "buyer_types": ["Battery and cell makers", "Utilities", "Energy developers"],
+      "sbir_agencies": ["DOE", "NSF", "DoD", "NASA"]
+    },
+    {
+      "id": "semiconductors-photonics",
+      "name": "Semiconductors, materials and photonics",
+      "keywords": ["semiconductor", "photonic", "laser", "optical", "thin film", "nanomaterial", "nanoparticle", "coating", "polymer", "alloy", "fabrication", "lithography"],
+      "naics": [
+        {"code": "334413", "title": "Semiconductor and Related Device Manufacturing"},
+        {"code": "541715", "title": "Research and Development in the Physical, Engineering, and Life Sciences (except Nanotechnology and Biotechnology)"}
+      ],
+      "pain_points": [
+        "Fabrication yield and cost limit new device designs.",
+        "Buyers want drop-in materials that fit existing production lines."
+      ],
+      "buyer_types": ["Device and component makers", "Materials suppliers", "Defense primes"],
+      "sbir_agencies": ["NSF", "DoD", "DOE", "NASA"]
+    },
+    {
+      "id": "agriculture-environment",
+      "name": "Agriculture and environmental technology",
+      "keywords": ["crop", "soil", "agriculture", "water quality", "pesticide", "livestock", "remote sensing", "pollution", "wastewater", "climate", "ecosystem"],
+      "naics": [
+        {"code": "541690", "title": "Other Scientific and Technical Consulting Services"},
+        {"code": "541715", "title": "Research and Development in the Physical, Engineering, and Life Sciences (except Nanotechnology and Biotechnology)"}
+      ],
+      "pain_points": [
+        "Producers lack low-cost, timely measurements of field and water conditions.",
+        "Regulatory reporting requires data that is expensive to collect."
+      ],
+      "buyer_types": ["Agricultural input suppliers", "Water utilities", "Environmental consultancies"],
+      "sbir_agencies": ["USDA", "NSF", "DOE"]
+    }
+  ]
+}

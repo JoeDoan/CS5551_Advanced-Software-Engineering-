@@ -1,0 +1,46 @@
+{
+  "form": "Invention Disclosure Form (UM-16C), Curators of the University of Missouri",
+  "source_url": "https://ori.umkc.edu/facilities-compliance-and-commercialization/commercialization/process/process-docs/invention-disclosure-form-um-16c-final.docx",
+  "template_file": "docs/policies/invention-disclosure-form-um-16c-final.docx",
+  "returns_to": "Office of Technology Commercialization, UMKC, 801 E. 51st St., Flarsheim Hall 574, Kansas City, MO 64110 (ericwa@umkc.edu)",
+  "fill_modes": {
+    "extract": "The drafter can propose this from the manuscript or proposal text. The author reads it before submitting.",
+    "extract_verify": "The drafter proposes a value only when the document states it plainly. The author must confirm it.",
+    "human": "The document cannot answer this. The drafter leaves it blank and flags it."
+  },
+  "fields": [
+    {"id": "A1_title", "section": "A.1", "label": "Non-confidential title of invention", "type": "text", "fill": "extract", "note": "Brief; no confidential information, acronyms or trademarks."},
+    {"id": "A1_general", "section": "A.1.a", "label": "General description of the invention", "type": "text", "fill": "extract"},
+    {"id": "A1_technical", "section": "A.1.b", "label": "Technical description and advantages over existing methods", "type": "text", "fill": "extract"},
+    {"id": "A1_novel", "section": "A.1.c", "label": "The novel aspects of the invention", "type": "text", "fill": "extract"},
+    {"id": "A1_problem", "section": "A.1.d", "label": "The problem this invention solves", "type": "text", "fill": "extract"},
+    {"id": "A1_different", "section": "A.1.e", "label": "How the invention differs from what others are doing", "type": "text", "fill": "extract"},
+    {"id": "A1_limits", "section": "A.1.f", "label": "Disadvantages and limitations", "type": "text", "fill": "extract"},
+    {"id": "A1_keywords", "section": "A.1", "label": "Keywords associated with this invention", "type": "text", "fill": "extract"},
+
+    {"id": "A2_conceived", "section": "A.2", "label": "When was the invention conceived? (date, comments)", "type": "date+text", "fill": "human"},
+    {"id": "A2_first_written", "section": "A.2", "label": "First written description (date, comments)", "type": "date+text", "fill": "extract_verify", "note": "A manuscript or proposal date may stand in for this."},
+    {"id": "A2_first_public", "section": "A.2", "label": "First public disclosure (date, comments)", "type": "date+text", "fill": "extract_verify", "note": "Drives the one-year U.S. patent window; a wrong date is costly, so the author confirms it."},
+    {"id": "A2_prototype", "section": "A.2", "label": "First model or prototype (date, comments)", "type": "date+text", "fill": "human"},
+    {"id": "A2_offer_to_sell", "section": "A.2", "label": "First offer to sell the invention (date, comments)", "type": "date+text", "fill": "human"},
+    {"id": "A2_export_control", "section": "A.2", "label": "Export control plan or controlled unclassified information (CUI)?", "type": "yes_no+text", "fill": "human"},
+
+    {"id": "A3_disclosures", "section": "A.3", "label": "Past and future public disclosures: description/type, date or expected date, comments", "type": "table", "fill": "extract_verify", "note": "Prior publications and talks cited in the manuscript can be listed as candidates."},
+
+    {"id": "B1_no_funding", "section": "B.1", "label": "I confirm there was no external funding support", "type": "checkbox", "fill": "human"},
+    {"id": "B1_types", "section": "B.1", "label": "Funding types: Federal, State, Corporate/Industry, Foundation, Research Consortium, SBIR/STTR, Other", "type": "checkbox_group", "fill": "extract_verify", "note": "Acknowledgment sections often name funders."},
+    {"id": "B1_details", "section": "B.1", "label": "Funding details: source name, grant/contract/award number, MoCode, principal investigator", "type": "table", "fill": "extract_verify", "note": "MoCode is internal to the university and is never in a manuscript, so it stays human-only. Federal funding triggers a required report to the agency."},
+
+    {"id": "B2_third_party_used", "section": "B.2", "label": "Were materials, data, technology or collaborations from a third party used?", "type": "yes_no", "fill": "human"},
+    {"id": "B2_agreements_signed", "section": "B.2", "label": "Were there signed agreements governing the transfers or collaborations?", "type": "yes_no", "fill": "human"},
+    {"id": "B2_agreements", "section": "B.2", "label": "Agreement types (NDA, collaboration, research, consortia, inter-institutional, consulting, MOU, other) and the other parties", "type": "table", "fill": "human"},
+
+    {"id": "C1_inventors", "section": "C.1", "label": "Potential inventors: name, employer/division/department at time of invention, current employer, email and phone, why each qualifies as an inventor", "type": "table", "fill": "extract_verify", "note": "Authors can seed the list. Inventorship is a legal question about who conceived the claims, not who authored the paper, so the author decides who is listed and why."},
+
+    {"id": "D1_competition", "section": "D.1", "label": "Closest known products or technologies", "type": "text", "fill": "extract"},
+    {"id": "D1_prior_art", "section": "D.1", "label": "Prior art: publications or patents describing something similar", "type": "text", "fill": "extract_verify", "note": "Only references the manuscript itself cites. No search is run."},
+    {"id": "D2_licensees", "section": "D.2", "label": "Potential licensees: company name, contact name, contact email", "type": "table", "fill": "human", "note": "The industry matcher may suggest company types, not named contacts."},
+
+    {"id": "E_submitter", "section": "E", "label": "Submitter's name, date and signature, with certification that the information is true, accurate and complete", "type": "signature", "fill": "human", "note": "Never completed by the tool."}
+  ]
+}

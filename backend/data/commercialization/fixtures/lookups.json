@@ -1,0 +1,827 @@
+{
+ "retrieved": "2026-11-02",
+ "topics": {
+  "bridge inspection": [
+   {
+    "kind": "literature",
+    "title": "Drone-enabled bridge inspection methodology and application",
+    "year": 2018,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1016/j.autcon.2018.06.006",
+    "detail": "Cited 380 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Robot-Assisted Bridge Inspection",
+    "year": 2011,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1007/s10846-010-9514-8",
+    "detail": "Cited 105 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Bridge inspection robot system with machine vision",
+    "year": 2009,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1016/j.autcon.2009.04.003",
+    "detail": "Cited 258 times"
+   },
+   {
+    "kind": "literature",
+    "title": "RELIABILITY OF VISUAL BRIDGE INSPECTION",
+    "year": 2001,
+    "source": "OpenAlex",
+    "url": "https://openalex.org/W618059975",
+    "detail": "Cited 88 times"
+   },
+   {
+    "kind": "literature",
+    "title": "A Climbing Robot for Steel Bridge Inspection",
+    "year": 2021,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1007/s10846-020-01266-1",
+    "detail": "Cited 115 times"
+   }
+  ],
+  "structural health monitoring": [
+   {
+    "kind": "literature",
+    "title": "Structural Health Monitoring",
+    "year": 2012,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1002/9781118443118",
+    "detail": "Cited 1029 times"
+   },
+   {
+    "kind": "literature",
+    "title": "An introduction to structural health monitoring",
+    "year": 2006,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1098/rsta.2006.1928",
+    "detail": "Cited 2753 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Encyclopedia of Structural Health Monitoring",
+    "year": 2009,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1002/9780470061626",
+    "detail": "Cited 785 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Structural Health Monitoring",
+    "year": 2006,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1002/9780470612071",
+    "detail": "Cited 481 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Structural health monitoring of civil infrastructure",
+    "year": 2006,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1098/rsta.2006.1925",
+    "detail": "Cited 1004 times"
+   },
+   {
+    "kind": "award",
+    "title": "Organizational factors associated with quality of care for opioid use disorders among transition-age adults in Medicaid",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11308231",
+    "detail": "NEW YORK UNIVERSITY SCHOOL OF MEDICINE, $696,133"
+   },
+   {
+    "kind": "award",
+    "title": "Shared Resource Management",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11317056",
+    "detail": "UNIVERSITY OF COLORADO DENVER, $1,383,018"
+   },
+   {
+    "kind": "award",
+    "title": "Development of a Label-Free Optical Probe for In Situ Quantification of Cervical Remodeling in Pregnancy",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11345108",
+    "detail": "FLORIDA INTERNATIONAL UNIVERSITY, $327,769"
+   },
+   {
+    "kind": "award",
+    "title": "Partners IN CONTROL: Using Remote MonitorINg teChnology with cOmmuNity healTh woRkers to support hypertensiOn management patients at Federally QuaLified Health Centers",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11261619",
+    "detail": "NEW YORK UNIVERSITY SCHOOL OF MEDICINE, $624,956"
+   },
+   {
+    "kind": "award",
+    "title": "Neurobehavioral Mechanisms of Social Behavior and Familial Structure",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11211008",
+    "detail": "NEW YORK UNIVERSITY SCHOOL OF MEDICINE, $1,240,576"
+   }
+  ],
+  "acoustic sensing": [
+   {
+    "kind": "literature",
+    "title": "On the sensitivity of distributed acoustic sensing",
+    "year": 2016,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1364/ol.41.005648",
+    "detail": "Cited 185 times"
+   },
+   {
+    "kind": "literature",
+    "title": "The Acoustic Sense of Animals",
+    "year": 1983,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.4159/harvard.9780674436220",
+    "detail": "Cited 49 times"
+   },
+   {
+    "kind": "literature",
+    "title": "A Comprehensive Study of Optical Fiber Acoustic Sensing",
+    "year": 2019,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1109/access.2019.2924736",
+    "detail": "Cited 160 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Research Progress in Distributed Acoustic Sensing Techniques",
+    "year": 2022,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.3390/s22166060",
+    "detail": "Cited 139 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Distributed acoustic sensing for reservoir monitoring with vertical seismic profiling",
+    "year": 2014,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1111/1365-2478.12116",
+    "detail": "Cited 494 times"
+   },
+   {
+    "kind": "award",
+    "title": "Velocity/Pressure Dual-Sensing Probe for Acoustic Measurements in the Human Ear Canal",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11344060",
+    "detail": "STATE UNIVERSITY OF NY,BINGHAMTON, $386,911"
+   },
+   {
+    "kind": "award",
+    "title": "COCHLEAR SIGNALING MEDIATED BY HENSEN’S CELLS",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11278132",
+    "detail": "UNIVERSITY OF KENTUCKY, $438,859"
+   },
+   {
+    "kind": "award",
+    "title": "Bilateral Acoustic Sensing and Automated Breathing Segmentation for Remote Monitoring of Patients with COPD: A Longitudinal Study",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11402697",
+    "detail": "LASARRUS CLINIC AND RESEARCH CENTER, INC., $887,583"
+   },
+   {
+    "kind": "award",
+    "title": "Advancing telemedicine in pulmonology: acoustic-waveform respiratory evaluation (AWARE) via sensing and machine learning on smartphones",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11370550",
+    "detail": "INDIANA UNIVERSITY INDIANAPOLIS, $602,173"
+   },
+   {
+    "kind": "award",
+    "title": "Bilateral Acoustic Sensing and Automated Breathing Segmentation for Remote Monitoring of Patients with COPD: A Longitudinal Study",
+    "year": 2025,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11196388",
+    "detail": "LASARRUS CLINIC AND RESEARCH CENTER, INC., $926,715"
+   }
+  ],
+  "machine learning": [
+   {
+    "kind": "literature",
+    "title": "Machine Learning",
+    "year": 2021,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1007/978-981-15-1967-3",
+    "detail": "Cited 828 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Machine Learning",
+    "year": 2012,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1017/cbo9780511973000",
+    "detail": "Cited 752 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Quantum machine learning",
+    "year": 2017,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1038/nature23474",
+    "detail": "Cited 4787 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Understanding Machine Learning",
+    "year": 2014,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1017/cbo9781107298019",
+    "detail": "Cited 3108 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Introduction to Machine Learning",
+    "year": 2019,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1142/9789811201967_0001",
+    "detail": "Cited 1638 times"
+   },
+   {
+    "kind": "award",
+    "title": "Combining Machine Learning Methods and Scalable In Vivo Biomarkers for the Early and Accurate Detection of Alzheimer's Disease in Veterans",
+    "year": 2027,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11251156",
+    "detail": "VA BOSTON HEALTH CARE SYSTEM"
+   },
+   {
+    "kind": "award",
+    "title": "Designing Personalized Formulations with Machine Learning",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11333736",
+    "detail": "DUKE UNIVERSITY, $402,500"
+   },
+   {
+    "kind": "award",
+    "title": "Machine Learning for Ventricular Arrhythmias",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11536472",
+    "detail": "STANFORD UNIVERSITY, $108,265"
+   },
+   {
+    "kind": "award",
+    "title": "Machine Learning for Ventricular Arrhythmias",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11402708",
+    "detail": "STANFORD UNIVERSITY, $479,534"
+   },
+   {
+    "kind": "award",
+    "title": "Machine learning to personalize antidepressant treatment",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11403758",
+    "detail": "KAISER FOUNDATION RESEARCH INSTITUTE, $765,573"
+   }
+  ],
+  "cybersecurity": [
+   {
+    "kind": "literature",
+    "title": "Cybersecurity and Cyberwar",
+    "year": 2014,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1093/wentk/9780199918096.001.0001",
+    "detail": "Cited 519 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Defining Cybersecurity",
+    "year": 2014,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.22215/timreview/835",
+    "detail": "Cited 436 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Cybersecurity Risk",
+    "year": 2022,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1093/rfs/hhac024",
+    "detail": "Cited 295 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Investigating the impact of cybersecurity policy awareness on employees’ cybersecurity behavior",
+    "year": 2018,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1016/j.ijinfomgt.2018.10.017",
+    "detail": "Cited 331 times"
+   },
+   {
+    "kind": "literature",
+    "title": "The role of national cybersecurity strategies on the improvement of cybersecurity education",
+    "year": 2022,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1016/j.cose.2022.102754",
+    "detail": "Cited 161 times"
+   },
+   {
+    "kind": "award",
+    "title": "NHLBI CYBERSECURITY RISK MANAGEMENT FRAMEWORK SERVICES",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11647602",
+    "detail": "$913,699"
+   },
+   {
+    "kind": "award",
+    "title": "TASK ORDER: SCIENTIFIC OVERSIGHT AND COHORT MANAGEMENT: CLIN1: SCIENTIFIC OVERSIGHT AND COHORT MANAGEMENT CLIN2: DATA WAREHOUSING AND SECURITY SEVERABLE SERVICES",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11664316",
+    "detail": "SOCIAL AND SCIENTIFIC SYSTEMS,  INC., $950,392"
+   },
+   {
+    "kind": "award",
+    "title": "Core B: Functional Annotation Core",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11397854",
+    "detail": "UNIVERSITY OF SOUTHERN CALIFORNIA, $324,367"
+   },
+   {
+    "kind": "award",
+    "title": "NeuroTech Harbor: Optimizer #20387",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11539083",
+    "detail": "JOHNS HOPKINS UNIVERSITY, $1,279,205"
+   },
+   {
+    "kind": "award",
+    "title": "Database and Statistical Core",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11349220",
+    "detail": "NEW YORK STATE PSYCHIATRIC INSTITUTE DBA RESEARCH FOUNDATION FOR MENTAL HYGIENE, INC, $235,352"
+   }
+  ],
+  "medical device": [
+   {
+    "kind": "literature",
+    "title": "Candida Infections of Medical Devices",
+    "year": 2004,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1128/cmr.17.2.255-267.2004",
+    "detail": "Cited 1055 times"
+   },
+   {
+    "kind": "literature",
+    "title": "ISO 14971: medical devices - application of risk management to medical devices",
+    "year": 2018,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1049/pbhe012e_ch6",
+    "detail": "Cited 297 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Medical devices: US medical device regulation",
+    "year": 2014,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1016/j.urolonc.2014.10.004",
+    "detail": "Cited 85 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Handbook of Materials for Medical Devices",
+    "year": 2003,
+    "source": "OpenAlex",
+    "url": "https://openalex.org/W384715309",
+    "detail": "Cited 440 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Encyclopedia of Medical Devices and Instrumentation",
+    "year": 2005,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1002/0471732877",
+    "detail": "Cited 481 times"
+   },
+   {
+    "kind": "award",
+    "title": "Medical Device Identifier to Improve Emergency Triage",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11409317",
+    "detail": "BRIDGESOURCE MEDICAL CORPORATION, $1,511,003"
+   },
+   {
+    "kind": "award",
+    "title": "Medical Device Design and Innovation; Orthopaedic Implant Failure Analysis and Redesign",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11260219",
+    "detail": "YALE UNIVERSITY, $41,294"
+   },
+   {
+    "kind": "award",
+    "title": "Developing a wearable medical device to detect opioid overdose",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11579934",
+    "detail": "RESILIENT LIFESCIENCE, INC., $1,018,701"
+   },
+   {
+    "kind": "award",
+    "title": "EMED: An Ethical Mixture-of-Experts Digital Twin Framework for Medical Device Surveillance",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11596786",
+    "detail": "UNIVERSITY OF TEXAS HLTH SCI CTR HOUSTON, $1,999,996"
+   },
+   {
+    "kind": "award",
+    "title": "Driving community-centered medical device innovation via a longitudinal interdisciplinary immersion program",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11140971",
+    "detail": "UNIVERSITY OF MASSACHUSETTS LOWELL, $39,719"
+   }
+  ],
+  "battery storage": [
+   {
+    "kind": "literature",
+    "title": "Lithium-Ion Battery Storage for the Grid—A Review of Stationary Battery Storage System Design Tailored for Applications in Modern Power Grids",
+    "year": 2017,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.3390/en10122107",
+    "detail": "Cited 780 times"
+   },
+   {
+    "kind": "literature",
+    "title": "The emergence of cost effective battery storage",
+    "year": 2019,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1038/s41467-019-09988-z",
+    "detail": "Cited 241 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Cost Projections for Utility-Scale Battery Storage",
+    "year": 2019,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.2172/1529218",
+    "detail": "Cited 291 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Battery storage systems in electric power systems",
+    "year": 2006,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1109/pes.2006.1709235",
+    "detail": "Cited 136 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Optimal battery storage operation for PV systems with tariff incentives",
+    "year": 2017,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1016/j.apenergy.2017.06.043",
+    "detail": "Cited 270 times"
+   },
+   {
+    "kind": "award",
+    "title": "Bearingless flux reversal motor for neonatal and pediatric extracorporeal life support applications",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11261620",
+    "detail": "ENSION, INC., $1,025,048"
+   },
+   {
+    "kind": "award",
+    "title": "The iD2:  A Smart Eye Drop Cap Monitor for Eye Drop Adherence",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11365143",
+    "detail": "UNIVERSAL ADHERENCE, LLC, $927,707"
+   },
+   {
+    "kind": "award",
+    "title": "PRAISE (Pressure Relief Assessment Information System): A Paradigm-shifting Mobile Health Platform for Pressure Relief Adherence in Manual Wheelchair Users",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11303935",
+    "detail": "UNIVERSITY OF CENTRAL OKLAHOMA, $381,392"
+   },
+   {
+    "kind": "award",
+    "title": "DiSCERN: Advanced PD Therapy Candidacy and Evaluation System",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11405932",
+    "detail": "GREAT LAKES NEUROTECHNOLOGIES, $949,447"
+   },
+   {
+    "kind": "award",
+    "title": "Bearingless flux reversal motor for neonatal and pediatric extracorporeal life support applications",
+    "year": 2025,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11069156",
+    "detail": "ENSION, INC., $870,467"
+   }
+  ],
+  "drug discovery": [
+   {
+    "kind": "literature",
+    "title": "Automating drug discovery",
+    "year": 2017,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1038/nrd.2017.232",
+    "detail": "Cited 909 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Natural Products for Drug Discovery in the 21st Century: Innovations for Novel Drug Discovery",
+    "year": 2018,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.3390/ijms19061578",
+    "detail": "Cited 1246 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Drug Discovery",
+    "year": 2005,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1002/0470015535",
+    "detail": "Cited 433 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Principles of early drug discovery",
+    "year": 2010,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1111/j.1476-5381.2010.01127.x",
+    "detail": "Cited 2860 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Computational drug discovery",
+    "year": 2012,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1038/aps.2012.109",
+    "detail": "Cited 352 times"
+   },
+   {
+    "kind": "award",
+    "title": "Purdue Drug Discovery Training Program",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11345095",
+    "detail": "PURDUE UNIVERSITY, $271,836"
+   },
+   {
+    "kind": "award",
+    "title": "THE NON-GMP SYNTHESIS OF COMPOUNDS FOR DRUG DISCOVERY",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11687259",
+    "detail": "ALCHEM LABORATORIES CORPORATION, $600,000"
+   },
+   {
+    "kind": "award",
+    "title": "Discovery-Driven Mathematics and Artificial Intelligence for Biosciences and Drug Discovery",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11577889",
+    "detail": "UNIVERSITY OF GEORGIA, $373,619"
+   },
+   {
+    "kind": "award",
+    "title": "UNMC Training Program in Alzheimer’s Disease and Related Dementias Drug Discovery",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11399145",
+    "detail": "UNIVERSITY OF NEBRASKA MEDICAL CENTER, $262,769"
+   },
+   {
+    "kind": "award",
+    "title": "Drug Discovery, Delivery and Experimental Therapeutics Program",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11416307",
+    "detail": "UNIVERSITY OF KANSAS MEDICAL CENTER, $74,126"
+   }
+  ],
+  "crop monitoring": [
+   {
+    "kind": "literature",
+    "title": "Agrometeorological crop monitoring and forecasting",
+    "year": 1979,
+    "source": "OpenAlex",
+    "url": "https://openalex.org/W1546618169",
+    "detail": "Cited 182 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Challenges and opportunities in remote sensing-based crop monitoring: a review",
+    "year": 2022,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1093/nsr/nwac290",
+    "detail": "Cited 347 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Crop monitoring by multimodal remote sensing: A review",
+    "year": 2023,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1016/j.rsase.2023.101093",
+    "detail": "Cited 127 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Agricultural crop monitoring using IOT - a study",
+    "year": 2017,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1109/isco.2017.7855968",
+    "detail": "Cited 156 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Crop monitoring in Sweden",
+    "year": 1990,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1080/01431169008955033",
+    "detail": "Cited 12 times"
+   }
+  ],
+  "photonics": [
+   {
+    "kind": "literature",
+    "title": "Microwave Photonics",
+    "year": 2009,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1002/9781394205318",
+    "detail": "Cited 2876 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Topological photonics",
+    "year": 2019,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1103/revmodphys.91.015006",
+    "detail": "Cited 3730 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Silicon Photonics",
+    "year": 2006,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1109/jlt.2006.885782",
+    "detail": "Cited 1423 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Topological photonics",
+    "year": 2014,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1038/nphoton.2014.248",
+    "detail": "Cited 3659 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Chalcogenide photonics",
+    "year": 2011,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1038/nphoton.2011.309",
+    "detail": "Cited 1576 times"
+   },
+   {
+    "kind": "award",
+    "title": "Photonics-based Fluorescence Imaging for Research, Diagnostics, and Pathology",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11264868",
+    "detail": "UNIVERSITY OF MARYLAND BALTIMORE, $386,250"
+   },
+   {
+    "kind": "award",
+    "title": "2026 Optics and Photonics in Medicine and Biology Gordon Research Conference and Gordon Research Seminar",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11392654",
+    "detail": "GORDON RESEARCH CONFERENCES, $10,000"
+   },
+   {
+    "kind": "award",
+    "title": "Developing Photoenzymes for Selective Chemical Synthesis",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11259880",
+    "detail": "PRINCETON UNIVERSITY, $165,366"
+   },
+   {
+    "kind": "award",
+    "title": "Optical microcavities for label-free single-molecule analysis of biomolecules",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11267344",
+    "detail": "UNIVERSITY OF WISCONSIN-MADISON, $2,196,715"
+   },
+   {
+    "kind": "award",
+    "title": "Low-cost robust compact 900 nm femtosecond laser source for two-photon microscopy",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11407296",
+    "detail": "NP PHOTONICS, INC., $306,873"
+   }
+  ],
+  "process control": [
+   {
+    "kind": "literature",
+    "title": "Process Control",
+    "year": 1995,
+    "source": "OpenAlex",
+    "url": "https://openalex.org/W2947369839",
+    "detail": "Cited 570 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Robust process control",
+    "year": 1988,
+    "source": "OpenAlex",
+    "url": "https://openalex.org/W1604822211",
+    "detail": "Cited 2743 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Robust process control.",
+    "year": 1990,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1016/0009-2509(90)85041-b",
+    "detail": "Cited 3216 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Statistical Process Control",
+    "year": 2012,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.4324/9780080474458",
+    "detail": "Cited 528 times"
+   },
+   {
+    "kind": "literature",
+    "title": "Integrating Statistical Process Control and Engineering Process Control",
+    "year": 1994,
+    "source": "OpenAlex",
+    "url": "https://doi.org/10.1080/00224065.1994.11979508",
+    "detail": "Cited 201 times"
+   },
+   {
+    "kind": "award",
+    "title": "Testing a Dual-Process Mechanistic Model Linking Food Insecurity and Loss-of-Control Eating",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11371398",
+    "detail": "UNIVERSITY OF NEVADA LAS VEGAS, $146,890"
+   },
+   {
+    "kind": "award",
+    "title": "Elucidating the Molecular Determinants of Functional Specificity in Intrinsically Disordered Proteins",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11260573",
+    "detail": "UNIV OF NORTH CAROLINA CHAPEL HILL, $413,946"
+   },
+   {
+    "kind": "award",
+    "title": "TASK ORDER 4A SITE STUDY SETUP: CTSU IDIQ",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11569994",
+    "detail": "WESTAT, INC., $1,600,000"
+   },
+   {
+    "kind": "award",
+    "title": "Understanding the Neural Mechanisms Controlling Brain-wide Dynamics",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11249208",
+    "detail": "PRINCETON UNIVERSITY, $328,154"
+   },
+   {
+    "kind": "award",
+    "title": "Neural mechanisms of multiregional communication during coordinated visual behavior",
+    "year": 2026,
+    "source": "NIH RePORTER",
+    "url": "https://reporter.nih.gov/project-details/11249932",
+    "detail": "UNIVERSITY OF PENNSYLVANIA, $603,053"
+   }
+  ]
+ }
+}
