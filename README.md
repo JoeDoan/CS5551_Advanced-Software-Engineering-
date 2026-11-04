@@ -1,46 +1,68 @@
-# UMKC Course Timetable Scheduler
-### CS 5551 — Advanced Software Engineering | School of Science & Engineering (SSE)
-**University of Missouri–Kansas City (UMKC)**
+# OptiSched: Uncertainty-Aware Academic Scheduling & Faculty Operations Platform
+### CS 5551 - Advanced Software Engineering & Hack-A-Roo 2026 | School of Science & Engineering (SSE)
+**University of Missouri-Kansas City (UMKC)** · **Faculty Advisor: Prof. Yugyung Lee**
 
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![OR-Tools CP-SAT](https://img.shields.io/badge/solver-Google%20OR--Tools%20CP--SAT-red.svg)](https://developers.google.com/optimization/cp/cp_solver)
-[![Automated Tests](https://img.shields.io/badge/tests-25%2F25%20passed-brightgreen.svg)]()
-[![Dataset Scale](https://img.shields.io/badge/scale-20%20Faculty%20%7C%2040%20Courses%20%7C%206%20Semesters-orange.svg)]()
+[![UIUC FOIA Dataset](https://img.shields.io/badge/data-10--Yr%20UIUC%20FOIA%20(800%20Course--Terms)-0d9488.svg)]()
+[![Conformal Coverage](https://img.shields.io/badge/Spring%202026%20Holdout-97.5%25%20(95%25%20PI)%20%7C%20-84.6%25%20Seat%20Shortage-2563eb.svg)]()
+
+> **One-Page Technical Brief:** See [`docs/hackathon/prof_lee_handout.md`](docs/hackathon/prof_lee_handout.md) for the verified executive summary of our 10-year enrollment forecasting, split conformal room sizing, 3-tier CP-SAT solver, and Faculty Commercialization Advisor.
 
 ---
 
 ## Table of Contents
 1. [Executive Summary](#executive-summary)
-2. [Mathematical Model & CP-SAT Formulation](#mathematical-model--cp-sat-formulation)
+2. [Hack-A-Roo 2026 Architecture & Verified Spring 2026 Holdout Results](#hack-a-roo-2026-architecture--verified-spring-2026-holdout-results)
+   - [Core Pillar 1: 10-Year Enrollment Forecasting & CP-SAT Optimization](#core-pillar-1-10-year-enrollment-forecasting--cp-sat-optimization)
+   - [Add-On Pillar 2: Faculty Commercialization & Policy Retrieval Advisor](#add-on-pillar-2-faculty-commercialization--policy-retrieval-advisor)
+3. [Mathematical Model & CP-SAT Formulation](#mathematical-model--cp-sat-formulation)
    - [Decision Variables](#decision-variables)
    - [Hard Constraints](#hard-constraints)
    - [Objective Function & Integer Weights](#objective-function--integer-weights)
    - [Dynamic Priority Carryover Engine](#dynamic-priority-carryover-engine)
-3. [UMKC Real-University Volume Dataset](#umkc-real-university-volume-dataset)
+4. [UMKC & UIUC FOIA Dual-Profile Datasets](#umkc-real-university-volume-dataset)
    - [Entity Overview](#entity-overview)
    - [Relational Database Schema](#relational-database-schema)
-4. [Multi-Semester Dynamic Preference Simulation](#multi-semester-dynamic-preference-simulation)
-   - [Semester Schedule (Fall 2024 – Spring 2027)](#semester-schedule-fall-2024--spring-2027)
-   - [Dynamic Preference Variation & Day Rotation](#dynamic-preference-variation--day-rotation)
-5. [Repository Structure](#repository-structure)
-6. [Installation & Setup](#installation--setup)
-7. [CLI Usage Guide](#cli-usage-guide)
-8. [Automated Verification & Test Suites](#automated-verification--test-suites)
-9. [Solver Performance Benchmarks](#solver-performance-benchmarks)
+5. [Multi-Semester Dynamic Preference Simulation](#multi-semester-dynamic-preference-simulation)
+6. [Repository Structure](#repository-structure)
+7. [Installation & Setup](#installation--setup)
+8. [CLI Usage Guide](#cli-usage-guide)
+9. [Automated Verification & Test Suites](#automated-verification--test-suites)
+10. [Solver Performance Benchmarks](#solver-performance-benchmarks)
 
 ---
 
 ## Executive Summary
 
-The **UMKC Course Timetable Scheduler** is a high-performance automated course scheduling and timetabling system built on **Google OR-Tools CP-SAT** (Constraint Programming / Boolean Satisfiability). The system models the **UMKC School of Science & Engineering (SSE)** at true university scale:
+**OptiSched** is a neuro-symbolic academic scheduling and faculty operations platform built on **Google OR-Tools CP-SAT**, **pooled ridge time-series forecasting**, and **split conformal prediction intervals**. The platform supports two switchable dataset profiles (`uiuc_foia` for 10-year real registrar validation and `umkc` for multi-semester department simulation):
 
-- **20 Faculty Members** across 4 departments (CS/SE, Math/Stat, ECE/Physics, Chem/Bio).
-- **40 Academic Courses** spanning undergraduate lectures, graduate seminars, and specialized labs.
-- **12 Classrooms** across 5 campus buildings with capacities from 25 to 150.
-- **6 Standard 75-Minute Time Slots** daily across Monday through Friday.
-- **6 Distinct Semesters** (Fall 2024 through Spring 2027) with dynamic, rotating faculty preferences.
-- **Strict Hard Constraint**: Every instructor is assigned **maximum 2 classes per semester** (achieving an exact $20 \times 2 = 40$ balance).
-- **Dynamic Priority Bidding**: Unmet preferences yield compensation points that carry over from term to term, while fully satisfied faculty experience gradual decay.
+- **10-Year Real UIUC FOIA Dataset (`uiuc_foia` profile):** Processes 10 academic years (`Fall 2016` through `Spring 2026`), distilling **22,991 raw catalog sections** into **800 course-semester records** across **40 active STEM courses** and **20 semesters**, with **Spring 2026** held out for causal out-of-sample evaluation.
+- **Pooled Ridge Forecasting + Split Conformal Prediction:** Achieves a held-out Spring 2026 point MAE of **17.24 seats** vs **18.03 seats** for Seasonal Naive and **28.25 seats** for prior-term copy. Calibrating split conformal intervals on 600 rolling-origin residuals achieves **97.5% (39/40)** coverage at the 95% bound and **85.0% (34/40)** coverage at the 80% bound.
+- **Asymmetric Overflow & Seat-Shortage Protection:** Sizing rooms to the **80% conformal upper bound** cuts held-out Spring 2026 room overflows from **9 courses down to 2** and reduces total unseated student seats by **84.6% (from 169 down to 26 seats)**.
+- **3-Tier Preference-Aware CP-SAT Solver:** Enforces zero room, instructor, and time-slot overlaps while maximizing instructor preferences across three precedence tiers (**per-course overrides**, **general semester availability**, and **2-year causal teaching habits**) scored across **40% Day, 40% Time Slot, and 20% Room/Layout**, achieving **84.0% (21/25)** 2-year habit continuity.
+- **Neuro-Symbolic What-If Copilot & Faculty Commercialization Advisor:** Translates natural-language scenario queries into structured CP-SAT re-solves, and helps faculty draft 26-field **UM-16C** invention disclosures from research paper PDFs with **BM25 keyword retrieval over 425 passages across 7 UM System and UMKC policy documents** plus live **CP-SAT Course-Release Simulation**.
+
+---
+
+## Hack-A-Roo 2026 Architecture & Verified Spring 2026 Holdout Results
+
+### Core Pillar 1: 10-Year Enrollment Forecasting & CP-SAT Optimization
+
+| Evaluation Metric (Held-Out Spring 2026, 40 Courses) | Copy Last Term | Seasonal Naive | Point Forecast (`Pooled Ridge`) | Conformal 80% Upper Bound (`Pooled Ridge`) |
+|:---|:---:|:---:|:---:|:---:|
+| **Point Forecast MAE (seats)** | 28.25 | 18.03 | **17.24** | 17.24 (point) |
+| **Empirical Interval Coverage** | - | - | - | **85.0% (34/40)** at 80% PI / **97.5% (39/40)** at 95% PI |
+| **Overflowed Courses (Actual > Room Cap)** | 8 / 40 | - | 9 / 40 | **2 / 40** |
+| **Total Unseated Student Seats** | 199 seats | - | 169 seats | **26 seats (-84.6% vs point forecast)** |
+| **Hard Timetable Conflicts** | 0 | 0 | 0 | **0 (OPTIMAL)** |
+| **2-Year Faculty Habit Continuity** | 84.0% (21/25) | 84.0% (21/25) | 84.0% (21/25) | **84.0% (21/25)** |
+
+### Add-On Pillar 2: Faculty Commercialization & Policy Retrieval Advisor
+
+1. **Step 1 (Paper-to-UM-16C Disclosure Drafter):** Accepts a faculty research paper PDF in memory and drafts the 26 fields of the University of Missouri System **UM-16C** invention disclosure form with verbatim supporting quotes (`backend/app/services/idf_service.py`).
+2. **Step 2 (BM25 Policy Retrieval & Compliance Checklist):** Indexes **425 passages across 7 UM System and UMKC policy documents** using **BM25 keyword retrieval** (`backend/app/services/policy_service.py`) and generates a tailored conflict-of-interest and compliance checklist (`backend/app/services/coi_checklist_service.py`).
+3. **Step 3 & 4 (Market Hypotheses, In-Memory Export & CP-SAT Course-Buyout Simulator):** Suggests testable NAICS and SBIR/STTR customer-discovery hypotheses, exports a complete disclosure zip bundle in memory (`backend/app/services/export_service.py`), and invokes the **CP-SAT Course-Release Simulator** (`backend/app/services/scenario_service.py`) to test whether the department timetable can absorb a grant teaching buyout.
 
 ---
 

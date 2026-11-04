@@ -51,23 +51,21 @@
 
 ---
 
-## Part 2: Predict Demand (0:30 - 1:10)
-**On screen:** Demand Forecast tab. Course: **CS 101**.
+## Part 2: Predict Demand & Size Classrooms (0:30 - 1:10)
+**On screen:** Demand Forecast & Holdout Benchmark tab (`uiuc_foia` 10-year real registrar profile or `umkc` department sandbox).
 
-> "First, we predict. This chart shows five semesters of enrollment for CS 101.
-> The orange dot is our forecast for Spring 2027. The blue band is the uncertainty.
+> "First, we predict next-term enrollment from 10 years of real UIUC FOIA registrar records: 22,991 raw catalog sections distilled into 800 course-semester records across 40 active STEM courses and 20 terms from Fall 2016 through Spring 2026.
+> We train on the first 19 terms and hold out the final term, Spring 2026, to test our forecasts against actual enrollments.
 >
-> Notice the yellow label: **synthetic history**.
-> We do not have real registrar data. So we generated a clear, seeded dataset and we say so on screen.
-> That means this tests the *method*, not real-world accuracy."
+> A point forecast alone under-predicts roughly half of courses. So we calibrate split conformal prediction intervals on 600 rolling-origin residuals to produce 80% and 95% upper demand bounds."
 
-**Point at the table:**
+**Point at the benchmark table:**
 
-> "We compare three models. The winner is a damped-trend model.
-> Its average error is about three students. The seasonal baseline is almost four.
-> The 80 percent band covered the held-out points 82 percent of the time. So the bands are honest."
+> "On the held-out Spring 2026 term, Pooled Ridge reaches a point MAE of 17.24 seats versus 18.03 for Seasonal Naive and 28.25 for copying last term.
+> Actual Spring 2026 enrollment falls inside our 95% conformal interval for 39 of 40 courses (97.5%) and inside our 80% interval for 34 of 40 courses (85.0%).
+> Most importantly, sizing rooms to our 80% conformal upper bound cuts overflowed courses from 9 down to 2 and reduces unseated student seats by 84.6%, from 169 seats down to 26."
 
-**Numbers:** champion `damped_trend` (MAE 3.25, sMAPE 6.46%), seasonal-naive MAE 3.79, pooled ridge MAE 4.39, held-out coverage 82.5%.
+**Numbers (`uiuc_foia` 10-Year Real Registrar Holdout):** champion `pooled_ridge` (MAE 17.24 seats), `seasonal_naive` (MAE 18.03 seats), `copy_last_term` (MAE 28.25 seats), 95% PI coverage 97.5% (39/40), 80% PI coverage 85.0% (34/40), room overflows 9 -> 2, unseated seats 169 -> 26 (-84.6%). *(If switched to the `umkc` 6-semester synthetic sandbox profile: `damped_trend` MAE 3.25, 80% PI coverage 82.5%.)*
 
 ---
 
