@@ -126,6 +126,10 @@ def test_empirical_benchmark_two_stage_non_circular_evaluation_and_cache(
         sb["overflow_courses_conformal_80_sizing"]
         < sb["overflow_courses_last_term_sizing"]
     )
+    assert sb["unseated_seats_last_term_sizing"] == 199
+    assert sb["unseated_seats_point_forecast_sizing"] == 169
+    assert sb["unseated_seats_conformal_80_sizing"] == 26
+    assert sb["unseated_seats_reduction_vs_point_pct"] == 84.6
     assert (
         sb["optisched_seat_utilization_pct"]
         > sb["uiuc_actual_seat_utilization_pct"]

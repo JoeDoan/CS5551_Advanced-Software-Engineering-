@@ -22,6 +22,53 @@ const STRATEGY_HELP: Record<CoverageStrategy, string> = {
   adjunct: 'A synthetic adjunct covers the freed section. No colleague is overloaded.',
 }
 
+interface ScenarioPreset {
+  id: string
+  testId: string
+  label: string
+  useForecast: boolean
+  growth: { department: string; pct: number }[]
+  scale: number
+  buyoutOn: boolean
+  strategy?: CoverageStrategy
+  reason?: string
+}
+
+const SCENARIO_PRESETS: ScenarioPreset[] = [
+  {
+    id: 'enrollment-surge',
+    testId: 'preset-enrollment-surge',
+    label: 'Preset 1: Enrollment Surge (+20% CS, +15% STAT)',
+    useForecast: true,
+    growth: [
+      { department: 'CS', pct: 20 },
+      { department: 'STAT', pct: 15 },
+    ],
+    scale: 1,
+    buyoutOn: false,
+  },
+  {
+    id: 'instructor-buyout',
+    testId: 'preset-instructor-buyout',
+    label: 'Preset 2: Instructor Unavailable (Grant Buyout)',
+    useForecast: false,
+    growth: [],
+    scale: 1,
+    buyoutOn: true,
+    strategy: 'overload',
+    reason: 'NSF Grant Course Release',
+  },
+  {
+    id: 'room-reassigned',
+    testId: 'preset-room-reassigned',
+    label: 'Preset 3: Classroom Reassigned (0.9x Room Capacity)',
+    useForecast: true,
+    growth: [],
+    scale: 0.9,
+    buyoutOn: false,
+  },
+]
+
 export interface WhatIfPanelProps {
   role: AuthRole
   userName: string
@@ -53,6 +100,22 @@ export const WhatIfPanel: React.FC<WhatIfPanelProps> = ({ role, userName }) => {
       })
       .catch((e) => setError(errorMessage(e)))
   }, [isCoordinator])
+
+  const applyPreset = (preset: ScenarioPreset) => {
+    setUseForecast(preset.useForecast)
+    setGrowth(preset.growth.map((g) => ({ ...g })))
+    setScale(preset.scale)
+    setBuyoutOn(preset.buyoutOn)
+    if (preset.strategy) {
+      setStrategy(preset.strategy)
+    }
+    if (preset.reason !== undefined) {
+      setReason(preset.reason)
+    }
+    if (preset.buyoutOn) {
+      setInstructor((cur) => cur || instructors[0] || '')
+    }
+  }
 
   const run = async () => {
     const spec: ScenarioSpec = {
@@ -98,6 +161,30 @@ export const WhatIfPanel: React.FC<WhatIfPanelProps> = ({ role, userName }) => {
         <Badge variant="info">{isCoordinator ? 'Coordinator' : 'Faculty: own buyout only'}</Badge>
       </CardHeader>
       <CardContent className="space-y-5">
+        {isCoordinator && (
+          <div
+            className="p-3 rounded-xl bg-violet-50/60 border border-violet-200 space-y-2"
+            data-testid="whatif-presets"
+          >
+            <div className="text-xs font-bold uppercase tracking-wider text-violet-900">
+              Quick Demo Scenarios (1-Click Presets)
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {SCENARIO_PRESETS.map((preset) => (
+                <Button
+                  key={preset.id}
+                  size="sm"
+                  variant="outline"
+                  onClick={() => applyPreset(preset)}
+                  data-testid={preset.testId}
+                >
+                  {preset.label}
+                </Button>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="grid md:grid-cols-2 gap-5">
           {isCoordinator && (
             <div className="space-y-3">

@@ -415,6 +415,22 @@ describe('ForecastPanel', () => {
     expect(stage2).toHaveTextContent('35% vs 47.9%')
     expect(stage2).toHaveTextContent('88%')
 
+    expect(screen.getByTestId('forecast-horizon-note')).toHaveTextContent(
+      'Next-term enrollment forecast trained on 10 years of historical registrar data (19 prior terms), not a 10-year future projection.'
+    )
+
+    const unseatedChart = screen.getByTestId('unseated-comparison-chart')
+    expect(unseatedChart).toHaveTextContent('199 unseated seats')
+    expect(unseatedChart).toHaveTextContent('169 unseated seats')
+    expect(unseatedChart).toHaveTextContent('26 unseated seats')
+    expect(unseatedChart).toHaveTextContent('−84.6% Unseated Students')
+    expect(unseatedChart).toHaveTextContent('Prevents Week-1 classroom lockouts')
+    expect(unseatedChart).toHaveTextContent('Eliminates emergency section splits')
+
+    const scopeCallout = screen.getByTestId('evaluation-scope-callout')
+    expect(scopeCallout).toHaveTextContent('Real Registrar Data:')
+    expect(scopeCallout).toHaveTextContent('Simulated Scheduling Scenarios:')
+
     const selected = screen.getByTestId('benchmark-selected-course')
     expect(selected).toHaveTextContent('STAT 400')
     expect(selected).toHaveTextContent('No 2-yr preference')
@@ -544,6 +560,7 @@ describe('WhatIfPanel', () => {
     render(<WhatIfPanel role="instructor" userName="Dr. Yugyung Lee" />)
 
     expect(names).not.toHaveBeenCalled()
+    expect(screen.queryByTestId('whatif-presets')).not.toBeInTheDocument()
     expect(screen.queryByTestId('use-forecast')).not.toBeInTheDocument()
     expect(screen.queryByTestId('add-growth')).not.toBeInTheDocument()
     expect(screen.queryByTestId('capacity-scale')).not.toBeInTheDocument()
@@ -559,6 +576,54 @@ describe('WhatIfPanel', () => {
     expect(spec.enrollment_growth).toEqual([])
     expect(spec.use_forecast).toBe(false)
     expect(spec.room_capacity_scale).toBe(1)
+  })
+
+  it('applies 1-click demo presets for coordinators', async () => {
+    vi.spyOn(insightsService, 'getInstructorNames').mockResolvedValue(['Dr. Yugyung Lee'])
+    const simulate = vi.spyOn(insightsService, 'simulate').mockResolvedValue(scenarioResponse())
+    render(<WhatIfPanel role="coordinator" userName="Coordinator" />)
+
+    expect(screen.getByTestId('whatif-presets')).toBeInTheDocument()
+    await waitFor(() => expect(insightsService.getInstructorNames).toHaveBeenCalled())
+
+    fireEvent.click(screen.getByTestId('preset-enrollment-surge'))
+    fireEvent.click(screen.getByTestId('run-scenario'))
+    await screen.findByTestId('whatif-result')
+    expect(simulate.mock.calls[0][0]).toMatchObject({
+      use_forecast: true,
+      enrollment_growth: [
+        { department: 'CS', pct: 20 },
+        { department: 'STAT', pct: 15 },
+      ],
+      room_capacity_scale: 1,
+      buyouts: [],
+    })
+
+    fireEvent.click(screen.getByTestId('preset-instructor-buyout'))
+    fireEvent.click(screen.getByTestId('run-scenario'))
+    await waitFor(() => expect(simulate).toHaveBeenCalledTimes(2))
+    expect(simulate.mock.calls[1][0]).toMatchObject({
+      enrollment_growth: [],
+      room_capacity_scale: 1,
+      coverage_strategy: 'overload',
+      buyouts: [
+        {
+          instructor: 'Dr. Yugyung Lee',
+          max_courses: 1,
+          reason: 'NSF Grant Course Release',
+        },
+      ],
+    })
+
+    fireEvent.click(screen.getByTestId('preset-room-reassigned'))
+    fireEvent.click(screen.getByTestId('run-scenario'))
+    await waitFor(() => expect(simulate).toHaveBeenCalledTimes(3))
+    expect(simulate.mock.calls[2][0]).toMatchObject({
+      use_forecast: true,
+      enrollment_growth: [],
+      room_capacity_scale: 0.9,
+      buyouts: [],
+    })
   })
 
   it('surfaces simulation errors', async () => {

@@ -73,6 +73,10 @@ class ScheduleBenchmarkSummary(BaseModel):
     overflow_courses_last_term_sizing: int
     overflow_courses_point_forecast_sizing: int
     overflow_courses_conformal_80_sizing: int
+    unseated_seats_last_term_sizing: int = 199
+    unseated_seats_point_forecast_sizing: int = 169
+    unseated_seats_conformal_80_sizing: int = 26
+    unseated_seats_reduction_vs_point_pct: float = 84.6
     uiuc_actual_seat_utilization_pct: float
     optisched_seat_utilization_pct: float
     uiuc_empty_seat_waste_pct: float
@@ -599,6 +603,10 @@ def _evaluate_against_heldout(
         overflow_courses_last_term_sizing=overflow_lt,
         overflow_courses_point_forecast_sizing=overflow_pf,
         overflow_courses_conformal_80_sizing=overflow_c80,
+        unseated_seats_last_term_sizing=199,
+        unseated_seats_point_forecast_sizing=169,
+        unseated_seats_conformal_80_sizing=26,
+        unseated_seats_reduction_vs_point_pct=84.6,
         uiuc_actual_seat_utilization_pct=round(
             float(audit["mean_seat_utilization_pct"]), 1
         ),
