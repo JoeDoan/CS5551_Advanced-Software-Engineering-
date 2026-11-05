@@ -190,8 +190,7 @@ export const ForecastPanel: React.FC = () => {
                 className="text-[11px] text-slate-500 mt-0.5"
                 data-testid="forecast-horizon-note"
               >
-                Next-term enrollment forecast trained on 10 years of historical registrar data (19
-                prior terms), not a 10-year future projection.
+                Training data: 19 terms (Fall 2016 to Fall 2025). Forecast target: next term.
               </p>
             </div>
           </div>
@@ -446,10 +445,10 @@ export const ForecastPanel: React.FC = () => {
 
             {(() => {
               const sb = benchmark.schedule_benchmark
-              const unseatedLt = sb.unseated_seats_last_term_sizing ?? 199
-              const unseatedPf = sb.unseated_seats_point_forecast_sizing ?? 169
-              const unseatedC80 = sb.unseated_seats_conformal_80_sizing ?? 26
-              const unseatedReduction = sb.unseated_seats_reduction_vs_point_pct ?? 84.6
+              const unseatedLt = sb.unseated_seats_last_term_sizing
+              const unseatedPf = sb.unseated_seats_point_forecast_sizing
+              const unseatedC80 = sb.unseated_seats_conformal_80_sizing
+              const unseatedReduction = sb.unseated_seats_reduction_vs_point_pct
               const maxSeats = Math.max(unseatedLt, unseatedPf, unseatedC80, 1)
               const strategies = [
                 {
@@ -474,7 +473,7 @@ export const ForecastPanel: React.FC = () => {
                   overflows: sb.overflow_courses_conformal_80_sizing,
                   barColor: 'bg-emerald-600',
                   textColor: 'text-emerald-900',
-                  badge: `−${unseatedReduction}% Unseated Students`,
+                  badge: null as string | null,
                 },
               ]
               return (
@@ -486,7 +485,7 @@ export const ForecastPanel: React.FC = () => {
                     <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
                       Unseated Student Seats &amp; Overflowed Courses ({benchmark.heldout_semester_name})
                     </span>
-                    <Badge variant="success">−{unseatedReduction}% Unseated Students</Badge>
+                    <Badge variant="success">−{unseatedReduction}% vs point forecast</Badge>
                   </div>
 
                   <div className="space-y-2.5">
@@ -513,17 +512,19 @@ export const ForecastPanel: React.FC = () => {
 
                   <div className="pt-2 border-t border-slate-100 space-y-1 text-slate-700">
                     <div>
-                      <span className="font-semibold text-slate-900">Why this matters — For Students:</span>{' '}
-                      Prevents Week-1 classroom lockouts and delayed graduation bottlenecks in
-                      high-demand STEM courses.
+                      <span className="font-semibold text-slate-900">Students:</span> fewer
+                      first-week seat shortages in high-demand courses.
                     </div>
                     <div>
-                      <span className="font-semibold text-slate-900">For Administrators:</span>{' '}
-                      Eliminates emergency section splits and last-minute room swaps while keeping{' '}
+                      <span className="font-semibold text-slate-900">Administrators:</span> fewer
+                      room changes after registration, with{' '}
                       <span className="font-semibold">
                         {benchmark.schedule_benchmark.hard_conflicts}
                       </span>{' '}
                       hard conflicts.
+                    </div>
+                    <div className="text-slate-500">
+                      Unseated = enrollment above assigned room capacity. Baselines sized at +5%.
                     </div>
                   </div>
                 </div>
@@ -535,19 +536,16 @@ export const ForecastPanel: React.FC = () => {
               data-testid="evaluation-scope-callout"
             >
               <div className="font-bold uppercase tracking-wider text-slate-800">
-                Evaluation Scope (Real Data vs. Simulated Scenarios)
+                Data and Evaluation
               </div>
               <div>
-                <span className="font-semibold text-slate-900">Real Registrar Data:</span> 10 years
-                (Fall 2016 – Spring 2026, 800 course-terms from 22,991 UIUC FOIA sections) used to
-                train and test next-semester enrollment forecasts.
+                <span className="font-semibold text-slate-900">Real:</span> enrollment for 40
+                courses over 20 terms (800 course-terms from 22,991 UIUC FOIA sections) and
+                instructors' 2-year teaching history.
               </div>
               <div>
-                <span className="font-semibold text-slate-900">
-                  Simulated Scheduling Scenarios:
-                </span>{' '}
-                CP-SAT room/slot allocation, 3-tier faculty preference weights, and counterfactual
-                What-If shocks (enrollment surge, instructor buyout, room reassignment).
+                <span className="font-semibold text-slate-900">Simulated:</span> room pool,
+                preference weights, and What-If scenarios.
               </div>
             </div>
 

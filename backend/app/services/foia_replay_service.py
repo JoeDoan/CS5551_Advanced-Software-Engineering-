@@ -73,10 +73,10 @@ class ScheduleBenchmarkSummary(BaseModel):
     overflow_courses_last_term_sizing: int
     overflow_courses_point_forecast_sizing: int
     overflow_courses_conformal_80_sizing: int
-    unseated_seats_last_term_sizing: int = 199
-    unseated_seats_point_forecast_sizing: int = 169
-    unseated_seats_conformal_80_sizing: int = 26
-    unseated_seats_reduction_vs_point_pct: float = 84.6
+    unseated_seats_last_term_sizing: int
+    unseated_seats_point_forecast_sizing: int
+    unseated_seats_conformal_80_sizing: int
+    unseated_seats_reduction_vs_point_pct: float
     uiuc_actual_seat_utilization_pct: float
     optisched_seat_utilization_pct: float
     uiuc_empty_seat_waste_pct: float
@@ -503,6 +503,9 @@ def _evaluate_against_heldout(
     overflow_lt = 0
     overflow_pf = 0
     overflow_c80 = 0
+    unseated_lt = 0
+    unseated_pf = 0
+    unseated_c80 = 0
     occupied_seats = 0
     empty_seats = 0
     total_assigned_seats = 0
@@ -529,14 +532,18 @@ def _evaluate_against_heldout(
         if in_95:
             within_95_count += 1
 
-        if decisions.last_term_sections[ccode].room_capacity < actual:
-            overflow_lt += 1
-        if decisions.point_forecast_sections[ccode].room_capacity < actual:
-            overflow_pf += 1
-
+        lt_cap = decisions.last_term_sections[ccode].room_capacity
+        pf_cap = decisions.point_forecast_sections[ccode].room_capacity
         c80_sec = decisions.conformal_80_sections[ccode]
+        if lt_cap < actual:
+            overflow_lt += 1
+        if pf_cap < actual:
+            overflow_pf += 1
         if c80_sec.room_capacity < actual:
             overflow_c80 += 1
+        unseated_lt += max(0, actual - lt_cap)
+        unseated_pf += max(0, actual - pf_cap)
+        unseated_c80 += max(0, actual - c80_sec.room_capacity)
 
         occupied_seats += min(actual, c80_sec.room_capacity)
         empty_seats += max(0, c80_sec.room_capacity - actual)
@@ -603,10 +610,12 @@ def _evaluate_against_heldout(
         overflow_courses_last_term_sizing=overflow_lt,
         overflow_courses_point_forecast_sizing=overflow_pf,
         overflow_courses_conformal_80_sizing=overflow_c80,
-        unseated_seats_last_term_sizing=199,
-        unseated_seats_point_forecast_sizing=169,
-        unseated_seats_conformal_80_sizing=26,
-        unseated_seats_reduction_vs_point_pct=84.6,
+        unseated_seats_last_term_sizing=unseated_lt,
+        unseated_seats_point_forecast_sizing=unseated_pf,
+        unseated_seats_conformal_80_sizing=unseated_c80,
+        unseated_seats_reduction_vs_point_pct=round(
+            100.0 * (1.0 - unseated_c80 / max(1, unseated_pf)), 1
+        ),
         uiuc_actual_seat_utilization_pct=round(
             float(audit["mean_seat_utilization_pct"]), 1
         ),

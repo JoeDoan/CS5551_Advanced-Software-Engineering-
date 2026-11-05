@@ -1,21 +1,37 @@
-# OptiSched: Uncertainty-Aware Academic Scheduling & Faculty Operations Platform
+# OptiSched: Uncertainty-Aware Enrollment Forecasting with CP-SAT Course Scheduling
 
-## Overview & Core Innovation
+## Overview
 
-OptiSched integrates **uncertainty-aware next-semester enrollment forecasting** (**Pooled Ridge Regression** + **Split Conformal Prediction**) directly into a **Google OR-Tools CP-SAT constraint solver** with a **3-tier faculty preference hierarchy**. Unlike existing university scheduling systems that copy prior-term room assignments or size rooms to raw point forecasts, OptiSched sizes classrooms to calibrated **80% conformal upper bounds** so upside demand variance is absorbed before classes begin.
+OptiSched forecasts next-term enrollment for each course, attaches calibrated 80% and 95% prediction intervals, and sizes each room to the 80% upper bound. A Google OR-Tools CP-SAT model then assigns rooms, time slots and instructors with zero hard conflicts, using a 3-tier faculty preference hierarchy.
 
-## Core Pillar 1: Next-Term Enrollment Forecasting (Trained on 10-Yr History) & CP-SAT Optimization
+## Data and evaluation
 
-1. **Next-Term Forecasting Trained on 10 Years of Real UIUC FOIA Registrar Data.** Our deterministic ETL pipeline processes 10 academic years (`Fall 2016` through `Spring 2026`), distilling `22,991` raw catalog sections into **800 course-semester headcounts** across `40` active STEM courses and `20` terms. The model trains on **10 years of historical data (`19` prior terms) to forecast the single upcoming semester (`Spring 2026` held out)**—not a 10-year future projection.
-2. **Pooled Ridge Forecasting + Split Conformal Prediction.** On the held-out Spring 2026 semester, Pooled Ridge achieves a point MAE of **17.24 seats** vs **18.03 seats** for Seasonal Naive and **28.25 seats** for copying prior-term enrollment (`39.0%` error reduction). Calibrating split conformal intervals on `600` rolling-origin residuals achieves **85.0% (`34/40`)** empirical coverage at the 80% bound and **97.5% (`39/40`)** coverage at the 95% bound.
-3. **3-Tier Preference-Aware CP-SAT Solver & Counterfactual What-If Simulator.** Enforces zero room, instructor, and time-slot overlaps while maximizing instructor preferences across three precedence tiers (**per-course overrides**, **general semester availability**, and **2-year causal teaching habits**) scored across **40% Day, 40% Time Slot, and 20% Room/Layout**. Department coordinators can also simulate three live operational shocks in seconds: **enrollment surges**, **instructor unavailability (grant buyout)**, and **classroom reassignments**.
-4. **Evaluation Scope Clarification (Real Data vs. Simulated Scenarios).** Enrollment trajectories (`800` course-terms), held-out Spring 2026 actuals, and 2-year modal teaching habits are **100% real UIUC FOIA registrar data**. The standardized 12-room / 6-slot constraint pool, 3-tier preference weights, and counterfactual What-If shocks are **simulated scheduling scenarios**.
+- **Data.** Public UIUC registrar records (FOIA). 22,991 sections aggregated into 800 course-term enrollments, 40 STEM courses over 20 terms.
+- **Training data.** 19 terms, Fall 2016 to Fall 2025. **Forecast target.** Next term.
+- **Test term.** Spring 2026, held out, 40 courses, real enrollment.
+- **Real inputs.** Enrollment history and instructors' 2-year teaching history. **Simulated inputs.** Room pool, preference weights, What-If scenarios.
+- **Baselines.** Copy prior term (Fall 2025) and point forecast, each sized at +5%.
 
-### Verified Holdout Results & Practical Impact (Held-Out Spring 2026, 40 Courses)
+## Results on held-out Spring 2026
 
-- **84.6% Reduction in Unseated Students (`169 → 26 seats`):** Sizing rooms with raw point forecasts results in **9 overflowed courses and 169 unseated student seats**, and copying prior-term enrollment results in **8 overflowed courses and 199 unseated seats**. Sizing rooms with OptiSched's **80% conformal upper bound** cuts Spring 2026 room overflows down to **2 of 40 courses (`-77.8%`)** and reduces unseated student seats to **26 (`-84.6%`)** with **0 hard conflicts (`OPTIMAL`)** and **84.0% (`21/25`)** 2-year faculty habit continuity.
-- **Benefits for Students & University Administrators:** Protects **students** from Week-1 classroom lockouts and delayed graduation bottlenecks in required STEM sequences, and saves **administrators** from emergency first-week section splits and room swaps.
+| Metric | Copy prior term | Point forecast | OptiSched 80% bound |
+|:---|:---:|:---:|:---:|
+| Forecast MAE (seats) | 28.25 | 17.24 | 17.24 |
+| Overflowed courses | 8 / 40 | 9 / 40 | **2 / 40** |
+| Unseated students | 338 | 153 | **60** |
+| Hard conflicts | 0 | 0 | **0** |
 
-## Extension Feature: Faculty Commercialization & Policy Retrieval Advisor
+- Unseated students fall 61% against the point forecast and 82% against copying the prior term.
+- Interval coverage is 85% (34/40) at 80% and 97.5% (39/40) at 95%.
+- Seat utilization is 64.9%, against 64.5% in the actual UIUC schedule.
+- On the 25 courses with a teaching history, 84% (21/25) keep the instructor's usual days and slot.
 
-As an extension module connected to the course-release simulator, OptiSched helps faculty draft 26-field **UM-16C** invention disclosures from research paper PDFs in memory, retrieves compliance passages via **BM25 keyword search over 425 passages across 7 UM System and UMKC policy documents**, and invokes the **CP-SAT Course-Release Simulator** to verify whether the department timetable can absorb a grant teaching buyout.
+**Who benefits.** Students face fewer first-week seat shortages in high-demand courses. Administrators make fewer room changes after registration, with no loss in seat utilization.
+
+## Working demonstration
+
+The What-If simulator re-solves a future term as a dry run for three scenarios: an enrollment surge (CS +20%, STAT +15%), an instructor unavailable (one-course grant release), and a room reassignment (all capacities × 0.9). It reports metric changes and every course that moved.
+
+## Extension: Faculty Commercialization Advisor
+
+Drafts a UM-16C invention disclosure (26 fields) from an uploaded paper, retrieves relevant clauses from 425 passages across 7 UM System and UMKC policy sources, and links to the instructor-release What-If scenario to check teaching coverage.

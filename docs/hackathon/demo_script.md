@@ -1,74 +1,78 @@
-# Hack-A-Roo 3-Minute Demonstration Video & Live Pitch Script: "Predict, Buffer, Solve, Simulate"
+# OptiSched 3-Minute Demo Script
 
-**Submission Deadline:** November 9, 2026 (3-Minute Video + Poster + GitHub Repo)
-**Final Live Demo:** November 13, 2026
-**Team:** Joe Doan, Tony Nguyen, Tina Nguyen, Salvatore Nigro | **Faculty Advisor:** Prof. Yugyung Lee
-**Target Length:** **3:00** (strictly timed for the Hack-A-Roo 3-minute demonstration video; every number below is verified in the running app)
+**Submission:** November 9, 2026 (video, poster, repository)
+**Live demo:** November 13, 2026
+**Team:** Joe Doan, Tony Nguyen, Tina Nguyen, Salvatore Nigro. **Advisor:** Prof. Yugyung Lee.
+**Length:** 3:00. Numbers below come from the running app on the `uiuc_foia` profile.
 
 ---
 
-## Pre-Recording / Pre-Stage Checklist (5 Minutes Before Recording)
+## Setup (5 minutes before recording)
 
-1. **Start Backend (`backend/`):**
+1. Start the backend.
    ```bash
    cd backend
    python3 -m uvicorn app.main:app --port 8000
    ```
-2. **Start Frontend (`frontend/`):**
+2. Start the frontend.
    ```bash
    cd frontend
    npm run dev
    ```
-3. **Verify Health & Active Dataset Profile (`uiuc_foia`):**
-   - Open `http://localhost:8000/api/v1/health` (`"status": "healthy"`).
-   - Open `http://localhost:5173/insights` signed in as **Course Coordinator**. Confirm the green badge says **`UIUC FOIA Registrar (2016–2025)`**.
-4. **Pre-Open 3 Browser Tabs at 110% Zoom:**
-   - **Tab 1 (`http://localhost:5173/insights`):** Demand Forecast & Held-Out Spring 2026 Benchmark (with the visual **Unseated Students Comparison Chart: 199 -> 169 -> 26**).
-   - **Tab 2 (`http://localhost:5173/schedules`):** Master Schedule Matrix & 3-Tier Faculty Preferences.
-   - **Tab 3 (`http://localhost:5173/commercialization`):** Faculty Commercialization Advisor (extension feature).
+3. Sign in at `http://localhost:5173/login` as **Course Coordinator**. Confirm the badge reads `UIUC FOIA Registrar (2016–2025)`.
+4. Open three tabs at 110% zoom.
+   - `http://localhost:5173/insights` (Demand Forecast and the Spring 2026 benchmark).
+   - `http://localhost:5173/schedule` (Master Schedule).
+   - `http://localhost:5173/commercialization` (extension).
 
 ---
 
-## 0:00 – 0:35 | 1. Innovation & How OptiSched Differs From Existing Systems
-**On screen:** Tab 1 (`Insights -> Demand Forecast`), showing the 19-term historical curve, next-term forecast point, and blue 80% / 95% conformal bands.
+## 0:00 to 0:35 | Problem and approach
+**On screen:** Insights, Demand Forecast. History line, next-term point, 80% and 95% bands.
 
-> "Existing university scheduling tools treat next-semester enrollment as a single fixed number, usually copied from last semester.
-> Because a single point estimate under-predicts roughly half of all classes, departments suffer first-week classroom overflows, locked-out students, and emergency room swaps.
+> "Rooms are assigned before registration opens.
+> If a room is sized to last term's headcount, or to a single forecast, students go without seats whenever demand runs high.
 >
-> **OptiSched** fixes this by combining **uncertainty-aware enrollment forecasting** with a **Google OR-Tools CP-SAT constraint solver**.
-> Importantly, we do not try to predict 10 years into the future. Instead, our Pooled Ridge model learns from **10 years of historical registrar data**—19 prior semesters—to forecast the **very next semester**, and calibrates **Split Conformal Prediction intervals** so the solver sizes rooms to an **80% upper demand bound**."
+> OptiSched forecasts next-term enrollment for each course and attaches calibrated prediction intervals.
+> It trains on 19 terms of real registrar data, Fall 2016 to Fall 2025.
+> Each room is sized to the 80% upper bound, and a CP-SAT model assigns rooms, time slots and instructors."
 
 ---
 
-## 0:35 – 1:15 | 2. Visual Key Results & Evaluation Scope (Real Data vs. Simulated Scenarios)
-**On screen:** Scroll slightly down on Tab 1 to the **Spring 2026 Held-Out Empirical Benchmark** card and point at the **Unseated Student Seats Visual Comparison Chart** and the **Evaluation Scope** callout.
+## 0:35 to 1:15 | Results on a held-out term
+**On screen:** Scroll to the Spring 2026 benchmark. Point at the unseated-seats chart and the Data and Evaluation box.
 
-> "Look at our held-out Spring 2026 validation across 40 active STEM courses:
-> - Actual registrar enrollment lands inside our 95% conformal band for **39 of 40 courses (97.5%)** and inside our 80% band for **34 of 40 courses (85.0%)**, with a point MAE of **17.24 seats**.
-> - More importantly, look at the visual comparison chart for unseated students:
->   - Sizing rooms by copying last term leaves **8 overflowed courses and 199 unseated students**.
->   - Sizing rooms by raw point forecasts still leaves **9 overflowed courses and 169 unseated students**.
->   - Sizing rooms with OptiSched's **80% conformal upper bound** cuts overflows down to **2 courses** and reduces unseated students by **84.6%, from 169 down to just 26 seats**—protecting students from Week-1 lockouts and saving administrators from emergency section splits.
+> "We held out Spring 2026, 40 courses, and compared against what actually happened.
+> Forecast error is 17.24 seats, against 28.25 for copying last term.
+> The 80% interval covered 34 of 40 courses. The 95% interval covered 39 of 40.
 >
-> To be completely transparent about our evaluation: the **800 course-semester enrollments** from Fall 2016 through Spring 2026 come from **real UIUC FOIA registrar records**, while our classroom assignments, 3-tier faculty preferences, and counterfactual shocks run in a **controlled CP-SAT simulation environment**."
+> Now unseated students, meaning enrollment above the assigned room's capacity.
+> Copying last term leaves 338 students without a seat.
+> Sizing to the point forecast leaves 153.
+> Sizing to OptiSched's 80% bound leaves 60. That is 61% fewer than the point forecast, with seat utilization about the same as the real UIUC schedule.
+>
+> Enrollment and teaching history are real UIUC records. The room pool, preference weights and What-If scenarios are simulated."
 
 ---
 
-## 1:15 – 2:35 | 3. Complete Workflow & Live What-If Counterfactuals
-**On screen:** Briefly flash Tab 2 (`Master Schedule`, 10 seconds) showing **0 hard conflicts** and **84.0% two-year faculty habit continuity**, then switch to Tab 1 -> **What-If Simulator** (`1-Click Demo Presets`) and **Ask OptiSched**.
+## 1:15 to 2:35 | Full workflow and three What-If scenarios
+**On screen:** Master Schedule for 10 seconds (0 hard conflicts). Then Insights, What-If Simulator, Quick Demo Scenarios.
 
-> "From those demand bounds, our CP-SAT solver builds a conflict-free timetable across rooms, time slots, and our 3-tier faculty preference hierarchy—per-course overrides, general availability, and 2-year teaching habits—achieving **84% habit continuity and zero hard conflicts**.
+> "From those room sizes, CP-SAT builds a timetable with zero hard conflicts.
+> On courses with a teaching history, 84% keep the instructor's usual days and slot.
 >
-> Now let's test how the schedule responds to three real operational shocks:
-> 1. **Shock 1 — Enrollment Increases:** I click the **Enrollment Surge** preset (`CS +20%, STAT +15%`) with forecast sizing enabled. CP-SAT re-solves in seconds, shifting surging sections into larger lecture halls while keeping the rest of the timetable stable.
-> 2. **Shock 2 — Instructor Unavailable:** Suppose a professor takes a one-course grant release. If we select **No replacement**, the solver mathematically proves the problem is **INFEASIBLE** because 20 faculty teaching at most 2 courses cannot cover 40 sections with one release. When we switch to **Colleague overload** or **Adjunct replacement**, the solver finds an **OPTIMAL** schedule that moves just **1 course**.
-> 3. **Shock 3 — Classroom Reassigned:** In **Ask OptiSched**, we can also type in plain English or click **Classroom Reassigned (`0.9x` room capacity)**. The language model only parses the intent into chips—every scheduling decision is made by the mathematical CP-SAT solver."
+> Now three changes a department actually faces.
+> 1. Enrollment surge. CS up 20%, STAT up 15%. The solver moves over-capacity sections to larger rooms.
+> 2. Instructor unavailable. One professor takes a one-course grant release. With colleague coverage, one course moves and both solves are optimal.
+> 3. Room reassigned. Every room loses 10% capacity. Courses above the new capacity move to rooms that fit.
+>
+> Each run is a dry run. Nothing is saved, and placements the scenario does not force to change stay where they are."
 
 ---
 
-## 2:35 – 3:00 | 4. Extension Feature: Faculty Commercialization Advisor & Closing
-**On screen:** Tab 3 (`Commercialization Advisor`, 20 seconds).
+## 2:35 to 3:00 | Extension and close
+**On screen:** Commercialization tab for 20 seconds.
 
-> "Finally, as an optional extension for faculty who win research grants, our **Commercialization Advisor** drafts a 26-field **UM-16C** disclosure from a paper PDF, retrieves verbatim rules from **425 passages across 7 UM System and UMKC policy documents** via BM25, and links directly into the **Course-Release Simulator** we just saw.
+> "One extension. For faculty commercializing research, OptiSched drafts a UM-16C disclosure from a paper, retrieves relevant clauses from 425 policy passages, and links to the instructor-release scenario you just saw.
 >
-> By uniting 10-year historical demand forecasting, split conformal risk bounds, and CP-SAT optimization, **OptiSched** cuts unseated student shortages by **84.6%** and turns academic scheduling from fragile guesswork into a mathematical guarantee. Thank you!"
+> OptiSched connects calibrated demand forecasts to the scheduler, so rooms are sized for the demand that is likely, not just the average. Thank you."

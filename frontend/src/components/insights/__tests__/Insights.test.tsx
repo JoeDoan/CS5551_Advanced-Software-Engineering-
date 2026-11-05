@@ -343,6 +343,10 @@ describe('ForecastPanel', () => {
         overflow_courses_last_term_sizing: 11,
         overflow_courses_point_forecast_sizing: 8,
         overflow_courses_conformal_80_sizing: 3,
+        unseated_seats_last_term_sizing: 310,
+        unseated_seats_point_forecast_sizing: 140,
+        unseated_seats_conformal_80_sizing: 55,
+        unseated_seats_reduction_vs_point_pct: 60.7,
         uiuc_actual_seat_utilization_pct: 64.5,
         optisched_seat_utilization_pct: 78.4,
         uiuc_empty_seat_waste_pct: 36.6,
@@ -416,20 +420,18 @@ describe('ForecastPanel', () => {
     expect(stage2).toHaveTextContent('88%')
 
     expect(screen.getByTestId('forecast-horizon-note')).toHaveTextContent(
-      'Next-term enrollment forecast trained on 10 years of historical registrar data (19 prior terms), not a 10-year future projection.'
+      'Training data: 19 terms (Fall 2016 to Fall 2025). Forecast target: next term.'
     )
 
     const unseatedChart = screen.getByTestId('unseated-comparison-chart')
-    expect(unseatedChart).toHaveTextContent('199 unseated seats')
-    expect(unseatedChart).toHaveTextContent('169 unseated seats')
-    expect(unseatedChart).toHaveTextContent('26 unseated seats')
-    expect(unseatedChart).toHaveTextContent('−84.6% Unseated Students')
-    expect(unseatedChart).toHaveTextContent('Prevents Week-1 classroom lockouts')
-    expect(unseatedChart).toHaveTextContent('Eliminates emergency section splits')
+    expect(unseatedChart).toHaveTextContent('310 unseated seats')
+    expect(unseatedChart).toHaveTextContent('140 unseated seats')
+    expect(unseatedChart).toHaveTextContent('55 unseated seats')
+    expect(unseatedChart).toHaveTextContent('−60.7% vs point forecast')
 
     const scopeCallout = screen.getByTestId('evaluation-scope-callout')
-    expect(scopeCallout).toHaveTextContent('Real Registrar Data:')
-    expect(scopeCallout).toHaveTextContent('Simulated Scheduling Scenarios:')
+    expect(scopeCallout).toHaveTextContent('Real:')
+    expect(scopeCallout).toHaveTextContent('Simulated:')
 
     const selected = screen.getByTestId('benchmark-selected-course')
     expect(selected).toHaveTextContent('STAT 400')

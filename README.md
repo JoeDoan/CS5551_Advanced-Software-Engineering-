@@ -1,57 +1,44 @@
-# OptiSched: Uncertainty-Aware Academic Scheduling & Faculty Operations Platform
-### CS 5551 - Advanced Software Engineering & Hack-A-Roo 2026 | School of Science & Engineering (SSE)
-**University of Missouri-Kansas City (UMKC)** · **Faculty Advisor: Prof. Yugyung Lee**
+# OptiSched: Uncertainty-Aware Enrollment Forecasting with CP-SAT Course Scheduling
+### CS 5551 Advanced Software Engineering · Hack-A-Roo 2026 · UMKC School of Science and Engineering
+**Team:** Joe Doan, Tony Nguyen, Tina Nguyen, Salvatore Nigro · **Advisor:** Prof. Yugyung Lee
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![OR-Tools CP-SAT](https://img.shields.io/badge/solver-Google%20OR--Tools%20CP--SAT-red.svg)](https://developers.google.com/optimization/cp/cp_solver)
-[![UIUC FOIA Dataset](https://img.shields.io/badge/data-10--Yr%20UIUC%20FOIA%20History%20%E2%86%92%20Next--Term%20Forecast-0d9488.svg)]()
-[![Conformal Coverage](https://img.shields.io/badge/Spring%202026%20Holdout-97.5%25%20(95%25%20PI)%20%7C%20-84.6%25%20Unseated%20Students-2563eb.svg)]()
+[![Data](https://img.shields.io/badge/data-UIUC%20FOIA%2C%2019%20training%20terms-0d9488.svg)]()
 
-> **Hack-A-Roo 2026 Deliverables:**
-> - **1-Page Visual Poster (PDF):** [`docs/hackathon/OptiSched_HackARoo_Poster.pdf`](docs/hackathon/OptiSched_HackARoo_Poster.pdf)
-> - **3-Minute Demonstration Video Script:** [`docs/hackathon/demo_script.md`](docs/hackathon/demo_script.md)
-> - **1-Page Executive Brief:** [`docs/hackathon/prof_lee_handout.md`](docs/hackathon/prof_lee_handout.md)
+**Hack-A-Roo deliverables.** [Poster (PDF)](docs/hackathon/OptiSched_HackARoo_Poster.pdf) · [3-minute demo script](docs/hackathon/demo_script.md) · [One-page brief](docs/hackathon/prof_lee_handout.md)
 
 ---
 
 ## Table of Contents
-1. [Executive Summary & Core Innovation](#1-executive-summary--core-innovation)
-2. [How OptiSched Differs from Existing Academic Scheduling Systems](#2-how-optisched-differs-from-existing-academic-scheduling-systems)
+1. [Overview](#1-overview)
+2. [Key Contributions](#2-key-contributions)
 3. [System Architecture](#3-system-architecture)
-4. [Visual Results & Practical Impact for Students and Administrators](#4-visual-results--practical-impact-for-students-and-administrators)
-5. [Evaluation Clarification: Real Registrar Data vs. Simulated Scenarios](#5-evaluation-clarification-real-registrar-data-vs-simulated-scenarios)
-6. [Working Application Screenshots & Complete Workflow](#6-working-application-screenshots--complete-workflow)
-7. [Reproducing the Live Demonstration (Including 3 Counterfactual Shocks)](#7-reproducing-the-live-demonstration-including-3-counterfactual-shocks)
+4. [Results on Held-Out Spring 2026](#4-results-on-held-out-spring-2026)
+5. [Data and Evaluation](#5-data-and-evaluation)
+6. [Application Screenshots](#6-application-screenshots)
+7. [Running the Demo](#7-running-the-demo)
 8. [Mathematical Model & 3-Tier CP-SAT Formulation](#8-mathematical-model--3-tier-cp-sat-formulation)
 9. [Extension Feature: Faculty Commercialization & Policy Retrieval Advisor](#9-extension-feature-faculty-commercialization--policy-retrieval-advisor)
 10. [Installation, CLI Usage & Automated Verification Suites](#10-installation-cli-usage--automated-verification-suites)
 
 ---
 
-## 1. Executive Summary & Core Innovation
+## 1. Overview
 
-**OptiSched** integrates **uncertainty-aware next-semester enrollment forecasting** (`Pooled Ridge Regression` + `Split Conformal Prediction`) directly into a **3-tier preference-aware constraint solver** (`Google OR-Tools CP-SAT`).
+Rooms are assigned before registration opens. When a room is sized to last term's headcount or to a single forecast, students go without seats whenever demand runs high.
 
-> **Forecasting Horizon Clarification:** OptiSched trains on **10 years of historical registrar enrollment data (`19` prior semesters, `Fall 2016`–`Fall 2025`) to forecast enrollment for the next upcoming semester (`Spring 2026` / `Fall 2026`)**. It does **not** attempt to predict enrollment 10 years into the future.
-
-- **Next-Term Demand Forecasting Trained on 10-Year Real Registrar History (`uiuc_foia` profile):** Processes 10 academic years (`Fall 2016` through `Spring 2026`), distilling **22,991 raw UIUC FOIA catalog sections** into **800 course-semester headcounts** across **40 active STEM courses** and **20 semesters**, holding out **Spring 2026** for strictly causal out-of-sample evaluation.
-- **Calibrated Split Conformal Prediction Intervals:** Achieves a held-out Spring 2026 point MAE of **17.24 seats** vs **18.03 seats** for Seasonal Naive and **28.25 seats** for copying prior-term enrollment (`39.0%` error reduction). Calibrating split conformal intervals on `600` rolling-origin residuals achieves **97.5% (`39/40`)** empirical coverage at the 95% bound and **85.0% (`34/40`)** coverage at the 80% bound.
-- **84.6% Reduction in Unseated Students (`169 → 26 seats`):** Sizing classrooms to the **80% split-conformal upper bound** rather than raw point predictions cuts held-out Spring 2026 room overflows from **9 courses down to 2** and reduces unseated students from **169 down to 26 seats (`-84.6%`)** with **0 hard timetable conflicts (`OPTIMAL`)**.
-- **3-Tier Preference-Aware CP-SAT Solver:** Enforces zero room, instructor, and time-slot overlaps while maximizing instructor preferences across three precedence tiers (**Tier 1: per-course overrides**, **Tier 2: general semester availability**, and **Tier 3: 2-year causal teaching habits**) scored across **40% Day, 40% Time Slot, and 20% Room/Layout**, preserving **84.0% (`21/25`)** 2-year habit continuity.
-- **Interactive Counterfactual What-If Simulator:** Enables department coordinators to re-solve the timetable in seconds when **enrollment surges**, **an instructor becomes unavailable (grant buyout / leave)**, or **a classroom is reassigned / reduced in capacity**, using a minimal-perturbation warm start.
+OptiSched forecasts next-term enrollment for each course and attaches calibrated 80% and 95% prediction intervals (split conformal prediction). Each room is sized to the 80% upper bound. A Google OR-Tools CP-SAT model then assigns rooms, time slots and instructors with zero hard conflicts while scoring faculty preferences.
 
 ---
 
-## 2. How OptiSched Differs from Existing Academic Scheduling Systems
+## 2. Key Contributions
 
-Traditional university scheduling tools treat enrollment estimation and room assignment as disconnected steps, either rolling over last semester's room assignments or sizing rooms to raw point forecasts that underestimate demand roughly half the time.
-
-| Capability | Existing Scheduling Systems (Roll-Over / Point-Estimate MIP) | OptiSched (Conformal Predict-Then-Optimize + CP-SAT) |
-|:---|:---|:---|
-| **Enrollment Demand Input** | Copies prior semester headcounts (`MAE 28.25`) or relies on uncalibrated point estimates (`MAE 17.24`) | Trains on **10 years of historical registrar data (19 prior terms)** to forecast the **next semester** with **Split Conformal Prediction Intervals** |
-| **Classroom Sizing Rule** | Sizes rooms to point predictions; any positive demand error triggers Week-1 seat shortages (`9` overflowed courses, `169` unseated students) | Sizes rooms to the **80% conformal upper bound**, absorbing upside demand variance (`2` overflowed courses, `26` unseated students, **`-84.6%`**) |
-| **Faculty Preference Modeling** | Manual spreadsheets or flat soft weights that ignore course-specific needs | **3-Tier Hierarchical CP-SAT Objective:** Per-Course Override > General Availability > 2-Year Historical Habit (`84.0%` continuity) |
-| **Disruption Response** | Manual room swaps taking days of email negotiation | **Live Counterfactual What-If Simulator** for enrollment surges, instructor buyouts, and classroom reassignments with minimal perturbation |
+- Next-term enrollment forecasts with split-conformal prediction intervals, trained on 19 terms of real registrar data (Fall 2016 to Fall 2025).
+- Room sizes taken from the interval and passed directly into a CP-SAT timetable model.
+- Held-out evaluation on a real term (Spring 2026, 40 courses) against two baselines.
+- A 3-tier faculty preference hierarchy: per-course overrides, general availability, and 2-year teaching history.
+- What-If re-solves for enrollment surges, instructor release and room changes, with minimal schedule change.
 
 ---
 
@@ -59,100 +46,96 @@ Traditional university scheduling tools treat enrollment estimation and room ass
 
 ```mermaid
 flowchart LR
-    subgraph Data["1. Historical Registrar Data (10 Years)"]
-        FOIA["UIUC FOIA Catalog (2016-2026)<br/>22,991 Sections → 800 Course-Terms"]
-        UMKC["UMKC Multi-Term Catalog<br/>40 Courses · 20 Faculty · 12 Rooms"]
+    subgraph Data["1. Data"]
+        FOIA["UIUC FOIA registrar records<br/>22,991 sections to 800 course-terms"]
     end
 
-    subgraph Forecast["2. Uncertainty-Aware Next-Term Forecast"]
-        RIDGE["Pooled Ridge Regression<br/>19 Prior Terms → Next Semester<br/>(Spring 2026 Holdout MAE: 17.24)"]
-        CONF["Split Conformal Calibration<br/>600 Rolling-Origin Residuals<br/>80% PI (85.0% Cov) · 95% PI (97.5% Cov)"]
+    subgraph Forecast["2. Forecast"]
+        MODELS["Seasonal naive, damped trend, pooled ridge<br/>Rolling-origin backtest picks lowest MAE"]
+        CONF["Split conformal intervals<br/>80% and 95%"]
     end
 
-    subgraph Solver["3. 3-Tier Google OR-Tools CP-SAT Solver"]
-        HARD["Hard Constraints (0 Conflicts)<br/>Room Cap ≥ 80% Conformal Bound<br/>Lab Purity · Max 2 Courses/Faculty"]
-        SOFT["3-Tier Soft Objective<br/>Tier 1: Per-Course Override<br/>Tier 2: General Availability<br/>Tier 3: 2-Yr Habit (84.0% Continuity)"]
+    subgraph Solver["3. Schedule (CP-SAT)"]
+        HARD["Hard constraints<br/>Room capacity at 80% bound, no overlaps, load limits"]
+        SOFT["Soft objective<br/>3-tier faculty preferences, 40/40/20"]
     end
 
-    subgraph App["4. Coordinator & Faculty Decision Suite"]
-        WHATIF["Counterfactual What-If Simulator<br/>1. Enrollment Surge (+20% CS)<br/>2. Instructor Unavailable (Buyout)<br/>3. Classroom Reassigned (0.9x Cap)"]
-        COMM["Extension: Commercialization Advisor<br/>UM-16C Drafter + BM25 Policy RAG"]
+    subgraph App["4. Coordinator tools"]
+        WHATIF["What-If simulator<br/>Surge, instructor release, room change"]
+        COMM["Extension: Commercialization Advisor"]
     end
 
-    FOIA --> RIDGE
-    UMKC --> HARD
-    RIDGE --> CONF
-    CONF -->|"80% Upper Bound Demand"| HARD
-    HARD --> SOFT
-    SOFT --> WHATIF
+    FOIA --> MODELS --> CONF
+    CONF -->|"80% upper bound"| HARD
+    HARD --> SOFT --> WHATIF
     WHATIF --> COMM
 ```
 
----
-
-## 4. Visual Results & Practical Impact for Students and Administrators
-
-![84.6% Reduction in Unseated Students](docs/images/unseated_students_comparison.png)
-
-### Quantitative Benchmark on Held-Out Spring 2026 (`40` Courses)
-
-| Evaluation Metric (Held-Out Spring 2026, 40 Courses) | Copy Prior Term (`Fall 2025`) | Seasonal Naive (`Same Term Last Year`) | Point Forecast Only (`Pooled Ridge`) | OptiSched 80% Conformal Bound (`Pooled Ridge + CP-SAT`) |
-|:---|:---:|:---:|:---:|:---:|
-| **Next-Term Point Forecast MAE (seats)** | 28.25 | 18.03 | **17.24** | **17.24** (point) |
-| **Empirical Interval Coverage** | — | — | — | **85.0% (34/40)** at 80% PI / **97.5% (39/40)** at 95% PI |
-| **Overflowed Courses (Actual > Room Cap)** | 8 / 40 | — | 9 / 40 | **2 / 40 (-77.8% vs point)** |
-| **Total Unseated Student Seats** | 199 seats | — | 169 seats | **26 seats (-84.6% vs point / -86.9% vs prior term)** |
-| **Hard Timetable Conflicts** | 0 | 0 | 0 | **0 (`OPTIMAL`)** |
-| **2-Year Faculty Habit Continuity** | 84.0% (21/25) | 84.0% (21/25) | 84.0% (21/25) | **84.0% (21/25)** |
-
-### Why This Improvement Matters in Practice
-- **For Students (`169 → 26` Unseated Seats, `-84.6%`):** Prevents Week-1 classroom lockouts, fire-code overcrowding, and waitlist bottlenecks in high-demand prerequisite STEM courses (`CS`, `STAT`, `ECE`, `MATH`), protecting on-time graduation pathways.
-- **For University Administrators (`9 → 2` Overflowed Courses, `0` Hard Conflicts):** Eliminates first-week emergency section splits, last-minute room swaps, and ad-hoc overload overrides while keeping empty-seat waste comparable (`35.1%` vs `36.6%` UIUC actual) and cutting midday `10am–2pm` bottleneck concentration in half (`22.5%` vs `47.9%` UIUC actual).
+Stack: FastAPI · OR-Tools CP-SAT · React + TypeScript.
 
 ---
 
-## 5. Evaluation Clarification: Real Registrar Data vs. Simulated Scenarios
+## 4. Results on Held-Out Spring 2026
 
-To ensure complete transparency in our empirical evaluation, we explicitly separate **real historical registrar data** from **simulated scheduling scenarios**:
+![Unseated students on held-out Spring 2026](docs/images/unseated_students_comparison.png)
 
-| Component | Data Source & Scope | Real vs. Simulated |
+| Metric (40 courses) | Copy prior term (+5%) | Point forecast (+5%) | OptiSched 80% bound |
+|:---|:---:|:---:|:---:|
+| Forecast MAE (seats) | 28.25 | 17.24 | 17.24 |
+| Interval coverage | | | 85% (34/40) at 80%, 97.5% (39/40) at 95% |
+| Overflowed courses | 8 | 9 | **2** |
+| Unseated students | 338 | 153 | **60** |
+| Hard conflicts | 0 | 0 | **0** |
+
+- Unseated students fall 61% against the point forecast and 82% against copying the prior term.
+- Seat utilization is 64.9%, against 64.5% in the actual UIUC schedule. Larger rooms did not buy the result.
+- Midday (10am to 2pm) concentration is 22.5%, against 47.9% in the actual UIUC schedule.
+- On the 25 courses with a teaching history, 84% (21/25) keep the instructor's usual days and slot.
+
+**Who benefits.** Students face fewer first-week seat shortages in high-demand courses. Administrators make fewer room changes after registration, with no loss in seat utilization.
+
+All values are computed by [`foia_replay_service.py`](backend/app/services/foia_replay_service.py) and served at `GET /api/v1/forecast/empirical-benchmark`.
+
+---
+
+## 5. Data and Evaluation
+
+| Input | Source | Real or simulated |
 |:---|:---|:---|
-| **Course Enrollment Time Series (`800` course-terms)** | Distilled from **22,991 raw UIUC FOIA Course Explorer sections** across **40 STEM courses** and **20 consecutive semesters** (`Fall 2016`–`Spring 2026`). | **100% Real Registrar Data** |
-| **Forecasting Horizon (`19 → 1` Next-Term Prediction)** | Models train on **10 years of historical data (`19` prior terms)** to predict the **single upcoming semester (`Spring 2026` held out)**—not a 10-year future projection. | **100% Real Out-of-Sample Holdout** |
-| **Historical Room Benchmarks (`UIUC Actual` & `2-Yr Habit`)** | Actual Spring 2026 UIUC classroom assignments and 2-year modal instructor/course teaching habits (`Fall 2023`–`Spring 2025`). | **100% Real Registrar Data** |
-| **Department Room Pool & 3-Tier Faculty Preferences** | Standardized 12-room / 6-slot constraint testbed (`data/uiuc_foia/` and `data/umkc/`), Tier 1 per-course overrides, and Tier 2 general availability weights. | **Simulated Scheduling Testbed** |
-| **Counterfactual What-If Shocks** | Interactive stress tests for **enrollment surges (`+20% CS, +15% STAT`)**, **instructor unavailability (grant buyout)**, and **classroom reassignment (`0.9x` room capacity)**. | **Simulated Counterfactual Scenarios** |
+| Course enrollment, 800 course-terms | 22,991 UIUC Course Explorer sections (FOIA), 40 STEM courses, Fall 2016 to Spring 2026 | Real |
+| Training window | 19 terms, Fall 2016 to Fall 2025 | Real |
+| Forecast target | Next term (Spring 2026, held out) | Real |
+| Instructor teaching history | Most frequent days and slot per instructor and course over the prior 2 years | Real |
+| Room pool (16 rooms) | Fixed testbed for the solver | Simulated |
+| Preference weights | 40% day, 40% slot, 20% room | Team-set |
+| What-If scenarios | Surge, instructor release, room capacity change | Simulated |
+
+**Definitions.** Unseated students = enrollment above the assigned room's capacity, summed over courses. Baselines are sized at 5% above their estimate.
 
 ---
 
-## 6. Working Application Screenshots & Complete Workflow
+## 6. Application Screenshots
 
-### Step 1: Next-Term Enrollment Forecasting & Held-Out Spring 2026 Visual Benchmark (`/insights`)
-Displays the 10-year historical enrollment trajectory (`Fall 2016`–`Spring 2026`), the calibrated 80% and 95% split-conformal bands for the upcoming semester, the visual comparison chart showing the **84.6% reduction in unseated students (`169 → 26`)**, and the **Evaluation Scope Callout** distinguishing real registrar data from simulated scheduling scenarios.
+**Demand forecast.** STAT 400 enrollment from Fall 2016 to Spring 2026, with the next-term forecast and its 80% and 95% intervals.
 
-![Enrollment Forecast & Spring 2026 Benchmark](docs/images/screenshot_forecast_benchmark.png)
+![Demand forecast](docs/images/crop_forecast.png)
 
-### Step 2: Counterfactual What-If Simulator — Responding to 3 Live Shocks (`/insights` → `What-If Simulator`)
-Demonstrates how the CP-SAT solver responds in real time when **(1) enrollment increases (`+20% CS, +15% STAT`)**, **(2) an instructor becomes unavailable (`Grant Buyout`)**, or **(3) a classroom is reassigned (`0.9x Room Capacity`)**, reporting exact baseline-vs-scenario deltas and the minimal set of courses moved.
+**What-If simulator.** One-click scenarios and the result of the instructor-unavailable preset. One course moved and every other course kept its placement.
 
-![Counterfactual What-If Simulator](docs/images/screenshot_whatif_simulator.png)
+![What-If presets](docs/images/crop_whatif_presets.png)
+![What-If result](docs/images/crop_whatif_result.png)
 
-### Step 3: Conflict-Free Master Schedule & 3-Tier Preference Verification (`/schedule`)
-Renders the solved conflict-free master timetable across classrooms, time slots, and instructors with interactive filtering and preference-alignment badges.
+**Master schedule.** 40 sections, with the constraint auditor reporting 0 hard conflicts.
 
-![Master Schedule View](docs/images/screenshot_master_schedule.png)
+![Master schedule](docs/images/crop_master_schedule.png)
 
 ---
 
-## 7. Reproducing the Live Demonstration (Including 3 Counterfactual Shocks)
+## 7. Running the Demo
 
-### Prerequisites
-- **Python 3.12+**
-- **Node.js 20+** and **npm**
+Prerequisites: Python 3.12+, Node.js 20+.
 
-### Step-by-Step Startup Commands
-
-1. **Start the FastAPI + OR-Tools CP-SAT Backend (`port 8000`):**
+1. Backend on port 8000.
    ```bash
    cd backend
    python3 -m venv venv
@@ -160,25 +143,20 @@ Renders the solved conflict-free master timetable across classrooms, time slots,
    pip install -r requirements.txt
    python3 -m uvicorn app.main:app --reload --port 8000
    ```
-
-2. **Start the React + Vite Frontend (`port 5173`):**
+2. Frontend on port 5173.
    ```bash
    cd frontend
    npm install
    npm run dev
    ```
-
-3. **Walk Through the Complete Demo Workflow in Browser (`http://localhost:5173`):**
-   - **Login:** Open `http://localhost:5173/login` and click **Demo Coordinator Login** (`coordinator@umkc.edu`).
-   - **Switch Dataset Profile (Optional):** In `/admin` or the top status bar, switch between **`UIUC FOIA (10-Yr Real Registrar)`** and **`UMKC (6-Term Department)`**.
-   - **Inspect Next-Term Forecast & 84.6% Seat-Shortage Reduction:** Navigate to **`Insights` → `Demand Forecast`** (`/insights`) to inspect the 10-year historical fan chart, the **Unseated Student Seats (`199 vs 169 vs 26`)** visual chart, and the **Evaluation Scope** callout.
-   - **Run the 3 Counterfactual What-If Shocks:** Click **`What-If Simulator`** inside `/insights` and use the **Quick Demo Scenarios (1-Click Presets)** bar:
-     1. Click **`Preset 1: Enrollment Surge (+20% CS, +15% STAT)`** → click **`Run simulation`** to observe CP-SAT upsize sections into larger rooms with `0` conflicts.
-     2. Click **`Preset 2: Instructor Unavailable (Grant Buyout)`** → click **`Run simulation`** to observe CP-SAT reassign the released instructor's course to a qualified colleague while keeping `39/40` courses stationary (`minimal` perturbation policy).
-     3. Click **`Preset 3: Classroom Reassigned (0.9x Room Capacity)`** → click **`Run simulation`** to observe how the timetable absorbs a 10% room-capacity contraction.
-   - **Inspect Classroom & Instructor Assignments:** Navigate to **`Master Schedule`** (`/schedule`) and **`Instructor Prefs`** (`/preferences`) to verify conflict-free room/slot assignments and 3-tier preference scoring.
-
----
+3. Walk through the workflow at `http://localhost:5173`.
+   - Sign in with **Demo Coordinator Login**.
+   - **Insights → Demand Forecast** shows the forecast, the Spring 2026 benchmark and the unseated-students chart.
+   - **Insights → What-If Simulator** has three one-click scenarios. Pick one and click **Run simulation**.
+     1. Enrollment surge (CS +20%, STAT +15%).
+     2. Instructor unavailable (one-course grant release, colleague coverage).
+     3. Room reassigned (all capacities × 0.9).
+   - **Master Schedule** (`/schedule`) shows room, slot and instructor assignments.
 
 ## 8. Mathematical Model & 3-Tier CP-SAT Formulation
 
@@ -236,12 +214,12 @@ Scheduler_project/
 │   │   ├── api/v1/                            # REST Controllers (schedules, insights, commercialization)
 │   │   ├── services/
 │   │   │   ├── forecast_service.py            # Pooled Ridge + Split Conformal Prediction Engine
-│   │   │   ├── foia_replay_service.py         # 10-Yr UIUC FOIA Empirical Holdout Benchmark
+│   │   │   ├── foia_replay_service.py         # UIUC FOIA held-out Spring 2026 benchmark
 │   │   │   ├── scenario_service.py            # Counterfactual What-If CP-SAT Re-Solver
 │   │   │   └── policy_service.py              # BM25 Policy Retrieval (425 Passages, 7 Docs)
 │   │   └── solver/                            # 3-Tier Google OR-Tools CP-SAT Engine
 │   ├── data/
-│   │   ├── uiuc_foia/                         # 10-Year Real UIUC FOIA Dataset (800 Course-Terms)
+│   │   ├── uiuc_foia/                         # UIUC FOIA dataset (800 course-terms)
 │   │   └── umkc/                              # 6-Term UMKC Department Simulation Dataset
 │   └── tests/                                 # 196 Automated Backend Pytest Cases
 ├── frontend/
@@ -262,7 +240,7 @@ Scheduler_project/
    python3 -m pytest -q
    ```
 
-2. **Run the UIUC FOIA 10-Year Holdout & Conformal Verification Suite (`12 passed`):**
+2. **Run the UIUC FOIA held-out benchmark suite:**
    ```bash
    cd backend
    python3 -m pytest tests/test_uiuc_foia_replay.py -q

@@ -183,10 +183,10 @@ export interface ScheduleBenchmarkSummary {
   overflow_courses_last_term_sizing: number
   overflow_courses_point_forecast_sizing: number
   overflow_courses_conformal_80_sizing: number
-  unseated_seats_last_term_sizing?: number
-  unseated_seats_point_forecast_sizing?: number
-  unseated_seats_conformal_80_sizing?: number
-  unseated_seats_reduction_vs_point_pct?: number
+  unseated_seats_last_term_sizing: number
+  unseated_seats_point_forecast_sizing: number
+  unseated_seats_conformal_80_sizing: number
+  unseated_seats_reduction_vs_point_pct: number
   uiuc_actual_seat_utilization_pct: number
   optisched_seat_utilization_pct: number
   uiuc_empty_seat_waste_pct: number
