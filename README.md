@@ -6,7 +6,7 @@
 [![OR-Tools CP-SAT](https://img.shields.io/badge/solver-Google%20OR--Tools%20CP--SAT-red.svg)](https://developers.google.com/optimization/cp/cp_solver)
 [![Data](https://img.shields.io/badge/data-UIUC%20FOIA%2C%2019%20training%20terms-0d9488.svg)]()
 
-**Hack-A-Roo deliverables.** [Poster (PDF)](docs/hackathon/OptiSched_HackARoo_Poster.pdf) · [3-minute demo script](docs/hackathon/demo_script.md) · [One-page brief](docs/hackathon/prof_lee_handout.md)
+**Hack-A-Roo deliverables.** [Poster (PDF)](docs/hackathon/OptiSched_HackARoo_Poster.pdf) · [3-minute demo video (MP4)](docs/hackathon/OptiSched_3Min_Demo.mp4) · [3-minute demo script](docs/hackathon/demo_script.md) · [One-page brief](docs/hackathon/prof_lee_handout.md)
 
 ---
 
