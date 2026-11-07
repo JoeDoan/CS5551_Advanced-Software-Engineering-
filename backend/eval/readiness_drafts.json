@@ -1,0 +1,20 @@
+{
+  "note": "SYNTHETIC draft texts for the readiness coach, written by the project team. Each says in must_state what the text clearly says and in must_flag what it clearly does not. 'Known gaps flagged' means every must_flag dimension comes back not_found with a follow-up; 'no invented gaps' means no must_state dimension comes back not_found. Labels were written from the text, before the first run.",
+  "drafts": [
+    {"id": "R1", "label": "complete",
+     "text": "Wearable Sweat Patch for Hydration Monitoring\nAbstract: We describe a skin patch that reads hydration from sweat. The main problem is that athletes and clinicians cannot measure hydration without a blood draw. Nurses and sports trainers would use the patch at the point of care. Unlike laboratory assays, our patch gives a result in minutes on a phone. We tested the prototype on 24 volunteers and measured agreement with laboratory results.\nKeywords: sweat sensing; hydration; wearable\nResults were presented as a poster at the spring symposium on April 4, 2026.\nReferences\n[1] Jones, A. Sweat electrolyte sensing. Journal of Sensors 4, 2020.\n[2] Park, S. Wearable patches for clinical use. Biosensors 9, 2022.\n",
+     "must_state": ["problem", "application", "difference", "evidence", "related_work", "timing"], "must_flag": []},
+    {"id": "R2", "label": "no evidence, no timing, no references",
+     "text": "A Faster Method for Route Planning in Rural Delivery\nAbstract: We propose a routing method for delivery vans. The main challenge is that rural routes change daily and current planners are slow. Dispatchers at small delivery companies would use it to replan routes each morning. Unlike existing planners, our method recomputes a full plan in seconds. The notation used throughout is defined in the appendix. The notation used throughout is defined in the appendix. The notation used throughout is defined in the appendix.\nKeywords: routing; logistics\n",
+     "must_state": ["problem", "application", "difference"], "must_flag": ["evidence", "related_work", "timing"]},
+    {"id": "R3", "label": "bare idea",
+     "text": "Idea Notes on Graph Ranking\nWe propose a new algorithm for ranking documents using graph structure. The notation used throughout is defined in the appendix. The notation used throughout is defined in the appendix. The notation used throughout is defined in the appendix. The notation used throughout is defined in the appendix. The notation used throughout is defined in the appendix. The notation used throughout is defined in the appendix.\n",
+     "must_state": [], "must_flag": ["problem", "application", "difference", "evidence", "related_work", "timing"]},
+    {"id": "R4", "label": "evidence only",
+     "text": "Acoustic Leak Detection Notes\nWe built a prototype and tested it in a pipe loop. We measured the leak position error across 40 trials and validated the results against a reference sensor. The notation used throughout is defined in the appendix. The notation used throughout is defined in the appendix. The notation used throughout is defined in the appendix. The notation used throughout is defined in the appendix.\n",
+     "must_state": ["evidence"], "must_flag": ["related_work", "timing", "difference"]},
+    {"id": "R5", "label": "timing only",
+     "text": "Drone Mapping Workflow Notes\nA preprint describing the workflow was posted on May 2, 2026 and a talk was given at a conference in June 2026. The notation used throughout is defined in the appendix. The notation used throughout is defined in the appendix. The notation used throughout is defined in the appendix. The notation used throughout is defined in the appendix. The notation used throughout is defined in the appendix.\n",
+     "must_state": ["timing"], "must_flag": ["evidence", "related_work"]}
+  ]
+}

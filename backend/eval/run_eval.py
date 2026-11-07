@@ -21,6 +21,7 @@ sys.path.insert(0, str(BACKEND))
 
 from app.services import policy_service  # noqa: E402
 from app.services.advisor_service import respond_audited  # noqa: E402
+import scenarios_eval  # noqa: E402  (same folder; on sys.path when run as a script)
 
 GOLD_PATH = Path(__file__).resolve().parent / "gold_retrieval.json"
 K = 5
@@ -109,11 +110,19 @@ def manifest() -> Dict[str, object]:
         "min_score": policy_service.MIN_SCORE,
         "min_distinct_terms": policy_service.MIN_DISTINCT_TERMS,
         "topic_boost": getattr(policy_service, "TOPIC_BOOST", None),
+        "scenarios_sha256": scenarios_eval.sha256_of(scenarios_eval.SCENARIOS_PATH),
+        "readiness_drafts_sha256": scenarios_eval.sha256_of(scenarios_eval.DRAFTS_PATH),
     }
 
 
 def run() -> dict:
-    return {"manifest": manifest(), "retrieval": evaluate_retrieval(), "advisor": evaluate_advisor()}
+    return {
+        "manifest": manifest(),
+        "retrieval": evaluate_retrieval(),
+        "advisor": evaluate_advisor(),
+        "scenarios": scenarios_eval.evaluate_scenarios(),
+        "readiness": scenarios_eval.evaluate_readiness(),
+    }
 
 
 def _print(record: dict) -> None:
@@ -125,6 +134,13 @@ def _print(record: dict) -> None:
         print(f"  {mark} {row['id']} rank={row['first_hit_rank']}  {row['question']}")
     print(f"concept    {a['concept_n'] - len(a['concept_failures'])}/{a['concept_n']}  failures={a['concept_failures']}")
     print(f"boundary   violations={a['boundary_violations']} of {a['boundary_n']}  dropped blocks={a['dropped_blocks']}")
+    sc, rd = record["scenarios"], record["readiness"]
+    print(f"scenarios  passed {sc['passed']}/{sc['n']}  hard-gate failures={sc['hard_gate_failures']}  by category={sc['by_category']}")
+    print(f"           dimensions {sc['dimension_totals']}")
+    for row in sc["rows"]:
+        if not row["passed"] or row["below_full"]:
+            print(f"  {'ok  ' if row['passed'] else 'FAIL'} {row['id']} intent={row['intent']} total={row['total']} below full: {row['below_full']}  {row['text'][:70]}")
+    print(f"readiness  {rd['n_drafts']} drafts  known gaps missed={rd['known_gaps_missed']} of {rd['known_gaps']}  invented gaps={rd['invented_gaps']} of {rd['stated_dimensions']} stated")
 
 
 if __name__ == "__main__":
