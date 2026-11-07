@@ -1,0 +1,39 @@
+{
+  "note": "Frozen evaluation questions for the Commercialization Advisor. Written by reading the policy corpus sections, before any retrieval tuning, and not edited afterwards (tests/test_eval_gold.py pins the file's hash). A policy item counts as a hit when one of the first five quoted passages comes from an expected source and, where expect_phrase is given, contains that phrase. These are the team's questions, not real faculty questions, and 18 policy items is a small sample, so read results as a regression check, not as accuracy.",
+  "policy": [
+    {"id": "P01", "question": "Who owns an invention I make using university resources?", "expect_sources": ["umkc-ownership", "um-crr-100-020"]},
+    {"id": "P02", "question": "How soon do I have to submit an invention disclosure form?", "expect_sources": ["um-crr-100-020"], "expect_phrase": "Invention Disclosure Form shall be made as promptly as possible"},
+    {"id": "P03", "question": "Can a graduate student own their own invention?", "expect_sources": ["um-crr-100-020"], "expect_phrase": "enrolled in the University"},
+    {"id": "P04", "question": "Do I have to report outside consulting for a company?", "expect_sources": ["um-crr-330-015"], "expect_phrase": "consulting, or other professional activity"},
+    {"id": "P05", "question": "What counts as a significant financial interest?", "expect_sources": ["umkc-fcoi"], "expect_phrase": "significant financial interest"},
+    {"id": "P06", "question": "Do I need training on conflicts of interest?", "expect_sources": ["umkc-fcoi"], "expect_phrase": "conflict of interest training"},
+    {"id": "P07", "question": "Can I ask for a conflict of interest decision to be reconsidered?", "expect_sources": ["umkc-fcoi"], "expect_phrase": "reconsidered by the full COIC"},
+    {"id": "P08", "question": "How often must investigators update their financial disclosure?", "expect_sources": ["umkc-fcoi"], "expect_phrase": "at least annually"},
+    {"id": "P09", "question": "Which conflict of interest rules apply to National Science Foundation funded research?", "expect_sources": ["um-crr-420-030"], "expect_phrase": "National Science Foundation"},
+    {"id": "P10", "question": "Who owns copyrightable software that I write?", "expect_sources": ["um-crr-100-030"], "expect_phrase": "Copyrightable software"},
+    {"id": "P11", "question": "What does the Bayh-Dole Act say about federally funded inventions?", "expect_sources": ["umkc-ip"], "expect_phrase": "Bayh-Dole Act allows inventions"},
+    {"id": "P12", "question": "What are trade secrets?", "expect_sources": ["umkc-ip"], "expect_phrase": "Trade secrets are information"},
+    {"id": "P13", "question": "Must I notify the technology transfer office about patent applications?", "expect_sources": ["um-crr-100-020"], "expect_phrase": "notify the TTO"},
+    {"id": "P14", "question": "Does an outside sponsor have ownership rights to my research results?", "expect_sources": ["umkc-ownership"], "expect_phrase": "External sponsors of research"},
+    {"id": "P15", "question": "What happens if I fail to disclose a financial interest on time?", "expect_sources": ["umkc-fcoi"]},
+    {"id": "P16", "question": "How are royalties from my invention shared with me?", "expect_sources": ["um-crr-100-020"], "expect_phrase": "Gross Proceeds"},
+    {"id": "P17", "question": "What is the difference between a trademark and a patent?", "expect_sources": ["umkc-ip"], "expect_phrase": "Trademarks protect words"},
+    {"id": "P18", "question": "What happens after I submit a disclosure?", "expect_sources": ["um-crr-100-020"], "known_failure_before_wp3": true}
+  ],
+  "concept": [
+    {"id": "C01", "question": "What is novelty?", "expect_intent": "concept"},
+    {"id": "C02", "question": "What does prior art mean?", "expect_intent": "concept"},
+    {"id": "C03", "question": "Define inventorship", "expect_intent": "concept"},
+    {"id": "C04", "question": "What is a conflict of interest?", "expect_intent": "concept"},
+    {"id": "C05", "question": "What is public disclosure?", "expect_intent": "concept"},
+    {"id": "C06", "question": "What is translational readiness?", "expect_intent": "concept"}
+  ],
+  "boundary": [
+    {"id": "B01", "question": "Is my invention patentable?", "expect_intent": "referral"},
+    {"id": "B02", "question": "Am I an inventor on this project?", "expect_intent": "referral"},
+    {"id": "B03", "question": "Should I file a patent?", "expect_intent": "referral"},
+    {"id": "B04", "question": "Is this novel? Just say yes or no.", "expect_intent": "referral"},
+    {"id": "B05", "question": "What is the weather in Kansas City?", "expect_intent": "out_of_scope"},
+    {"id": "B06", "question": "zzqx wibble outside", "expect_intent": "out_of_scope"}
+  ]
+}

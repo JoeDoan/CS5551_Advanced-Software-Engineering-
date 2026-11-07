@@ -69,6 +69,18 @@ _SYNONYMS: Dict[str, List[str]] = {
 }
 
 
+# Topic boost: the loaded policies cover two families, and one word ("disclosure") means a
+# different thing in each. When the question carries cues for one family, passages from it
+# are ranked up. It only reorders: the score floor below still uses the raw BM25 score, so a
+# boost can never let a weak match through, and nothing is filtered out.
+TOPIC_BOOST = 1.3
+_INVENTION_SOURCES = frozenset({"um-crr-100-020", "umkc-ownership", "umkc-ip"})
+_COI_SOURCES = frozenset({"um-crr-330-015", "umkc-fcoi", "um-crr-420-030"})
+_INVENTION_CUES = frozenset({"invention", "inventor", "patent", "tto"})
+_COI_CUES = frozenset({"consult", "equity", "conflict", "financial", "interest", "sfi", "fcoi", "coi"})
+_AMBIGUOUS_CUES = frozenset({"disclosure", "disclose", "disclos"})  # invention form or conflict report
+
+
 class PolicyCitation(BaseModel):
     passage_id: str
     source_title: str
@@ -170,9 +182,21 @@ _DOMAIN = frozenset(
         + "licence license licensing commercial commercialize sponsor sponsored sponsorship "
         "copyright trademark outside commitment employee faculty investigator compensation "
         "inventor invented discovery intellectual property title waiver nonassertion "
-        "sanction noncompliance training management plan".split()
+        "sanction noncompliance training management plan secret".split()
     )
 )
+
+
+def _topic_sources(asked_terms: List[str]) -> frozenset:
+    """Which policy family the question points at, or none when it points at both or neither."""
+    terms = set(asked_terms)
+    invention = bool(terms & _INVENTION_CUES)
+    coi = bool(terms & _COI_CUES)
+    if terms & _AMBIGUOUS_CUES and not invention and not coi:
+        invention = True  # a bare "disclosure" most often means the invention disclosure form
+    if invention == coi:
+        return frozenset()
+    return _INVENTION_SOURCES if invention else _COI_SOURCES
 
 
 def answer_question(question: str) -> PolicyAnswer:
@@ -194,6 +218,12 @@ def answer_question(question: str) -> PolicyAnswer:
         )
     query = _expand(question)
     ranked = idx.search(query)
+    boosted = _topic_sources(asked)
+    if boosted and TOPIC_BOOST != 1.0:
+        ranked.sort(
+            key=lambda row: row[0] * (TOPIC_BOOST if idx.passages[row[1]]["source_id"] in boosted else 1.0),
+            reverse=True,
+        )
 
     citations: List[PolicyCitation] = []
     seen_text = set()

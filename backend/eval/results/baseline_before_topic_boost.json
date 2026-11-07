@@ -1,0 +1,254 @@
+{
+  "manifest": {
+    "git_head": "92d3159",
+    "gold_sha256": "a7d3da63965ec25d03209020e1683158b685449c756de0733bc07d4600f86109",
+    "corpus_passages": 425,
+    "min_score": 4.0,
+    "min_distinct_terms": 2,
+    "topic_boost": null
+  },
+  "retrieval": {
+    "n": 18,
+    "hit@5": 0.667,
+    "hit@1": 0.444,
+    "mrr": 0.511,
+    "false_refusals": 1,
+    "rows": [
+      {
+        "id": "P01",
+        "question": "Who owns an invention I make using university resources?",
+        "answered": true,
+        "first_hit_rank": 1,
+        "top_sources": [
+          "umkc-ownership",
+          "um-crr-100-020",
+          "um-crr-100-020",
+          "um-crr-100-020",
+          "um-crr-100-020"
+        ]
+      },
+      {
+        "id": "P02",
+        "question": "How soon do I have to submit an invention disclosure form?",
+        "answered": true,
+        "first_hit_rank": null,
+        "top_sources": [
+          "um-crr-100-020",
+          "um-crr-100-020",
+          "umkc-ownership",
+          "um-crr-100-020",
+          "um-crr-100-020"
+        ]
+      },
+      {
+        "id": "P03",
+        "question": "Can a graduate student own their own invention?",
+        "answered": true,
+        "first_hit_rank": 5,
+        "top_sources": [
+          "um-crr-100-020",
+          "um-crr-100-020",
+          "um-crr-100-020",
+          "umkc-ownership",
+          "um-crr-100-020"
+        ]
+      },
+      {
+        "id": "P04",
+        "question": "Do I have to report outside consulting for a company?",
+        "answered": true,
+        "first_hit_rank": null,
+        "top_sources": [
+          "umkc-fcoi",
+          "umkc-fcoi",
+          "um-crr-330-015",
+          "um-crr-330-015",
+          "umkc-fcoi"
+        ]
+      },
+      {
+        "id": "P05",
+        "question": "What counts as a significant financial interest?",
+        "answered": true,
+        "first_hit_rank": 1,
+        "top_sources": [
+          "umkc-fcoi",
+          "umkc-fcoi",
+          "umkc-fcoi",
+          "umkc-fcoi",
+          "umkc-fcoi"
+        ]
+      },
+      {
+        "id": "P06",
+        "question": "Do I need training on conflicts of interest?",
+        "answered": true,
+        "first_hit_rank": 4,
+        "top_sources": [
+          "umkc-fcoi",
+          "um-crr-420-030",
+          "umkc-fcoi",
+          "umkc-fcoi",
+          "umkc-fcoi"
+        ]
+      },
+      {
+        "id": "P07",
+        "question": "Can I ask for a conflict of interest decision to be reconsidered?",
+        "answered": true,
+        "first_hit_rank": 1,
+        "top_sources": [
+          "umkc-fcoi",
+          "um-crr-330-015",
+          "um-crr-330-015",
+          "um-crr-330-015",
+          "um-crr-330-015"
+        ]
+      },
+      {
+        "id": "P08",
+        "question": "How often must investigators update their financial disclosure?",
+        "answered": true,
+        "first_hit_rank": null,
+        "top_sources": [
+          "umkc-fcoi",
+          "um-crr-420-030",
+          "umkc-fcoi",
+          "umkc-fcoi",
+          "umkc-fcoi"
+        ]
+      },
+      {
+        "id": "P09",
+        "question": "Which conflict of interest rules apply to National Science Foundation funded research?",
+        "answered": true,
+        "first_hit_rank": 2,
+        "top_sources": [
+          "umkc-fcoi",
+          "um-crr-420-030",
+          "um-crr-330-015",
+          "umkc-fcoi",
+          "umkc-fcoi"
+        ]
+      },
+      {
+        "id": "P10",
+        "question": "Who owns copyrightable software that I write?",
+        "answered": true,
+        "first_hit_rank": 1,
+        "top_sources": [
+          "um-crr-100-030",
+          "um-crr-100-030",
+          "um-crr-100-030",
+          "umkc-ownership",
+          "um-crr-100-030"
+        ]
+      },
+      {
+        "id": "P11",
+        "question": "What does the Bayh-Dole Act say about federally funded inventions?",
+        "answered": true,
+        "first_hit_rank": 1,
+        "top_sources": [
+          "umkc-ip",
+          "umkc-ip",
+          "um-crr-100-020",
+          "um-crr-100-020",
+          "um-crr-100-020"
+        ]
+      },
+      {
+        "id": "P12",
+        "question": "What are trade secrets?",
+        "answered": false,
+        "first_hit_rank": null,
+        "top_sources": []
+      },
+      {
+        "id": "P13",
+        "question": "Must I notify the technology transfer office about patent applications?",
+        "answered": true,
+        "first_hit_rank": 4,
+        "top_sources": [
+          "um-crr-100-020",
+          "um-crr-100-020",
+          "um-crr-100-020",
+          "um-crr-100-020",
+          "um-crr-100-020"
+        ]
+      },
+      {
+        "id": "P14",
+        "question": "Does an outside sponsor have ownership rights to my research results?",
+        "answered": true,
+        "first_hit_rank": 1,
+        "top_sources": [
+          "umkc-ownership",
+          "um-crr-100-030",
+          "um-crr-100-020",
+          "umkc-ownership",
+          "um-crr-100-020"
+        ]
+      },
+      {
+        "id": "P15",
+        "question": "What happens if I fail to disclose a financial interest on time?",
+        "answered": true,
+        "first_hit_rank": 1,
+        "top_sources": [
+          "umkc-fcoi",
+          "umkc-fcoi",
+          "umkc-fcoi",
+          "umkc-fcoi",
+          "umkc-fcoi"
+        ]
+      },
+      {
+        "id": "P16",
+        "question": "How are royalties from my invention shared with me?",
+        "answered": true,
+        "first_hit_rank": null,
+        "top_sources": [
+          "umkc-fcoi",
+          "umkc-fcoi",
+          "um-crr-420-030",
+          "um-crr-100-020",
+          "um-crr-100-030"
+        ]
+      },
+      {
+        "id": "P17",
+        "question": "What is the difference between a trademark and a patent?",
+        "answered": true,
+        "first_hit_rank": 1,
+        "top_sources": [
+          "umkc-ip",
+          "umkc-ip",
+          "um-crr-100-020",
+          "um-crr-100-020",
+          "um-crr-100-020"
+        ]
+      },
+      {
+        "id": "P18",
+        "question": "What happens after I submit a disclosure?",
+        "answered": true,
+        "first_hit_rank": null,
+        "top_sources": [
+          "umkc-fcoi",
+          "umkc-fcoi",
+          "umkc-fcoi",
+          "umkc-fcoi",
+          "umkc-fcoi"
+        ]
+      }
+    ]
+  },
+  "advisor": {
+    "concept_n": 6,
+    "concept_failures": [],
+    "boundary_n": 6,
+    "boundary_violations": [],
+    "dropped_blocks": 0
+  }
+}
