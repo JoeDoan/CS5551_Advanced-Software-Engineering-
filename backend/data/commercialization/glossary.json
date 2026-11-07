@@ -1,0 +1,160 @@
+{
+  "note": "General plain-language explainers written by the project team. They are not University policy. Each stays labelled 'draft, not yet reviewed' until reviewed_by and reviewed_on are filled in by the technology office.",
+  "entries": [
+    {
+      "id": "disclosure",
+      "term": "Disclosure",
+      "aliases": ["disclosure", "disclosures", "disclose"],
+      "plain": "The word 'disclosure' is used in three different ways. An invention disclosure is the confidential form you give the university about an invention. A public disclosure is sharing the details of the invention openly, for example in a paper or talk. A conflict of interest disclosure is reporting outside financial interests and activities. They are separate things with separate rules.",
+      "example": "Submitting the invention disclosure form to the technology office is not a public disclosure. Presenting the same results at a conference is.",
+      "think_about": ["Which of the three do I mean?", "Is anything about this work already public?"],
+      "related_fields": ["A3_disclosures"],
+      "related": ["invention_disclosure", "public_disclosure", "conflict_of_interest"],
+      "policy_query": null
+    },
+    {
+      "id": "invention_disclosure",
+      "term": "Invention disclosure",
+      "aliases": ["invention disclosure", "invention disclosure form", "disclosure form", "idf", "um-16c", "um 16c"],
+      "plain": "A form that describes an invention for the university's technology office. It usually starts the university's review of whether and how to protect and commercialize the work. It is typically handled in confidence and is not a patent application. Ask the office about confidentiality for your case.",
+      "example": "A faculty member who has built a working sensor prototype describes the problem, how the sensor works and who funded the work on the form.",
+      "think_about": ["What problem does this solve, and for whom?", "What do I already know about similar work?", "Who contributed ideas?"],
+      "related_fields": ["A1_title", "A1_general", "A1_technical", "E_submitter"],
+      "related": ["inventorship", "prior_art", "public_disclosure"],
+      "policy_query": "disclose invention"
+    },
+    {
+      "id": "public_disclosure",
+      "term": "Public disclosure",
+      "aliases": ["public disclosure", "publicly disclosed", "public disclosures", "going public"],
+      "plain": "Sharing the details of an invention openly, without confidentiality. Common examples are a journal paper, a preprint, a conference talk or poster, a thesis, a web page and offering the invention for sale. Public disclosure can limit patent rights, and the rules differ between countries. In the United States there is generally a limited window after your own public disclosure, and elsewhere there may be none, so confirm timing with the office before you publish.",
+      "example": "Posting a preprint on the day before a patent application is filed can affect rights in some countries.",
+      "think_about": ["What has already been shared, and when?", "Is a paper, talk or poster coming up?"],
+      "related_fields": ["A2_first_public", "A3_disclosures"],
+      "related": ["invention_disclosure", "prior_art"],
+      "policy_query": null
+    },
+    {
+      "id": "prior_art",
+      "term": "Prior art",
+      "aliases": ["prior art", "existing work", "related work"],
+      "plain": "Anything made public before a patent application is filed that relates to your invention: papers, patents, talks, products and websites. Reviewers compare an invention against it. A useful disclosure names the closest things you know about, even when they seem different.",
+      "example": "For an acoustic crack sensor, prior art could include ultrasonic inspection methods in journals and existing commercial inspection tools.",
+      "think_about": ["What is the closest thing that already exists?", "How is mine different from it?"],
+      "related_fields": ["D1_prior_art", "D1_competition"],
+      "related": ["novelty", "differentiation"],
+      "policy_query": null
+    },
+    {
+      "id": "novelty",
+      "term": "Novelty",
+      "aliases": ["novelty", "novel", "new enough"],
+      "plain": "In general, an invention is novel when it has not already been made public in the form you claim. Whether a particular invention is novel is a judgment made by the technology office and patent counsel after they compare it to prior art. This tool does not make that judgment. You can help by writing down what your work does differently.",
+      "example": "A method that adds one known step to a known process may need a clear explanation of what the added step changes.",
+      "think_about": ["What does my work do that earlier work does not?"],
+      "related_fields": ["A1_novel", "A1_different"],
+      "related": ["prior_art", "patentability", "differentiation"],
+      "policy_query": null
+    },
+    {
+      "id": "patentability",
+      "term": "Patentability",
+      "aliases": ["patentability", "patentable", "patent eligibility"],
+      "plain": "The legal question of whether an invention can receive a patent. In general it asks whether the invention is new, is not an obvious step from what is already known, is useful, and is the kind of thing that can be patented. The technology office and patent counsel assess it. This tool does not.",
+      "example": "Two similar sensors can differ in patentability depending on what was published before each was described.",
+      "think_about": ["What is already public that is close to mine?"],
+      "related_fields": ["A1_novel", "D1_prior_art"],
+      "related": ["novelty", "prior_art"],
+      "policy_query": null
+    },
+    {
+      "id": "inventorship",
+      "term": "Inventorship",
+      "aliases": ["inventorship", "inventor", "inventors", "co-inventor", "co inventor", "co-inventors"],
+      "plain": "Inventors are the people who contributed to the idea of the invention, meaning how it works or what it is. Helping run experiments or write the paper does not by itself make someone an inventor, and an author on a paper is not automatically an inventor. Who counts is a legal determination made with patent counsel. List everyone who contributed ideas and ask the office.",
+      "example": "A student who proposed the key sensing approach may be an inventor. A technician who built the test rig to a given design may not be.",
+      "think_about": ["Who contributed ideas to how this works?", "Did anyone outside the university contribute?"],
+      "related_fields": ["C1_inventors"],
+      "related": ["invention_disclosure"],
+      "policy_query": null
+    },
+    {
+      "id": "differentiation",
+      "term": "Differentiation",
+      "aliases": ["differentiation", "differentiator", "how is it different", "what makes it different"],
+      "plain": "How your approach differs from what exists today, and why that matters. Name the closest alternative and the specific difference: cheaper, faster, more accurate, or working where others fail. A clear difference helps reviewers and partners see the value.",
+      "example": "Our sensor runs unattended and needs no lane closures, while the standard method needs both.",
+      "think_about": ["What is the closest alternative?", "What exactly is better, and by how much?"],
+      "related_fields": ["A1_different", "D1_competition"],
+      "related": ["prior_art", "potential_application"],
+      "policy_query": null
+    },
+    {
+      "id": "potential_application",
+      "term": "Potential application",
+      "aliases": ["potential application", "application", "applications", "use case", "use cases"],
+      "plain": "A specific use of your result by a specific user. 'Inspectors can find hairline cracks on steel bridges without closing lanes' is an application. 'A new acoustic technique' is a finding. Naming who would use it and what they do today makes the value easier to see.",
+      "example": "Finding: a passive acoustic method locates cracks. Application: a state transportation department monitors bridges continuously.",
+      "think_about": ["Who would use this?", "What do they do today instead?"],
+      "related_fields": ["A1_problem", "A1_general"],
+      "related": ["differentiation", "translational_readiness"],
+      "policy_query": null
+    },
+    {
+      "id": "development_stage",
+      "term": "Development stage",
+      "aliases": ["development stage", "stage of development", "stage", "maturity"],
+      "plain": "How far the work has progressed: an idea, a laboratory proof of concept, a working prototype, testing in realistic conditions, or ready for field use. Partners usually want to know the stage because earlier work often needs more development before a company will invest. Being early is not a reason to wait to talk to the office.",
+      "example": "A prototype that ran for six months on two bridges is further along than a bench test on one sample.",
+      "think_about": ["What has been built or tested so far?", "What evidence do I have that it works?"],
+      "related_fields": ["A2_prototype", "A1_limits"],
+      "related": ["translational_readiness"],
+      "policy_query": null
+    },
+    {
+      "id": "translational_readiness",
+      "term": "Translational readiness",
+      "aliases": ["translational readiness", "readiness", "technology readiness", "technology readiness level", "trl", "translational"],
+      "plain": "How close a research result is to being useful outside the lab. Useful questions are: is there a defined user and problem, is there evidence it works in realistic conditions, and is there a clear next development step? Some fields use numbered scales such as technology readiness levels. This tool does not assign a level.",
+      "example": "A result with a named user, field trial data and a plan for the next trial is easier to move forward than a result with none of these.",
+      "think_about": ["Is there a clear user and problem?", "What is the next step to show it works in real conditions?"],
+      "related_fields": ["A1_problem", "A2_prototype", "A1_limits"],
+      "related": ["development_stage", "potential_application"],
+      "policy_query": null
+    },
+    {
+      "id": "conflict_of_interest",
+      "term": "Conflict of interest",
+      "aliases": ["conflict of interest", "conflicts of interest", "financial conflict of interest", "fcoi", "coi", "outside interest", "outside interests"],
+      "plain": "A situation where an outside financial interest or activity could appear to affect your university research or duties. Universities generally ask employees to disclose certain outside interests so that any conflict can be reviewed and managed. Having an outside interest is not automatically a problem. Not reporting it can be. The quoted policy below says what applies at the University of Missouri and UMKC.",
+      "example": "Holding equity in a company that wants to license your research is an interest to report and have reviewed.",
+      "think_about": ["Do I or a family member have equity or consulting ties to a company connected to this work?"],
+      "related_fields": ["B2_third_party_used"],
+      "related": ["equity", "licensing"],
+      "policy_query": "conflict of interest definition significant financial interest",
+      "policy_max": 1
+    },
+    {
+      "id": "licensing",
+      "term": "Licensing",
+      "aliases": ["licensing", "license", "licence", "licenses", "licensed"],
+      "plain": "Permission the university gives a company to use an invention the university owns, usually in return for payments or an ownership share. A startup often begins with a license from the university.",
+      "example": "A new company receives a license to use a sensor invention and pays the university royalties on sales.",
+      "think_about": ["Is there a company that might want to use this?", "Do I have any financial tie to that company?"],
+      "related_fields": ["D2_licensees"],
+      "related": ["equity", "conflict_of_interest"],
+      "policy_query": null
+    },
+    {
+      "id": "equity",
+      "term": "Equity",
+      "aliases": ["equity", "stock", "shares", "ownership share"],
+      "plain": "An ownership share in a company. If a company that may license your work offers you equity, that is generally a financial interest to report and have reviewed under the conflict of interest rules. Ask the conflict of interest office before accepting.",
+      "example": "A startup offers a faculty founder shares while it negotiates a license to the faculty member's invention.",
+      "think_about": ["Is equity part of any discussion with a company?"],
+      "related_fields": ["B2_third_party_used"],
+      "related": ["conflict_of_interest", "licensing"],
+      "policy_query": "equity financial interest company"
+    }
+  ]
+}

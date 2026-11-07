@@ -12,6 +12,7 @@ from app.schemas.api_schemas import (
 )
 from app.models.entities import Schedule, Course, User, Room, TimeSlot, Semester
 from app.api.v1 import (
+    routes_advisor,
     routes_analytics,
     routes_assignments,
     routes_auth,
@@ -68,6 +69,11 @@ router.include_router(
 )
 router.include_router(
     routes_commercialization.router,
+    prefix="/commercialization",
+    tags=["Faculty Commercialization"],
+)
+router.include_router(
+    routes_advisor.router,
     prefix="/commercialization",
     tags=["Faculty Commercialization"],
 )
