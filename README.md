@@ -6,7 +6,7 @@
 [![OR-Tools CP-SAT](https://img.shields.io/badge/solver-Google%20OR--Tools%20CP--SAT-red.svg)](https://developers.google.com/optimization/cp/cp_solver)
 [![Data](https://img.shields.io/badge/data-UIUC%20FOIA%2C%2019%20training%20terms-0d9488.svg)]()
 
-**Hack-A-Roo deliverables.** [Poster (PDF)](docs/hackathon/OptiSched_HackARoo_Poster.pdf) · [3-minute demo video (MP4)](docs/hackathon/OptiSched_3Min_Demo.mp4) · [3-minute demo script](docs/hackathon/demo_script.md) · [One-page brief](docs/hackathon/prof_lee_handout.md)
+**Hack-A-Roo deliverables.** [Poster (PDF)](docs/hackathon/OptiSched_HackARoo_Poster.pdf) · [3-minute demo video (MP4)](docs/hackathon/OptiSched_3Min_Demo.mp4) · [3-minute demo video (Google Drive)](https://drive.google.com/drive/folders/1WFiqrBmV1QXLT7YIgssh_T41pW6FQo3U?usp=sharing) · [One-page brief](docs/hackathon/prof_lee_handout.md)
 
 ---
 
@@ -226,8 +226,8 @@ Scheduler_project/
 │   └── src/                                   # React + TypeScript UI (157 Vitest Cases across 33 Suites)
 └── docs/
     ├── hackathon/
-    │   ├── OptiSched_HackARoo_Poster.pdf      # 1-Page Visual Hack-A-Roo Poster
-    │   ├── demo_script.md                     # Timed 3:00 Video Demonstration Script
+    │   ├── OptiSched_HackARoo_Poster.pdf      # 48x36 Visual Hack-A-Roo Poster
+    │   ├── OptiSched_3Min_Demo.mp4            # 3-Minute Demo Video (with Captions)
     │   └── prof_lee_handout.md                # 1-Page Executive Brief
     └── images/                                # Benchmark Charts & Live Application Screenshots
 ```
