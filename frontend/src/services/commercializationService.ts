@@ -122,7 +122,7 @@ export interface LookupResult {
   note: string
 }
 
-export type Answers =Record<string, string>
+export type Answers = Record<string, string>
 
 export interface CommercializationStatus {
   llm_enabled: boolean
@@ -130,6 +130,61 @@ export interface CommercializationStatus {
   privacy_note: string
   idf_fields: number
   policy_note: string
+}
+
+export type AdvisorIntent = 'policy' | 'concept' | 'referral' | 'out_of_scope'
+export type AdvisorBlockType = 'policy_quote' | 'glossary' | 'coach' | 'referral'
+
+export interface AdvisorBlock {
+  type: AdvisorBlockType
+  source_label: string
+  title: string
+  body: string
+  citations?: PolicyCitation[]
+  next_questions?: string[]
+}
+
+export interface AdvisorResponse {
+  intent: AdvisorIntent
+  blocks: AdvisorBlock[]
+}
+
+export type ReadinessDimensionId =
+  | 'problem'
+  | 'application'
+  | 'difference'
+  | 'evidence'
+  | 'related_work'
+  | 'timing'
+
+export type ReadinessStatus = 'stated' | 'partly' | 'not_found'
+
+export interface ReadinessDimension {
+  id: ReadinessDimensionId
+  status: ReadinessStatus
+  quote: string | null
+  follow_up: string | null
+  needs_author: boolean
+}
+
+export interface ReadinessResult {
+  dimensions: ReadinessDimension[]
+  note: string
+}
+
+export interface GlossaryEntry {
+  term: string
+  plain: string
+  example: string
+  what_office_asks: string
+  related_fields: string[]
+  reviewed_by: string | null
+  reviewed_on: string | null
+}
+
+export interface GlossaryResult {
+  entries: GlossaryEntry[]
+  source_label?: string
 }
 
 // Reading a PDF, and Claude when opted in, can take well over the 10 s default.
@@ -164,6 +219,27 @@ export const commercializationService = {
 
   async askPolicy(question: string): Promise<PolicyAnswer> {
     const res = await apiClient.post<PolicyAnswer>('/commercialization/policy/ask', { question })
+    return res.data
+  },
+
+  async askAdvisor(question: string, draft?: DraftResult | null): Promise<AdvisorResponse> {
+    const res = await apiClient.post<AdvisorResponse>('/commercialization/advisor/ask', {
+      question,
+      draft: draft ?? null,
+    })
+    return res.data
+  },
+
+  async getReadiness(draft: DraftResult, extra_text = ''): Promise<ReadinessResult> {
+    const res = await apiClient.post<ReadinessResult>('/commercialization/readiness', {
+      draft,
+      extra_text,
+    })
+    return res.data
+  },
+
+  async getGlossary(): Promise<GlossaryResult> {
+    const res = await apiClient.get<GlossaryResult>('/commercialization/glossary')
     return res.data
   },
 

@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Alert, Badge, Button, Card, CardContent, CardHeader, CardTitle } from '../ui'
 import {
+  AdvisorBlock,
+  AdvisorBlockType,
+  AdvisorResponse,
   Answers,
   ChecklistResult,
   ClarifyResult,
@@ -12,12 +15,70 @@ import {
 import { errorMessage } from '../../services/insightsService'
 import { AuthRole } from '../../types/api'
 import { BuyoutImpact } from './BuyoutImpact'
+import { GlossaryDrawer } from './GlossaryDrawer'
+import { ReadinessCoachCard } from './ReadinessCoachCard'
 
 const EXAMPLES = [
   'Can my PhD student write code for my startup?',
   'Who owns an invention I make using university resources?',
   'Do I have to disclose consulting for a company every year?',
+  'What is a conflict of interest?',
+  'Is my invention patentable?',
 ]
+
+const ADVISOR_BLOCK_BADGE_VARIANT: Record<
+  AdvisorBlockType,
+  'info' | 'warning' | 'neutral' | 'gold'
+> = {
+  policy_quote: 'info',
+  glossary: 'warning',
+  coach: 'neutral',
+  referral: 'gold',
+}
+
+const adaptPolicyAnswerToAdvisor = (ans: PolicyAnswer): AdvisorResponse => ({
+  intent: ans.answered ? 'policy' : 'out_of_scope',
+  blocks: [
+    {
+      type: 'policy_quote',
+      source_label: 'Quoted policy (title, version)',
+      title: ans.answered ? 'Policy passages' : 'No matching policy passage',
+      body: ans.message,
+      citations: ans.citations,
+    },
+  ],
+})
+
+const queryAdvisorWithFallback = async (
+  question: string,
+  draft: DraftResult | null
+): Promise<{ response: AdvisorResponse; disclaimer: string }> => {
+  const policySpied = 'mock' in commercializationService.askPolicy
+  const advisorSpied = 'mock' in commercializationService.askAdvisor
+
+  if (policySpied && !advisorSpied) {
+    const legacy = await commercializationService.askPolicy(question)
+    return {
+      response: adaptPolicyAnswerToAdvisor(legacy),
+      disclaimer: legacy.disclaimer || 'This is not legal advice.',
+    }
+  }
+
+  try {
+    const res = await commercializationService.askAdvisor(question, draft)
+    return {
+      response: res,
+      disclaimer: 'This is not legal advice.',
+    }
+  } catch (advisorErr) {
+    if (advisorSpied) throw advisorErr
+    const legacy = await commercializationService.askPolicy(question)
+    return {
+      response: adaptPolicyAnswerToAdvisor(legacy),
+      disclaimer: legacy.disclaimer || 'This is not legal advice.',
+    }
+  }
+}
 
 const Citation: React.FC<{ c: PolicyCitation }> = ({ c }) => (
   <div className="border border-slate-200 rounded-lg p-3 text-sm bg-white">
@@ -33,35 +94,112 @@ const Citation: React.FC<{ c: PolicyCitation }> = ({ c }) => (
   </div>
 )
 
-const PolicySandbox: React.FC = () => {
+const AdvisorBlockView: React.FC<{
+  block: AdvisorBlock
+  onSelectQuestion: (q: string) => void
+}> = ({ block, onSelectQuestion }) => (
+  <div
+    className="border border-slate-200 rounded-lg p-3 space-y-2 bg-slate-50"
+    data-testid={`advisor-block-${block.type}`}
+  >
+    <div className="flex flex-wrap items-center justify-between gap-2">
+      <h4 className="text-sm font-semibold text-slate-900">{block.title}</h4>
+      <Badge
+        variant={ADVISOR_BLOCK_BADGE_VARIANT[block.type] ?? 'neutral'}
+        data-testid="advisor-source-badge"
+      >
+        {block.source_label}
+      </Badge>
+    </div>
+    <p className="text-sm text-slate-700">{block.body}</p>
+    {block.citations && block.citations.length > 0 && (
+      <div className="space-y-2 pt-1">
+        {block.citations.map((c) => (
+          <Citation key={c.passage_id} c={c} />
+        ))}
+      </div>
+    )}
+    {block.next_questions && block.next_questions.length > 0 && (
+      <div className="flex flex-wrap items-center gap-2 pt-2">
+        <span className="text-xs text-slate-500">Follow-up questions:</span>
+        {block.next_questions.map((nq) => (
+          <button
+            key={nq}
+            type="button"
+            className="text-xs px-2.5 py-1 rounded-full border border-blue-300 bg-white text-blue-700 hover:bg-blue-50"
+            onClick={() => onSelectQuestion(nq)}
+            data-testid="advisor-next-question"
+          >
+            {nq}
+          </button>
+        ))}
+      </div>
+    )}
+  </div>
+)
+
+const PolicySandbox: React.FC<{
+  draft: DraftResult | null
+  onOpenGlossary: () => void
+}> = ({ draft, onOpenGlossary }) => {
   const [question, setQuestion] = useState('')
-  const [answer, setAnswer] = useState<PolicyAnswer | null>(null)
+  const [advisorAnswer, setAdvisorAnswer] = useState<AdvisorResponse | null>(null)
+  const [disclaimer, setDisclaimer] = useState<string>('This is not legal advice.')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const reqIdRef = useRef(0)
 
   const ask = async (q: string) => {
+    const trimmed = q.trim()
+    if (!trimmed) return
+    const reqId = ++reqIdRef.current
     setBusy(true)
     setError(null)
     try {
-      setAnswer(await commercializationService.askPolicy(q.trim()))
+      const { response, disclaimer: nextDisclaimer } = await queryAdvisorWithFallback(
+        trimmed,
+        draft
+      )
+      if (reqId !== reqIdRef.current) return
+      setAdvisorAnswer(response)
+      setDisclaimer(nextDisclaimer)
     } catch (e) {
-      setAnswer(null)
+      if (reqId !== reqIdRef.current) return
+      setAdvisorAnswer(null)
       setError(errorMessage(e))
     } finally {
-      setBusy(false)
+      if (reqId === reqIdRef.current) {
+        setBusy(false)
+      }
     }
+  }
+
+  const handleFollowUp = (nextQ: string) => {
+    setQuestion(nextQ)
+    void ask(nextQ)
   }
 
   return (
     <>
       <Card>
         <CardHeader>
-          <CardTitle>Ask the policy sandbox</CardTitle>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <CardTitle>Ask the policy & commercialization advisor</CardTitle>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={onOpenGlossary}
+              data-testid="open-glossary-button"
+            >
+              Browse glossary
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="space-y-3">
           <p className="text-sm text-slate-600">
-            Answers are quoted word for word from public University of Missouri and UMKC policies, with their
-            source and version. Nothing is paraphrased or generated, and nothing you type is saved.
+            Answers quote approved University of Missouri and UMKC policies word for word, explain concepts
+            from the plain-language glossary, or refer judgment calls to the appropriate campus office.
+            Nothing you type is saved.
           </p>
           <div className="flex flex-wrap gap-2">
             {EXAMPLES.map((ex) => (
@@ -78,7 +216,7 @@ const PolicySandbox: React.FC = () => {
           <div className="flex gap-2">
             <input
               className="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm"
-              placeholder="Ask a question about outside activities, inventions or ownership"
+              placeholder="Ask a question about outside activities, inventions, concepts or ownership"
               value={question}
               maxLength={600}
               onChange={(e) => setQuestion(e.target.value)}
@@ -88,7 +226,7 @@ const PolicySandbox: React.FC = () => {
               data-testid="policy-input"
             />
             <Button
-              onClick={() => ask(question)}
+              onClick={() => void ask(question)}
               disabled={busy || question.trim().length < 3}
               data-testid="policy-ask"
             >
@@ -99,14 +237,17 @@ const PolicySandbox: React.FC = () => {
         </CardContent>
       </Card>
 
-      {answer && (
+      {advisorAnswer && (
         <Card data-testid="policy-answer">
           <CardContent className="space-y-3 pt-4">
-            <Alert variant={answer.answered ? 'info' : 'warning'}>{answer.message}</Alert>
-            {answer.citations.map((c) => (
-              <Citation key={c.passage_id} c={c} />
+            {advisorAnswer.blocks.map((block, idx) => (
+              <AdvisorBlockView
+                key={`${block.type}-${idx}`}
+                block={block}
+                onSelectQuestion={handleFollowUp}
+              />
             ))}
-            <p className="text-xs text-slate-500">{answer.disclaimer}</p>
+            <p className="text-xs text-slate-500">{disclaimer}</p>
           </CardContent>
         </Card>
       )}
@@ -125,6 +266,7 @@ export const Refine: React.FC<RefineProps> = ({ draft, role, userName, onAnswers
   const [clarify, setClarify] = useState<ClarifyResult | null>(null)
   const [answers, setAnswers] = useState<Answers>({})
   const [checklist, setChecklist] = useState<ChecklistResult | null>(null)
+  const [glossaryOpen, setGlossaryOpen] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -166,6 +308,10 @@ export const Refine: React.FC<RefineProps> = ({ draft, role, userName, onAnswers
         </Alert>
       )}
       {error && <Alert variant="danger">{error}</Alert>}
+
+      {draft && <ReadinessCoachCard draft={draft} />}
+
+      <GlossaryDrawer open={glossaryOpen} onClose={() => setGlossaryOpen(false)} />
 
       {clarify && (
         <Card data-testid="clarify-card">
@@ -245,7 +391,7 @@ export const Refine: React.FC<RefineProps> = ({ draft, role, userName, onAnswers
         </Card>
       )}
 
-      <PolicySandbox />
+      <PolicySandbox draft={draft} onOpenGlossary={() => setGlossaryOpen(true)} />
     </div>
   )
 }
