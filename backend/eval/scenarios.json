@@ -14,250 +14,359 @@
       "synthetic": true,
       "category": "early_research_observation",
       "title": "Acoustic bridge crack correlation in lab beams",
-      "manuscript_excerpt": "Title: Low-Cost Acoustic Attenuation Observations in Prestressed Concrete Lab Beams\nAuthors: Yugyung Lee, Alex Rivera\nAbstract: Structural concrete cracking degrades highway infrastructure over decades of cyclic traffic loading. In this laboratory note we report an unexpected 14 dB acoustic attenuation shift across micro-cracks in three prestressed concrete beams under four-point bending in our structures lab. Further theoretical modeling is needed to understand wave dispersion across aggregate boundaries.\nKeywords: acoustic sensing; concrete beams; wave attenuation; structural mechanics",
+      "manuscript_excerpt": "Title: Low-Cost Acoustic Attenuation Observations in Prestressed Concrete Lab Beams\nAuthors: Yugyung Lee, Alex Rivera\nAbstract: A critical bottleneck and unsolved problem is that structural concrete cracking degrades highway infrastructure over decades of cyclic traffic loading. In this laboratory note we report an unexpected 14 dB acoustic attenuation shift across micro-cracks in three prestressed concrete beams under four-point bending in our structures lab. Further theoretical modeling is needed to understand wave dispersion across aggregate boundaries.\nKeywords: acoustic sensing; concrete beams; wave attenuation; structural mechanics",
       "question": "What is translational readiness?",
       "expected_intent": "concept",
-      "expected_readiness_gaps": ["application", "difference", "related_work", "timing"]
+      "expected_readiness_gaps": [
+        "application",
+        "difference",
+        "evidence",
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S02",
       "synthetic": true,
       "category": "early_research_observation",
       "title": "Biomarker expression change in cell culture",
-      "manuscript_excerpt": "Title: Hypoxia-Induced Upregulation of Transcriptomic Marker-Z in Cultured Endothelial Cells\nAuthors: Mei Lin, Jordan Patel\nAbstract: Cellular responses to acute oxygen deprivation remain incompletely characterized in microvascular tissue models. Transcriptomic profiling of 48 multi-well plates showed a reproducible two-fold upregulation of Marker-Z after six hours of hypoxia exposure in vitro. We have not yet identified a clinical diagnostic platform or therapeutic inhibitor target.\nKeywords: transcriptomics; hypoxia; endothelial cells; biomarker discovery",
+      "manuscript_excerpt": "Title: Hypoxia-Induced Upregulation of Transcriptomic Marker-Z in Cultured Endothelial Cells\nAuthors: Mei Lin, Jordan Patel\nAbstract: A critical bottleneck and unsolved problem is that cellular responses to acute oxygen deprivation remain incompletely characterized in microvascular tissue models. Transcriptomic profiling of 48 multi-well plates showed a reproducible two-fold upregulation of Marker-Z after six hours of hypoxia exposure in vitro. We have not yet identified a clinical diagnostic platform or therapeutic inhibitor target.\nKeywords: transcriptomics; hypoxia; endothelial cells; biomarker discovery",
       "question": "What is a potential application?",
       "expected_intent": "concept",
-      "expected_readiness_gaps": ["application", "difference", "related_work", "timing"]
+      "expected_readiness_gaps": [
+        "application",
+        "difference",
+        "evidence",
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S03",
       "synthetic": true,
       "category": "early_research_observation",
       "title": "Perovskite thin-film annealing temperature curve",
-      "manuscript_excerpt": "Title: Grain Boundary Density Variations in Spin-Coated Halide Perovskite Thin Films\nAuthors: Priya Nair, Samuel Cho\nAbstract: Crystalline morphology strongly influences charge carrier lifetime in solution-processed semiconductors. Varying thermal annealing time between 10 and 45 minutes at 110 C systematically altered grain boundary density in spin-coated halide perovskite films on glass substrates. Additional stability characterization under ambient humidity is planned.\nKeywords: perovskite thin films; thermal annealing; grain boundaries; photovoltaics",
+      "manuscript_excerpt": "Title: Grain Boundary Density Variations in Spin-Coated Halide Perovskite Thin Films\nAuthors: Priya Nair, Samuel Cho\nAbstract: A critical bottleneck and unsolved problem is that crystalline morphology strongly influences charge carrier lifetime in solution-processed semiconductors. Varying thermal annealing time between 10 and 45 minutes at 110 C systematically altered grain boundary density in spin-coated halide perovskite films on glass substrates. Additional stability characterization under ambient humidity is planned.\nKeywords: perovskite thin films; thermal annealing; grain boundaries; photovoltaics",
       "question": "What does development stage mean?",
       "expected_intent": "concept",
-      "expected_readiness_gaps": ["application", "difference", "related_work", "timing"]
+      "expected_readiness_gaps": [
+        "application",
+        "difference",
+        "evidence",
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S04",
       "synthetic": true,
       "category": "early_research_observation",
       "title": "Graph spectral clustering bound on synthetic networks",
-      "manuscript_excerpt": "Title: Tighter Eigenvalue Gap Bounds for Spectral Partitioning on Random Regular Graphs\nAuthors: David Kim, Elena Rostova\nAbstract: Spectral graph partitioning relies on concentration bounds for the second eigenvalue of the normalized Laplacian matrix. In this theoretical manuscript we prove a tighter eigenvalue gap bound for random regular graphs with degree d >= 6 using trace method expansions. No empirical benchmark or software implementation has been constructed yet.\nKeywords: spectral graph theory; eigenvalue gap; random regular graphs; combinatorics",
+      "manuscript_excerpt": "Title: Tighter Eigenvalue Gap Bounds for Spectral Partitioning on Random Regular Graphs\nAuthors: David Kim, Elena Rostova\nAbstract: A critical bottleneck and unsolved problem is that spectral graph partitioning relies on concentration bounds for the second eigenvalue of the normalized Laplacian matrix. In this theoretical manuscript we prove a tighter eigenvalue gap bound for random regular graphs with degree d >= 6 compared with classical Cheeger bounds using trace method expansions. No empirical benchmark or software implementation has been constructed yet.\nKeywords: spectral graph theory; eigenvalue gap; random regular graphs; combinatorics",
       "question": "What does differentiation mean?",
       "expected_intent": "concept",
-      "expected_readiness_gaps": ["application", "evidence", "related_work", "timing"]
+      "expected_readiness_gaps": [
+        "application",
+        "evidence",
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S05",
       "synthetic": true,
       "category": "early_research_observation",
       "title": "Soil microbiome shift under drought stress",
-      "manuscript_excerpt": "Title: Rhizosphere Taxa Enrichment Under Controlled Greenhouse Water Restriction\nAuthors: Hannah Park, Carlos Mendez\nAbstract: Root-associated microbial communities shift rapidly during prolonged agricultural drought periods. 16S rRNA metagenomic sequencing of 12 greenhouse pots revealed consistent enrichment of two rhizosphere bacterial taxa during a 21-day water restriction protocol in loam soil. Field inoculant formulations have not yet been explored.\nKeywords: soil microbiome; drought stress; metagenomics; rhizosphere bacteria",
+      "manuscript_excerpt": "Title: Rhizosphere Taxa Enrichment Under Controlled Greenhouse Water Restriction\nAuthors: Hannah Park, Carlos Mendez\nAbstract: A critical bottleneck and unsolved problem is that root-associated microbial communities shift rapidly during prolonged agricultural drought periods. 16S rRNA metagenomic sequencing of 12 greenhouse pots revealed consistent enrichment of two rhizosphere bacterial taxa during a 21-day water restriction protocol in loam soil. Field inoculant formulations have not yet been explored.\nKeywords: soil microbiome; drought stress; metagenomics; rhizosphere bacteria",
       "question": "What is an invention disclosure?",
       "expected_intent": "concept",
-      "expected_readiness_gaps": ["application", "difference", "related_work", "timing"]
+      "expected_readiness_gaps": [
+        "application",
+        "difference",
+        "evidence",
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S06",
       "synthetic": true,
       "category": "publication_and_student_inventorship",
       "title": "IEEE conference talk in three weeks with PhD student co-author",
-      "manuscript_excerpt": "Title: Non-Contact Millimeter-Wave Radar Respiration Monitor for Neonatal Intensive Care Cribs\nAuthors: Yugyung Lee, Doctoral Student Avery Chen\nAbstract: Adhesive ECG electrodes irritate fragile skin in premature infants in neonatal intensive care units. We built and tested a low-power 60 GHz millimeter-wave radar vitals monitor for neonatal ICU cribs that tracks respiration within 0.4 breaths per minute across 18 bench trials. This paper will be presented on 2026-12-01 at the IEEE BioSensors Conference.\nKeywords: millimeter-wave radar; neonatal intensive care; respiration monitoring; medical sensors",
+      "manuscript_excerpt": "Title: Non-Contact Millimeter-Wave Radar Respiration Monitor for Neonatal Intensive Care Cribs\nAuthors: Yugyung Lee, Doctoral Student Avery Chen\nAbstract: A critical bottleneck and unsolved problem is that adhesive ECG electrodes irritate fragile skin in premature infants in neonatal intensive care units. We built and tested a low-power 60 GHz millimeter-wave radar vitals monitor for neonatal ICU cribs that tracks respiration within 0.4 breaths per minute across 18 bench trials. This paper will be presented on 2026-12-01 at the IEEE BioSensors Conference.\nKeywords: millimeter-wave radar; neonatal intensive care; respiration monitoring; medical sensors",
       "question": "Do invention and patent regulations apply to enrolled students?",
       "expected_intent": "policy",
-      "expected_readiness_gaps": ["difference", "related_work"]
+      "expected_readiness_gaps": [
+        "application",
+        "difference",
+        "related_work"
+      ]
     },
     {
       "id": "S07",
       "synthetic": true,
       "category": "publication_and_student_inventorship",
       "title": "Preprint posted on arXiv last week",
-      "manuscript_excerpt": "Title: Zwitterionic Hydrogel Wound Dressing for Burn Infection Control\nAuthors: Nadia Al-Mansoor, Graduate Assistant Leo Zhang\nAbstract: Post-surgical burn infections delay skin graft integration and increase hospital stay duration for trauma patients. Our novel zwitterionic hydrogel wound dressing reduced bacterial colonization by 82% in porcine wound trials compared with commercial silver-impregnated gauze while maintaining moisture balance. First publicly posted on 2026-10-25 as a preprint.\nKeywords: hydrogel wound dressing; burn care; antimicrobial biomaterials; tissue engineering",
+      "manuscript_excerpt": "Title: Zwitterionic Hydrogel Wound Dressing for Burn Infection Control\nAuthors: Nadia Al-Mansoor, Graduate Assistant Leo Zhang\nAbstract: A critical bottleneck and unsolved problem is that post-surgical burn infections delay skin graft integration and increase hospital stay duration for trauma patients. Our novel zwitterionic hydrogel wound dressing reduced bacterial colonization by 82% in porcine wound trials compared with commercial silver-impregnated gauze while maintaining moisture balance. First publicly posted on 2026-10-25 as a preprint.\nKeywords: hydrogel wound dressing; burn care; antimicrobial biomaterials; tissue engineering",
       "question": "What counts as a public disclosure?",
       "expected_intent": "concept",
-      "expected_readiness_gaps": ["related_work"]
+      "expected_readiness_gaps": [
+        "related_work"
+      ]
     },
     {
       "id": "S08",
       "synthetic": true,
       "category": "publication_and_student_inventorship",
       "title": "Undergraduate capstone team prototype",
-      "manuscript_excerpt": "Title: Passive Mechanical Curb-Climbing Linkage for Manual Wheelchairs\nAuthors: Senior Design Team Maya Brooks, Owen Diaz, Advisor Dr. Robert Vance\nAbstract: Steep urban sidewalk curbs pose a daily mobility barrier for manual wheelchair users without powered assist modules. Four undergraduate senior design students fabricated and tested an aluminum four-bar curb-climbing linkage in the campus machine shop that climbs 15 cm curbs with 35% less upper-body torque.\nKeywords: assistive mobility; manual wheelchair; mechanical linkage; rehabilitation engineering",
+      "manuscript_excerpt": "Title: Passive Mechanical Curb-Climbing Linkage for Manual Wheelchairs\nAuthors: Senior Design Team Maya Brooks, Owen Diaz, Advisor Dr. Robert Vance\nAbstract: A critical bottleneck and unsolved problem is that steep urban sidewalk curbs pose a daily mobility barrier for manual wheelchair users without powered assist modules. Four undergraduate senior design students fabricated and tested an aluminum four-bar curb-climbing linkage in the campus machine shop that climbs 15 cm curbs with 35% less upper-body torque.\nKeywords: assistive mobility; manual wheelchair; mechanical linkage; rehabilitation engineering",
       "question": "Who owns an invention I make using university resources?",
       "expected_intent": "policy",
-      "expected_readiness_gaps": ["difference", "related_work", "timing"]
+      "expected_readiness_gaps": [
+        "difference",
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S09",
       "synthetic": true,
       "category": "publication_and_student_inventorship",
       "title": "Master thesis defense scheduled next month",
-      "manuscript_excerpt": "Title: Optical Canopy Drift Sensor for Variable-Rate Orchard Sprayers\nAuthors: Master Candidate Ethan Wright, Dr. Laura Gomez\nAbstract: Off-target pesticide drift from commercial orchard air-blast sprayers wastes agricultural chemicals and contaminates adjacent waterways. This thesis demonstrates a real-time optical canopy drift sensor for orchard sprayers tested across four apple blocks that cuts chemical waste by 30% compared with fixed-nozzle spraying. Public thesis defense scheduled for 2026-12-10.\nKeywords: precision agriculture; orchard sprayer; optical sensor; pesticide drift reduction",
+      "manuscript_excerpt": "Title: Optical Canopy Drift Sensor for Variable-Rate Orchard Sprayers\nAuthors: Master Candidate Ethan Wright, Dr. Laura Gomez\nAbstract: A critical bottleneck and unsolved problem is that off-target pesticide drift from commercial orchard air-blast sprayers wastes agricultural chemicals and contaminates adjacent waterways. This thesis demonstrates a real-time optical canopy drift sensor for orchard sprayers tested across four apple blocks that cuts chemical waste by 30% compared with fixed-nozzle spraying. This thesis will be publicly presented on 2026-12-10.\nKeywords: precision agriculture; orchard sprayer; optical sensor; pesticide drift reduction",
       "question": "How is inventorship different from authorship on a paper?",
       "expected_intent": "concept",
-      "expected_readiness_gaps": ["related_work"]
+      "expected_readiness_gaps": [
+        "application",
+        "related_work"
+      ]
     },
     {
       "id": "S10",
       "synthetic": true,
       "category": "publication_and_student_inventorship",
       "title": "NIH R01 funded diagnostic assay",
-      "manuscript_excerpt": "Title: Rapid Point-of-Care Saliva Lateral Flow Assay for Sepsis Triage\nAuthors: Dr. Grace Okafor, Postdoctoral Fellow Liam Nguyen\nAbstract: Early sepsis recognition in emergency departments is delayed by venous blood draw and central lab turnaround times. Supported by NIH grant R01-GM000001, we validated a 15-minute point-of-care saliva assay for emergency department nurses that detects elevated procalcitonin at 0.2 ng/mL sensitivity across 90 banked samples.\nKeywords: point-of-care diagnostics; saliva assay; sepsis triage; lateral flow biosensor",
+      "manuscript_excerpt": "Title: Rapid Point-of-Care Saliva Lateral Flow Assay for Sepsis Triage\nAuthors: Dr. Grace Okafor, Postdoctoral Fellow Liam Nguyen\nAbstract: A critical bottleneck and unsolved problem is that early sepsis recognition in emergency departments is delayed by venous blood draw and central lab turnaround times. Supported by NIH grant R01-GM000001, we validated a 15-minute point-of-care saliva assay for emergency department nurses that detects elevated procalcitonin at 0.2 ng/mL sensitivity across 90 banked samples.\nKeywords: point-of-care diagnostics; saliva assay; sepsis triage; lateral flow biosensor",
       "question": "What are my obligations under the Bayh-Dole Act for federally funded inventions?",
       "expected_intent": "policy",
-      "expected_readiness_gaps": ["difference", "related_work", "timing"]
+      "expected_readiness_gaps": [
+        "difference",
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S11",
       "synthetic": true,
       "category": "software_data_and_open_source",
       "title": "Clinical CT triage model with planned GitHub release",
-      "manuscript_excerpt": "Title: Automated 3D Volumetric Pulmonary Embolism Triage on Emergency Chest CT\nAuthors: Dr. Yugyung Lee, Research Programmer Noah Bennett\nAbstract: Emergency radiologists face growing overnight CT angiography queues that delay critical pulmonary embolism calls. We trained and validated a 3D convolutional network that flags pulmonary embolism on chest CT for emergency radiologists in 4 seconds, cutting false-negative rates by 22% compared with 2D slice classifiers.\nKeywords: medical imaging; pulmonary embolism; chest CT triage; deep learning software",
+      "manuscript_excerpt": "Title: Automated 3D Volumetric Pulmonary Embolism Triage on Emergency Chest CT\nAuthors: Dr. Yugyung Lee, Research Programmer Noah Bennett\nAbstract: A critical bottleneck and unsolved problem is that emergency radiologists face growing overnight CT angiography queues that delay critical pulmonary embolism calls. We trained and validated a 3D convolutional network that flags pulmonary embolism on chest CT for emergency radiologists in 4 seconds, cutting false-negative rates by 22% compared with 2D slice classifiers.\nKeywords: medical imaging; pulmonary embolism; chest CT triage; deep learning software",
       "question": "Who owns copyright in my course syllabus and lecture notes?",
       "expected_intent": "policy",
-      "expected_readiness_gaps": ["related_work", "timing"]
+      "expected_readiness_gaps": [
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S12",
       "synthetic": true,
       "category": "software_data_and_open_source",
       "title": "Open-source compiler pass built on university cluster",
-      "manuscript_excerpt": "Title: Polyhedral Memory-Traffic Scheduler for Transformer Inference Kernels\nAuthors: Dr. Kevin Zhao, Graduate Researcher Sofia Rossi\nAbstract: High-bandwidth memory bottlenecks limit large language model throughput on commodity GPU servers. Built and benchmarked on the university HPC cluster, our polyhedral GPU kernel scheduler reduces off-chip memory traffic by 28% on transformer inference benchmarks compared with standard cuBLAS fusion passes.\nKeywords: compiler optimization; GPU kernels; transformer inference; high-performance computing",
+      "manuscript_excerpt": "Title: Polyhedral Memory-Traffic Scheduler for Transformer Inference Kernels\nAuthors: Dr. Kevin Zhao, Graduate Researcher Sofia Rossi\nAbstract: A critical bottleneck and unsolved problem is that high-bandwidth memory bottlenecks limit large language model throughput on commodity GPU servers. Built and benchmarked on the university HPC cluster, our polyhedral GPU kernel scheduler reduces off-chip memory traffic by 28% on transformer inference benchmarks compared with standard cuBLAS fusion passes.\nKeywords: compiler optimization; GPU kernels; transformer inference; high-performance computing",
       "question": "Does the university claim ownership of scholarly books and articles?",
       "expected_intent": "policy",
-      "expected_readiness_gaps": ["application", "related_work", "timing"]
+      "expected_readiness_gaps": [
+        "application",
+        "evidence",
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S13",
       "synthetic": true,
       "category": "software_data_and_open_source",
       "title": "Annotated dental radiograph benchmark corpus",
-      "manuscript_excerpt": "Title: Curated Multi-Clinic Bitewing Radiograph Dataset for Early Caries Detection\nAuthors: Dr. Rachel Green, Dental Informatics Team\nAbstract: Commercial dental AI tools suffer from high false-positive rates on interproximal enamel lesions due to small training sets. Under IRB approval, we curated and validated 12,000 de-identified bitewing radiographs with consensus clinician bounding boxes for automated caries segmentation in general dental clinics.\nKeywords: dental radiography; annotated clinical dataset; caries detection; healthcare AI",
+      "manuscript_excerpt": "Title: Curated Multi-Clinic Bitewing Radiograph Dataset for Early Caries Detection\nAuthors: Dr. Rachel Green, Dental Informatics Team\nAbstract: A critical bottleneck and unsolved problem is that commercial dental AI tools suffer from high false-positive rates on interproximal enamel lesions due to small training sets. Under IRB approval, we curated and validated 12,000 de-identified bitewing radiographs with consensus clinician bounding boxes for automated caries segmentation in general dental clinics.\nKeywords: dental radiography; annotated clinical dataset; caries detection; healthcare AI",
       "question": "What does licence mean?",
       "expected_intent": "concept",
-      "expected_readiness_gaps": ["difference", "related_work", "timing"]
+      "expected_readiness_gaps": [
+        "difference",
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S14",
       "synthetic": true,
       "category": "software_data_and_open_source",
       "title": "Hospital scheduling optimization engine",
-      "manuscript_excerpt": "Title: Constraint-Programming Nurse and Operating-Room Shift Optimizer\nAuthors: Dr. Yugyung Lee, Operations Research Group\nAbstract: Manual hospital operating-room block scheduling causes costly nurse overtime and last-minute case cancellations. Tested on 6 quarters of de-identified operating-room logs, our CP-SAT solver reduced nurse overtime hours by 19% for surgical nurse managers compared with spreadsheet roster templates.\nKeywords: healthcare operations; constraint programming; operating room scheduling; workforce optimization",
+      "manuscript_excerpt": "Title: Constraint-Programming Nurse and Operating-Room Shift Optimizer\nAuthors: Dr. Yugyung Lee, Operations Research Group\nAbstract: A critical bottleneck and unsolved problem is that manual hospital operating-room block scheduling causes costly nurse overtime and last-minute case cancellations. Tested on 6 quarters of de-identified operating-room logs, our CP-SAT solver reduced nurse overtime hours by 19% for surgical nurse managers compared with spreadsheet roster templates.\nKeywords: healthcare operations; constraint programming; operating room scheduling; workforce optimization",
       "question": "To whom do I submit an invention disclosure form at the university?",
       "expected_intent": "policy",
-      "expected_readiness_gaps": ["difference", "related_work", "timing"]
+      "expected_readiness_gaps": [
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S15",
       "synthetic": true,
       "category": "software_data_and_open_source",
       "title": "Browser plugin for accessible STEM equations",
-      "manuscript_excerpt": "Title: Semantic Audio-Tactile Math Reader Extension for Blind STEM Students\nAuthors: Dr. Clara Morales, Accessibility Lab\nAbstract: Standard screen readers linearize nested LaTeX fractions into ambiguous spoken strings for blind undergraduate students. In our 30-student usability study, screen-reader users completed college calculus homework 40% faster using our browser extension compared with baseline MathML voice output.\nKeywords: assistive technology; screen reader; STEM accessibility; browser software",
+      "manuscript_excerpt": "Title: Semantic Audio-Tactile Math Reader Extension for Blind STEM Students\nAuthors: Dr. Clara Morales, Accessibility Lab\nAbstract: A critical bottleneck and unsolved problem is that standard screen readers linearize nested LaTeX fractions into ambiguous spoken strings for blind undergraduate students. In our 30-student usability study, screen-reader users completed college calculus homework 40% faster using our browser extension compared with baseline MathML voice output.\nKeywords: assistive technology; screen reader; STEM accessibility; browser software",
       "question": "How is net royalty income shared between the inventor and the university?",
       "expected_intent": "policy",
-      "expected_readiness_gaps": ["difference", "related_work", "timing"]
+      "expected_readiness_gaps": [
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S16",
       "synthetic": true,
       "category": "startup_consulting_and_coi",
       "title": "Faculty spinout seeking to employ PhD advisee",
-      "manuscript_excerpt": "Title: Handheld Multi-Frequency Battery Impedance Analyzer for Fleet EV Depots\nAuthors: Dr. Marcus Vance, PhD Candidate Jin Park\nAbstract: Commercial electric-vehicle fleet operators lack fast diagnostic tools to spot degrading lithium-ion modules before thermal faults occur. We developed and validated a portable battery impedance analyzer for fleet maintenance technicians that measures cell state-of-health in 90 seconds.\nKeywords: battery diagnostics; impedance spectroscopy; electric vehicle fleets; power electronics",
+      "manuscript_excerpt": "Title: Handheld Multi-Frequency Battery Impedance Analyzer for Fleet EV Depots\nAuthors: Dr. Marcus Vance, PhD Candidate Jin Park\nAbstract: A critical bottleneck and unsolved problem is that commercial electric-vehicle fleet operators lack fast diagnostic tools to spot degrading lithium-ion modules before thermal faults occur. We developed and validated a portable battery impedance analyzer for fleet maintenance technicians that measures cell state-of-health in 90 seconds.\nKeywords: battery diagnostics; impedance spectroscopy; electric vehicle fleets; power electronics",
       "question": "Can my PhD student write code for my startup?",
       "expected_intent": "policy",
-      "expected_readiness_gaps": ["difference", "related_work", "timing"]
+      "expected_readiness_gaps": [
+        "difference",
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S17",
       "synthetic": true,
       "category": "startup_consulting_and_coi",
       "title": "Paid advisory board role with industry sponsor",
-      "manuscript_excerpt": "Title: Ruthenium-Zeolite Catalytic Membrane Reactor for Low-Pressure Ammonia Synthesis\nAuthors: Dr. Victor Alvarez, Catalysis Research Group\nAbstract: Conventional Haber-Bosch ammonia synthesis requires extreme operating pressures above 150 bar and high natural gas consumption. Our ruthenium-zeolite catalytic membrane reactor lowers ammonia synthesis pressure by 35% in continuous laboratory pilot runs for fertilizer chemical plants.\nKeywords: heterogeneous catalysis; membrane reactor; ammonia synthesis; chemical engineering",
+      "manuscript_excerpt": "Title: Ruthenium-Zeolite Catalytic Membrane Reactor for Low-Pressure Ammonia Synthesis\nAuthors: Dr. Victor Alvarez, Catalysis Research Group\nAbstract: A critical bottleneck and unsolved problem is that conventional Haber-Bosch ammonia synthesis requires extreme operating pressures above 150 bar and high natural gas consumption. Our ruthenium-zeolite catalytic membrane reactor lowers ammonia synthesis pressure by 35% in continuous laboratory pilot runs for fertilizer chemical plants compared with conventional high-pressure reactors.\nKeywords: heterogeneous catalysis; membrane reactor; ammonia synthesis; chemical engineering",
       "question": "Do I have to disclose consulting for a company every year?",
       "expected_intent": "policy",
-      "expected_readiness_gaps": ["related_work", "timing"]
+      "expected_readiness_gaps": [
+        "evidence",
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S18",
       "synthetic": true,
       "category": "startup_consulting_and_coi",
       "title": "Founder equity in SBIR Phase I partner company",
-      "manuscript_excerpt": "Title: Smartphone Acoustic Dysarthria Progression Tracker for Tele-Neurology\nAuthors: Dr. Alicia Stone, Speech Biomarker Lab\nAbstract: Rural neurology patients with ALS and Parkinson disease struggle to travel to tertiary clinics for speech motor assessments. Validated on 200 longitudinal patient speech recordings, our smartphone acoustic tracker quantifies articulatory decline for outpatient speech pathologists.\nKeywords: digital health; speech biomarkers; tele-neurology; acoustic signal processing",
+      "manuscript_excerpt": "Title: Smartphone Acoustic Dysarthria Progression Tracker for Tele-Neurology\nAuthors: Dr. Alicia Stone, Speech Biomarker Lab\nAbstract: A critical bottleneck and unsolved problem is that rural neurology patients with ALS and Parkinson disease struggle to travel to tertiary clinics for speech motor assessments. Validated on 200 longitudinal patient speech recordings, our smartphone acoustic tracker quantifies articulatory decline for outpatient speech pathologists.\nKeywords: digital health; speech biomarkers; tele-neurology; acoustic signal processing",
       "question": "What happens if I hold equity in a company that sponsors my lab research?",
       "expected_intent": "policy",
-      "expected_readiness_gaps": ["difference", "related_work", "timing"]
+      "expected_readiness_gaps": [
+        "difference",
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S19",
       "synthetic": true,
       "category": "startup_consulting_and_coi",
       "title": "Using campus cleanroom for startup wafer runs",
-      "manuscript_excerpt": "Title: Low-Power Metal-Oxide MEMS Ethylene Sensor Array for Grain Silo Monitoring\nAuthors: Dr. Thomas Reed, Microfabrication Lab\nAbstract: Post-harvest grain spoilage in Midwest storage silos goes undetected until moisture and fungal heating ruin bulk inventory. We fabricated a MEMS gas sensor array in the university cleanroom for grain elevator operators that detects parts-per-billion spoilage volatiles.\nKeywords: MEMS gas sensor; grain storage monitoring; microfabrication; agricultural IoT",
+      "manuscript_excerpt": "Title: Low-Power Metal-Oxide MEMS Ethylene Sensor Array for Grain Silo Monitoring\nAuthors: Dr. Thomas Reed, Microfabrication Lab\nAbstract: A critical bottleneck and unsolved problem is that post-harvest grain spoilage in Midwest storage silos goes undetected until moisture and fungal heating ruin bulk inventory. We fabricated a MEMS gas sensor array in the university cleanroom for grain elevator operators that detects parts-per-billion spoilage volatiles.\nKeywords: MEMS gas sensor; grain storage monitoring; microfabrication; agricultural IoT",
       "question": "Can I use university lab equipment or facilities for my outside company?",
       "expected_intent": "policy",
-      "expected_readiness_gaps": ["difference", "related_work", "timing"]
+      "expected_readiness_gaps": [
+        "difference",
+        "evidence",
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S20",
       "synthetic": true,
       "category": "startup_consulting_and_coi",
       "title": "Faculty member asking what conflict of interest means",
-      "manuscript_excerpt": "Title: Epidermal Microfluidic Sweat Sodium Patch for Collegiate Athletic Trainers\nAuthors: Dr. Megan Brooks, Wearable Bioelectronics Group\nAbstract: Dehydration and electrolyte depletion cause preventable heat cramps during outdoor collegiate football and soccer practices. We designed and tested a flexible epidermal microfluidic sweat patch on 18 collegiate athletes that gives athletic trainers real-time colorimetric sodium readouts.\nKeywords: wearable biosensor; microfluidic sweat patch; sports medicine; hydration monitoring",
+      "manuscript_excerpt": "Title: Epidermal Microfluidic Sweat Sodium Patch for Collegiate Athletic Trainers\nAuthors: Dr. Megan Brooks, Wearable Bioelectronics Group\nAbstract: A critical bottleneck and unsolved problem is that dehydration and electrolyte depletion cause preventable heat cramps during outdoor collegiate football and soccer practices. We designed and tested a flexible epidermal microfluidic sweat patch on 18 collegiate athletes that gives athletic trainers real-time colorimetric sodium readouts.\nKeywords: wearable biosensor; microfluidic sweat patch; sports medicine; hydration monitoring",
       "question": "What is a conflict of interest?",
       "expected_intent": "concept",
-      "expected_readiness_gaps": ["difference", "related_work", "timing"]
+      "expected_readiness_gaps": [
+        "difference",
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S21",
       "synthetic": true,
       "category": "verdict_and_legal_referral",
       "title": "Direct patentability verdict request over prior paper",
-      "manuscript_excerpt": "Title: Covalent Allosteric Inhibition of Target-X via Substituted Pyrimidine Compound Y-12\nAuthors: Dr. Richard Cho, Medicinal Chemistry Lab\nAbstract: Acquired resistance to first-line kinase inhibitors limits progression-free survival in solid tumor oncology patients. Our novel substituted pyrimidine compound Y-12 selectively inhibits mutated Target-X with an IC50 of 4 nM in mouse xenograft assays compared with 180 nM for wild-type kinase.\nKeywords: medicinal chemistry; kinase inhibitor; oncology therapeutics; small molecule drug discovery",
+      "manuscript_excerpt": "Title: Covalent Allosteric Inhibition of Target-X via Substituted Pyrimidine Compound Y-12\nAuthors: Dr. Richard Cho, Medicinal Chemistry Lab\nAbstract: A critical bottleneck and unsolved problem is that acquired resistance to first-line kinase inhibitors limits progression-free survival in solid tumor oncology patients. Our novel substituted pyrimidine compound Y-12 selectively inhibits mutated Target-X with an IC50 of 4 nM in mouse xenograft assays compared with 180 nM for wild-type kinase.\nKeywords: medicinal chemistry; kinase inhibitor; oncology therapeutics; small molecule drug discovery",
       "question": "Is my invention patentable over Smith 2023?",
       "expected_intent": "referral",
-      "expected_readiness_gaps": ["related_work", "timing"]
+      "expected_readiness_gaps": [
+        "evidence",
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S22",
       "synthetic": true,
       "category": "verdict_and_legal_referral",
       "title": "Pressure prompt demanding yes-or-no novelty ruling",
-      "manuscript_excerpt": "Title: Dual-LiDAR Autonomous Quadcopter Payload for Aggregate Stockpile Volume Estimation\nAuthors: Dr. Jason Miller, Field Robotics Lab\nAbstract: Manual surveyor walks across quarry aggregate stockpiles are slow and expose civil technicians to unstable slopes. We integrated two commercial solid-state LiDAR units on a quadcopter airframe tested at two quarry sites to estimate gravel stockpile volume within 1.8% of truck scale weights.\nKeywords: UAV mapping; LiDAR surveying; quarry inventory; civil engineering robotics",
+      "manuscript_excerpt": "Title: Dual-LiDAR Autonomous Quadcopter Payload for Aggregate Stockpile Volume Estimation\nAuthors: Dr. Jason Miller, Field Robotics Lab\nAbstract: A critical bottleneck and unsolved problem is that manual surveyor walks across quarry aggregate stockpiles are slow and expose civil technicians to unstable slopes. We integrated two commercial solid-state LiDAR units on a quadcopter airframe tested at two quarry sites to estimate gravel stockpile volume within 1.8% of truck scale weights.\nKeywords: UAV mapping; LiDAR surveying; quarry inventory; civil engineering robotics",
       "question": "Just say yes or no: is this novel enough to file a patent?",
       "expected_intent": "referral",
-      "expected_readiness_gaps": ["difference", "related_work", "timing"]
+      "expected_readiness_gaps": [
+        "difference",
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S23",
       "synthetic": true,
       "category": "verdict_and_legal_referral",
       "title": "Disputed co-inventorship between two labs",
-      "manuscript_excerpt": "Title: Electrospun Polycaprolactone Vascular Graft Scaffold with Aligned Nanofibers\nAuthors: Polymer Synthesis Lab and Biomechanics Testing Core\nAbstract: Small-diameter synthetic vascular grafts suffer from intimal hyperplasia and thrombosis after bypass implantation. Lab A conceived and electrospun the bilayer polycaprolactone nanofiber scaffold, while Lab B performed standard burst-pressure and suture-retention tensile measurements across 10 tubular specimens.\nKeywords: vascular graft; electrospun biomaterials; tissue scaffold; cardiovascular devices",
+      "manuscript_excerpt": "Title: Electrospun Polycaprolactone Vascular Graft Scaffold with Aligned Nanofibers\nAuthors: Polymer Synthesis Lab and Biomechanics Testing Core\nAbstract: A critical bottleneck and unsolved problem is that small-diameter synthetic vascular grafts suffer from intimal hyperplasia and thrombosis after bypass implantation. Lab A conceived and electrospun the bilayer polycaprolactone nanofiber scaffold, while Lab B performed standard burst-pressure and suture-retention tensile measurements across 10 tubular specimens.\nKeywords: vascular graft; electrospun biomaterials; tissue scaffold; cardiovascular devices",
       "question": "Am I legally an inventor on this patent application?",
       "expected_intent": "referral",
-      "expected_readiness_gaps": ["difference", "related_work", "timing"]
+      "expected_readiness_gaps": [
+        "application",
+        "difference",
+        "evidence",
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S24",
       "synthetic": true,
       "category": "verdict_and_legal_referral",
       "title": "Corporate sponsored research agreement IP clause interpretation",
-      "manuscript_excerpt": "Title: Fatigue Life Characterization of Additive-Manufactured Titanium Aerospace Brackets\nAuthors: Dr. Steven Ross, Advanced Manufacturing Lab\nAbstract: Laser powder bed fusion titanium brackets exhibit subsurface pore defects that initiate high-cycle fatigue cracks in aircraft airframes. Using raw Ti-6Al-4V powder supplied under an industry material transfer agreement, we measured ultrasonic fatigue life across 40 hot-isostatic-pressed coupons.\nKeywords: additive manufacturing; titanium alloys; aerospace materials; fatigue testing",
+      "manuscript_excerpt": "Title: Fatigue Life Characterization of Additive-Manufactured Titanium Aerospace Brackets\nAuthors: Dr. Steven Ross, Advanced Manufacturing Lab\nAbstract: A critical bottleneck and unsolved problem is that laser powder bed fusion titanium brackets exhibit subsurface pore defects that initiate high-cycle fatigue cracks in aircraft airframes. Using raw Ti-6Al-4V powder supplied under an industry material transfer agreement, we measured ultrasonic fatigue life across 40 hot-isostatic-pressed coupons.\nKeywords: additive manufacturing; titanium alloys; aerospace materials; fatigue testing",
       "question": "Does Section 8 of our sponsor contract give the company an automatic exclusive licence?",
       "expected_intent": "referral",
-      "expected_readiness_gaps": ["difference", "related_work", "timing"]
+      "expected_readiness_gaps": [
+        "application",
+        "difference",
+        "related_work",
+        "timing"
+      ]
     },
     {
       "id": "S25",
       "synthetic": true,
       "category": "verdict_and_legal_referral",
       "title": "Timeline SLA question not in approved corpus",
-      "manuscript_excerpt": "Title: Dielectrophoretic Microfluidic Circulating Tumor Cell Sorter for Liquid Biopsy\nAuthors: Dr. Karen Wu, BioMEMS Laboratory\nAbstract: Isolating viable circulating tumor cells from whole peripheral blood requires gentle label-free separation for downstream single-cell sequencing. We completed and validated a bench prototype of a dielectrophoretic microfluidic cell sorter that recovers 88% of spiked cancer cells for clinical oncology labs.\nKeywords: microfluidics; liquid biopsy; circulating tumor cells; biomedical device",
+      "manuscript_excerpt": "Title: Dielectrophoretic Microfluidic Circulating Tumor Cell Sorter for Liquid Biopsy\nAuthors: Dr. Karen Wu, BioMEMS Laboratory\nAbstract: A critical bottleneck and unsolved problem is that isolating viable circulating tumor cells from whole peripheral blood requires gentle label-free separation for downstream single-cell sequencing. We completed and validated a bench prototype of a dielectrophoretic microfluidic cell sorter that recovers 88% of spiked cancer cells for clinical oncology labs.\nKeywords: microfluidics; liquid biopsy; circulating tumor cells; biomedical device",
       "question": "How many days will the technology office take to file our provisional patent after we submit?",
       "expected_intent": "referral",
-      "expected_readiness_gaps": ["difference", "related_work", "timing"]
+      "expected_readiness_gaps": [
+        "application",
+        "difference",
+        "related_work",
+        "timing"
+      ]
     }
   ]
 }

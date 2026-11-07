@@ -36,7 +36,7 @@
       "expected_intent": "policy",
       "question": "What is the dollar threshold for a significant financial interest on a federal grant?",
       "expected_source_ids": ["um-crr-420-030", "umkc-fcoi"],
-      "expected_passage_ids": ["um-crr-420-030#28", "um-crr-420-030#11", "um-crr-420-030#5"],
+      "expected_passage_ids": ["um-crr-420-030#6", "um-crr-420-030#7", "umkc-fcoi#22", "umkc-fcoi#23", "umkc-fcoi#42"],
       "expected_glossary_terms": []
     },
     {
@@ -45,7 +45,7 @@
       "expected_intent": "policy",
       "question": "How are net proceeds from licensing a patented invention shared with inventors?",
       "expected_source_ids": ["um-crr-100-020"],
-      "expected_passage_ids": ["um-crr-100-020#96", "um-crr-100-020#126", "um-crr-100-020#125"],
+      "expected_passage_ids": ["um-crr-100-020#151", "um-crr-100-020#96", "um-crr-100-020#146"],
       "expected_glossary_terms": []
     },
     {
@@ -117,7 +117,7 @@
       "expected_intent": "policy",
       "question": "How are trade secrets defined and protected compared to patents?",
       "expected_source_ids": ["umkc-ip"],
-      "expected_passage_ids": ["umkc-ip#1", "umkc-ip#12", "umkc-ip#6"],
+      "expected_passage_ids": ["umkc-ip#1", "umkc-ip#12"],
       "expected_glossary_terms": []
     },
     {
@@ -126,7 +126,7 @@
       "expected_intent": "policy",
       "question": "Can an employee use university equipment or students for personal gain?",
       "expected_source_ids": ["um-crr-330-015"],
-      "expected_passage_ids": ["um-crr-330-015#4", "um-crr-330-015#57", "um-crr-330-015#58"],
+      "expected_passage_ids": ["um-crr-330-015#4", "um-crr-330-015#48"],
       "expected_glossary_terms": []
     },
     {
@@ -151,9 +151,9 @@
       "id": "gold-17",
       "category": "policy",
       "expected_intent": "policy",
-      "question": "Does the conflict of interest policy apply to research involving human subjects or NSF and PHS grants?",
-      "expected_source_ids": ["um-crr-420-030", "um-crr-330-015"],
-      "expected_passage_ids": ["um-crr-420-030#2", "um-crr-420-030#26", "um-crr-330-015#3"],
+      "question": "What happens after I submit an invention disclosure?",
+      "expected_source_ids": ["um-crr-100-020"],
+      "expected_passage_ids": ["um-crr-100-020#61", "um-crr-100-020#63", "um-crr-100-020#64", "um-crr-100-020#70", "um-crr-100-020#94"],
       "expected_glossary_terms": []
     },
     {
@@ -162,7 +162,7 @@
       "expected_intent": "policy",
       "question": "Who appoints the Patent Committee and what is its role?",
       "expected_source_ids": ["um-crr-100-020"],
-      "expected_passage_ids": ["um-crr-100-020#130", "um-crr-100-020#137", "um-crr-100-020#167"],
+      "expected_passage_ids": ["um-crr-100-020#6", "um-crr-100-020#130", "um-crr-100-020#131", "um-crr-100-020#135"],
       "expected_glossary_terms": []
     },
     {

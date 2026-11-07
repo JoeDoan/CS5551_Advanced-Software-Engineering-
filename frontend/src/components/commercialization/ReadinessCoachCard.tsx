@@ -47,6 +47,10 @@ const buildFallbackReadiness = (draft: DraftResult, extraText: string): Readines
   const problemQuote = fieldQuoteOrValue(draft, 'A1_problem')
   const appQuote =
     fieldQuoteOrValue(draft, 'A1_general') || fieldQuoteOrValue(draft, 'A1_novel')
+  const hasAppCue =
+    /\b(user|users|operator|clinician|inspector|engineer|nurse|manager|department|hospital|clinic|depot|plant)\b/i.test(
+      `${extraText} ${appQuote ?? ''} ${problemQuote ?? ''}`
+    )
   const diffQuote =
     fieldQuoteOrValue(draft, 'A1_different') || fieldQuoteOrValue(draft, 'D1_competition')
   const evidenceText = `${extraText} ${fieldValue(draft, 'A1_general')}`.trim()
@@ -72,10 +76,12 @@ const buildFallbackReadiness = (draft: DraftResult, extraText: string): Readines
     },
     {
       id: 'application',
-      status: appQuote ? 'partly' : 'not_found',
+      status: hasAppCue ? 'stated' : appQuote ? 'partly' : 'not_found',
       quote: appQuote,
-      follow_up: 'Who is the specific user or operator, and what changes in their workflow?',
-      needs_author: true,
+      follow_up: hasAppCue
+        ? null
+        : 'Who is the specific user or operator, and what changes in their workflow?',
+      needs_author: !hasAppCue,
     },
     {
       id: 'difference',
@@ -89,9 +95,7 @@ const buildFallbackReadiness = (draft: DraftResult, extraText: string): Readines
     {
       id: 'evidence',
       status: hasEvidenceCue ? 'stated' : 'not_found',
-      quote: hasEvidenceCue
-        ? extraText.trim() || fieldQuoteOrValue(draft, 'A1_general')
-        : null,
+      quote: hasEvidenceCue ? fieldQuoteOrValue(draft, 'A1_general') : null,
       follow_up: hasEvidenceCue
         ? null
         : 'What data, simulation, or prototype results exist so far?',

@@ -340,6 +340,14 @@ describe('Refine (questions, checklist, buyout bridge)', () => {
     await waitFor(() =>
       expect(screen.getByTestId('readiness-status-evidence').textContent).toBe('stated')
     )
+
+    expect(
+      screen.getByText('Who is the specific user or operator, and what changes in their workflow?')
+    ).toBeTruthy()
+    fireEvent.click(screen.getByTestId('readiness-covered-application'))
+    expect(
+      screen.queryByText('Who is the specific user or operator, and what changes in their workflow?')
+    ).toBeNull()
   })
 
   it('opens GlossaryDrawer from Refine, displays the draft source badge, and filters entries by search term', async () => {
@@ -360,7 +368,7 @@ describe('Refine (questions, checklist, buyout bridge)', () => {
           plain: 'Legal determination of who conceived the claimed invention.',
           example: 'Co-designing the signal filter vs running standard tests.',
           what_office_asks: 'Who conceived the technical solution?',
-          related_fields: ['B_contributors'],
+          related_fields: ['C1_inventors'],
           reviewed_by: null,
           reviewed_on: null,
         },
@@ -382,5 +390,8 @@ describe('Refine (questions, checklist, buyout bridge)', () => {
     })
     expect(screen.queryByTestId('glossary-entry-novelty')).toBeNull()
     expect(screen.getByTestId('glossary-entry-inventorship')).toBeTruthy()
+
+    fireEvent.click(screen.getByTestId('close-glossary-button'))
+    expect(screen.queryByTestId('glossary-drawer')).toBeNull()
   })
 })

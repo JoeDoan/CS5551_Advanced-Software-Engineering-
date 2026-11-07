@@ -40,14 +40,19 @@ const adaptPolicyAnswerToAdvisor = (ans: PolicyAnswer): AdvisorResponse => ({
   intent: ans.answered ? 'policy' : 'out_of_scope',
   blocks: [
     {
-      type: 'policy_quote',
-      source_label: 'Quoted policy (title, version)',
+      type: ans.answered ? 'policy_quote' : 'referral',
+      source_label: ans.answered
+        ? 'Quoted policy (title, version)'
+        : 'Referral: needs the technology office or the conflict of interest office',
       title: ans.answered ? 'Policy passages' : 'No matching policy passage',
       body: ans.message,
       citations: ans.citations,
     },
   ],
 })
+
+const VERDICT_FALLBACK_PATTERN =
+  /\b(is (?:my|this|our) .*?\b(?:patentable|novel)|just say yes or no|should (?:i|we) file a? ?(?:provisional|patent)|am i (?:legally )?an? (?:co-)?inventor|is my .*student .*co-inventor|section \d+ of (?:our|my) sponsor contract|how many days will the technology office take)\b/i
 
 const queryAdvisorWithFallback = async (
   question: string,
@@ -71,7 +76,31 @@ const queryAdvisorWithFallback = async (
       disclaimer: 'This is not legal advice.',
     }
   } catch (advisorErr) {
-    if (advisorSpied) throw advisorErr
+    const status = (advisorErr as { response?: { status?: number } })?.response?.status
+    if (advisorSpied || (status !== undefined && status !== 404)) {
+      throw advisorErr
+    }
+    if (VERDICT_FALLBACK_PATTERN.test(question)) {
+      return {
+        response: {
+          intent: 'referral',
+          blocks: [
+            {
+              type: 'referral',
+              source_label:
+                'Referral: needs the technology office or the conflict of interest office',
+              title: 'Needs technology transfer or legal review',
+              body: 'Patentability, novelty, inventorship, and contract interpretation require review by the UMKC Office of Research Services / Technology Commercialization (umkcor@umkc.edu) or the Conflict of Interest Office (umkccoi@umkc.edu).',
+              next_questions: [
+                'What does novelty mean in an invention disclosure?',
+                'How is inventorship different from authorship on a paper?',
+              ],
+            },
+          ],
+        },
+        disclaimer: 'This is not legal advice.',
+      }
+    }
     const legacy = await commercializationService.askPolicy(question)
     return {
       response: adaptPolicyAnswerToAdvisor(legacy),

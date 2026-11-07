@@ -41,7 +41,7 @@ export const FALLBACK_GLOSSARY_ENTRIES: GlossaryEntry[] = [
       'A PhD student who designed the core signal filter may be an inventor, whereas someone who only ran standard assays may be an author but not an inventor.',
     what_office_asks:
       'Who contributed to conceiving the technical solution, and what was each person’s role and affiliation?',
-    related_fields: ['B_contributors', 'E_submitter'],
+    related_fields: ['C1_inventors', 'E_submitter'],
     reviewed_by: null,
     reviewed_on: null,
   },
@@ -65,7 +65,7 @@ export const FALLBACK_GLOSSARY_ENTRIES: GlossaryEntry[] = [
       'Validated on 12 laboratory concrete beams with repeatable signal-to-noise improvement.',
     what_office_asks:
       'What experimental data, working code, or physical test results exist today?',
-    related_fields: ['A1_general', 'A2_prototype'],
+    related_fields: ['A1_general', 'A1_limits'],
     reviewed_by: null,
     reviewed_on: null,
   },
@@ -113,7 +113,7 @@ export const FALLBACK_GLOSSARY_ENTRIES: GlossaryEntry[] = [
       'Holding equity in or consulting for a startup that sponsors research in your UMKC laboratory.',
     what_office_asks:
       'Is your annual outside-interest disclosure current, and does any company overlap with your lab, students, or grants?',
-    related_fields: ['C_funding', 'B_contributors'],
+    related_fields: ['B1_types', 'C1_inventors'],
     reviewed_by: null,
     reviewed_on: null,
   },
@@ -125,7 +125,7 @@ export const FALLBACK_GLOSSARY_ENTRIES: GlossaryEntry[] = [
       'Submitting the UM Invention Disclosure Form before a conference manuscript goes live.',
     what_office_asks:
       'What did you build or discover, who funded it, who contributed, and are any public deadlines approaching?',
-    related_fields: ['A1_title', 'A1_general', 'C_funding'],
+    related_fields: ['A1_title', 'A1_general', 'B1_types'],
     reviewed_by: null,
     reviewed_on: null,
   },
@@ -137,7 +137,7 @@ export const FALLBACK_GLOSSARY_ENTRIES: GlossaryEntry[] = [
       'An exclusive or non-exclusive licence allowing a startup or industry partner to commercialize a patented sensor.',
     what_office_asks:
       'Are any external companies already expressing interest, or is open-source / non-exclusive distribution planned?',
-    related_fields: ['D1_competition', 'C_funding'],
+    related_fields: ['D2_licensees', 'B2_agreements'],
     reviewed_by: null,
     reviewed_on: null,
   },
@@ -149,7 +149,7 @@ export const FALLBACK_GLOSSARY_ENTRIES: GlossaryEntry[] = [
       'Founding shares in a spinout company seeking an option or licence to intellectual property developed in your lab.',
     what_office_asks:
       'Do any contributors hold or plan to hold ownership or board roles in an entity related to this work?',
-    related_fields: ['B_contributors', 'C_funding'],
+    related_fields: ['C1_inventors', 'D2_licensees'],
     reviewed_by: null,
     reviewed_on: null,
   },
@@ -171,8 +171,10 @@ export const GlossaryDrawer: React.FC<GlossaryDrawerProps> = ({
   const [search, setSearch] = useState<string>(initialTerm)
 
   useEffect(() => {
-    setSearch(initialTerm)
-  }, [initialTerm])
+    if (open) {
+      setSearch(initialTerm)
+    }
+  }, [open, initialTerm])
 
   useEffect(() => {
     if (!open) return
@@ -186,9 +188,7 @@ export const GlossaryDrawer: React.FC<GlossaryDrawerProps> = ({
         } else {
           setEntries(FALLBACK_GLOSSARY_ENTRIES)
         }
-        if (res?.source_label) {
-          setSourceLabel(res.source_label)
-        }
+        setSourceLabel(res?.source_label || GLOSSARY_SOURCE_LABEL)
       })
       .catch(() => {
         if (active) {
@@ -255,9 +255,11 @@ export const GlossaryDrawer: React.FC<GlossaryDrawerProps> = ({
               <div className="flex items-center justify-between gap-2">
                 <h4 className="text-sm font-semibold text-slate-900">{entry.term}</h4>
                 <span className="text-xs text-slate-500">
-                  {entry.reviewed_by
-                    ? `Reviewed by ${entry.reviewed_by}`
-                    : 'Draft (unreviewed)'}
+                  {entry.reviewed_by && entry.reviewed_on
+                    ? `Reviewed by ${entry.reviewed_by} (${entry.reviewed_on})`
+                    : entry.reviewed_by
+                      ? `Reviewed by ${entry.reviewed_by}`
+                      : 'Draft (unreviewed)'}
                 </span>
               </div>
               <p className="text-sm text-slate-700">{entry.plain}</p>
