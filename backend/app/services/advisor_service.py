@@ -57,7 +57,7 @@ def _policy_block(question: str):
 
 def _build(decision: Decision, question: str):
     intent = decision.intent
-    if intent in (Intent.VERDICT_SEEKING, Intent.INVENTORSHIP, Intent.LEGAL_JUDGMENT):
+    if intent in (Intent.VERDICT_SEEKING, Intent.INVENTORSHIP, Intent.LEGAL_JUDGMENT, Intent.PROCESS_TIMELINE):
         return "referral", [referral_block(decision), *_glossary_blocks(decision.related_terms)]
     if intent is Intent.READINESS:
         return "concept", [*_glossary_blocks(decision.related_terms), early_contact_block(decision)]

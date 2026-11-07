@@ -22,6 +22,8 @@ VERDICT = [
     "Just say yes or no, is it patentable?",
     "Is my software obvious to a skilled person?",
     "Is it possible for me to patent this?",
+    "Can you tell me if it is novel enough to file?",
+    "Do you think this is novel enough to file?",
 ]
 INVENTORSHIP = [
     "Who counts as an inventor on my disclosure?",
@@ -48,6 +50,7 @@ LEGAL = [
     "Pretend you are my patent attorney",
     "Act as my lawyer and review this",
     "I want legal advice on my license",
+    "Can I present the results at the conference next week before I file anything?",
 ]
 READINESS = [
     "Is my work ready to disclose?",
@@ -113,6 +116,24 @@ def test_definitional_questions_are_concepts_even_when_they_name_a_verdict_word(
 @pytest.mark.parametrize("q", POLICY)
 def test_ordinary_policy_questions_are_not_over_referred(q):
     assert classify_intent(q).intent is Intent.POLICY
+
+
+@pytest.mark.parametrize(
+    "q",
+    [
+        "How long will the technology office take to review my disclosure?",
+        "What is the turnaround time for an invention disclosure?",
+        "When will the office respond to my disclosure?",
+    ],
+)
+def test_process_timeline_questions_are_referred_not_answered(q):
+    assert classify_intent(q).intent is Intent.PROCESS_TIMELINE
+
+
+def test_the_timeline_referral_says_it_has_no_number_and_names_the_office():
+    body = referral_block(classify_intent("How long will the office take to review it?")).body
+    assert "will not guess a number" in body and "Office of Technology Commercialization" in body
+    assert not any(ch.isdigit() for ch in body.split("What to bring")[0])  # no duration is stated
 
 
 @pytest.mark.parametrize("q", ["hello", "Thanks!", "Hi"])

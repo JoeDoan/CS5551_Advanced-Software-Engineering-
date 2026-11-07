@@ -15,6 +15,7 @@ from typing import List, Optional
 
 from app.services.advisor_models import Block, GlossaryEntry
 from app.services.policy_service import answer_question
+from app.services.scope_service import MEANING_REQUEST, strip_filler
 
 GLOSSARY_PATH = Path(__file__).resolve().parents[2] / "data" / "commercialization" / "glossary.json"
 
@@ -76,10 +77,13 @@ def lookup(question: str, limit: int = 2) -> List[GlossaryEntry]:
     "What is novelty?", "define prior art", "novelty" match. A long question that happens to
     mention a term does not, so it still goes to the policy search.
     """
-    q = (question or "").strip().rstrip("?.! ")
+    q = strip_filler(question).rstrip("?.! ")
     lead = _DEFINITION_LEAD.match(q)
+    broad = False  # an explain request somewhere in a longer question ("... What does that mean?")
     if lead:
         phrase = q[lead.end():]
+    elif MEANING_REQUEST.search(q):
+        phrase, broad = q, True
     else:
         words = re.findall(r"[\w'-]+", q)
         if not words or len(words) > MAX_BARE_WORDS:
@@ -93,7 +97,10 @@ def lookup(question: str, limit: int = 2) -> List[GlossaryEntry]:
     for raw in _raw_entries():
         best = None
         for alias in raw["aliases"]:
-            m = _alias_pattern(alias).search(cleaned) or _alias_pattern(alias).search(phrase)
+            # In a long question only a specific name counts, not a common word like "stage" or "stock".
+            if broad and " " not in alias and alias.lower() != raw["term"].lower():
+                continue
+            m =_alias_pattern(alias).search(cleaned) or _alias_pattern(alias).search(phrase)
             if m and (best is None or len(alias) > best[1]):
                 best = (m.start(), len(alias))
         if best:

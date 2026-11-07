@@ -32,6 +32,7 @@ class Intent(str, Enum):
     VERDICT_SEEKING = "verdict_seeking"  # patentable, novel, worth patenting, is it an invention
     INVENTORSHIP = "inventorship"  # who is or should be named an inventor
     LEGAL_JUDGMENT = "legal_judgment"  # should I file/sign/publish, legal advice, rule overrides
+    PROCESS_TIMELINE = "process_timeline"  # how long the office takes: no loaded source says, so refer
     OUT_OF_SCOPE = "out_of_scope"  # greetings and the like
 
 
@@ -48,7 +49,46 @@ _DEFINITIONAL = re.compile(
     re.I,
 )
 _PERSONAL = re.compile(r"\b(?:my|our|mine|me|i|i'm|i've|we|we're|this|it's|its|that's|their|his|her)\b", re.I)
+_POLITE_ME = re.compile(r"\b(?:for|to)\s+me\b|\b(?:tell|show|help|let)\s+me\b", re.I)
 _GREETING = re.compile(r"^\s*(?:hi|hello|hey|thanks|thank\s+you|good\s+(?:morning|afternoon|evening))\b[\s!.?,]*$", re.I)
+
+# Politeness in front of a question ("Quick question, ...") must not change how it is read.
+_FILLER_LEAD = re.compile(
+    r"^\s*(?:hi|hello|hey|please|thanks|thank\s+you|quick\s+question|one\s+question|sorry(?:\s+to\s+bother\s+you)?|"
+    r"excuse\s+me|i\s+have\s+a\s+question|just\s+wondering|i\s+was\s+wondering(?:\s+(?:if|whether))?|"
+    r"can\s+i\s+ask(?:\s+a\s+question)?)\b[\s,:;!.\-]*(?:but\s+)?",
+    re.I,
+)
+
+# A request to explain a term, wherever it sits in the question ("... What does that mean?").
+MEANING_REQUEST = re.compile(
+    r"\b(?:what(?:'s|\s+is|\s+are|\s+does|\s+do)\b[^?.!]{0,80}\b(?:mean|means|meaning|stand\s+for)\b"
+    r"|(?:can|could|would|will)\s+you\s+(?:please\s+)?(?:explain|define|describe|clarify)\b"
+    r"|tell\s+me\s+what\s+(?:[\w'-]+\s+){0,4}?(?:is|are|means?)\b|(?:explain|define|describe)\s+\w"
+    r"|i(?:'m|\s+am)\s+not\s+sure\s+what\b|difference\s+between\b)",
+    re.I,
+)
+
+
+def strip_filler(text: str) -> str:
+    q = " ".join((text or "").split())  # also collapses runs of spaces, which would stretch the gaps in the rules below
+    for _ in range(4):
+        m = _FILLER_LEAD.match(q)
+        if not m or m.end() == 0:
+            break
+        q = q[m.end():]
+    return q.strip()
+
+
+_CLAUSE_BREAK = re.compile(r"[?.!;]\s+|\b(?:also|then|plus)\b[\s,]*", re.I)
+
+
+def _after_first_sentence(q: str) -> str:
+    """What follows the first clause, so a definition cannot hide a second, different request."""
+    m = _CLAUSE_BREAK.search(q)
+    return q[m.end():] if m else ""
+
+
 
 _VERDICT = [
     re.compile(r"\bpatentab", re.I),
@@ -64,6 +104,12 @@ _VERDICT = [
     re.compile(r"\bdo\s+(?:i|we)\s+have\s+(?:an?\s+)?(?:real\s+)?invention\b", re.I),
     re.compile(r"\bworth\s+(?:patenting|filing|commerciali\w+|licens\w+|anything|money)\b", re.I),
     re.compile(r"\bhow\s+much\s+(?:is|will|would|could)\b.{0,40}\b(?:worth|make|earn)\b", re.I),
+    re.compile(r"\b(?:novel|new|original|inventive|unique|innovative)\s+enough\b|\benough\s+to\s+(?:patent|file|protect)\b", re.I),
+    re.compile(
+        r"\b(?:if|whether|think|say|believe)\s+(?:that\s+)?(?:it|this|that|my\s+\w+|our\s+\w+)\s+(?:is|are|seems?)\s+"
+        r"(?:\w+\s+){0,2}(?:novel|inventive|obvious|new|original|unique|valuable|worth\w*)\b",
+        re.I,
+    ),
     re.compile(r"\bwill\s+(?:they|the\s+(?:university|office|patent\s+office|uspto))\s+(?:grant|approve|accept|patent|file)\b", re.I),
 ]
 
@@ -90,9 +136,16 @@ _OVERRIDE = [
 _TIMING = re.compile(
     r"\b(?:can|could|may|am\s+i\s+allowed\s+to|is\s+it\s+(?:ok|okay|safe|fine))\b.{0,30}"
     r"\b(?:publish|present|post|share|submit|talk\s+about|release|put\s+(?:it\s+)?online|upload)\b.{0,50}"
-    r"\b(?:before|without|prior\s+to|ahead\s+of)\b.{0,30}\b(?:patent|filing|filed|disclos\w+|protect\w*)\b",
+    r"\b(?:before|without|prior\s+to|ahead\s+of)\b.{0,30}\b(?:patent\w*|fil(?:e|es|ing|ed)|disclos\w+|protect\w*)\b",
     re.I,
 )
+# How long the office's review takes. No loaded source says, so this is referred, never guessed.
+_TIMELINE = [
+    re.compile(r"\bhow\s+long\b.{0,40}\b(?:office|tto|review\w*|evaluat\w+|process\w*|approv\w+|hear\s+back)\b", re.I),
+    re.compile(r"\bhow\s+(?:many\s+)?(?:days|weeks|months)\b.{0,40}\b(?:hear\s+back|until|before\s+(?:i|we)\s+(?:hear|get))\b", re.I),
+    re.compile(r"\b(?:turnaround|response|review|processing)\s+time\b", re.I),
+    re.compile(r"\bwhen\s+(?:will|would)\s+(?:the\s+)?(?:office|tto|they)\b.{0,30}\b(?:respond|reply|review|decide|get\s+back)\b", re.I),
+]
 _READINESS = [
     re.compile(
         r"\b(?:ready|mature|developed|far\s+enough|early\s+stage|enough\s+(?:data|results|evidence))\b.{0,40}"
@@ -109,23 +162,29 @@ def _any(patterns, text: str) -> bool:
 
 
 def classify_intent(text: str) -> Decision:
-    q = (text or "").strip()
-    if _GREETING.match(q):
+    q = strip_filler(text)
+    if not q or _GREETING.match(q):
         return Decision(Intent.OUT_OF_SCOPE)
-    definitional = bool(_DEFINITIONAL.match(q))
-    explaining = definitional and not _PERSONAL.search(q)  # "what does patentable mean" is a concept question
+    definitional = bool(_DEFINITIONAL.match(q)) or bool(MEANING_REQUEST.search(q))
+    # "for me" and "tell me" are politeness, not a question about the user's own work.
+    explaining = definitional and not _PERSONAL.search(_POLITE_ME.sub(" ", q))
     coi = bool(_COI_CUES.search(q))
+    # A pure definition is not a verdict request, but anything asked after it still is checked.
+    scan = _after_first_sentence(q) if explaining else q
 
-    if not explaining:
-        if _any(_VERDICT, q):
+    if scan:
+        if _any(_VERDICT, scan):
             return Decision(Intent.VERDICT_SEEKING, related_terms=["novelty", "prior_art", "patentability"], coi=coi)
-        if _any(_INVENTORSHIP, q):
+        if _any(_INVENTORSHIP, scan):
             return Decision(Intent.INVENTORSHIP, related_terms=["inventorship"], coi=coi)
-        if _any(_OVERRIDE, q) or _any(_LEGAL, q) or _TIMING.search(q):
-            timing = bool(_TIMING.search(q))
-            return Decision(Intent.LEGAL_JUDGMENT, related_terms=["public_disclosure"] if timing else [], timing=timing, coi=coi)
-        if _any(_READINESS, q):
-            return Decision(Intent.READINESS, related_terms=["translational_readiness", "development_stage"], coi=coi)
+    # Pressure and role-play are never a definition, wherever they sit in the question.
+    if _any(_OVERRIDE, q) or (scan and (_any(_LEGAL, scan) or _TIMING.search(scan))):
+        timing = bool(_TIMING.search(q))
+        return Decision(Intent.LEGAL_JUDGMENT, related_terms=["public_disclosure"] if timing else [], timing=timing, coi=coi)
+    if _any(_TIMELINE, q):
+        return Decision(Intent.PROCESS_TIMELINE, related_terms=["invention_disclosure"], coi=coi)
+    if scan and _any(_READINESS, scan):
+        return Decision(Intent.READINESS, related_terms=["translational_readiness", "development_stage"], coi=coi)
     if definitional:
         return Decision(Intent.CONCEPT, coi=coi)
     return Decision(Intent.POLICY, coi=coi)
@@ -169,6 +228,17 @@ def referral_block(decision: Decision) -> Block:
         )
         help_ = "List everyone who contributed ideas to the invention and bring that list to the office."
         chips = ["What is inventorship?", "What is an invention disclosure?"]
+    elif kind is Intent.PROCESS_TIMELINE:
+        title = "I do not have the office's review times"
+        why = (
+            "None of the policies loaded here say how long the technology office's review takes, so this tool "
+            "will not guess a number. It can depend on the case."
+        )
+        help_ = (
+            "Ask the office when you submit, and say if a publication or talk is coming up, because that can "
+            "affect how soon you need an answer."
+        )
+        chips = ["What is an invention disclosure?", "What is public disclosure?"]
     else:
         title = "That needs the technology office or counsel, not this tool"
         why = "This tool explains concepts and quotes policy. It does not give legal advice or tell you what to file, sign or publish."
