@@ -122,6 +122,59 @@ export interface LookupResult {
   note: string
 }
 
+// ---- Advisor contract (frozen on the backend: tests/test_advisor.py::test_contract_is_frozen) ----
+export type AdvisorIntent = 'policy' | 'concept' | 'referral' | 'out_of_scope'
+export type BlockType = 'policy_quote' | 'glossary' | 'coach' | 'referral'
+
+export interface AdvisorBlock {
+  type: BlockType
+  source_label: string
+  title: string
+  body: string
+  citations: PolicyCitation[]
+  next_questions: string[]
+}
+
+export interface AdvisorResponse {
+  intent: AdvisorIntent
+  blocks: AdvisorBlock[]
+}
+
+export interface GlossaryEntry {
+  id: string
+  term: string
+  aliases: string[]
+  plain: string
+  example: string
+  think_about: string[]
+  related_fields: string[]
+  related: string[]
+  reviewed_by: string | null
+  reviewed_on: string | null
+  source_label: string
+}
+
+export type ReadinessDimensionId =
+  | 'problem'
+  | 'application'
+  | 'difference'
+  | 'evidence'
+  | 'related_work'
+  | 'timing'
+
+export interface ReadinessDimension {
+  id: ReadinessDimensionId
+  status: 'stated' | 'partly' | 'not_found'
+  quote: string | null
+  follow_up: string | null
+  needs_author: boolean
+}
+
+export interface ReadinessResult {
+  dimensions: ReadinessDimension[]
+  note: string
+}
+
 export type Answers =Record<string, string>
 
 export interface CommercializationStatus {
@@ -164,6 +217,29 @@ export const commercializationService = {
 
   async askPolicy(question: string): Promise<PolicyAnswer> {
     const res = await apiClient.post<PolicyAnswer>('/commercialization/policy/ask', { question })
+    return res.data
+  },
+
+  async askAdvisor(question: string): Promise<AdvisorResponse> {
+    const res = await apiClient.post<AdvisorResponse>('/commercialization/advisor/ask', { question })
+    return res.data
+  },
+
+  async glossary(): Promise<GlossaryEntry[]> {
+    const res = await apiClient.get<GlossaryEntry[]>('/commercialization/glossary')
+    return res.data
+  },
+
+  async readiness(
+    draft: DraftResult,
+    extraText: string,
+    coveredElsewhere: ReadinessDimensionId[]
+  ): Promise<ReadinessResult> {
+    const res = await apiClient.post<ReadinessResult>('/commercialization/readiness', {
+      draft,
+      extra_text: extraText,
+      covered_elsewhere: coveredElsewhere,
+    })
     return res.data
   },
 

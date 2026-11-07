@@ -3,11 +3,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { CommercializationPage } from '../../../pages/CommercializationPage'
 import { suggestTerms } from '../Validate'
 import {
+  AdvisorResponse,
   CommercializationStatus,
   DraftField,
   DraftResult,
   MatchResult,
-  PolicyAnswer,
   commercializationService,
 } from '../../../services/commercializationService'
 
@@ -80,28 +80,30 @@ const matchResult = (): MatchResult => ({
   sbir_topics_url: 'https://www.sbir.gov/topics',
 })
 
-const policy = (over: Partial<PolicyAnswer> = {}): PolicyAnswer => ({
-  answered: true,
-  question: 'q',
-  citations: [
+const advice = (): AdvisorResponse => ({
+  intent: 'policy',
+  blocks: [
     {
-      passage_id: 'um-crr-100-020#9',
-      source_title: 'UM Collected Rules 100.020, Invention and Patent Regulations',
-      source_url: 'https://example.test/100.020',
-      version: 'Amended 6-24-21',
-      applies_to: 'University employees and enrolled students',
-      section: '100.020',
-      locator: '100.020',
-      text: 'These regulations constitute a term and condition of enrollment.',
-      score: 12,
+      type: 'policy_quote',
+      source_label: 'Quoted policy: UM Collected Rules 100.020, Amended 6-24-21',
+      title: 'What the written policy says',
+      body: 'Found 1 passage(s) that may be relevant.\n\nThis is not legal advice.',
+      citations: [
+        {
+          passage_id: 'um-crr-100-020#9',
+          source_title: 'UM Collected Rules 100.020, Invention and Patent Regulations',
+          source_url: 'https://example.test/100.020',
+          version: 'Amended 6-24-21',
+          applies_to: 'University employees and enrolled students',
+          section: '100.020',
+          locator: '100.020',
+          text: 'These regulations constitute a term and condition of enrollment.',
+          score: 12,
+        },
+      ],
+      next_questions: [],
     },
   ],
-  matched_terms: ['student'],
-  message: 'Found 1 passage(s) that may be relevant.',
-  disclaimer: 'This is not legal advice.',
-  corpus_note: '',
-  corpus_passages: 425,
-  ...over,
 })
 
 describe('CommercializationPage', () => {
@@ -135,20 +137,33 @@ describe('CommercializationPage', () => {
     expect(screen.getAllByText(/sends your document text to Anthropic/)[0]).toBeTruthy()
   })
 
-  it('shows policy citations with source and version, and refusals plainly', async () => {
-    const ask = vi.spyOn(commercializationService, 'askPolicy').mockResolvedValue(policy())
+  it('shows quoted policy with source and version, and a refusal plainly', async () => {
+    const ask = vi.spyOn(commercializationService, 'askAdvisor').mockResolvedValue(advice())
     render(<CommercializationPage />)
     fireEvent.click(screen.getByTestId('step-refine'))
-    fireEvent.change(screen.getByTestId('policy-input'), { target: { value: 'Can my PhD student help?' } })
-    fireEvent.click(screen.getByTestId('policy-ask'))
-    await waitFor(() => expect(screen.getByTestId('policy-answer')).toBeTruthy())
+    fireEvent.change(screen.getByTestId('advisor-input'), { target: { value: 'Can my PhD student help?' } })
+    fireEvent.click(screen.getByTestId('advisor-ask'))
+    await waitFor(() => expect(screen.getByTestId('advisor-answer')).toBeTruthy())
     expect(ask).toHaveBeenCalledWith('Can my PhD student help?')
-    expect(screen.getByText(/Amended 6-24-21/)).toBeTruthy()
+    // the version appears in the block's source label and again on the quoted passage
+    expect(screen.getAllByText(/Amended 6-24-21/).length).toBeGreaterThanOrEqual(2)
     expect(screen.getByText(/This is not legal advice/)).toBeTruthy()
 
-    ask.mockResolvedValue(policy({ answered: false, citations: [], message: 'No passage in the loaded policies answers this.' }))
-    fireEvent.click(screen.getByTestId('policy-ask'))
-    await waitFor(() => expect(screen.getByText(/No passage in the loaded policies/)).toBeTruthy())
+    ask.mockResolvedValue({
+      intent: 'out_of_scope',
+      blocks: [
+        {
+          type: 'referral',
+          source_label: 'Referral: needs the technology office or the conflict of interest office',
+          title: 'Nothing in the loaded policies answers this',
+          body: 'No passage in the loaded policies answers this.',
+          citations: [],
+          next_questions: [],
+        },
+      ],
+    })
+    fireEvent.click(screen.getByTestId('advisor-ask'))
+    await waitFor(() => expect(screen.getByText(/No passage in the loaded policies answers this\./)).toBeTruthy())
   })
 
   it('Stage 3 asks for a draft first, then lists markets and exactly what would be sent', async () => {

@@ -1,118 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { Alert, Badge, Button, Card, CardContent, CardHeader, CardTitle } from '../ui'
+import { Alert, Badge, Card, CardContent, CardHeader, CardTitle } from '../ui'
 import {
   Answers,
   ChecklistResult,
   ClarifyResult,
   DraftResult,
-  PolicyAnswer,
-  PolicyCitation,
   commercializationService,
 } from '../../services/commercializationService'
 import { errorMessage } from '../../services/insightsService'
 import { AuthRole } from '../../types/api'
+import { AdvisorBox } from './AdvisorBox'
 import { BuyoutImpact } from './BuyoutImpact'
-
-const EXAMPLES = [
-  'Can my PhD student write code for my startup?',
-  'Who owns an invention I make using university resources?',
-  'Do I have to disclose consulting for a company every year?',
-]
-
-const Citation: React.FC<{ c: PolicyCitation }> = ({ c }) => (
-  <div className="border border-slate-200 rounded-lg p-3 text-sm bg-white">
-    <p className="text-slate-800">“{c.text}”</p>
-    <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-      <a className="underline" href={c.source_url} target="_blank" rel="noreferrer">
-        {c.source_title}
-      </a>
-      <Badge variant="neutral">{c.version}</Badge>
-      <span>{[c.section, c.locator].filter((x, i, a) => x && a.indexOf(x) === i).join(' · ')}</span>
-    </div>
-    <p className="mt-1 text-xs text-slate-500">Applies to: {c.applies_to}</p>
-  </div>
-)
-
-const PolicySandbox: React.FC = () => {
-  const [question, setQuestion] = useState('')
-  const [answer, setAnswer] = useState<PolicyAnswer | null>(null)
-  const [busy, setBusy] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const ask = async (q: string) => {
-    setBusy(true)
-    setError(null)
-    try {
-      setAnswer(await commercializationService.askPolicy(q.trim()))
-    } catch (e) {
-      setAnswer(null)
-      setError(errorMessage(e))
-    } finally {
-      setBusy(false)
-    }
-  }
-
-  return (
-    <>
-      <Card>
-        <CardHeader>
-          <CardTitle>Ask the policy sandbox</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <p className="text-sm text-slate-600">
-            Answers are quoted word for word from public University of Missouri and UMKC policies, with their
-            source and version. Nothing is paraphrased or generated, and nothing you type is saved.
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {EXAMPLES.map((ex) => (
-              <button
-                key={ex}
-                type="button"
-                className="text-xs px-2 py-1 rounded-full border border-slate-300 text-slate-600 hover:bg-slate-100"
-                onClick={() => setQuestion(ex)}
-              >
-                {ex}
-              </button>
-            ))}
-          </div>
-          <div className="flex gap-2">
-            <input
-              className="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm"
-              placeholder="Ask a question about outside activities, inventions or ownership"
-              value={question}
-              maxLength={600}
-              onChange={(e) => setQuestion(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && question.trim().length >= 3 && !busy) void ask(question)
-              }}
-              data-testid="policy-input"
-            />
-            <Button
-              onClick={() => ask(question)}
-              disabled={busy || question.trim().length < 3}
-              data-testid="policy-ask"
-            >
-              {busy ? 'Searching…' : 'Search policies'}
-            </Button>
-          </div>
-          {error && <Alert variant="danger">{error}</Alert>}
-        </CardContent>
-      </Card>
-
-      {answer && (
-        <Card data-testid="policy-answer">
-          <CardContent className="space-y-3 pt-4">
-            <Alert variant={answer.answered ? 'info' : 'warning'}>{answer.message}</Alert>
-            {answer.citations.map((c) => (
-              <Citation key={c.passage_id} c={c} />
-            ))}
-            <p className="text-xs text-slate-500">{answer.disclaimer}</p>
-          </CardContent>
-        </Card>
-      )}
-    </>
-  )
-}
+import { Citation } from './Citation'
+import { GlossaryDrawer } from './GlossaryDrawer'
+import { ReadinessCoachCard } from './ReadinessCoachCard'
 
 export interface RefineProps {
   draft: DraftResult | null
@@ -159,13 +60,18 @@ export const Refine: React.FC<RefineProps> = ({ draft, role, userName, onAnswers
 
   return (
     <div className="space-y-4" data-testid="stage-refine">
+      <div className="flex justify-end">
+        <GlossaryDrawer />
+      </div>
       {!draft && (
         <Alert variant="info">
-          Draft your disclosure in step 1 to get questions and a checklist tailored to it. You can still ask
-          the policy sandbox below.
+          Draft your disclosure in step 1 to get questions, a checklist and a read of what it does not say yet,
+          tailored to it. You can still ask the advisor below.
         </Alert>
       )}
       {error && <Alert variant="danger">{error}</Alert>}
+
+      {draft && <ReadinessCoachCard draft={draft} />}
 
       {clarify && (
         <Card data-testid="clarify-card">
@@ -245,7 +151,7 @@ export const Refine: React.FC<RefineProps> = ({ draft, role, userName, onAnswers
         </Card>
       )}
 
-      <PolicySandbox />
+      <AdvisorBox />
     </div>
   )
 }

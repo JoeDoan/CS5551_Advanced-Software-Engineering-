@@ -80,13 +80,16 @@ const response = (over: Partial<ScenarioResponse> = {}): ScenarioResponse =>
 describe('Refine (questions, checklist, buyout bridge)', () => {
   beforeEach(() => {
     vi.restoreAllMocks()
+    vi.spyOn(commercializationService, 'readiness').mockResolvedValue({ dimensions: [], note: 'No score and no verdict.' })
   })
 
-  it('without a draft it asks for one but still offers the policy sandbox', () => {
+  it('without a draft it asks for one but still offers the advisor and the glossary', () => {
     render(<Refine draft={null} role="coordinator" userName="" />)
     expect(screen.getByText(/Draft your disclosure in step 1/)).toBeTruthy()
-    expect(screen.getByTestId('policy-input')).toBeTruthy()
+    expect(screen.getByTestId('advisor-input')).toBeTruthy()
+    expect(screen.getByTestId('glossary-open')).toBeTruthy()
     expect(screen.queryByTestId('clarify-card')).toBeNull()
+    expect(screen.queryByTestId('readiness-card')).toBeNull()
   })
 
   it('shows questions, re-requests the checklist with the answers, and shows the buyout card only for a course release', async () => {
