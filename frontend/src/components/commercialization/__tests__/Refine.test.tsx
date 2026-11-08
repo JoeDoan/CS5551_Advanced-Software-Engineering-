@@ -3,10 +3,12 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { Refine } from '../Refine'
 import { BuyoutImpact, summarizeBuyout } from '../BuyoutImpact'
 import {
+  AdvisorResponse,
   ChecklistItem,
   ChecklistResult,
   ClarifyResult,
   DraftResult,
+  ReadinessResult,
   commercializationService,
 } from '../../../services/commercializationService'
 import {
@@ -77,6 +79,54 @@ const response = (over: Partial<ScenarioResponse> = {}): ScenarioResponse =>
     ...over,
   }) as unknown as ScenarioResponse
 
+const readinessFixture: ReadinessResult = {
+  note: 'No score and no verdict. This lists what the disclosure does not yet say.',
+  dimensions: [
+    {
+      id: 'problem',
+      status: 'stated',
+      quote: 'Manual bridge deck inspection misses early subsurface micro-cracks.',
+      follow_up: null,
+      needs_author: false,
+    },
+    {
+      id: 'application',
+      status: 'partly',
+      quote: 'Highway bridge maintenance',
+      follow_up: 'Who is the specific user or operator, and what changes in their workflow?',
+      needs_author: true,
+    },
+    {
+      id: 'difference',
+      status: 'stated',
+      quote: 'Uses low-cost piezoelectric array instead of laser vibrometry.',
+      follow_up: null,
+      needs_author: false,
+    },
+    {
+      id: 'evidence',
+      status: 'not_found',
+      quote: null,
+      follow_up: 'What data, simulation, or prototype results exist so far?',
+      needs_author: true,
+    },
+    {
+      id: 'related_work',
+      status: 'partly',
+      quote: 'Smith et al. 2022 acoustic emission study',
+      follow_up: 'Which closest papers, patents, or existing tools should the office compare against?',
+      needs_author: true,
+    },
+    {
+      id: 'timing',
+      status: 'not_found',
+      quote: null,
+      follow_up: 'Are any talks, posters, preprints, or theses planned in the next 3 to 6 months?',
+      needs_author: true,
+    },
+  ],
+}
+
 describe('Refine (questions, checklist, buyout bridge)', () => {
   beforeEach(() => {
     vi.restoreAllMocks()
@@ -91,6 +141,7 @@ describe('Refine (questions, checklist, buyout bridge)', () => {
 
   it('shows questions, re-requests the checklist with the answers, and shows the buyout card only for a course release', async () => {
     vi.spyOn(commercializationService, 'clarify').mockResolvedValue(clarify)
+    vi.spyOn(commercializationService, 'getReadiness').mockResolvedValue(readinessFixture)
     const checklist = vi
       .spyOn(commercializationService, 'checklist')
       .mockImplementation(async (_d, answers): Promise<ChecklistResult> => ({
@@ -160,5 +211,187 @@ describe('Refine (questions, checklist, buyout bridge)', () => {
     expect(s.feasible).toBe(true)
     expect(s.detail[0]).toContain('covered by Colleague')
     expect(s.detail[1]).toContain('not available')
+  })
+
+  it('renders advisor blocks with source_label badges and triggers askAdvisor when clicking next_questions chips', async () => {
+    const firstResponse: AdvisorResponse = {
+      intent: 'concept',
+      blocks: [
+        {
+          type: 'glossary',
+          source_label: 'General explainer, draft, not yet reviewed by the technology office',
+          title: 'Conflict of interest',
+          body: 'An outside financial interest or role that could affect university duties.',
+          next_questions: ['When do I report outside consulting?'],
+        },
+        {
+          type: 'referral',
+          source_label: 'Referral: needs the technology office or the conflict of interest office',
+          title: 'Campus review required',
+          body: 'Contact the UMKC Conflict of Interest Office (umkccoi@umkc.edu) for case-specific determinations.',
+        },
+      ],
+    }
+
+    const followUpResponse: AdvisorResponse = {
+      intent: 'policy',
+      blocks: [
+        {
+          type: 'policy_quote',
+          source_label: 'Quoted policy (UM Collected Rules 330.015, Amended 9-12-24)',
+          title: 'Outside interest reporting',
+          body: 'Found 1 passage that may be relevant.',
+          citations: [
+            {
+              passage_id: 'um-crr-330-015#4',
+              source_title: 'UM Collected Rules 330.015, Policy on Conflict of Interest',
+              source_url: 'https://example.test/330.015',
+              version: 'Amended 9-12-24',
+              applies_to: 'All University of Missouri System employees',
+              section: '330.015',
+              locator: '330.015',
+              text: 'They shall inform their chairpersons/supervisors in writing of their Outside Interests.',
+              score: 11.2,
+            },
+          ],
+        },
+      ],
+    }
+
+    const askAdvisor = vi
+      .spyOn(commercializationService, 'askAdvisor')
+      .mockResolvedValueOnce(firstResponse)
+      .mockResolvedValueOnce(followUpResponse)
+
+    render(<Refine draft={null} role="instructor" userName="Dr. Yugyung Lee" />)
+    fireEvent.change(screen.getByTestId('policy-input'), {
+      target: { value: 'What is a conflict of interest?' },
+    })
+    fireEvent.click(screen.getByTestId('policy-ask'))
+
+    await waitFor(() => expect(screen.getByTestId('policy-answer')).toBeTruthy())
+    expect(askAdvisor).toHaveBeenCalledWith('What is a conflict of interest?', null)
+    const badges = screen.getAllByTestId('advisor-source-badge')
+    expect(badges[0].textContent).toBe(
+      'General explainer, draft, not yet reviewed by the technology office'
+    )
+    expect(badges[1].textContent).toBe(
+      'Referral: needs the technology office or the conflict of interest office'
+    )
+
+    fireEvent.click(screen.getByTestId('advisor-next-question'))
+    await waitFor(() =>
+      expect(askAdvisor).toHaveBeenCalledWith('When do I report outside consulting?', null)
+    )
+    await waitFor(() =>
+      expect(screen.getByText('Quoted policy (UM Collected Rules 330.015, Amended 9-12-24)')).toBeTruthy()
+    )
+  })
+
+  it('renders ReadinessCoachCard with 6 dimensions, quotes, follow-ups, and re-queries getReadiness on extra text submit', async () => {
+    vi.spyOn(commercializationService, 'clarify').mockResolvedValue(clarify)
+    vi.spyOn(commercializationService, 'checklist').mockResolvedValue({
+      disclaimer: 'Not legal advice.',
+      items: [],
+    })
+    const getReadiness = vi
+      .spyOn(commercializationService, 'getReadiness')
+      .mockResolvedValueOnce(readinessFixture)
+      .mockResolvedValueOnce({
+        ...readinessFixture,
+        dimensions: readinessFixture.dimensions.map((d) =>
+          d.id === 'evidence'
+            ? {
+                ...d,
+                status: 'stated',
+                quote: 'Validated on 12 bridge deck cores in the structures lab.',
+                follow_up: null,
+                needs_author: false,
+              }
+            : d
+        ),
+      })
+
+    render(<Refine draft={draft} role="instructor" userName="Dr. Yugyung Lee" />)
+    await waitFor(() => expect(screen.getByTestId('readiness-coach-card')).toBeTruthy())
+    expect(getReadiness).toHaveBeenCalledWith(draft, '')
+
+    for (const id of ['problem', 'application', 'difference', 'evidence', 'related_work', 'timing']) {
+      expect(screen.getByTestId(`readiness-dim-${id}`)).toBeTruthy()
+    }
+    expect(
+      screen.getByText(/From your draft: “Manual bridge deck inspection misses early subsurface micro-cracks.”/)
+    ).toBeTruthy()
+    expect(
+      screen.getByText('What data, simulation, or prototype results exist so far?')
+    ).toBeTruthy()
+
+    fireEvent.change(screen.getByTestId('readiness-extra-input'), {
+      target: { value: 'Validated on 12 bridge deck cores in the structures lab.' },
+    })
+    fireEvent.click(screen.getByTestId('readiness-update-button'))
+
+    await waitFor(() =>
+      expect(getReadiness).toHaveBeenCalledWith(
+        draft,
+        'Validated on 12 bridge deck cores in the structures lab.'
+      )
+    )
+    await waitFor(() =>
+      expect(screen.getByTestId('readiness-status-evidence').textContent).toBe('stated')
+    )
+
+    expect(
+      screen.getByText('Who is the specific user or operator, and what changes in their workflow?')
+    ).toBeTruthy()
+    fireEvent.click(screen.getByTestId('readiness-covered-application'))
+    expect(
+      screen.queryByText('Who is the specific user or operator, and what changes in their workflow?')
+    ).toBeNull()
+  })
+
+  it('opens GlossaryDrawer from Refine, displays the draft source badge, and filters entries by search term', async () => {
+    vi.spyOn(commercializationService, 'getGlossary').mockResolvedValue({
+      source_label: 'General explainer, draft, not yet reviewed by the technology office',
+      entries: [
+        {
+          term: 'Novelty',
+          plain: 'What is new compared with prior public disclosures.',
+          example: 'A sensor array that isolates micro-crack frequencies.',
+          what_office_asks: 'What step has not been published before?',
+          related_fields: ['A1_novel'],
+          reviewed_by: null,
+          reviewed_on: null,
+        },
+        {
+          term: 'Inventorship',
+          plain: 'Legal determination of who conceived the claimed invention.',
+          example: 'Co-designing the signal filter vs running standard tests.',
+          what_office_asks: 'Who conceived the technical solution?',
+          related_fields: ['C1_inventors'],
+          reviewed_by: null,
+          reviewed_on: null,
+        },
+      ],
+    })
+
+    render(<Refine draft={null} role="instructor" userName="Dr. Yugyung Lee" />)
+    fireEvent.click(screen.getByTestId('open-glossary-button'))
+
+    await waitFor(() => expect(screen.getByTestId('glossary-drawer')).toBeTruthy())
+    expect(screen.getByTestId('glossary-source-badge').textContent).toBe(
+      'General explainer, draft, not yet reviewed by the technology office'
+    )
+    expect(screen.getByTestId('glossary-entry-novelty')).toBeTruthy()
+    expect(screen.getByTestId('glossary-entry-inventorship')).toBeTruthy()
+
+    fireEvent.change(screen.getByTestId('glossary-search'), {
+      target: { value: 'inventorship' },
+    })
+    expect(screen.queryByTestId('glossary-entry-novelty')).toBeNull()
+    expect(screen.getByTestId('glossary-entry-inventorship')).toBeTruthy()
+
+    fireEvent.click(screen.getByTestId('close-glossary-button'))
+    expect(screen.queryByTestId('glossary-drawer')).toBeNull()
   })
 })

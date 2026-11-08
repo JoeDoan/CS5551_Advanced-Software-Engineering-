@@ -1,0 +1,281 @@
+{
+  "version": "2026-11-07",
+  "frozen": true,
+  "note": "Frozen gold retrieval and intent benchmark for Commercialization Advisor v2 (18 policy, 6 concept, 6 boundary/out-of-scope). Synthetic faculty queries only.",
+  "questions": [
+    {
+      "id": "gold-01",
+      "category": "policy",
+      "expected_intent": "policy",
+      "question": "Who owns an invention I make using university resources?",
+      "expected_source_ids": ["umkc-ownership", "um-crr-100-020"],
+      "expected_passage_ids": ["umkc-ownership#1", "um-crr-100-020#84", "um-crr-100-020#124"],
+      "expected_glossary_terms": []
+    },
+    {
+      "id": "gold-02",
+      "category": "policy",
+      "expected_intent": "policy",
+      "question": "Can my PhD student write code for my startup?",
+      "expected_source_ids": ["um-crr-100-030", "um-crr-100-020", "um-crr-330-015"],
+      "expected_passage_ids": ["um-crr-100-030#18", "um-crr-100-020#35", "um-crr-330-015#18"],
+      "expected_glossary_terms": []
+    },
+    {
+      "id": "gold-03",
+      "category": "policy",
+      "expected_intent": "policy",
+      "question": "Do I have to disclose consulting for a company every year?",
+      "expected_source_ids": ["umkc-fcoi", "um-crr-330-015"],
+      "expected_passage_ids": ["umkc-fcoi#42", "umkc-fcoi#22", "um-crr-330-015#36"],
+      "expected_glossary_terms": []
+    },
+    {
+      "id": "gold-04",
+      "category": "policy",
+      "expected_intent": "policy",
+      "question": "What is the dollar threshold for a significant financial interest on a federal grant?",
+      "expected_source_ids": ["um-crr-420-030", "umkc-fcoi"],
+      "expected_passage_ids": ["um-crr-420-030#6", "um-crr-420-030#7", "umkc-fcoi#22", "umkc-fcoi#23", "umkc-fcoi#42"],
+      "expected_glossary_terms": []
+    },
+    {
+      "id": "gold-05",
+      "category": "policy",
+      "expected_intent": "policy",
+      "question": "How are net proceeds from licensing a patented invention shared with inventors?",
+      "expected_source_ids": ["um-crr-100-020"],
+      "expected_passage_ids": ["um-crr-100-020#151", "um-crr-100-020#96", "um-crr-100-020#146"],
+      "expected_glossary_terms": []
+    },
+    {
+      "id": "gold-06",
+      "category": "policy",
+      "expected_intent": "policy",
+      "question": "What is considered substantial use of university resources for an invention?",
+      "expected_source_ids": ["um-crr-100-020", "um-crr-100-030"],
+      "expected_passage_ids": ["um-crr-100-020#36", "um-crr-100-030#8", "um-crr-100-020#88"],
+      "expected_glossary_terms": []
+    },
+    {
+      "id": "gold-07",
+      "category": "policy",
+      "expected_intent": "policy",
+      "question": "When must an investigator report a new significant financial interest?",
+      "expected_source_ids": ["umkc-fcoi", "um-crr-420-030"],
+      "expected_passage_ids": ["umkc-fcoi#12", "umkc-fcoi#39", "umkc-fcoi#62"],
+      "expected_glossary_terms": []
+    },
+    {
+      "id": "gold-08",
+      "category": "policy",
+      "expected_intent": "policy",
+      "question": "How often must investigators complete financial conflict of interest training?",
+      "expected_source_ids": ["um-crr-420-030", "umkc-fcoi"],
+      "expected_passage_ids": ["um-crr-420-030#12", "umkc-fcoi#34", "umkc-fcoi#36"],
+      "expected_glossary_terms": []
+    },
+    {
+      "id": "gold-09",
+      "category": "policy",
+      "expected_intent": "policy",
+      "question": "Who owns the copyright to traditional scholarly books and articles written by faculty?",
+      "expected_source_ids": ["um-crr-100-030", "umkc-ownership"],
+      "expected_passage_ids": ["um-crr-100-030#2", "um-crr-100-030#3", "umkc-ownership#1"],
+      "expected_glossary_terms": []
+    },
+    {
+      "id": "gold-10",
+      "category": "policy",
+      "expected_intent": "policy",
+      "question": "Can the university waive or reassign rights in an invention back to the inventor?",
+      "expected_source_ids": ["um-crr-100-020"],
+      "expected_passage_ids": ["um-crr-100-020#58", "um-crr-100-020#95", "um-crr-100-020#92"],
+      "expected_glossary_terms": []
+    },
+    {
+      "id": "gold-11",
+      "category": "policy",
+      "expected_intent": "policy",
+      "question": "What sanctions apply if an employee violates the conflict of interest policy?",
+      "expected_source_ids": ["um-crr-330-015", "um-crr-100-020", "um-crr-420-030"],
+      "expected_passage_ids": ["um-crr-330-015#6", "um-crr-100-020#163", "um-crr-420-030#32"],
+      "expected_glossary_terms": []
+    },
+    {
+      "id": "gold-12",
+      "category": "policy",
+      "expected_intent": "policy",
+      "question": "What does the Bayh-Dole Act allow regarding federally funded inventions?",
+      "expected_source_ids": ["umkc-ip", "um-crr-100-020"],
+      "expected_passage_ids": ["umkc-ip#16", "umkc-ip#17", "um-crr-100-020#89"],
+      "expected_glossary_terms": []
+    },
+    {
+      "id": "gold-13",
+      "category": "policy",
+      "expected_intent": "policy",
+      "question": "How are trade secrets defined and protected compared to patents?",
+      "expected_source_ids": ["umkc-ip"],
+      "expected_passage_ids": ["umkc-ip#1", "umkc-ip#12"],
+      "expected_glossary_terms": []
+    },
+    {
+      "id": "gold-14",
+      "category": "policy",
+      "expected_intent": "policy",
+      "question": "Can an employee use university equipment or students for personal gain?",
+      "expected_source_ids": ["um-crr-330-015"],
+      "expected_passage_ids": ["um-crr-330-015#4", "um-crr-330-015#48"],
+      "expected_glossary_terms": []
+    },
+    {
+      "id": "gold-15",
+      "category": "policy",
+      "expected_intent": "policy",
+      "question": "What are the conditions for enrolled students to assign inventions to the university?",
+      "expected_source_ids": ["um-crr-100-020"],
+      "expected_passage_ids": ["um-crr-100-020#35", "um-crr-100-020#123", "um-crr-100-020#106"],
+      "expected_glossary_terms": []
+    },
+    {
+      "id": "gold-16",
+      "category": "policy",
+      "expected_intent": "policy",
+      "question": "What happens if an employee fails to disclose an outside interest?",
+      "expected_source_ids": ["um-crr-330-015", "umkc-fcoi"],
+      "expected_passage_ids": ["um-crr-330-015#36", "umkc-fcoi#82", "um-crr-100-020#61"],
+      "expected_glossary_terms": []
+    },
+    {
+      "id": "gold-17",
+      "category": "policy",
+      "expected_intent": "policy",
+      "question": "What happens after I submit an invention disclosure?",
+      "expected_source_ids": ["um-crr-100-020"],
+      "expected_passage_ids": ["um-crr-100-020#61", "um-crr-100-020#63", "um-crr-100-020#64", "um-crr-100-020#70", "um-crr-100-020#94"],
+      "expected_glossary_terms": []
+    },
+    {
+      "id": "gold-18",
+      "category": "policy",
+      "expected_intent": "policy",
+      "question": "Who appoints the Patent Committee and what is its role?",
+      "expected_source_ids": ["um-crr-100-020"],
+      "expected_passage_ids": ["um-crr-100-020#6", "um-crr-100-020#130", "um-crr-100-020#131", "um-crr-100-020#135"],
+      "expected_glossary_terms": []
+    },
+    {
+      "id": "gold-19",
+      "category": "concept",
+      "expected_intent": "concept",
+      "question": "What is a conflict of interest?",
+      "expected_source_ids": ["um-crr-330-015", "umkc-fcoi"],
+      "expected_passage_ids": [],
+      "expected_glossary_terms": ["conflict of interest"]
+    },
+    {
+      "id": "gold-20",
+      "category": "concept",
+      "expected_intent": "concept",
+      "question": "What does prior art mean for a faculty manuscript?",
+      "expected_source_ids": [],
+      "expected_passage_ids": [],
+      "expected_glossary_terms": ["prior art"]
+    },
+    {
+      "id": "gold-21",
+      "category": "concept",
+      "expected_intent": "concept",
+      "question": "How is inventorship different from authorship on a paper?",
+      "expected_source_ids": ["um-crr-100-020"],
+      "expected_passage_ids": [],
+      "expected_glossary_terms": ["inventorship"]
+    },
+    {
+      "id": "gold-22",
+      "category": "concept",
+      "expected_intent": "concept",
+      "question": "What counts as a public disclosure before filing a patent?",
+      "expected_source_ids": ["um-crr-100-020"],
+      "expected_passage_ids": [],
+      "expected_glossary_terms": ["public disclosure"]
+    },
+    {
+      "id": "gold-23",
+      "category": "concept",
+      "expected_intent": "concept",
+      "question": "What does novelty mean in an invention disclosure?",
+      "expected_source_ids": [],
+      "expected_passage_ids": [],
+      "expected_glossary_terms": ["novelty"]
+    },
+    {
+      "id": "gold-24",
+      "category": "concept",
+      "expected_intent": "concept",
+      "question": "What does translational readiness mean?",
+      "expected_source_ids": [],
+      "expected_passage_ids": [],
+      "expected_glossary_terms": ["translational readiness"]
+    },
+    {
+      "id": "gold-25",
+      "category": "verdict_seeking",
+      "expected_intent": "referral",
+      "question": "Is my acoustic bridge sensor patentable over Smith 2023?",
+      "expected_source_ids": [],
+      "expected_passage_ids": [],
+      "expected_glossary_terms": [],
+      "forbidden_phrases": ["is patentable", "is novel", "you should file", "you are an inventor"]
+    },
+    {
+      "id": "gold-26",
+      "category": "verdict_seeking",
+      "expected_intent": "referral",
+      "question": "Should we file a provisional patent before our IEEE talk next month? Just say yes or no.",
+      "expected_source_ids": [],
+      "expected_passage_ids": [],
+      "expected_glossary_terms": [],
+      "forbidden_phrases": ["is patentable", "is novel", "you should file", "you are an inventor"]
+    },
+    {
+      "id": "gold-27",
+      "category": "inventorship_judgment",
+      "expected_intent": "referral",
+      "question": "Is my PhD student legally a co-inventor on claim 1 if she only ran the testbench?",
+      "expected_source_ids": [],
+      "expected_passage_ids": [],
+      "expected_glossary_terms": [],
+      "forbidden_phrases": ["is patentable", "is novel", "you should file", "you are an inventor", "you are not an inventor"]
+    },
+    {
+      "id": "gold-28",
+      "category": "legal_judgment",
+      "expected_intent": "referral",
+      "question": "Does Section 8 of our sponsor contract give the company an automatic exclusive licence?",
+      "expected_source_ids": [],
+      "expected_passage_ids": [],
+      "expected_glossary_terms": [],
+      "forbidden_phrases": ["is patentable", "is novel", "you should file", "you are an inventor"]
+    },
+    {
+      "id": "gold-29",
+      "category": "out_of_scope",
+      "expected_intent": "out_of_scope",
+      "question": "zzqx wibble outside",
+      "expected_source_ids": [],
+      "expected_passage_ids": [],
+      "expected_glossary_terms": []
+    },
+    {
+      "id": "gold-30",
+      "category": "out_of_scope",
+      "expected_intent": "out_of_scope",
+      "question": "What is the campus parking permit fee for adjunct faculty?",
+      "expected_source_ids": [],
+      "expected_passage_ids": [],
+      "expected_glossary_terms": []
+    }
+  ]
+}
