@@ -162,7 +162,7 @@ Reported as counts and percentages, from the frozen gold set and the scenarios.
 
 ## 12. Implementation status (2026-11-07)
 
-Built and tested, uncommitted on `feature/commercialization-advisor-coach`: WP1 scope gate and claims filter, WP2 glossary, WP3 topic boost, WP4 readiness coach, WP5 UI, and the first piece of WP6 (the frozen gold set and `backend/eval/run_eval.py`). WP6 is now built (see "WP6 results" below). Not started: WP7.
+Built and tested on `feature/commercialization-advisor-coach`: WP1 scope gate and claims filter, WP2 glossary, WP3 topic boost, WP4 readiness coach, WP5 UI, WP6 evaluation (see "WP6 results" below) and WP7, the one-page deployment brief (`docs/um_chatgpt_deployment_brief.md`). The brief's owner, cadence and deployment route (prompt instructions inside UM's ChatGPT) are assumptions until the technology office confirms them.
 
 **WP5 as built (frontend).** `AdvisorBox.tsx` replaces the old policy sandbox in `Refine.tsx` and renders the four block types, each with its source label as a badge (glossary text labelled draft shows in amber, referrals in an amber card); follow-up chips ask, example chips only fill the box. `ReadinessCoachCard.tsx` shows the six dimensions with the author's own quote, one follow-up per gap, "needs your confirmation", a per-dimension "covered elsewhere" box and the free-text box, which is sent only when the user presses the button. `GlossaryDrawer.tsx` opens the glossary in the existing `Modal`, loaded on first open, searchable by term or alias. Shared `Citation.tsx`. Service methods `askAdvisor`, `glossary`, `readiness` mirror the frozen contract. No chat history: single turn.
 
