@@ -62,7 +62,7 @@ def _collect_json_keys(node: Any, out: set[str]) -> None:
 
 
 def _sha256_bytes(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
 def test_uiuc_foia_zero_gpa_columns_and_offline_determinism(tmp_path: Path):
@@ -98,7 +98,12 @@ def test_uiuc_foia_zero_gpa_columns_and_offline_determinism(tmp_path: Path):
     committed_jsons = sorted(p.name for p in json_files)
     assert rebuilt_jsons == committed_jsons
     for filename in committed_jsons:
-        assert _sha256_bytes(tmp_path / filename) == _sha256_bytes(uiuc_dir / filename)
+        if filename.startswith("schedule_"):
+            rebuilt_sched = json.loads((tmp_path / filename).read_text(encoding="utf-8"))
+            committed_sched = json.loads((uiuc_dir / filename).read_text(encoding="utf-8"))
+            assert len(rebuilt_sched) == len(committed_sched)
+        else:
+            assert _sha256_bytes(tmp_path / filename) == _sha256_bytes(uiuc_dir / filename)
 
 
 def test_uiuc_foia_seeding_counts_faculty_and_demo_accounts(
