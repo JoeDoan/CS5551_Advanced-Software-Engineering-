@@ -2,7 +2,7 @@
 
 **Submission:** November 9, 2026 (video, poster, repository)
 **Live demo:** November 13, 2026
-**Team:** Joe Doan, Tony Nguyen, Tina Nguyen, Salvatore Nigro. **Advisor:** Prof. Yugyung Lee.
+**Team:** Joe Doan, Tony Nguyen, Tina Nguyen, Salvatore Nigro. **Faculty Advisors:** Prof. Yugyung Lee & Prof. Sudipta Chattopadhyay.
 **Length:** 3:00. Numbers below come from the running app on the `uiuc_foia` profile.
 
 ---

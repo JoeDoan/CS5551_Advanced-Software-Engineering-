@@ -1,6 +1,6 @@
 # OptiSched: Uncertainty-Aware Enrollment Forecasting with CP-SAT Course Scheduling
 ### CS 5551 Advanced Software Engineering · Hack-A-Roo 2026 · UMKC School of Science and Engineering
-**Team:** Joe Doan, Tony Nguyen, Tina Nguyen, Salvatore Nigro · **Advisor:** Prof. Yugyung Lee
+**Team:** Joe Doan, Tony Nguyen, Tina Nguyen, Salvatore Nigro · **Faculty Advisors:** Prof. Yugyung Lee & Prof. Sudipta Chattopadhyay
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![OR-Tools CP-SAT](https://img.shields.io/badge/solver-Google%20OR--Tools%20CP--SAT-red.svg)](https://developers.google.com/optimization/cp/cp_solver)
@@ -262,5 +262,5 @@ Scheduler_project/
 ## Team & Acknowledgments
 - **Course**: CS 5551 — Advanced Software Engineering & Hack-A-Roo 2026
 - **Institution**: University of Missouri-Kansas City (UMKC) — School of Science & Engineering (SSE)
-- **Faculty Advisor**: Prof. Yugyung Lee
+- **Faculty Advisors**: Prof. Yugyung Lee (Hack-A-Roo Advisor) & Prof. Sudipta Chattopadhyay (CS 5551 Course Instructor)
 - **Core Engine**: Split Conformal Prediction + Google OR-Tools CP-SAT

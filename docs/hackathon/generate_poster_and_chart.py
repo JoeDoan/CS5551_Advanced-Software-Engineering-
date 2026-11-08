@@ -307,14 +307,14 @@ POSTER_HTML = """<!DOCTYPE html>
     white-space: nowrap;
   }
   .banner .authors {
-    font-size: 9.4px;
+    font-size: 8.1px;
     color: #cbd5e1;
     margin-top: 3px;
     font-weight: 600;
     white-space: nowrap;
   }
   .banner .authors b { color: #ffffff; }
-  .banner .authors .sep { color: var(--gold-light); margin: 0 6px; }
+  .banner .authors .sep { color: var(--gold-light); margin: 0 3.5px; }
   .qr-card {
     background: #ffffff;
     color: var(--ink);
@@ -882,9 +882,9 @@ POSTER_HTML = """<!DOCTYPE html>
       <div class="authors">
         <b>Joe Doan &middot; Tony Nguyen &middot; Tina Nguyen &middot; Salvatore Nigro</b>
         <span class="sep">|</span>
-        Faculty Advisor: <b>Prof. Yugyung Lee</b>
+        Faculty Advisors: <b>Prof. Yugyung Lee &amp; Prof. Sudipta Chattopadhyay</b>
         <span class="sep">|</span>
-        Department of Computer Science &amp; Electrical Engineering
+        Dept. of Computer Science &amp; Electrical Engineering
       </div>
     </div>
     <div class="qr-card">
