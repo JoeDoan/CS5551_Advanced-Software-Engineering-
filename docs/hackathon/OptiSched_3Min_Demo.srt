@@ -1,87 +1,87 @@
 1
-00:00:00,000 --> 00:00:10,780
+00:00:00,000 --> 00:00:09,280
 Hello everyone! We are Joe Doan, Tony Nguyen, Tina Nguyen, and Salvatore Nigro, advised by Professor Yugyung Lee and Professor Sudipta Chattopadhyay, presenting OptiSched.
 
 2
-00:00:11,000 --> 00:00:19,552
+00:00:09,500 --> 00:00:18,052
 Universities assign classrooms months before registration opens, so sizing rooms to last term's headcount leaves high-demand courses overflowing.
 
 3
-00:00:19,552 --> 00:00:22,737
+00:00:18,052 --> 00:00:21,237
 Let's sign in as Course Coordinator and open Insights.
 
 4
-00:00:22,957 --> 00:00:35,345
+00:00:21,457 --> 00:00:33,845
 As shown in the green badge at top right, OptiSched trains on nineteen terms of real University of Illinois registrar records from Fall 2016 to Fall 2025, forecasting one term ahead.
 
 5
-00:00:35,565 --> 00:00:45,926
+00:00:34,065 --> 00:00:44,426
 Our champion pooled Ridge model predicts next-term enrollment and calibrates eighty percent and ninety-five percent split-conformal intervals, shown by the blue bars on the right of the chart.
 
 6
-00:00:46,146 --> 00:00:52,022
+00:00:44,646 --> 00:00:50,522
 When we select different courses in the dropdown, the historical enrollment curve and prediction intervals update live.
 
 7
-00:00:52,242 --> 00:01:08,720
+00:00:50,742 --> 00:01:07,220
 Scrolling down to our held-out Spring 2026 benchmark across forty courses, Stage 1 on the left shows pooled Ridge cuts forecast error to 17.24 seats versus 28.25 for copying Fall 2025, while covering 85 and 97.5 percent of courses.
 
 8
-00:01:08,940 --> 00:01:21,541
+00:01:07,440 --> 00:01:20,041
 On the right, Stage 2 shows our CP-SAT schedule achieves zero hard conflicts, matches actual UIUC seat utilization at 64.9 percent, and preserves 84 percent of faculty two-year teaching habits.
 
 9
-00:01:21,761 --> 00:01:30,911
+00:01:20,261 --> 00:01:29,411
 In the unseated student chart below, copying Fall 2025 leaves 338 students without a seat, and the point forecast leaves 153.
 
 10
-00:01:30,911 --> 00:01:38,964
+00:01:29,411 --> 00:01:37,464
 Sizing rooms to OptiSched's eighty percent conformal bound reduces unseated students to 60, a 61 percent drop.
 
 11
-00:01:39,184 --> 00:01:48,963
+00:01:37,684 --> 00:01:47,463
 Below the chart, the Data and Evaluation box separates real UIUC FOIA enrollment and teaching history from the simulated room pool and What-If scenarios.
 
 12
-00:01:49,183 --> 00:01:59,375
+00:01:47,683 --> 00:01:57,875
 Opening the Master Schedule, CP-SAT certifies zero hard conflicts across all forty sections, and coordinators can switch live between the Room Matrix, Weekly Calendar, and Table View.
 
 13
-00:01:59,595 --> 00:02:03,170
+00:01:58,095 --> 00:02:01,670
 Now let's test three live disruptions in the What-If Simulator.
 
 14
-00:02:03,170 --> 00:02:08,392
+00:02:01,670 --> 00:02:06,892
 First, an enrollment surge with Computer Science up 20 percent and Statistics up 15 percent.
 
 15
-00:02:08,392 --> 00:02:13,783
+00:02:06,892 --> 00:02:12,283
 Clicking Run Simulation re-solves live and moves only over-capacity sections into larger rooms.
 
 16
-00:02:14,003 --> 00:02:18,354
+00:02:12,503 --> 00:02:16,854
 Second, an instructor becomes unavailable for an NSF grant course release.
 
 17
-00:02:18,354 --> 00:02:26,349
+00:02:16,854 --> 00:02:24,849
 Clicking Preset 2 and running the solver assigns a qualified colleague in the same department to cover STAT 420, moving just one course.
 
 18
-00:02:26,569 --> 00:02:31,242
+00:02:25,069 --> 00:02:29,742
 Third, a classroom reassignment scales room capacities down to 0.9 times baseline.
 
 19
-00:02:31,242 --> 00:02:38,480
+00:02:29,742 --> 00:02:36,980
 Running the solver relocates only the courses that exceed the reduced room limits while keeping all other placements unchanged.
 
 20
-00:02:38,700 --> 00:02:47,904
+00:02:37,200 --> 00:02:46,404
 Finally, as an extension for faculty commercializing research, the Commercialization Advisor drafts a UM-16C invention disclosure from a paper abstract.
 
 21
-00:02:47,904 --> 00:02:54,807
+00:02:46,404 --> 00:02:53,307
 By connecting calibrated demand intervals to CP-SAT optimization, OptiSched sizes rooms for likely student demand.
 
 22
-00:02:54,807 --> 00:02:55,413
+00:02:53,307 --> 00:02:53,913
 Thank you!
