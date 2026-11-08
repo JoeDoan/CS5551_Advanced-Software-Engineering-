@@ -62,7 +62,14 @@ def _collect_json_keys(node: Any, out: set[str]) -> None:
 
 
 def _sha256_bytes(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    # Line endings are normalised: a Windows checkout (autocrlf) turns the committed LF into CRLF.
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
+
+# Written by the CP-SAT solver. Which of several equally good schedules comes out depends on the
+# OR-Tools version (requirements.txt only sets a lower bound), so these are checked for
+# repeatability on this machine instead of against the committed bytes.
+SOLVER_OUTPUT = {"schedules.json"} | {f"schedules_sem{i}.json" for i in range(1, 7)}
 
 
 def test_uiuc_foia_zero_gpa_columns_and_offline_determinism(tmp_path: Path):
@@ -97,8 +104,20 @@ def test_uiuc_foia_zero_gpa_columns_and_offline_determinism(tmp_path: Path):
     rebuilt_jsons = sorted(Path(p).name for p in glob.glob(str(tmp_path / "*.json")))
     committed_jsons = sorted(p.name for p in json_files)
     assert rebuilt_jsons == committed_jsons
+    assert SOLVER_OUTPUT <= set(committed_jsons)
     for filename in committed_jsons:
-        assert _sha256_bytes(tmp_path / filename) == _sha256_bytes(uiuc_dir / filename)
+        if filename in SOLVER_OUTPUT:
+            committed = json.loads((uiuc_dir / filename).read_text(encoding="utf-8"))
+            rebuilt = json.loads((tmp_path / filename).read_text(encoding="utf-8"))
+            assert len(rebuilt) == len(committed) == 40, filename
+            continue
+        assert _sha256_bytes(tmp_path / filename) == _sha256_bytes(uiuc_dir / filename), filename
+
+    second = tmp_path / "second"
+    shutil.copytree(raw_dir, second / "raw")
+    build_dataset(output_dir=str(second))
+    for filename in committed_jsons:
+        assert _sha256_bytes(second / filename) == _sha256_bytes(tmp_path / filename), filename
 
 
 def test_uiuc_foia_seeding_counts_faculty_and_demo_accounts(
