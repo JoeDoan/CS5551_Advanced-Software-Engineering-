@@ -49,10 +49,10 @@ BEATS: tuple[Beat, ...] = (
         id="intro_team",
         section_badge="UMKC OptiSched · Team Intro",
         badge_color="#2563eb",
-        caption="Hello everyone! We are Joe Doan, Tony Nguyen, Tina Nguyen, and Salvatore Nigro, advised by Professor Yugyung Lee, presenting OptiSched.",
+        caption="Hello everyone! We are Joe Doan, Tony Nguyen, Tina Nguyen, and Salvatore Nigro, advised by Professor Yugyung Lee and Professor Sudipta Chattopadhyay, presenting OptiSched.",
         narration=(
             "Hello everyone! We are Joe Doan, Tony Nguyen, Tina Nguyen, and Salvatore Nigro, "
-            "advised by Professor Yugyung Lee, presenting OptiSched."
+            "advised by Professor Yugyung Lee and Professor Sudipta Chattopadhyay, presenting OptiSched."
         ),
     ),
     Beat(
@@ -223,7 +223,7 @@ OVERLAY_INIT_JS = """
         'padding:12px 24px',
         'box-shadow:0 14px 34px rgba(0, 0, 0, 0.5)',
         'font-family:Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-        'font-size:15.5px',
+        'font-size:14.5px',
         'font-weight:700',
         'letter-spacing:0.01em',
         'white-space:nowrap',
@@ -231,7 +231,7 @@ OVERLAY_INIT_JS = """
         'transition:opacity 0.18s ease',
         'pointer-events:none'
       ].join(';');
-      teamBanner.textContent = 'UMKC Hack-A-Roo · OptiSched Team: Joe Doan, Tony Nguyen, Tina Nguyen, Salvatore Nigro · Advisor: Prof. Yugyung Lee';
+      teamBanner.textContent = 'UMKC Hack-A-Roo · OptiSched Team: Joe Doan, Tony Nguyen, Tina Nguyen, Salvatore Nigro · Advisors: Prof. Yugyung Lee & Prof. Sudipta Chattopadhyay';
 
       const ring = document.createElement('div');
       ring.id = 'demo-target-ring';
@@ -1067,7 +1067,7 @@ def cue_14_commercialization_and_close(rec: LiveRecorder) -> None:
     abstract_text = (
         "OptiSched: Uncertainty-Aware Academic Course Scheduling via Split-Conformal "
         "Prediction Intervals and Lexicographic CP-SAT Optimization\n"
-        "Joe Doan, Tony Nguyen, Tina Nguyen, Salvatore Nigro, Yugyung Lee\n"
+        "Joe Doan, Tony Nguyen, Tina Nguyen, Salvatore Nigro, Yugyung Lee, Sudipta Chattopadhyay\n"
         "Abstract: A central problem in university course scheduling is sizing classrooms "
         "months before registration opens when course demand is uncertain. We propose a novel "
         "predict-then-optimize framework combining pooled Ridge regression, split-conformal "
