@@ -212,7 +212,12 @@ def test_matcher_validation(client):
 
 
 # ------------------------------------------------------------- the shipped sample paper
-SAMPLE_PDF = "../docs/samples/sample_paper_bridge_cracks.pdf"
+SAMPLE_PDF = str(
+    idf.Path(__file__).resolve().parents[2]
+    / "docs"
+    / "samples"
+    / "sample_paper_bridge_cracks.pdf"
+)
 
 
 def test_sample_paper_drafts_cleanly_and_every_value_is_a_true_excerpt():

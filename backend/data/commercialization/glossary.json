@@ -1,0 +1,125 @@
+{
+  "source_label": "General explainer, draft, not yet reviewed by the technology office",
+  "entries": [
+    {
+      "term": "Novelty",
+      "plain": "What is new in your technical approach compared with anything previously made public in papers, talks, posters, theses, patents, or products.",
+      "example": "A passive acoustic array that isolates micro-crack attenuation shifts in concrete beams without lane closures, whereas published methods require active ultrasonic transducers.",
+      "what_office_asks": "Which specific step, mechanism, composition, or algorithm has not been described in prior public disclosures?",
+      "related_fields": ["A1_novel", "A1_different"],
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "source_label": "General explainer, draft, not yet reviewed by the technology office"
+    },
+    {
+      "term": "Prior art",
+      "plain": "Any earlier publication, preprint, conference presentation, thesis, website, patent, or commercial product that describes closely related technology before a filing date.",
+      "example": "Your own earlier workshop abstract, a competitor's published journal paper, or an existing commercial sensor datasheet.",
+      "what_office_asks": "What are the closest papers, patents, or products (including your own prior work) that a patent examiner or licensee would compare against?",
+      "related_fields": ["D1_prior_art", "D1_competition"],
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "source_label": "General explainer, draft, not yet reviewed by the technology office"
+    },
+    {
+      "term": "Inventorship",
+      "plain": "A legal standard based on who conceived the specific technical solution claimed in a patent, which differs from academic authorship on a manuscript.",
+      "example": "A co-author who ran standard testbench measurements or edited the manuscript without conceiving part of the technical solution may be an author on the paper without being listed as an inventor.",
+      "what_office_asks": "Who contributed to conceiving the technical concepts, and what specific part did each person conceive?",
+      "related_fields": ["C1_inventors"],
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "source_label": "General explainer, draft, not yet reviewed by the technology office"
+    },
+    {
+      "term": "Public disclosure",
+      "plain": "Any non-confidential communication that enables someone in the field to understand or reproduce the invention, such as a journal article, arXiv preprint, conference talk, poster, thesis defense, or public GitHub repository.",
+      "example": "Posting a manuscript on arXiv or presenting slides at an IEEE conference starts a one-year U.S. patent filing window and can immediately affect foreign patent rights.",
+      "what_office_asks": "When was the work first shared outside the university without a confidentiality agreement, or when is the next planned talk, poster, preprint, or publication?",
+      "related_fields": ["A2_first_public", "A3_disclosures"],
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "source_label": "General explainer, draft, not yet reviewed by the technology office"
+    },
+    {
+      "term": "Development stage",
+      "plain": "How far the technology has progressed from an initial theoretical concept or lab observation to simulation, benchtop validation, prototype testing, or field deployment.",
+      "example": "A radar respiration monitor tested across 18 bench trials in a laboratory setting versus an unverified mathematical bound.",
+      "what_office_asks": "What experimental data, simulations, benchtop measurements, or prototype runs exist today, and what remains untested?",
+      "related_fields": ["A1_general", "A1_limits"],
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "source_label": "General explainer, draft, not yet reviewed by the technology office"
+    },
+    {
+      "term": "Translational readiness",
+      "plain": "How clearly a research result defines a real-world problem, a specific user or application context, measurable evidence, and differentiation from existing alternatives.",
+      "example": "Moving from observing an unexpected 14 dB acoustic shift in lab beams to specifying how bridge inspectors would deploy the sensor and what evidence still needs collection.",
+      "what_office_asks": "What problem does this solve, who would use it, how does it compare with current practice, and what experimental validation exists so far?",
+      "related_fields": ["A1_problem", "A1_general", "A1_different", "A1_limits"],
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "source_label": "General explainer, draft, not yet reviewed by the technology office"
+    },
+    {
+      "term": "Potential application",
+      "plain": "The concrete practical use case, workflow, product, or user group that benefits from the research result outside the laboratory.",
+      "example": "Emergency department nurses using a 15-minute saliva assay for rapid sepsis triage instead of waiting for central lab blood cultures.",
+      "what_office_asks": "Who is the specific user, operator, or buyer, and what changes in their workflow or cost structure?",
+      "related_fields": ["A1_problem", "A1_general", "D2_licensees"],
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "source_label": "General explainer, draft, not yet reviewed by the technology office"
+    },
+    {
+      "term": "Differentiation",
+      "plain": "How your technical method or design differs in mechanism, performance, cost, or workflow from current practice and competing commercial or academic approaches.",
+      "example": "Reducing ammonia synthesis pressure by 35% in continuous pilot runs compared with conventional high-pressure Haber-Bosch reactors.",
+      "what_office_asks": "What do practitioners use today, and what measurable advantage or trade-off does your approach show over those alternatives?",
+      "related_fields": ["A1_different", "D1_competition"],
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "source_label": "General explainer, draft, not yet reviewed by the technology office"
+    },
+    {
+      "term": "Conflict of interest",
+      "plain": "A situation in which an employee's outside financial interest, consulting arrangement, equity holding, or external role could influence, or reasonably appear to influence, their university teaching, research, or administrative responsibilities.",
+      "example": "Holding founder equity or a paid advisory board role in a startup that sponsors research in your university lab or employs your graduate advisees.",
+      "what_office_asks": "Do any contributors hold outside consulting agreements, equity, or leadership roles in an entity related to this research or its funding?",
+      "related_fields": ["B1_types", "B2_agreements", "D2_licensees"],
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "source_label": "General explainer, draft, not yet reviewed by the technology office"
+    },
+    {
+      "term": "Invention disclosure",
+      "plain": "A confidential internal document (UM-16C at the University of Missouri System) submitted to the technology transfer office to report a new research discovery or technical creation before public release or commercialization.",
+      "example": "Submitting the UM-16C form to the UMKC Office of Research Services / Technology Commercialization before presenting a conference paper or releasing software.",
+      "what_office_asks": "Have you described the technical problem, novel aspects, funding sources, contributors, prior art, and any past or upcoming public disclosures?",
+      "related_fields": ["A1_title", "A1_general", "B1_types", "C1_inventors"],
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "source_label": "General explainer, draft, not yet reviewed by the technology office"
+    },
+    {
+      "term": "Licence",
+      "plain": "A formal agreement in which the university grants a company or organization permission to make, use, or sell university-owned intellectual property under specified financial and diligence terms without transferring underlying ownership.",
+      "example": "Granting an established medical device manufacturer or a faculty startup a right to commercialize a university-patented sensor or curated clinical dataset.",
+      "what_office_asks": "Which companies or industry sectors might licence this technology, and are there existing sponsor or third-party agreements that affect licensing rights?",
+      "related_fields": ["D2_licensees", "B2_agreements"],
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "source_label": "General explainer, draft, not yet reviewed by the technology office"
+    },
+    {
+      "term": "Equity",
+      "plain": "Ownership shares, stock, stock options, or other ownership interests in an outside business entity such as a faculty spinout or industry sponsor.",
+      "example": "Holding founder shares in an SBIR partner startup that seeks to licence university technology or sponsor laboratory testing.",
+      "what_office_asks": "Does any investigator or family member hold ownership shares or options in a company connected to the research, sponsorship, or potential licensing?",
+      "related_fields": ["B1_types", "B2_agreements", "D2_licensees"],
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "source_label": "General explainer, draft, not yet reviewed by the technology office"
+    }
+  ]
+}
