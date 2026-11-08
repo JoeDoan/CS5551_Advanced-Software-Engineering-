@@ -66,7 +66,29 @@ _SYNONYMS: Dict[str, List[str]] = {
     "nsf": ["federal", "investigator"],
     "nih": ["phs", "federal", "investigator"],
     "conflict": ["conflict", "interest"],
+    "dollar": ["remuneration", "5000", "10000", "exceeds"],
+    "threshold": ["remuneration", "5000", "10000", "exceeds", "aggregated"],
 }
+
+_OFF_TOPIC_TERMS = frozenset(
+    "parking permit tuition dining gym housing pizza restaurant weather".split()
+)
+
+_INVENTION_SOURCES = frozenset(
+    {"um-crr-100-020", "um-crr-100-030", "umkc-ip", "umkc-ownership"}
+)
+_COI_SOURCES = frozenset({"um-crr-330-015", "um-crr-420-030", "umkc-fcoi"})
+
+_INVENTION_CUE_RE = re.compile(
+    r"\b(?:invention|inventions|patent|patents|invention\s+disclosure|royalt(?:y|ies)|"
+    r"proceeds|copyright|trade\s+secrets?|bayh-?dole|patent\s+committee|waive|reassign)\b",
+    re.I,
+)
+_COI_CUE_RE = re.compile(
+    r"\b(?:conflict\s+of\s+interest|fcoi|consulting|equity|outside\s+interest|"
+    r"significant\s+financial\s+interest|dollar\s+threshold)\b",
+    re.I,
+)
 
 
 class PolicyCitation(BaseModel):
@@ -175,10 +197,22 @@ _DOMAIN = frozenset(
 )
 
 
+def _topic_multiplier(question: str, passage_id: str) -> float:
+    source_id = passage_id.split("#")[0] if "#" in passage_id else ""
+    has_inv = bool(_INVENTION_CUE_RE.search(question))
+    has_coi = bool(_COI_CUE_RE.search(question))
+    if has_inv and not has_coi and source_id in _INVENTION_SOURCES:
+        return 1.25
+    if has_coi and not has_inv and source_id in _COI_SOURCES:
+        return 1.25
+    return 1.0
+
+
 def answer_question(question: str) -> PolicyAnswer:
     idx = _index()
+    raw_tokens = set(_tokens(question))
     asked = _terms(question)
-    if not any(t in _DOMAIN for t in asked):
+    if (raw_tokens & _OFF_TOPIC_TERMS) or not any(t in _DOMAIN for t in asked):
         return PolicyAnswer(
             answered=False,
             question=question.strip(),
@@ -195,12 +229,19 @@ def answer_question(question: str) -> PolicyAnswer:
     query = _expand(question)
     ranked = idx.search(query)
 
-    citations: List[PolicyCitation] = []
-    seen_text = set()
+    eligible = []
     for score, i, hit in ranked:
-        passage = idx.passages[i]
         if score < MIN_SCORE or len(hit) < MIN_DISTINCT_TERMS:
             continue
+        passage = idx.passages[i]
+        boosted = score * _topic_multiplier(question, passage["id"])
+        eligible.append((boosted, score, i, hit))
+    eligible.sort(key=lambda row: row[0], reverse=True)
+
+    citations: List[PolicyCitation] = []
+    seen_text = set()
+    for boosted, _raw_score, i, hit in eligible:
+        passage = idx.passages[i]
         if passage["text"] in seen_text:
             continue
         seen_text.add(passage["text"])
@@ -214,13 +255,13 @@ def answer_question(question: str) -> PolicyAnswer:
                 section=passage["section"],
                 locator=passage["locator"],
                 text=passage["text"],
-                score=round(score, 2),
+                score=round(boosted, 2),
             )
         )
         if len(citations) == MAX_RESULTS:
             break
 
-    matched = sorted({t for _s, _i, hit in ranked[:MAX_RESULTS] for t in hit} & set(asked))
+    matched = sorted({t for _b, _s, _i, hit in eligible[:MAX_RESULTS] for t in hit} & set(asked))
     if not citations:
         message = (
             "No passage in the loaded policies answers this. That does not mean it is "
