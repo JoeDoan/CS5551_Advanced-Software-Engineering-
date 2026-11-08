@@ -62,6 +62,38 @@ _LEGAL_JUDGMENT_PATTERNS = (
     r"\blegally\s+entitle(?:d)?\s+under\s+(?:our|the)\s+(?:contract|agreement)\b",
 )
 
+# Whether and when to publish or present before an invention is protected is a timing decision for
+# the technology office. It is referred (as a legal-judgment question), not answered with policy quotes.
+_PUBLICATION_TIMING_PATTERNS = (
+    r"\b(?:publish|publishing|present|presenting|post|posting|share|sharing|release|releasing)\b[^?]*\bbefore\b[^?]*\b(?:fil(?:e|ing)|patent|provisional|submitting\s+(?:the|an|a|my)\s+(?:invention\s+)?disclosure)\b",
+    r"\bbefore\s+(?:i|we)\s+(?:file|submit\s+(?:the|an|a|my)\s+(?:invention\s+)?disclosure)\b[^?]*\b(?:publish|present|post|share|release)\b",
+    r"\bbefore\s+fil(?:e|ing)\b[^?]*\b(?:publish|present|post|share|release)\b",
+)
+
+# How long the office takes is not stated in any loaded source, so the tool must not guess a number.
+# These are referred through the verdict branch, with their own wording (see build_referral_block).
+_REVIEW_TIME_PATTERNS = (
+    r"\bhow\s+long\s+(?:will|does|do|would)\b[^?]*\b(?:technology\s+office|tto|ori|office|otc|commercialization)\b[^?]*\b(?:take|review|respond|reply|process|evaluate|approve|decide)",
+    r"\bhow\s+long\s+(?:will|does|do|would)\s+(?:the\s+|my\s+|our\s+)?(?:review|evaluation|approval|process)\b[^?]*\btake\b",
+    r"\bturnaround\s+time\b",
+    r"\bwhen\s+(?:will|would)\s+(?:the\s+)?(?:technology\s+office|tto|ori|office)\b[^?]*\b(?:respond|reply|review|get\s+back|decide)\b",
+    r"\bhow\s+(?:many|soon)\s+(?:days|weeks|months)\b[^?]*\b(?:hear\s+back|respond|reply|decision)\b",
+)
+
+
+def _matches(patterns: tuple, lowered: str) -> bool:
+    return any(re.search(pat, lowered, re.I) for pat in patterns)
+
+
+def _is_publication_timing(question: str) -> bool:
+    lowered = question.lower()
+    return _matches(_PUBLICATION_TIMING_PATTERNS, lowered) and not _matches(_LEGAL_JUDGMENT_PATTERNS, lowered)
+
+
+def _is_review_time(question: str) -> bool:
+    lowered = question.lower()
+    return _matches(_REVIEW_TIME_PATTERNS, lowered) and not _matches(_VERDICT_PATTERNS, lowered)
+
 _OFF_TOPIC_PATTERNS = (
     r"\b(?:parking|permit\s+fee|campus\s+parking|meter|garage)\b",
     r"\b(?:pizza|restaurant|coffee|cafeteria|dining\s+hall|catering)\b",
@@ -102,14 +134,14 @@ def classify_intent(question: str) -> str:
     if any(re.search(pat, lowered, re.I) for pat in _OFF_TOPIC_PATTERNS):
         return "out_of_scope"
 
-    if any(re.search(pat, lowered, re.I) for pat in _LEGAL_JUDGMENT_PATTERNS):
+    if _matches(_LEGAL_JUDGMENT_PATTERNS, lowered) or _matches(_PUBLICATION_TIMING_PATTERNS, lowered):
         return "legal_judgment"
 
     if not re.search(r"how\s+is\s+inventorship\s+different\s+from\s+authorship", lowered, re.I):
         if any(re.search(pat, lowered, re.I) for pat in _INVENTORSHIP_PATTERNS):
             return "inventorship"
 
-    if any(re.search(pat, lowered, re.I) for pat in _VERDICT_PATTERNS):
+    if _matches(_VERDICT_PATTERNS, lowered) or _matches(_REVIEW_TIME_PATTERNS, lowered):
         return "verdict_seeking"
 
     if glossary_service.lookup(cleaned) is not None:
@@ -136,6 +168,20 @@ def build_referral_block(intent: str, question: str) -> Dict[str, Any]:
             "How is inventorship different from authorship on a paper?",
             "What are the conditions for enrolled students to assign inventions to the university?",
         ]
+    elif intent == "legal_judgment" and _is_publication_timing(question):
+        title = "Whether to publish or present first is a timing decision for the technology office"
+        body = (
+            "This tool does not tell you whether to publish, present or post your results before "
+            "filing. Sharing the details of an invention openly can affect what protection is still "
+            "possible, and the right order depends on your case. Contact the UMKC Office of "
+            "Research Services / Technology Commercialization (umkcor@umkc.edu) before the "
+            "publication or talk happens, not after. Bring your UM-16C draft, the date and venue of "
+            "the paper, abstract or talk, and anything you have already shared outside the lab."
+        )
+        next_questions = [
+            "What counts as a public disclosure before filing a patent?",
+            "What happens after I submit an invention disclosure?",
+        ]
     elif intent == "legal_judgment":
         title = "Contract and licensing interpretation requires campus review"
         body = (
@@ -148,6 +194,19 @@ def build_referral_block(intent: str, question: str) -> Dict[str, Any]:
         next_questions = [
             "What does licence mean?",
             "Who owns an invention I make using university resources?",
+        ]
+    elif intent == "verdict_seeking" and _is_review_time(question):
+        title = "I do not have the office's review times"
+        body = (
+            "None of the policies loaded here say how long the technology office's review takes, so "
+            "this tool will not guess a number. It can depend on the case. Ask the UMKC Office of "
+            "Research Services / Technology Commercialization (umkcor@umkc.edu) when you submit, and "
+            "say if a publication or talk is coming up, because that can affect the timing. Bring "
+            "your UM-16C draft and any dates that matter."
+        )
+        next_questions = [
+            "What happens after I submit an invention disclosure?",
+            "What counts as a public disclosure before filing a patent?",
         ]
     elif intent == "verdict_seeking":
         title = "Patentability, filing decisions, and timelines require office review"
