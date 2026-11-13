@@ -236,84 +236,84 @@ We state our assumptions and system boundaries transparently so judges, faculty,
 * **Draft Status of Commercialization Glossary and Follow-Up Bank:** All 12 plain-language entries in `glossary.json` and the curated follow-up question chips carry the explicit badge `"General explainer, draft, not yet reviewed by the technology office"` (`reviewed_by` is `null` and `reviewed_on` is `null`). They remain labeled as drafts until UMKC Office of Technology Commercialization (OTC) staff complete formal sign-off.
 * **Public Policy Corpus Scope and Campus Office Referrals:** Our policy corpus (425 passages across 7 public UM System CRR and UMKC policy documents) covers written invention, copyright, and conflict-of-interest regulations. It does not contain internal office service-level timelines (such as how many days OTC takes to review a filing) or legal advice on patentability, novelty, inventorship disputes, or sponsor contract clauses. By design, the advisor refuses to guess on those topics and refers faculty directly to the **UMKC Office of Research Services (`umkcor@umkc.edu`)** and the **UMKC Conflict of Interest Office (`umkccoi@umkc.edu`)**.
 
-## 8. 3-Minute Solo Poster Presentation Script (ESL Graduate Level) + Top 5 Judge Q&A
+## 8. 3-Minute Solo Poster Presentation Script (Low-Number, Function & Target Edition)
 
-This script is written for **one presenter standing next to the poster**. Every spoken sentence is 22 words or fewer and uses clear, natural Global English. Total spoken length across the 5 cues is **409 words (3 minutes at a calm 136 words-per-minute pace)**.
+This script is designed for **one presenter standing next to the poster**. It uses **almost zero numbers** (only `61 percent` and `zero conflicts`) and focuses every section on **what you point to**, **its function**, and **its target user and goal**. Total spoken length across the 5 cues is **383 words (3 minutes at a calm 128 words-per-minute pace)**.
 
-### Part 1: Timed Cue-by-Cue Solo Script (3:00 Total, 409 Words)
+### Part 1: Timed Cue-by-Cue Solo Script (3:00 Total, 383 Words)
 
-#### `0:00 to 0:35` | 1. The Problem and Overview (35 seconds, 71 words)
+#### `0:00 to 0:35` | 1. Overview, Target Users, and Core Problem (35 seconds, 74 words)
 
-**[Point to the Poster Title Banner and Left Column Panel 01 (The Bottleneck) and Panel 02 (5-Stage Architecture).]**
+**[Point to: Poster Title Banner and Left Column Panel 01 | Function: Platform Overview | Target: Department Coordinators and Faculty Inventors]**
 
-> "Hello! Welcome to our project, **OptiSched**.  
-> Every semester, university coordinators must assign classrooms, time slots, and instructors **six months before student registration opens**.  
-> When departments copy last year room assignments, growing courses overflow their classrooms on the first day of class.  
-> At the same time, professors who commercialize research must check university rules and find coverage for grant course releases.  
-> We built **OptiSched** to solve both problems in one predict-then-optimize platform."
+> "Hello! Welcome to **OptiSched**.  
+> Our target users are **university department coordinators and faculty members**.  
+> Every semester, coordinators must assign classrooms, time slots, and instructors months before student registration opens.  
+> When departments simply copy last year's schedule, growing classes overflow their rooms on the first day.  
+> At the same time, professors who commercialize research need a fast way to check university rules and cover their classes.  
+> **OptiSched** solves both problems in one web platform."
 
-#### `0:35 to 1:15` | 2. Data and Enrollment Forecasting Benchmark (40 seconds, 93 words)
+#### `0:35 to 1:15` | 2. Demand Forecasting with Safety Buffers (40 seconds, 82 words)
 
-**[Point to Center Column Panel 04B (Point Forecast MAE Cards & Conformal Coverage Strip) and Right Column Panel 05 (STAT 400 Forecast Chart).]**
+**[Point to: Left Column Panel 02 (Stages 1 to 3) and Right Column Panel 05 (Forecast Chart) | Function: Predict Course Demand + Upper Safety Band | Target: Stop Classroom Overcrowding Before Registration Starts]**
 
-> "First, let us look at how we predict student enrollment demand.  
-> We trained our models on **ten years of public registrar data** from the University of Illinois.  
-> This dataset covers **40 STEM courses across 20 semesters** from Fall 2016 to Spring 2026.  
-> On held-out Spring 2026, our **Pooled Ridge** model achieved the lowest Mean Absolute Error at **17.24 students**.  
-> That beats **Seasonal Naive** at **18.03** and cuts error by **39 percent** compared to copying Fall 2025.  
-> We then calibrate **80 percent split-conformal prediction bands**, which covered **34 of 40 courses**, or **85 percent**."
+> "Our first function is **Demand Forecasting with Safety Buffers**.  
+> Its target is to stop classroom overcrowding before registration even begins.  
+> Instead of guessing or copying last semester, our model learns seasonal enrollment trends from historical university registrar records.  
+> A normal forecast only gives one average number, which still under-predicts growing classes half the time.  
+> So our function adds a **calibrated upper safety band** around each course forecast.  
+> That upper band tells the scheduler the safe room size each class really needs."
 
-#### `1:15 to 1:55` | 3. CP-SAT Optimization and Unseated Students Result (40 seconds, 91 words)
+#### `1:15 to 1:55` | 3. Automated Room and Preference Scheduler (40 seconds, 86 words)
 
-**[Point to Center Column Panel 04A (Unseated Students Bar Chart from 338 to 153 to 60) and Panel 04C (Schedule Quality vs. Actual UIUC Registrar Table).]**
+**[Point to: Center Column Panel 04A (Unseated Students Bar Chart) and Right Column Panel 05 (Master Schedule) | Function: Google OR-Tools CP-SAT Constraint Solver | Target: Seat Every Student with Zero Conflicts and High Faculty Satisfaction]**
 
-> "Second, we pass that 80 percent upper demand bound into **Google OR-Tools CP-SAT**, an integer constraint solver.  
-> Look at what happens in **Spring 2026** when a department sizes rooms without conformal bounds.  
-> Copying the prior term leaves **338 students without a seat** across 8 overflowed courses.  
-> Using a point forecast still leaves **153 unseated students** across 9 courses.  
-> Sizing rooms to our **80 percent bound** cuts unseated students to **60**, a **61 percent reduction**.  
-> The schedule has **zero hard conflicts**, **64.9 percent seat utilization**, and an **84 percent faculty preference match**."
+> "Our second function is the **Automated Constraint Scheduler**, powered by **Google OR-Tools**.  
+> Its target is to build a conflict-free master schedule for the entire department in seconds.  
+> It takes our safe demand bounds and matches every course to a real classroom, time slot, and instructor.  
+> It guarantees **zero room or instructor double-bookings** and honors faculty preferences for teaching days, time slots, and rooms.  
+> As shown on this green bar chart, our approach cuts **unseated students by 61 percent** without wasting large lecture halls."
 
 #### `1:55 to 2:35` | 4. What-If Simulator and Commercialization Advisor v2 (40 seconds, 88 words)
 
-**[Point to Right Column Panel 05 and Panel 06 (Master Schedule & What-If Simulator Cards), then gesture to the Bottom-Right Footer and Live Commercialization Advisor v2.]**
+**[Point to: Right Column Panel 06 (What-If Cards) and Bottom-Right Footer (Commercialization Advisor) | Function: Instant Schedule Repair + Quote-Verified Disclosure & Policy Coach | Target: Coordinators Handling Disruptions and Faculty Commercializing Research]**
 
-> "Third, schedules must adapt when department plans change.  
-> In our **What-If Simulator**, a coordinator can test an enrollment surge, a room loss, or a grant buyout in under five seconds.  
-> That links directly to our **Commercialization Advisor v2**.  
-> When a professor uploads a paper, the tool drafts a **quote-verified UM-16C disclosure** and checks readiness across **six dimensions**.  
-> For policy questions, our **Scope Gate** and **BM25 search** quote word for word from **425 official UM and UMKC passages**.  
-> It achieved **100 percent top-five recall** and **zero legal boundary violations**."
+> "Our third function is the **What-If Simulator**, targeted at coordinators facing sudden schedule changes.  
+> With one click, a coordinator can simulate an enrollment surge, a closed classroom, or a professor's grant buyout.  
+> The solver repairs the schedule in seconds while keeping other classes untouched.  
+> That connects directly to our fourth function, the **Faculty Commercialization Advisor**.  
+> Targeted at faculty inventors, it turns a research paper into a quote-verified invention disclosure draft and checks readiness.  
+> It also quotes official university policies word for word and routes legal questions to campus offices."
 
 #### `2:35 to 3:00` | 5. Honest Scope Boundaries and Closing Takeaway (25 seconds, 66 words)
 
-**[Point to Left Column Panel 03 (Real vs. Simulated Data Scope) and step back with an open gesture.]**
+**[Point to: Left Column Panel 03 (Real vs. Simulated Data Scope) | Function: Transparent Governance Boundary | Target: Trustworthy University Decision Support]**
 
-> "To be transparent about our scope, our enrollment history and policy passages come from real public university records.  
-> Our 16-room pool and preference weights are simulated for privacy, and our 12-term glossary is a draft awaiting office review.  
-> By connecting calibrated demand bounds, CP-SAT scheduling, and quote-verified policy guidance, **OptiSched** keeps students seated and supports faculty innovation.  
+> "Finally, we keep our system boundaries transparent.  
+> Our enrollment trends and university policy quotes come from real public university records.  
+> Meanwhile, our room pools and preference weights are simulated to protect faculty privacy.  
+> By connecting demand safety bounds, constraint scheduling, and quote-verified policy guidance, **OptiSched** keeps students seated and supports faculty innovation.  
 > Thank you! I am happy to answer your questions."
 
-### Part 2: Top 5 Judge Questions & Ready-to-Speak Answers
+### Part 2: Top 5 Judge Questions & Low-Number Ready-to-Speak Answers
 
-Memorize these five short answers. Every sentence is 23 words or fewer and directly answers the toughest technical questions judges ask.
-
-#### Q1: "If you already use Google OR-Tools CP-SAT to optimize the schedule, why do you need a forecasting model?"
+#### Q1: "If you already use Google OR-Tools to optimize the schedule, why do you need a forecasting model?"
 > **Answer:**  
-> "OR-Tools is an optimization solver, not a prediction model. It needs expected student enrollment as an input parameter to size classrooms properly. Because departments publish schedules six months before registration opens, true enrollment is unknown at planning time. Without our conformal demand bound, copying last term headcounts leaves 338 students without seats across 8 courses."
+> "OR-Tools is an optimization solver, not a prediction model. Its function is to assign rooms, but its target depends on knowing how many students will enroll. Because schedules are built months before registration opens, true enrollment is unknown. Our forecasting function provides that safe upper seat target."
 
-#### Q2: "Why did Pooled Ridge beat Seasonal Naive and Damped Trend, and why add conformal bands?"
+#### Q2: "Why did you choose Pooled Ridge and Conformal Safety Bands instead of a single-course trend model?"
 > **Answer:**  
-> "A single course only has 19 historical semesters, including the 2020 and 2021 pandemic dip. Single-course trend models overfit those swings and reach 21.80 Mean Absolute Error. By pooling all 40 courses with L2 regularization, Pooled Ridge learns shared seasonal and momentum patterns without overfitting. It wins with a 17.24 error on Spring 2026, and the 80 percent conformal bound protects rooms against upward demand spikes."
+> "A single course only has two semesters per year, so single-course trend models overfit pandemic dips and noise. Our Pooled Ridge function learns shared seasonal patterns across all courses together. Then our conformal safety band adds an upper buffer so growing courses do not overflow their rooms."
 
-#### Q3: "Does the Commercialization Advisor use an LLM like ChatGPT, or is it rule-based?"
+#### Q3: "Does the Commercialization Advisor use a chatbot like ChatGPT, or is it rule-based?"
 > **Answer:**  
-> "Step 1 offers an optional opt-in Claude mode to draft initial UM-16C fields, but the default pipeline runs 100 percent offline in Python. Even when Claude is enabled in Step 1, our quote verifier checks that every proposed field quotes the manuscript word for word. In Step 2, readiness coaching, glossary lookup, and policy search are completely deterministic so unpublished research stays private."
+> "Its target is zero hallucinated university rules and full privacy for unpublished research. Step 1 runs offline in Python by default. Even in the optional Claude mode, every extracted field is verified word for word against the paper. Step 2 uses 100 percent deterministic keyword search and readiness checks."
 
 #### Q4: "How do you prevent the system from giving bad legal advice about patents or inventorship?"
 > **Answer:**  
-> "We enforce two deterministic guardrails, a pre-retrieval Scope Gate and a post-processing Output Verifier. When a professor asks about patentability, inventorship, or contract terms, the Scope Gate blocks guessing. It routes them to the UMKC Office of Research Services or the Conflict of Interest Office. Our Output Verifier also blocks forbidden verdict phrases and enforces a provenance badge on every card. That gave us zero boundary violations across 30 gold questions and 25 faculty scenarios."
+> "We use two deterministic guardrails, a Scope Gate before search and an Output Verifier after search. When a professor asks for a legal verdict on patentability or inventorship, the Scope Gate blocks guessing. It refers them directly to the UMKC Research or Conflict of Interest Office."
 
-#### Q5: "What is the biggest limitation of your current system?"
+#### Q5: "What is the main limitation of your current system?"
 > **Answer:**  
-> "Our main scheduling limitation is that the solver assigns each course to one room from a fixed 16-room pool. It cannot split a large course into two sections automatically because adding sections requires department budget approval. On the commercialization side, our 12-term glossary is labeled as an unreviewed draft until the technology office signs off. Both boundaries are shown clearly in the interface so users know what requires human approval."
+> "On the scheduling side, the solver assigns each course to one classroom from a fixed room pool. It does not split a class into two sections automatically because adding sections requires budget approval. On the commercialization side, our plain-language glossary is labeled as a draft awaiting technology office sign-off."
+
